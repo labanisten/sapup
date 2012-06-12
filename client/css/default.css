@@ -1,212 +1,27 @@
-html, body {
-  font: 8pt arial;
+table {
+  width: 100%;
+}
+
+th {
+  width: 50px;
+}
+
+table, th, td
+{
+  border: 1px solid;
+}
+
+td {
+  border-radius: 10px;
+  border-color: white;
 }
 
 
-div.timeline-frame {
-  border: 1px solid #BEBEBE;
-
-  border-color: #5D99C3;
-  overflow: hidden;
-
-  border-radius: 5px;  
-  -moz-border-radius: 5px; /* For Firefox 3.6 and older */ 
-} 
-                                             
-div.timeline-axis {
-
-  border-width: 1px;
-  border-top-style: solid;
-
-  border-color: #5D99C3;
-
-  background-color: #5D99C3; 
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5D99C3', endColorstr='#3A6DA0'); /* for IE */
-  background: -webkit-gradient(linear, left top, left bottom, from(#5D99C3), to(#3A6DA0)); /* for webkit browsers */
-  background: -moz-linear-gradient(top,  #5D99C3,  #3A6DA0); /* for firefox 3.6+ */ 
+td.available {
+  background-color: green;
 }
 
-div.timeline-axis-grid {
-  border-left-style: solid;
-  border-width: 1px;
-}
-div.timeline-axis-grid-minor {
-  border-color: #e5e5e5;
-}  
-div.timeline-axis-grid-major {
-  border-color: #bfbfbf;
-}  
-div.timeline-axis-text {
-  color: white;
-  padding: 3px;
-  white-space: nowrap;
-}  
-
-div.timeline-axis-text-minor {
-}
- 
-div.timeline-axis-text-major {
+td.freeze {
+  background-color: red;
 }
 
-div.timeline-event {
-  color: #1A1A1A;
-  border-color: #97B0F8;
-  background-color: #D5DDF6;
-}
-
-
-
-div.timeline-event-box {
-  text-align: center;   
-  border-style: solid;
-  border-width: 1px;  
-  border-radius: 5px;  
-  -moz-border-radius: 5px; /* For Firefox 3.6 and older */ 
-}  
-
-div.timeline-event-dot {
-  border-style: solid;
-  border-width: 5px;
-  border-radius: 5px;
-  -moz-border-radius: 5px;  /* For Firefox 3.6 and older */ 
-}
-
-div.timeline-event-range {
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 2px;
-  -moz-border-radius: 2px;  /* For Firefox 3.6 and older */
-}
-
-div.timeline-event-line {
-  border-left-width: 1px;
-  border-left-style: solid;
-} 
-
-div.timeline-event, div.timeline-event-box, div.timeline-event-range {       
-  border: none;
-  background: none;  
-}
-
-
-div.timeline-event-content {
-  margin: 0px;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-
-div.timeline-groups-axis {
-  border-color: #5D99C3;
-  border-width: 1px;
-}
-
-div.timeline-groups-text {
-  color: #4D4D4D;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-div.timeline-currenttime {
-  background-color: #FF7F6E;
-  width: 2px;
-}
-
-div.timeline-customtime {
-  background-color: #6E94FF;
-  width: 2px;
-  cursor: move;
-}
-
-div.timeline-navigation {
-  font-family: arial;
-  font-size: 20px;
-  font-weight: bold;
-  color: gray;
-
-  border: 1px solid #BEBEBE;
-  background-color: #F5F5F5;
-  border-radius: 2px;
-  -moz-border-radius: 2px;  /* For Firefox 3.6 and older */
-}
-
-div.timeline-navigation-new, div.timeline-navigation-delete, 
-    div.timeline-navigation-zoom-in,  div.timeline-navigation-zoom-out, 
-    div.timeline-navigation-move-left, div.timeline-navigation-move-right {
-  cursor: pointer;
-  padding: 10px 16px;
-  float: left;
-  text-decoration: none;
-  border-color: #BEBEBE; /* border is used for the separator between new and navigation buttons */
-  
-  width: 16px;
-  height: 16px;
-}
-
-div.timeline-navigation-new {
-  background: url('img/16/new.png') no-repeat center;
-}
-
-div.timeline-navigation-delete {
-  padding: 0px;
-  padding-left: 5px;
-  background: url('img/16/delete.png') no-repeat center;
-}
-
-div.timeline-navigation-zoom-in {
-  background: url('img/16/zoomin.png') no-repeat center;
-}
-
-div.timeline-navigation-zoom-out {
-  background: url('img/16/zoomout.png') no-repeat center;
-}
-
-div.timeline-navigation-move-left {
-  background: url('img/16/moveleft.png') no-repeat center;
-}
-
-div.timeline-navigation-move-right {
-  background: url('img/16/moveright.png') no-repeat center;
-}
-
-      
-#new {
-  position: absolute;
-  left: 25px;
-  top: 9px;
-  
-  text-transform: uppercase; 
-  color: white;
-  font-weight: bold;
-  font-size: 40px;
-  text-decoration: none;
-  background-color: blue;
-}
-      
-div.unavailable, div.available, div.maybe {
-  color: white;
-  height: 10px;
-  padding: 5px;
-  border-radius: 5px;  
-  opacity: 0.9;
-  -moz-opacity: 0.9;
-  filter:alpha(opacity=9);
-  -moz-border-radius: 5px; /* For Firefox 3.6 and older */ 
-}
-
-div.unavailable {
-  background-color: #F03030; /* red */
-}
-div.available {
-  background-color: #1AA11A; /* green */
-}
-div.maybe {
-  background-color: #FFA500; /* orange */
-}      
-
-div.timeline-event-selected {
-  border-color: #FFC200;
-  background-color: yellow;
-  border-style: solid;
-  border-width: 2px;  
-}

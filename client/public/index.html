@@ -8,11 +8,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <script src="../js/jsapi.js"></script>
-    <script src="../js/timeline.js"></script>
-    <script src="../js/main.js"></script>
     <script src="http://code.angularjs.org/angular-1.0.0rc7.min.js"></script>
-    <script src="../js/angular.js"></script>
+    <script src="../js/controllers.js"></script>
+    <link href="../css/bootstrap.css" rel="stylesheet">
+    <link href="../css/default.css" rel="stylesheet">
     
 
     <style type="text/css">
@@ -24,11 +23,9 @@
         padding: 9px 0;
       }
     </style>
-    <link href="../css/bootstrap.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../css/default.css">
   </head>
 
-  <body>
+  <body ng-controller="TimelineCtrl">
      <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -62,39 +59,105 @@
 
     <div class="container">
       <div class="row">
-        <div class="span3">
-          <div ng-controller="TimelineCtrl">
-            <form class="well" ng-submit="addTimeline()">
-            <select ng-model="timeline.system" name="selectSystem">
+          <div class="span12">
+          <div>
+            <form class="well form-inline" ng-submit="addTimeline()">          
+            <select  ng-model="timeline.system" name="selectSystem">
+              <option value="" disabled="disabled">Select system</option>
               <option value="P03">P03</option>
               <option value="P04">P04</option>
               <option value="P07">P07</option>
               <option value="D03">D03</option>
             </select>
             <select ng-model="timeline.status" name="selectStatus">
+              <option value="" disabled="disabled">Select status</option>
               <option value="available">Available</option>
               <option value="unavailable">Unavailable</option>
               <option value="restricted">Restricted</option>
             </select>
-              Start: <input ng-model="timeline.start" id="start" type="date" class="datefield" name="start" />
-              End: <input ng-model="timeline.end" id="end" type="date" class="datefield" name="end" />
-              <h4>System: {{timeline.system}}</h4>
-              <h4>Status: {{timeline.status}}</h4>
-              <h4>Start: {{timeline.start}}</h4>
-              <h4>End: {{timeline.end}}</h4>
+
+            <label for="startDate">Start:</label> 
+            <input id="startDate" type="date" class="datefield input-small">
+            <label for="endDate">End:</label> 
+            <input id="endDate" type="date" class="datefield input-small">
+            <button class="btn btn-primary btn-mini">Create</button>
             </form>
-            <button class="btn">Create</button>
-          </div><!--/.well -->
-        </div><!--/span-->
-        <div class="span9">
-          <div  id="mytimeline"  />
-        </div><!--/span-->
-      </div>          
+          </div>            
+        </div>
+      </div> <!-- row -->
+      
+      <div class="row">
+        <div class="span12">
+          <table>
+            <thead>
+              <tr>  
+                <th>System</th>  
+                <th>1</th>  
+                <th>2</th>  
+                <th>3</th>  
+                <th>4</th>  
+                <th>5</th>  
+                <th>6</th>  
+                <th>7</th>  
+                <th>8</th>  
+                <th>9</th>  
+                <th>10</th>  
+                <th>11</th>  
+                <th>12</th>  
+                <th>13</th>  
+                <th>14</th>  
+                <th>15</th>  
+                <th>16</th>  
+                <th>17</th>  
+                <th>18</th>  
+                <th>19</th>  
+                <th>20</th>  
+                <th>21</th>  
+                <th>22</th>  
+                <th>23</th>  
+                <th>24</th>  
+                <th>25</th>  
+                <th>26</th>  
+                <th>27</th>  
+                <th>28</th>  
+                <th>29</th>  
+                <th>30</th>  
+
+              </tr>  
+            </thead>
+          <tbody>
+            <tr>            
+                <td class="system">P03</td>
+                <td colspan="25" class="available"></td>
+                <td class="freeze" colspan="3"></td>
+                <td class="available" colspan="2"></td>
+            </tr>
+            <tr>            
+                <td class="system">P07</td>
+                <td class="freeze" colspan="3"></td>
+                <td class="available" colspan="15"></td>
+                <td class="freeze" colspan="10"></td>
+                <td class="available" colspan="2"></td>
+            </tr>
+            <tr>            
+                <td class="system">P03</td>
+                <td class="available" colspan="26"></td>
+                <td class="freeze" colspan="3"></td>
+                <td class="available"></td>
+            </tr>
+            <tr>            
+                <td class="system">P07</td>
+                <td class="freeze" colspan="2"></td>
+                <td class="available"colspan="28"></td>
+            </tr>
+
+          </tbody>          
+          </table>
+        </div>
+      </div> <!-- row -->
+
 
     </div><!--/.container-->    
-      <footer>
-        <p>&copy; Statoil 2012</p>
-      </footer>
 
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="../js/jquery-1.7.1.min.js"></script>
