@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html ng-app lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>System availability</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <script src="http://code.angularjs.org/angular-1.0.0rc7.min.js"></script>
+    <script src="../js/controllers.js"></script>
+    <link href="../css/bootstrap.css" rel="stylesheet">
+    <link href="../css/default.css" rel="stylesheet">
+    
+
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 10px 0;
+      }
+    </style>
+  </head>
+
+  <body ng-controller="TimelineCtrl">
+     <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">System availability</a>
+          <div class="btn-group pull-right">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+              <i class="icon-user"></i> Username
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Profile</a></li>
+              <li class="divider"></li>
+              <li><a href="#">Sign Out</a></li>
+            </ul>
+          </div>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+          <div class="span12">
+          <div>
+            <form class="well form-inline" ng-submit="addTimeline()">          
+            <select  ng-model="timeline.system" name="selectSystem">
+              <option value="" disabled="disabled">Select system</option>
+              <option value="P03">P03</option>
+              <option value="P04">P04</option>
+              <option value="P07">P07</option>
+              <option value="D03">D03</option>
+<<<<<<< HEAD
+              <option value="D03">P08</option>
+=======
+			  <option value="D03">D03</option>
+>>>>>>> d7bedf5709bbc4398f741f20d66a357674d39b93
+            </select>
+            <select ng-model="timeline.status" name="selectStatus">
+              <option value="" disabled="disabled">Select status</option>
+              <option value="available">Available</option>
+              <option value="unavailable">Unavailable</option>
+              <option value="restricted">Restricted</option>
+            </select>
+
+            <label for="startDate">Start:</label> 
+            <input id="startDate" type="date" class="datefield input-small">
+            <label for="endDate">End:</label> 
+            <input id="endDate" type="date" class="datefield input-small">
+            <button class="btn btn-primary btn-mini">Create</button>
+            </form>
+          </div>            
+        </div>
+      </div> <!-- row -->
+      
+      <div class="row">
+        <div class="span12">
+          <table>
+            <thead>
+              <tr>  
+                <th>System</th>  
+                <th>1</th>  
+                <th>2</th>  
+                <th>3</th>  
+                <th>4</th>  
+                <th>5</th>  
+                <th>6</th>  
+                <th>7</th>  
+                <th>8</th>  
+                <th>9</th>  
+                <th>10</th>  
+                <th>11</th>  
+                <th>12</th>  
+                <th>13</th>  
+                <th>14</th>  
+                <th>15</th>  
+                <th>16</th>  
+                <th>17</th>  
+                <th>18</th>  
+                <th>19</th>  
+                <th>20</th>  
+                <th>21</th>  
+                <th>22</th>  
+                <th>23</th>  
+                <th>24</th>  
+                <th>25</th>  
+                <th>26</th>  
+                <th>27</th>  
+                <th>28</th>  
+                <th>29</th>  
+                <th>30</th>  
+
+              </tr>  
+            </thead>
+          <tbody>
+            <tr>            
+                <td class="system">P03</td>
+                <td colspan="25" class="available"></td>
+                <td class="freeze" colspan="3"></td>
+                <td class="available" colspan="2"></td>
+            </tr>
+            <tr>            
+                <td class="system">P07</td>
+                <td class="freeze" colspan="3"></td>
+                <td class="available" colspan="15"></td>
+                <td class="freeze" colspan="10"></td>
+                <td class="available" colspan="2"></td>
+            </tr>
+            <tr>            
+                <td class="system">P03</td>
+                <td class="available" colspan="26"></td>
+                <td class="freeze" colspan="3"></td>
+                <td class="available"></td>
+            </tr>
+            <tr>            
+                <td class="system">P07</td>
+                <td class="freeze" colspan="2"></td>
+                <td class="available"colspan="28"></td>
+            </tr>
+
+          </tbody>          
+          </table>
+        </div>
+      </div> <!-- row -->
+
+
+    </div><!--/.container-->    
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../js/jquery-1.7.1.min.js"></script>
+    <script src="../js/bootstrap.js"></script>
+    <script src="../js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+      $('.datefield').datepicker({dateFormat: 'yy-mm-dd'});
+    </script>
+  </body>
+</html>
