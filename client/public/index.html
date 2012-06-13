@@ -134,8 +134,8 @@
                 <td class="available" colspan="2"></td>
             </tr>
             <tr>            
-                <td class="system">P07</td>
-                <td class="freeze" colspan="3"></td>
+                <td class="system">{{statuslines[1].system}}</td>
+                <td class="freeze" colspan="{{statuslines[1].colsp}}"></td>
                 <td class="available" colspan="15"></td>
                 <td class="freeze" colspan="10"></td>
                 <td class="available" colspan="2"></td>
@@ -151,6 +151,11 @@
                 <td class="freeze" colspan="2"></td>
                 <td class="available"colspan="28"></td>
             </tr>
+			
+			<tr ng-repeat="statusline in getStatusLines()">
+				<td class="system"> {{statusline.system}} </td>
+				
+			</tr>
 
           </tbody>          
           </table>
