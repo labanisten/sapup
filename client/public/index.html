@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <script src="http://code.angularjs.org/angular-1.0.0rc7.min.js"></script> 
+    <script src="http://code.angularjs.org/angular-1.0.0rc9.min.js"></script> 
     <script src="../js/controllers.js"></script>
     <link href="../css/bootstrap.css" rel="stylesheet">
     <link href="../css/default.css" rel="stylesheet">
@@ -127,7 +127,7 @@
               </tr>  
             </thead>
           <tbody>
-            <tr>            
+            <!--<tr>            
                 <td class="system">P03</td>
                 <td colspan="25" class="available"></td>
                 <td class="freeze" colspan="3"></td>
@@ -150,18 +150,17 @@
                 <td class="system">P07</td>
                 <td class="freeze" colspan="2"></td>
                 <td class="available"colspan="28"></td>
-            </tr>
+            </tr>-->
 			
-			<tr ng-repeat="statusline in getStatusLines()">
-				<td class="system"> {{statusline.system}} </td>
-				
+			<tr ng-repeat="systemline in systemlines">
+				<td class="system"> {{systemline.system}} </td>
+				<td ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" class="{{statusline.status}}"></td>
 			</tr>
 
           </tbody>          
           </table>
         </div>
       </div> <!-- row -->
-
     </div><!--/.container-->    
 
     <!-- Placed at the end of the document so the pages load faster -->
