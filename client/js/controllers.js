@@ -1,19 +1,18 @@
 function TimelineCtrl($scope) {
-/*
-  $scope.statuslines = [
-    //{system:'P03', start:'20120516', end:'20120523', status:'available'}, 
-    {system:'P10', start:'20120503', end:'20120510', status:'freeze', colsp:'20'},
-    {system:'P10', start:'20120512', end:'20120520', status:'freeze'},
-	{system:'P11', start:'20120510', end:'20120512', status:'freeze'},
-	{system:'P11', start:'20120515', end:'20120530', status:'freeze'}];
-*/	
 
-	//$scope.statusdetail = [{system:'D10', start:'20120503', end:'20120510', status:'freeze'}];
-	
-	$scope.detail_system;
-	$scope.detail_status;
-	$scope.detail_start;
-	$scope.detail_end;
+	$scope.selectedStatusLine = {
+		system:"", 
+		status:"", 
+		start:undefined, 
+		end:undefined,
+	}
+
+	$scope.calendar = {
+		daysLabels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+		monthsLabels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+		daysInMonth: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
+		current_date: new Date(),
+	}
 	
     $scope.systemlines = [
 		{system:'P03', statuslines:[
@@ -44,51 +43,25 @@ function TimelineCtrl($scope) {
 	};
   
     $scope.showDetails = function(statusline) {
-		$scope.detail_status = statusline.status;
-		$scope.detail_start = statusline.start;
-		$scope.detail_end = statusline.end;
+		$scope.selectedStatusLine.system = statusline.system;
+		$scope.selectedStatusLine.status = statusline.status;
+		$scope.selectedStatusLine.start = statusline.start;
+		$scope.selectedStatusLine.end = statusline.end;
 	}
   
-  $scope.getStatusLines = function() {
-	//var list = [];
-	//list.push({'system':'P20', 'status':'available'});
-	//$scope.statuslines = $.merge($scope.statuslines, list);
-	
-	//var unique_values = {};
-	//var list_of_values = [];
-	
-    //var list = $scope.statuslines.concat({system:'P30', start:'20120512', end:'20120520', status:'freeze'});
-	//var list = $.merge($scope.statuslines, {'system':'P30', 'start':'20120512', 'end':'20120520', 'status':'freeze'});
-	
-	//list = $.unique(list);
-	/*
-	$.each(
-		list, 
-		function(item){
-
-		}
-	);
-	*/
-	
+	$scope.getStatusLines = function() {
 	var list = $scope.systemlines;
-	//list = list.concat({system:'P30', start:'20120512', end:'20120520', status:'freeze'});
-	//list = $.unique(list);
-	
-    $.each(
+
+	$.each(
 		list, 
 		function(item, val){
 			console.log(item + ' ' + val.system + ' ' + val.statuslines[0].start);
 		}
 	);
-	
-	console.log(list.length);
-	
-	
 
-	//list = $.merge(list, {'system':'P30', 'start':'20120512', 'end':'20120520', 'status':'freeze'});
-	
+	console.log(list.length);
 	return list;
-	
-  };
+
+	};
  
 }
