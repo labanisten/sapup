@@ -1,11 +1,19 @@
 function TimelineCtrl($scope) {
+/*
   $scope.statuslines = [
     //{system:'P03', start:'20120516', end:'20120523', status:'available'}, 
     {system:'P10', start:'20120503', end:'20120510', status:'freeze', colsp:'20'},
     {system:'P10', start:'20120512', end:'20120520', status:'freeze'},
 	{system:'P11', start:'20120510', end:'20120512', status:'freeze'},
 	{system:'P11', start:'20120515', end:'20120530', status:'freeze'}];
+*/	
+
+	//$scope.statusdetail = [{system:'D10', start:'20120503', end:'20120510', status:'freeze'}];
 	
+	$scope.detail_system;
+	$scope.detail_status;
+	$scope.detail_start;
+	$scope.detail_end;
 	
     $scope.systemlines = [
 		{system:'P03', statuslines:[
@@ -31,9 +39,15 @@ function TimelineCtrl($scope) {
 	];
 	
  
-  $scope.addTimeline = function() {
-    $scope.statuslines.push({system:$scope.system, start:$scope.start, end:$scope.end, status:$scope.status});
-  };
+	$scope.addTimeline = function() {
+		$scope.statuslines.push({system:$scope.system, start:$scope.start, end:$scope.end, status:$scope.status});
+	};
+  
+    $scope.showDetails = function(statusline) {
+		$scope.detail_status = statusline.status;
+		$scope.detail_start = statusline.start;
+		$scope.detail_end = statusline.end;
+	}
   
   $scope.getStatusLines = function() {
 	//var list = [];

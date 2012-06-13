@@ -8,10 +8,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <script src="http://code.angularjs.org/angular-1.0.0rc9.min.js"></script> 
+    <script src="http://code.angularjs.org/angular-1.0.0rc12.min.js"></script> 
     <script src="../js/controllers.js"></script>
+	<script type="text/javascript" src="../js/calendar.js"></script>
     <link href="../css/bootstrap.css" rel="stylesheet">
     <link href="../css/default.css" rel="stylesheet">
+	
     
 
     <style type="text/css">
@@ -86,7 +88,39 @@
           </div>            
         </div>
       </div> <!-- row -->
+	  
+	  
+	  
+	  <div class="row">
+          <div class="span12">
+          <div>
+            <form class="well form-inline" ng-submit="addTimeline()">          
+            <select  ng-model="detail_system" name="selectSystem">
+              <option value="" disabled="disabled">Select system</option>
+              <option value="P03">P03</option>
+              <option value="P04">P04</option>
+              <option value="P07">P07</option>
+              <option value="D10">D10</option>
+              <option value="D08">P08</option>
+            </select>
+            <select ng-model="detail_status" name="selectStatus">
+              <option value="" disabled="disabled">Select status</option>
+              <option value="available">Available</option>
+			  <option value="freeze">Freeze</option>
+              <option value="unavailable">Unavailable</option>
+              <option value="restricted">Restricted</option>
+            </select>
+
+            <label for="startDate">Start:</label> 
+            <input id="startDate" type="date" class="datefield input-small" ng-model="detail_start">
+            <label for="endDate">End:</label> 
+            <input id="endDate" type="date" class="datefield input-small" ng-model="detail_end">
+            </form>
+          </div>            
+        </div>
+      </div> <!-- row -->
       
+	  <!--
       <div class="row">
         <div class="span12">
           <table>
@@ -150,7 +184,7 @@
                 <td class="system">P07</td>
                 <td class="freeze" colspan="2"></td>
                 <td class="available"colspan="28"></td>
-            </tr>-->
+            </tr>
 			
 			<tr ng-repeat="systemline in systemlines">
 				<td class="system"> {{systemline.system}} </td>
@@ -160,7 +194,25 @@
           </tbody>          
           </table>
         </div>
-      </div> <!-- row -->
+      </div>--> <!-- row -->
+	  
+	  
+	  <div class="row">
+		<div class="span12">
+		
+			<script type="text/javascript">
+
+			  var cal = new Calendar();
+			  cal.generateHTML();									  
+			  document.write(cal.getHTML());
+
+			</script>
+		
+		
+		</div>
+	  </div>
+	  
+	  
     </div><!--/.container-->    
 
     <!-- Placed at the end of the document so the pages load faster -->
