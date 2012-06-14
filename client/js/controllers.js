@@ -1,4 +1,11 @@
-function TimelineCtrl($scope) {
+
+
+var myModule = angular.module('systemAvailability', ['mongolab']);
+
+
+function TimelineCtrl($scope, Systems) {
+
+
 
 	$scope.selectedStatusLine = {
 		system:"", 
@@ -14,53 +21,73 @@ function TimelineCtrl($scope) {
 		current_date: new Date(),
 	}
 	
-    $scope.systemlines = [
-		{system:'P03', statuslines:[
-									{start:'20120501', end:'20120502', status:'freeze'},
-									{start:'20120503', end:'20120510', status:'available'},
-									{start:'20120511', end:'20120520', status:'freeze'},
-									{start:'20120521', end:'20120530', status:'available'},
-								   ]
-		},
-		
-		{system:'P10', statuslines:[
-									{start:'20120501', end:'20120525', status:'available'},
-									{start:'20120526', end:'20120530', status:'freeze'}
-								   ]
-		},
-		
-		{system:'P11', statuslines:[
-									{start:'20120501', end:'20120510', status:'freeze'},
-									{start:'20120511', end:'20120525', status:'available'},
-									{start:'20120526', end:'20120530', status:'freeze'}
-								   ]
-		}
-	];
+    $scope.systemlines = Systems.query();
 	
- 
+	function getSystemLines(){
+		var systemLines = Systems.query();	
+		
+	}
+	
 	$scope.addTimeline = function() {
 		$scope.statuslines.push({system:$scope.system, start:$scope.start, end:$scope.end, status:$scope.status});
 	};
+	
+	$scope.removeStatusElement = function() {
+	
+		$.each($scope.systemlines, function(i, v_system) {	
+		
+			if (v_system.system == $scope.selectedStatusLine.system) {
+			
+				$.each(v_system.statuslines, function(j, v_status) {
+					
+					if(v_status.start == $scope.selectedStatusLine.start && 
+						v_status.end == $scope.selectedStatusLine.end && 
+							v_status.status == $scope.selectedStatusLine.status){
+							
+								console.log("t1");	
+								//delete $scope.systemlines[i].statuslines[j];
+								$scope.systemlines[i].statuslines.splice(j,1);
+								console.log("t2");
+								//return;
+					}
+					
+				})
+				
+			}
+			
+		});
+
+	};
   
-    $scope.showDetails = function(statusline) {
-		$scope.selectedStatusLine.system = statusline.system;
+    $scope.showDetails = function(system, statusline) {
+		$scope.selectedStatusLine.system = system;
 		$scope.selectedStatusLine.status = statusline.status;
 		$scope.selectedStatusLine.start = statusline.start;
 		$scope.selectedStatusLine.end = statusline.end;
 	}
   
-	$scope.getStatusLines = function() {
-	var list = $scope.systemlines;
+	$scope.getSystemLines = function() {
+	
+		var list = $scope.systemlines;
 
-	$.each(
-		list, 
-		function(item, val){
-			console.log(item + ' ' + val.system + ' ' + val.statuslines[0].start);
-		}
-	);
+						list.push({system:'P88', statuslines:[
+									{start:'20120501', end:'20120505', status:'freeze'},
+									{start:'20120526', end:'20120530', status:'freeze'}
+								   ]
+						  });
+						  
+		$.each(
+			list, 
+			function(item, val){
+				console.log(item + ' ' + val.system + ' ' + val.statuslines[0].start);
 
-	console.log(list.length);
-	return list;
+			}
+		);
+		
+		
+
+		console.log(list.length);
+		return list;
 
 	};
  

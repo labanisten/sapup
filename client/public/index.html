@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html ng-app lang="en">
+<html ng-app="systemAvailability" lang="en">
   <head>
     <meta charset="utf-8">
     <title>System availability</title>
@@ -9,7 +9,9 @@
     <meta name="author" content="">
 
     <script src="http://code.angularjs.org/angular-1.0.0rc12.min.js"></script> 
+	<script src="http://code.angularjs.org/angular-resource-1.0.0rc12.min.js"></script>
     <script src="../js/controllers.js"></script>
+	<script src="../js/mongolab.js"></script>
     <link href="../bootstrap//css/bootstrap.css" rel="stylesheet">
 	
     
@@ -91,7 +93,7 @@
 	  <div class="row">
           <div class="span12">
           <div>
-            <form class="well form-inline" ng-submit="addTimeline()">          
+            <form class="well form-inline" ng-submit="removeStatusElement()">          
               <label class="control-label" for="system">System</label>            
               <input class="disabled span2"  ng-model="selectedStatusLine.system" name="system" disabled>
               <label for="status">Status</label>
@@ -118,14 +120,18 @@
           <thead>
           <tbody>
             <tr ng-repeat="systemline in systemlines">
-              <td class="system"> {{systemline.system}} </td>
-              <td ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" class="{{statusline.status}}" ng-click="showDetails(statusline)"></td>
-            </tr>
+			
+				<td class="system"> {{systemline.system}} </td>
+				<td class="element element-corner element-borderstatus-{{statusline.status}}" ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline.system, statusline)">
+					<span class="element-inner-{{statusline.status}} element-inner element-shadow element-corner"></span>
+				</td>
+			
+			</tr>
           </tbody>      
         </table>
 		  </div>  
 	  </div>
-	  
+  
     </div><!--/.container-->    
 
     <!-- Placed at the end of the document so the pages load faster -->
