@@ -33,9 +33,10 @@
 }
 .element-inner-available {
   cursor: crosshair;
-  /*visibility: hidden;*/
-
+  visibility: hidden;
   border-radius: 0px;
+  /*TODO: no special cursor on available element*/
+
   /*
   background-color: #5bb75b;
   background-image: -ms-linear-gradient(top, #62c462, #51a351);

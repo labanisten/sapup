@@ -106,13 +106,13 @@
           <div>
             <form class="well form-inline" ng-submit="addStatusElement()">          
               <label class="control-label" for="system">System</label>            
-              <input class="span2"  ng-model="selectedStatusLine.system" name="system">
+              <input class="span2"  ng-model="addLine.system" name="system">
               <label for="status">Status</label>
-              <input class="span2" ng-model="selectedStatusLine.status" name="status">
+              <input class="span2" ng-model="addLine.status" name="status">
               <label for="startDate">Start</label> 
-              <input class="span2" id="startDate" type="date" class="datefield input-small" ng-model="selectedStatusLine.start">
+              <input class="span2" id="startDate" type="date" class="datefield input-small" ng-model="addLine.start">
               <label for="endDate">End</label> 
-              <input class="span2" id="endDate" type="date" class="datefield input-small" ng-model="selectedStatusLine.end">
+              <input class="span2" id="endDate" type="date" class="datefield input-small" ng-model="addLine.end">
               <button class="btn btn-primary">Add</button>
             </form>
           </div>            
