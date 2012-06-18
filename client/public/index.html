@@ -88,7 +88,36 @@
             </form>
           </div>            
         </div>
-      </div>  row -->
+      </div>  row 
+	  
+	  <div class="row">
+		<div class="span12">
+
+			<div>  
+				<div id="item1" draggable="true"></div>
+				<div id="item2" draggable="true"></div>
+			</div>
+				
+		</div
+	  </div>-->
+	  
+	  <div class="row">
+        <div class="span12">
+          <div>
+            <form class="well form-inline" ng-submit="addStatusElement()">          
+              <label class="control-label" for="system">System</label>            
+              <input class="span2"  ng-model="selectedStatusLine.system" name="system">
+              <label for="status">Status</label>
+              <input class="span2" ng-model="selectedStatusLine.status" name="status">
+              <label for="startDate">Start</label> 
+              <input class="span2" id="startDate" type="date" class="datefield input-small" ng-model="selectedStatusLine.start">
+              <label for="endDate">End</label> 
+              <input class="span2" id="endDate" type="date" class="datefield input-small" ng-model="selectedStatusLine.end">
+              <button class="btn btn-primary">Add</button>
+            </form>
+          </div>            
+        </div>
+      </div> <!-- row -->
 	  
 	  <div class="row">
           <div class="span12">
@@ -142,6 +171,28 @@
       $(function() {
         $('.datefield').datepicker({dateFormat: 'yy-mm-dd'});
       })
+	  
+	  /*$('document').ready(init);
+	  
+       function init(){
+	   
+            $('#item1, #item2').bind('dragstart', function(event) {
+                event.originalEvent.dataTransfer.setData("text/plain", event.target.getAttribute('id'));
+            });
+            
+			// bind the dragover event on the board sections
+            $('#tablecell').bind('dragover', function(event) {
+                event.preventDefault();
+            });
+
+			// bind the drop event on the board sections
+			$('#tablecell').bind('drop', function(event) {
+				var notecard = event.originalEvent.dataTransfer.getData("text/plain");
+				event.target.appendChild(document.getElementById(notecard));
+				event.preventDefault();
+			});
+        }*/
+
     </script>
   </body>
 </html>

@@ -9,11 +9,28 @@ function TimelineCtrl($scope, Systems) {
 		//return new Date(a.start).getTime() - new Date(b.start).getTime();
 		return a.start - b.start;
 	}
+	
+	
+    function convertToDate(dateString)
+	{
+
+		var datestring = dateString;
+		var y = datestring.substr(0,4);
+		var m = datestring.substr(4,2);
+		var d = datestring.substr(6,2);
+		m = m - 1;
+		date = new Date(y, m, d); 
+		
+		return date;
+		
+	}
 
 
 	function getDBdata(){
 
 		// TODO: sorting 
+		
+		var startdate = 20120501;
 
 		var syslines = Systems.query(function(){
 
@@ -21,17 +38,40 @@ function TimelineCtrl($scope, Systems) {
 			
 				$.each(v_system.statuslines, function(j, v_status) {
 
-					if(j == 0 && v_status.start > '20120501'){
-					
-						syslines[i].statuslines.unshift({"start":"20120501", "end":""+(v_status.start - 1)+"", "status":"available"});
+					if(j == 0 && v_status.start > startdate){
+						
+						//var statusdate = convertToDate(v_status.start);
+						//var startdate = convertToDate('20120501');
+
+						for(k = 0; k < v_status.start - startdate; k++){
+						
+							//console.log(startdate + k);
+							syslines[i].statuslines.unshift({"start":startdate + k, "end":startdate + k, "status":"available"});
+							syslines[i].statuslines.sort(custom_sort);
+							
+						}
+						
+						//syslines[i].statuslines.unshift({"start":"20120501", "end":""+(v_status.start - 1)+"", "status":"available"});
+						
 						
 					}else if( j > 0 && v_status.start - 1 != (v_system.statuslines[j - 1].end)){
 					
 						//TODO: add 1 to startdate
-						//var test = v_system.statuslines[j - 1].end + 1;
+
+						var prev_end_date = parseInt(v_system.statuslines[j - 1].end) + 1;						
+						//console.log("m: " + (v_status.start - prev_end_date));
 						
-						syslines[i].statuslines.push({"start":(v_system.statuslines[j - 1].end), "end":(v_status.start - 1), "status":"available"});
-						syslines[i].statuslines.sort(custom_sort);
+						for(k = 0; k < v_status.start - prev_end_date; k++){
+						
+							//console.log(parseInt(prev_end_date) + k);
+							//console.log(startdate + k);
+							syslines[i].statuslines.push({"start":prev_end_date + k, "end":prev_end_date + k, "status":"available"});
+							syslines[i].statuslines.sort(custom_sort);
+							
+						}
+						
+						//syslines[i].statuslines.push({"start":(v_system.statuslines[j - 1].end), "end":(v_status.start - 1), "status":"available"});
+						//syslines[i].statuslines.sort(custom_sort);
 						
 					}
 
@@ -97,11 +137,39 @@ function TimelineCtrl($scope, Systems) {
 					if(v_status.start == $scope.selectedStatusLine.start && 
 						v_status.end == $scope.selectedStatusLine.end && 
 							v_status.status == $scope.selectedStatusLine.status){
+
+								$scope.systemlines[i].statuslines[j].status = "available";
+
+					}					
+				})				
+			}		
+		});
+	};
+	
+	
+		$scope.addStatusElement = function() {
+	
+		$.each($scope.systemlines, function(i, v_system) {	
+		
+			if (v_system.system == $scope.selectedStatusLine.system) {
+			
+				$.each(v_system.statuslines, function(j, v_status) {
+					
+					if(v_status.start == $scope.selectedStatusLine.start && 
+						v_status.end == $scope.selectedStatusLine.end && 
+							v_status.status == $scope.selectedStatusLine.status){
 							
 								//$scope.systemlines[i].statuslines.splice(j,1);
-								//$scope.systemlines[i].statuslines[j].start = "";
+								//$scope.systemlines[i].statuslines[j].start = "";							
 								//$scope.systemlines[i].statuslines[j].end = "";
-								$scope.systemlines[i].statuslines[j].status = "available";
+								
+								//$scope.systemlines[i].statuslines[j].status = "available";
+								if($scope.systemlines[i].statuslines[j].status == 'available'){
+								
+									$scope.systemlines[i].statuslines.push({"start":$scope.selectedStatusLine.start, "end":$scope.selectedStatusLine.end, "status":$scope.selectedStatusLine.status});
+									$scope.systemlines[i].statuslines.sort(custom_sort);
+									return false; //jquery break
+								}
 								
 								/*
 								//console.log("pr.status: " + $scope.systemlines[i].statuslines[j - 1].status);

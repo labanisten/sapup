@@ -33,7 +33,9 @@
 }
 .element-inner-available {
   cursor: crosshair;
-  visibility: hidden;
+  /*visibility: hidden;*/
+
+  border-radius: 0px;
   /*
   background-color: #5bb75b;
   background-image: -ms-linear-gradient(top, #62c462, #51a351);
@@ -107,3 +109,23 @@ td {
 .freeze:hover {
   color: red;
 }
+/*
+#item1{
+
+	float:left;
+	min-width: 50px;
+	min-height: 50px;
+	border: 2px solid black;
+	margin: 10px;
+	font-weight:bold;
+	min-height:60px;
+	
+}
+
+
+#item2{
+
+	border: 1px solid #999;
+	
+}
+*/
