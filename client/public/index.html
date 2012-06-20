@@ -131,21 +131,38 @@
               <input class="disabled span2" id="startDate" type="date" class="datefield input-small" ng-model="selectedStatusLine.start" disabled>
               <label for="endDate">End</label> 
               <input class="disabled span2" id="endDate" type="date" class="datefield input-small" ng-model="selectedStatusLine.end" disabled>
-              <button class="btn btn-primary">Delete</button>
+              <button class="btn btn-danger">Delete</button>
             </form>
           </div>            
         </div>
       </div> <!-- row -->
 
 	  
-	  <div class="row">
+	  <div class="row-fluid">
 		  <div class="span12">
         <table id="systemtab">
           <thead>
-            <tr><th colspan='{{calendar.monthLEngth}}'>{{monthName}}</th></tr>
-              <tr>
+            <tr>
+				<th colspan='{{daysInCurrentMonth()}}'>{{currentMonthName()}}</th>
+			</tr>
+		
+			<tr>
+				<th>Week</th>
+				<th ng-repeat="week in currentMonthWeekList()">{{week}}</th>
+			</tr>
+			
+			
+			<tr>
+				<th>Day</th>
+				<th ng-repeat="dayName in dayNamesInCurrentMonth()">{{dayName}}</th>
+			</tr>
+			
+            <tr>
                 <th>System</th>
-                <th ng-repeat="day in calendar.daysInMonth">{{day}}</th>
+                <!--<th ng-repeat="day in calendar.daysInMonth">{{day}}</th>-->
+				<th ng-repeat="day in currentMonthDayList()">{{day}}</th>
+			</tr>
+			 
           <thead>
           <tbody>
             <tr ng-repeat="systemline in systemlines">

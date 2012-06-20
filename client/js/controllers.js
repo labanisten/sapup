@@ -25,10 +25,81 @@ function TimelineCtrl($scope, Systems) {
 
 	
 	$scope.calendar = {
-		daysLabels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-		monthsLabels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-		daysInMonth: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
-		current_date: new Date(),
+	
+		daysLabel: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+		daysLabelShort: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+		monthLabels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+		daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+		currentDate: new Date(),
+	}
+	
+	function getWeek(date) {
+			var onejan = new Date(date.getFullYear(),0,1);
+			return Math.ceil((((date - onejan) / 86400000) + onejan.getDay()+1)/7);
+	} 
+		
+	
+	$scope.currentMonthWeekList = function(){
+	
+		var dayArray = $scope.currentMonthDayList();
+		
+		var weekArray = [];
+		
+		var m = $scope.calendar.currentDate;
+		
+		$.each(dayArray, function(i, v_day){
+			weekArray.push(getWeek(new Date(m.getFullYear(), m.getMonth(), i)));		
+		});
+		
+		return weekArray;
+		
+	}
+	
+	
+	$scope.currentMonthName = function(){
+		return $scope.calendar.monthLabels[$scope.calendar.currentDate.getMonth()];
+	}
+	
+	
+	$scope.daysInCurrentMonth = function(){
+		return $scope.calendar.daysInMonth[$scope.calendar.currentDate.getMonth()];;
+	}
+	
+	
+	$scope.currentMonthDayList = function(){
+		var days = $scope.calendar.daysInMonth[$scope.calendar.currentDate.getMonth()];
+		
+		var dayArray = [];
+		
+		for(i = 1; i <= days; i++){
+			dayArray.push(i);
+		}
+	
+		return dayArray;
+	}
+	
+	
+	$scope.dayNamesInCurrentMonth = function(){
+	
+		var dayCount = $scope.calendar.daysInMonth[$scope.calendar.currentDate.getMonth()];
+		
+		var dayArray = [];
+			
+		var date = $scope.calendar.currentDate;
+		var firstDayInMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+
+		var day_it = firstDayInMonth.getDay();		
+		for(i = 0; i < dayCount; i++){
+		
+			dayArray.push($scope.calendar.daysLabel[day_it]);
+			day_it++;
+			
+			if(day_it > 6){
+				day_it = 0;
+			}
+		}
+	
+		return dayArray;
 	}
 	
 	
@@ -62,7 +133,6 @@ function TimelineCtrl($scope, Systems) {
 
 		var syslines = Systems.query(function(){
 	
-
 			$.each(syslines, function(i, v_system) {
 			
 				$.each(v_system.statuslines, function(j, v_status) {
@@ -89,7 +159,7 @@ function TimelineCtrl($scope, Systems) {
 				
 				if( lastElementDate < endDate){
 				
-					console.log("t1: " + (endDate - lastElementDate));
+					//console.log("t1: " + (endDate - lastElementDate));
 					
 					lastElementDate += 1;
 					for(k = 0; k <= endDate - lastElementDate; k++){				
@@ -107,20 +177,6 @@ function TimelineCtrl($scope, Systems) {
 	}
 	
 	
-
-	
-	
-	function getSystemLines(){
-		var systemLines = Systems.query();	
-		
-	}
-	
-	
-	$scope.addTimeline = function() {
-		$scope.statuslines.push({system:$scope.system, start:$scope.start, end:$scope.end, status:$scope.status});
-	};
-	
-	
 	$scope.removeStatusElement = function() {
 	
 		$.each($scope.systemlines, function(i, v_system) {	
@@ -135,7 +191,7 @@ function TimelineCtrl($scope, Systems) {
 								
 								//TODO: split line
 								$scope.systemlines[i].statuslines[j].status = "available";
-
+								$scope.systemlines.save({'id':'213'});
 					}					
 				})				
 			}		
@@ -214,6 +270,17 @@ function TimelineCtrl($scope, Systems) {
 		});
 	};
   
+ /* 
+	function getSystemLines(){
+		var systemLines = Systems.query();	
+		
+	}
+	
+	
+	$scope.addTimeline = function() {
+		$scope.statuslines.push({system:$scope.system, start:$scope.start, end:$scope.end, status:$scope.status});
+	};
+	*/
   
     $scope.showDetails = function(system, statusline) {
 		$scope.selectedStatusLine.system = system;
@@ -222,7 +289,7 @@ function TimelineCtrl($scope, Systems) {
 		$scope.selectedStatusLine.end = statusline.end;
 	}
   
-  
+  /*
 	$scope.getSystemLines = function() {
 	
 		var list = $scope.systemlines;
@@ -245,5 +312,5 @@ function TimelineCtrl($scope, Systems) {
 		return list;
 
 	};
- 
+ */
 }
