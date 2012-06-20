@@ -27,7 +27,10 @@
 .element-borderstatus-freeze {
   border: 1px solid rgba(151, 56, 52, 0.64);
 }
-.element-borderstatus-update {
+.element-borderstatus-upgrade {
+  border: 1px solid rgba(151, 56, 52, 0.64);
+}
+.element-borderstatus-maintenance {
   border: 1px solid rgba(151, 56, 52, 0.64);
 }
 .element-borderstatus-test {
@@ -66,7 +69,19 @@
   filter: progid:dximagetransform.microsoft.gradient(startColorstr='#FFFF86', endColorstr='#E8E800', GradientType=0);
   filter: progid:dximagetransform.microsoft.gradient(enabled=false);
 }
-.element-inner-update {
+.element-inner-upgrade {
+  background-color: #da4f49;
+  background-image: -ms-linear-gradient(top, #ee5f5b, #bd362f);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ee5f5b), to(#bd362f));
+  background-image: -webkit-linear-gradient(top, #ee5f5b, #bd362f);
+  background-image: -o-linear-gradient(top, #ee5f5b, #bd362f);
+  background-image: -moz-linear-gradient(top, #ee5f5b, #bd362f);
+  background-image: linear-gradient(top, #ee5f5b, #bd362f);
+  background-repeat: repeat-x;
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ee5f5b', endColorstr='#bd362f', GradientType=0);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+}
+.element-inner-maintenance {
   background-color: #da4f49;
   background-image: -ms-linear-gradient(top, #ee5f5b, #bd362f);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ee5f5b), to(#bd362f));
