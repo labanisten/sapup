@@ -7,6 +7,10 @@ function TimelineCtrl($scope, Systems) {
 
 	$scope.systemlines = getDBdata();
 	
+	
+	var startDate = 20120501;
+	var endDate = 20120530;
+		
 
 	$scope.selectedStatusLine = {
 		system:"", 
@@ -123,56 +127,64 @@ function TimelineCtrl($scope, Systems) {
 		
 	}
 
+	
+	function addEmptyElementsForSystem(system, calendartable, index){
+	
+		calendartable.push({ "system":system, "statuslines":[] });
+				
+		for(k = 0; k < (endDate - startDate) + 1; k++){
+			calendartable[index].statuslines.push({"start":startDate + k, "end":startDate + k, "status":"available"});						
+	    }
+		
+		return calendartable;
+	}
+	
+	
+	function insertCalendarElement(calendartable, v_status, i, j){
+	
+		if(v_status.start == v_status.end){
+			calendartable[i].statuslines[j].status = v_status.status;
+		}
+		else{
+	
+			$.each(calendartable[i].statuslines, function(j, c_status) {
+
+				if(c_status.start == v_status.start){
+				
+					for(k = 0; k < (v_status.end - v_status.start) + 1; k++){	
+						calendartable[i].statuslines.splice(j, 1);
+					}
+
+					return false; //jquery loopbreak
+				}
+				
+			});
+
+			calendartable[i].statuslines.push({"start":v_status.start, "end":v_status.end, "status":v_status.status});
+			calendartable[i].statuslines.sort(custom_sort);
+		}
+		
+		return calendartable;
+	}
+	
 
 	function getDBdata(){
 
-		// TODO: sorting 
-		
-		var startDate = 20120501;
-		var endDate = 20120530;
 
+		var calendartable = [];
+	
 		var syslines = Systems.query(function(){
 	
-			$.each(syslines, function(i, v_system) {
-			
-				$.each(v_system.statuslines, function(j, v_status) {
-				
-					if(j == 0 && v_status.start > startDate){
-						
-						for(k = 0; k < v_status.start - startDate; k++){
-							syslines[i].statuslines.unshift({"start":startDate + k, "end":startDate + k, "status":"available"});
-							syslines[i].statuslines.sort(custom_sort);	
-						}
-						
-					}else if( j > 0 && v_status.start - 1 != (v_system.statuslines[j - 1].end)){
-					
-						var prev_end_date = parseInt(v_system.statuslines[j - 1].end) + 1;						
+			$.each(syslines, function(i, v_system) {		
+				calendartable = addEmptyElementsForSystem(v_system.system, calendartable, i);
 
-						for(k = 0; k < v_status.start - prev_end_date; k++){
-							syslines[i].statuslines.push({"start":prev_end_date + k, "end":prev_end_date + k, "status":"available"});
-							syslines[i].statuslines.sort(custom_sort);		
-						}
-					}
-				})
-
-				var lastElementDate = parseInt(v_system.statuslines[v_system.statuslines.length - 1].end);
-				
-				if( lastElementDate < endDate){
-				
-					//console.log("t1: " + (endDate - lastElementDate));
-					
-					lastElementDate += 1;
-					for(k = 0; k <= endDate - lastElementDate; k++){				
-							syslines[i].statuslines.push({"start":lastElementDate + k, "end":lastElementDate + k, "status":"available"});							
-					}
-				}
+				$.each(v_system.statuslines, function(j, v_status) {		
+					calendartable = insertCalendarElement(calendartable, v_status, i, j);							
+				});
 			});
 		});
-					
-					
 
-		
-		return syslines;
+		return calendartable;
 	
 	}
 	
@@ -190,8 +202,17 @@ function TimelineCtrl($scope, Systems) {
 							v_status.status == $scope.selectedStatusLine.status){
 								
 								//TODO: split line
-								$scope.systemlines[i].statuslines[j].status = "available";
-								$scope.systemlines.save({'id':'213'});
+								console.log("s_start: " + $scope.systemlines[i].statuslines[j].start);
+								console.log("s_end: " + $scope.systemlines[i].statuslines[j].end);
+								$scope.systemlines[i].statuslines.splice(j, 1);
+								
+								for(k = 0; k < (v_status.end - v_status.start) + 1; k++){
+									$scope.systemlines[i].statuslines.push({
+										"start":parseInt(v_status.start) + k, "end":parseInt(v_status.start) + k, "status":"available"
+									});						
+								}
+		
+								$scope.systemlines[i].statuslines.sort(custom_sort);
 					}					
 				})				
 			}		

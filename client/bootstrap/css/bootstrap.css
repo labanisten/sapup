@@ -4214,8 +4214,7 @@ a.badge:hover {
 }
 .element-inner-available {
   cursor: default;
-  /*visibility: hidden;*/
-
+  visibility: hidden;
   border-radius: 0px;
   /*TODO: no special cursor on available element*/
 
