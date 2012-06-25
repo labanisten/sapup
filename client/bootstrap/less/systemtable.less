@@ -4,7 +4,7 @@
 .element
 {
 	/*border: 1px solid #000000;*/
-	padding: 0px;
+	padding: 0px;  
 }
 
 .element-corner
@@ -14,11 +14,13 @@
 
 .element-inner
 {
-	border-top: 1px solid rgba(255, 255, 255, 0.4);
+	border-top: 1px solid rgba(255, 255, 255, 0.45);
 	height: 20px;
 	cursor: pointer;
 	width: 100%;
     display: block;
+	min-width: 30px;
+	
 }
 
 .element-shadow
@@ -29,7 +31,8 @@
 
 .element-borderstatus-available
 {
-	border: 1px solid rgba(27, 122, 27, 0.64);
+	cursor: default;
+	/*border: 1px solid rgba(27, 122, 27, 0.64);*/
 }
 
 
@@ -38,8 +41,31 @@
 	border: 1px solid rgba(151, 56, 52, 0.64);
 }
 
+.element-borderstatus-upgrade
+{
+	border: 1px solid rgba(151, 56, 52, 0.64);
+}
+
+.element-borderstatus-maintenance
+{
+	border: 1px solid rgba(151, 56, 52, 0.64);
+}
+
+
+.element-borderstatus-test
+{
+	border: 1px solid rgba(151, 56, 52, 0.64);
+}
+
 
 .element-inner-available {
+
+  cursor: default;
+  visibility: hidden;
+  border-radius: 0px;
+  /*TODO: no special cursor on available element*/
+  
+  /*
   background-color: #5bb75b;
   background-image: -ms-linear-gradient(top, #62c462, #51a351);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#62c462), to(#51a351));
@@ -50,8 +76,25 @@
   background-repeat: repeat-x;
   filter: progid:dximagetransform.microsoft.gradient(startColorstr='#62c462', endColorstr='#51a351', GradientType=0);
   filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+  */
 }
+
+
 .element-inner-freeze {
+  background-color: #F7F705;
+  background-image: -ms-linear-gradient(top, #FFFF86, #E8E800);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#FFFF86), to(#E8E800));
+  background-image: -webkit-linear-gradient(top, #FFFF86, #E8E800);
+  background-image: -o-linear-gradient(top, #FFFF86, #E8E800);
+  background-image: -moz-linear-gradient(top, #FFFF86, #E8E800);
+  background-image: linear-gradient(top, #FFFF86, #E8E800);
+  background-repeat: repeat-x;
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#FFFF86', endColorstr='#E8E800', GradientType=0);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+}
+
+
+.element-inner-upgrade {
   background-color: #da4f49;
   background-image: -ms-linear-gradient(top, #ee5f5b, #bd362f);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ee5f5b), to(#bd362f));
@@ -65,6 +108,34 @@
 }
 
 
+.element-inner-maintenance {
+  background-color: #da4f49;
+  background-image: -ms-linear-gradient(top, #ee5f5b, #bd362f);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ee5f5b), to(#bd362f));
+  background-image: -webkit-linear-gradient(top, #ee5f5b, #bd362f);
+  background-image: -o-linear-gradient(top, #ee5f5b, #bd362f);
+  background-image: -moz-linear-gradient(top, #ee5f5b, #bd362f);
+  background-image: linear-gradient(top, #ee5f5b, #bd362f);
+  background-repeat: repeat-x;
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ee5f5b', endColorstr='#bd362f', GradientType=0);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+}
+
+
+.element-inner-test {
+  background-color: #9F0DE4;
+  background-image: -ms-linear-gradient(top, #B55FDE, #7900B3);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#B55FDE), to(#7900B3));
+  background-image: -webkit-linear-gradient(top, #B55FDE, #7900B3);
+  background-image: -o-linear-gradient(top, #B55FDE, #7900B3);
+  background-image: -moz-linear-gradient(top, #B55FDE, #7900B3);
+  background-image: linear-gradient(top, #B55FDE, #7900B3);
+  background-repeat: repeat-x;
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#B55FDE', endColorstr='#7900B3', GradientType=0);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+}
+
+
 table {
   width: 100%;
   font: 100% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
@@ -72,23 +143,28 @@ table {
   border-spacing: 3px;
 }
 
+
 th {
   width: 50px;
   border-left: 1px solid #999;
   pointer-events: none;
 }
 
+
 td {
   border-radius: 10px;
-  border-color: white;
+  /*border: 2px solid #999;*/
+  /*border-color: black;*/
   height: 15px;
   cursor: pointer;
 }
 
-td.freeze:hover {
+
+.freeze:hover {
  color:red;
 }
 
+<<<<<<< HEAD
 /*.calendarNavButton {
   margin-top: 10px;
   vertical-align: middle;
@@ -140,3 +216,29 @@ color: @white;
     .opacity(90);
   }
 }
+=======
+/*
+#item1{
+
+	float:left;
+	min-width: 50px;
+	min-height: 50px;
+	border: 2px solid black;
+	margin: 10px;
+	font-weight:bold;
+	min-height:60px;
+	
+}
+
+
+#item2{
+
+	border: 1px solid #999;
+	
+}
+*/
+
+
+
+
+>>>>>>> 0eabd467ce874ecadaec7eeff166a1d03148744b

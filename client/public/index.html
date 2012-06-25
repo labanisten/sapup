@@ -8,8 +8,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <script src="http://code.angularjs.org/angular-1.0.0rc12.min.js"></script> 
-	<script src="http://code.angularjs.org/angular-resource-1.0.0rc12.min.js"></script>
+    <script src="http://code.angularjs.org/angular-1.0.0.min.js"></script> 
+	<script src="http://code.angularjs.org/angular-resource-1.0.0.min.js"></script>
     <script src="../js/controllers.js"></script>
 	<script src="../js/mongolab.js"></script>
     <link href="../bootstrap//css/bootstrap.css" rel="stylesheet">
@@ -86,7 +86,36 @@
             </form>
           </div>            
         </div>
-      </div>  row -->
+      </div>  row 
+	  
+	  <div class="row">
+		<div class="span12">
+
+			<div>  
+				<div id="item1" draggable="true"></div>
+				<div id="item2" draggable="true"></div>
+			</div>
+				
+		</div
+	  </div>-->
+	  
+	  <div class="row">
+        <div class="span12">
+          <div>
+            <form class="well form-inline" ng-submit="addStatusElement()">          
+              <label class="control-label" for="system">System</label>            
+              <input class="span2"  ng-model="addLine.system" name="system">
+              <label for="status">Status</label>
+              <input class="span2" ng-model="addLine.status" name="status">
+              <label for="startDate">Start</label> 
+              <input class="span2" id="startDate" type="date" class="datefield input-small" ng-model="addLine.start">
+              <label for="endDate">End</label> 
+              <input class="span2" id="endDate" type="date" class="datefield input-small" ng-model="addLine.end">
+              <button class="btn btn-primary">Add</button>
+            </form>
+          </div>            
+        </div>
+      </div> <!-- row -->
 	  
 	     <div class="row">
           <div class="span1">
@@ -103,7 +132,7 @@
               <input class="disabled span2" id="startDate" type="date" class="datefield input-small" ng-model="selectedStatusLine.start" disabled>
               <label for="endDate">End</label> 
               <input class="disabled span2" id="endDate" type="date" class="datefield input-small" ng-model="selectedStatusLine.end" disabled>
-              <button class="btn btn-primary">Delete</button>
+              <button class="btn btn-danger">Delete</button>
             </form>
           </div>            
         </div>
@@ -113,8 +142,9 @@
       </div> <!-- row -->
 
 	  
-	  <div class="row">
+	  <div class="row-fluid">
 		  <div class="span12">
+<<<<<<< HEAD
         <div id="systemTableCarousel" class="carousel slide">
           <div class="carousel-inner">
             <div class="active item">
@@ -143,6 +173,43 @@
           <div class="item">Third item...</div>
           </div>
         </div> <!-- carousel -->
+=======
+        <table id="systemtab">
+          <thead>
+            <tr>
+				<th colspan='{{daysInCurrentMonth()}}'>{{currentMonthName()}}</th>
+			</tr>
+		
+			<tr>
+				<th>Week</th>
+				<th ng-repeat="week in currentMonthWeekList()">{{week}}</th>
+			</tr>
+			
+			
+			<tr>
+				<th>Day</th>
+				<th ng-repeat="dayName in dayNamesInCurrentMonth()">{{dayName}}</th>
+			</tr>
+			
+            <tr>
+                <th>System</th>
+                <!--<th ng-repeat="day in calendar.daysInMonth">{{day}}</th>-->
+				<th ng-repeat="day in currentMonthDayList()">{{day}}</th>
+			</tr>
+			 
+          <thead>
+          <tbody>
+            <tr ng-repeat="systemline in systemlines">
+			
+				<td class="system"> {{systemline.system}} </td>
+				<td class="element element-corner element-borderstatus-{{statusline.status}}" ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline.system, statusline)">
+					<span class="element-inner-{{statusline.status}} element-inner element-shadow element-corner"></span>
+				</td>
+			
+			</tr>
+          </tbody>      
+        </table>
+>>>>>>> 0eabd467ce874ecadaec7eeff166a1d03148744b
 		  </div>  
 	  </div> <!-- row -->
   
@@ -157,6 +224,28 @@
         $('.datefield').datepicker({dateFormat: 'yy-mm-dd'});
         $('.carousel').carousel('pause');
       })
+	  
+	  /*$('document').ready(init);
+	  
+       function init(){
+	   
+            $('#item1, #item2').bind('dragstart', function(event) {
+                event.originalEvent.dataTransfer.setData("text/plain", event.target.getAttribute('id'));
+            });
+            
+			// bind the dragover event on the board sections
+            $('#tablecell').bind('dragover', function(event) {
+                event.preventDefault();
+            });
+
+			// bind the drop event on the board sections
+			$('#tablecell').bind('drop', function(event) {
+				var notecard = event.originalEvent.dataTransfer.getData("text/plain");
+				event.target.appendChild(document.getElementById(notecard));
+				event.preventDefault();
+			});
+        }*/
+
     </script>
   </body>
 </html>

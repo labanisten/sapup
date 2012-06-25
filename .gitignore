@@ -35,3 +35,6 @@ nbproject
 .CVS
 .idea
 node_modules
+
+#CSS 
+client\bootstrap\css\*
