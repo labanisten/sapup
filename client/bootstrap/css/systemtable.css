@@ -68,3 +68,46 @@ td {
 td.freeze:hover {
   color: red;
 }
+/*.calendarNavButton {
+  margin-top: 10px;
+  vertical-align: middle;
+  width: 40px;
+  line-height: 17px;
+  height: 40px;
+  font-size: 40px;
+  font-weight: 100;
+  color: @white;
+  text-align: center;
+  background: @grayDarker;
+  border: 3px solid @white;
+  .border-radius(20px);
+  .opacity(50);
+
+
+ &.right {
+    left: auto;
+    right: 15px;
+  }
+
+
+  // Hover state
+  &:hover {
+    color: @white;
+    text-decoration: none;
+    .opacity(90);
+  }
+}*/
+.calendarNavButton {
+  width: 100px;
+  height: 100px;
+  display: block;
+  border-radius: 50px;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  -khtml-border-radius: 50px;
+  font-size: 20px;
+  color: #fff;
+  line-height: 100px;
+  text-align: center;
+  background: #000000;
+}

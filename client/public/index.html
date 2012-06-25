@@ -13,9 +13,7 @@
     <script src="../js/controllers.js"></script>
 	<script src="../js/mongolab.js"></script>
     <link href="../bootstrap//css/bootstrap.css" rel="stylesheet">
-	
-    
-
+	   
     <style type="text/css">
       body {
         padding-top: 60px;
@@ -90,8 +88,11 @@
         </div>
       </div>  row -->
 	  
-	  <div class="row">
-          <div class="span12">
+	     <div class="row">
+          <div class="span1">
+            <button class="calendarNavButton left" onclick="$('.carousel').carousel('prev');">&lsaquo;</button>
+          </div>
+          <div class="span10">
           <div>
             <form class="well form-inline" ng-submit="removeStatusElement()">          
               <label class="control-label" for="system">System</label>            
@@ -106,31 +107,44 @@
             </form>
           </div>            
         </div>
+        <div class="span1">
+          <button class="calendarNavButton right" onclick="$('.carousel').carousel('next');">&rsaquo;</button>
+        </div>
       </div> <!-- row -->
 
 	  
 	  <div class="row">
 		  <div class="span12">
-        <table id="systemtab">
-          <thead>
-            <tr><th colspan='{{calendar.monthLEngth}}'>{{monthName}}</th></tr>
-              <tr>
-                <th>System</th>
-                <th ng-repeat="day in calendar.daysInMonth">{{day}}</th>
-          <thead>
-          <tbody>
-            <tr ng-repeat="systemline in systemlines">
-			
-				<td class="system"> {{systemline.system}} </td>
-				<td class="element element-corner element-borderstatus-{{statusline.status}}" ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline.system, statusline)">
-					<span class="element-inner-{{statusline.status}} element-inner element-shadow element-corner"></span>
-				</td>
-			
-			</tr>
-          </tbody>      
-        </table>
+        <div id="systemTableCarousel" class="carousel slide">
+          <div class="carousel-inner">
+            <div class="active item">
+              <table id="systemTab">
+                <thead>
+                  <tr><th colspan='{{calendar.monthLEngth}}'>{{monthName}}</th></tr>
+                    <tr>
+                      <th>System</th>
+                      <th ng-repeat="day in calendar.daysInMonth">{{day}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="systemline in systemlines">
+            				<td class="system"> 
+                      {{systemline.system}} 
+                    </td>
+            				<td class="element element-corner element-borderstatus-{{statusline.status}}" ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline.system, statusline)">
+            					<span class="element-inner-{{statusline.status}} element-inner element-shadow element-corner"></span>
+            				</td>
+      			
+      			      </tr>
+                </tbody>      
+              </table>
+            </div>
+          <div class="item">Second item...</div>
+          <div class="item">Third item...</div>
+          </div>
+        </div> <!-- carousel -->
 		  </div>  
-	  </div>
+	  </div> <!-- row -->
   
     </div><!--/.container-->    
 
@@ -141,6 +155,7 @@
     <script type="text/javascript">
       $(function() {
         $('.datefield').datepicker({dateFormat: 'yy-mm-dd'});
+        $('.carousel').carousel('pause');
       })
     </script>
   </body>
