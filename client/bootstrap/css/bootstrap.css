@@ -4288,7 +4288,7 @@ table {
 }
 th {
   width: 50px;
-  border-left: 1px solid #999;
+  border: 1px solid #999;
   pointer-events: none;
 }
 td {
@@ -4303,7 +4303,6 @@ td {
 .freeze:hover {
   color: red;
 }
-<<<<<<< HEAD
 /*.calendarNavButton {
   margin-top: 10px;
   vertical-align: middle;
@@ -4358,7 +4357,6 @@ td {
   opacity: 0.9;
   filter: alpha(opacity=90);
 }
-=======
 /*
 #item1{
 
@@ -4379,7 +4377,6 @@ td {
 	
 }
 */
->>>>>>> 0eabd467ce874ecadaec7eeff166a1d03148744b
 .pull-right {
   float: right;
 }

@@ -9,24 +9,16 @@
     <meta name="author" content="">
 
     <script src="http://code.angularjs.org/angular-1.0.0.min.js"></script> 
-	<script src="http://code.angularjs.org/angular-resource-1.0.0.min.js"></script>
+	  <script src="http://code.angularjs.org/angular-resource-1.0.0.min.js"></script>
     <script src="../js/controllers.js"></script>
-	<script src="../js/mongolab.js"></script>
-    <link href="../bootstrap//css/bootstrap.css" rel="stylesheet">
-	   
-    <style type="text/css">
-      body {
-        padding-top: 60px;
-        padding-bottom: 40px;
-      }
-      .sidebar-nav {
-        padding: 10px 0;
-      }
-    </style>
+	  <script src="../js/mongolab.js"></script>
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+   
   </head>
 
   <body ng-controller="TimelineCtrl">
-     <div class="navbar navbar-fixed-top">
+
+  <div class="navbar">
       <div class="navbar-inner">
         <div class="container">
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -35,184 +27,65 @@
             <span class="icon-bar"></span>
           </a>
           <a class="brand" href="#">System availability</a>
-          <div class="btn-group pull-right">
-            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-              <i class="icon-user"></i> Username
-              <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="#">Profile</a></li>
-              <li class="divider"></li>
-              <li><a href="#">Sign Out</a></li>
-            </ul>
-          </div>
-          <div class="nav-collapse">
+
+          <div>
             <ul class="nav">
               <li class="active"><a href="#">Home</a></li>
               <li><a href="#about">About</a></li>
               <li><a href="#contact">Contact</a></li>
             </ul>
-          </div><!--/.nav-collapse -->
+          </div>
+
         </div>
       </div>
     </div>
 
-    <div class="container">
-	  
-  <!--    <div class="row">
-          <div class="span12">
-          <div>
-            <form class="well form-inline" ng-submit="addTimeline()">          
-            <select  ng-model="selectedStatusLine.system" name="selectSystem">
-              <option value="" disabled="disabled">Select system</option>
-              <option value="P03">P03</option>
-              <option value="P04">P04</option>
-              <option value="P07">P07</option>
-              <option value="D10">D10</option>
-              <option value="D08">P08</option>
-            </select>
-            <select ng-model="selectedStatusLine.status" name="selectStatus">
-              <option value="" disabled="disabled">Select status</option>
-              <option value="available">Available</option>
-              <option value="freeze">Freeze</option>
-              <option value="unavailable">Unavailable</option>
-              <option value="restricted">Restricted</option>
-            </select>
-
-            <label for="startDate">Start:</label> 
-            <input id="startDate" type="date" class="datefield input-small" ng-model="selectedStatusLine.start">
-            <label for="endDate">End:</label> 
-            <input id="endDate" type="date" class="datefield input-small" ng-model="selectedStatusLine.end">
-            </form>
-          </div>            
-        </div>
-      </div>  row 
-	  
-	  <div class="row">
-		<div class="span12">
-
-			<div>  
-				<div id="item1" draggable="true"></div>
-				<div id="item2" draggable="true"></div>
-			</div>
-				
-		</div
-	  </div>-->
-	  
-	  <div class="row">
-        <div class="span12">
-          <div>
-            <form class="well form-inline" ng-submit="addStatusElement()">          
-              <label class="control-label" for="system">System</label>            
-              <input class="span2"  ng-model="addLine.system" name="system">
-              <label for="status">Status</label>
-              <input class="span2" ng-model="addLine.status" name="status">
-              <label for="startDate">Start</label> 
-              <input class="span2" id="startDate" type="date" class="datefield input-small" ng-model="addLine.start">
-              <label for="endDate">End</label> 
-              <input class="span2" id="endDate" type="date" class="datefield input-small" ng-model="addLine.end">
-              <button class="btn btn-primary">Add</button>
-            </form>
-          </div>            
-        </div>
-      </div> <!-- row -->
-	  
-	     <div class="row">
-          <div class="span1">
-            <button class="calendarNavButton left" onclick="$('.carousel').carousel('prev');">&lsaquo;</button>
-          </div>
-          <div class="span10">
-          <div>
-            <form class="well form-inline" ng-submit="removeStatusElement()">          
-              <label class="control-label" for="system">System</label>            
-              <input class="disabled span2"  ng-model="selectedStatusLine.system" name="system" disabled>
-              <label for="status">Status</label>
-              <input class="disabled span2" ng-model="selectedStatusLine.status" name="status" disabled>
-              <label for="startDate">Start</label> 
-              <input class="disabled span2" id="startDate" type="date" class="datefield input-small" ng-model="selectedStatusLine.start" disabled>
-              <label for="endDate">End</label> 
-              <input class="disabled span2" id="endDate" type="date" class="datefield input-small" ng-model="selectedStatusLine.end" disabled>
-              <button class="btn btn-danger">Delete</button>
-            </form>
-          </div>            
-        </div>
-        <div class="span1">
-          <button class="calendarNavButton right" onclick="$('.carousel').carousel('next');">&rsaquo;</button>
-        </div>
-      </div> <!-- row -->
-
-	  
-	  <div class="row-fluid">
-		  <div class="span12">
-<<<<<<< HEAD
-        <div id="systemTableCarousel" class="carousel slide">
-          <div class="carousel-inner">
-            <div class="active item">
-              <table id="systemTab">
-                <thead>
-                  <tr><th colspan='{{calendar.monthLEngth}}'>{{monthName}}</th></tr>
+    <div class="container-fluid">
+  	  <div class="row-fluid">
+  		  <div class="span12">
+          <div id="systemTableCarousel" class="carousel slide">
+            <div class="carousel-inner">
+              <div class="active item">
+                <table id="systemtab">
+                  <thead>
                     <tr>
-                      <th>System</th>
-                      <th ng-repeat="day in calendar.daysInMonth">{{day}}</th>
+                      <th colspan='{{daysInCurrentMonth()}}'>{{currentMonthName()}}</th>
                     </tr>
-                </thead>
-                <tbody>
-                  <tr ng-repeat="systemline in systemlines">
-            				<td class="system"> 
-                      {{systemline.system}} 
-                    </td>
-            				<td class="element element-corner element-borderstatus-{{statusline.status}}" ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline.system, statusline)">
-            					<span class="element-inner-{{statusline.status}} element-inner element-shadow element-corner"></span>
-            				</td>
-      			
-      			      </tr>
-                </tbody>      
-              </table>
+      
+                    <tr>
+                      <th>Week</th>
+                      <th ng-repeat="week in currentMonthWeekList()">{{week}}</th>
+                    </tr>
+        
+                    <tr>
+                      <th>Day</th>
+                      <th ng-repeat="dayName in dayNamesInCurrentMonth()">{{dayName}}</th>
+                    </tr>
+        
+                    <tr>
+                        <th>System</th>
+                        <!--<th ng-repeat="day in calendar.daysInMonth">{{day}}</th>-->
+                        <th ng-repeat="day in currentMonthDayList()">{{day}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="systemline in systemlines">
+          
+                      <td class="system"> {{systemline.system}} </td>
+                      <td class="element element-corner element-borderstatus-{{statusline.status}}" ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline.system, statusline)">
+                        <span class="element-inner-{{statusline.status}} element-inner element-shadow element-corner"></span>
+                      </td>
+                  
+                    </tr>
+                  </tbody>      
+                </table>            
+              </div>
+              <div class="item">Second item...</div>
+              <div class="item">Third item...</div>
             </div>
-          <div class="item">Second item...</div>
-          <div class="item">Third item...</div>
-          </div>
-        </div> <!-- carousel -->
-=======
-        <table id="systemtab">
-          <thead>
-            <tr>
-				<th colspan='{{daysInCurrentMonth()}}'>{{currentMonthName()}}</th>
-			</tr>
-		
-			<tr>
-				<th>Week</th>
-				<th ng-repeat="week in currentMonthWeekList()">{{week}}</th>
-			</tr>
-			
-			
-			<tr>
-				<th>Day</th>
-				<th ng-repeat="dayName in dayNamesInCurrentMonth()">{{dayName}}</th>
-			</tr>
-			
-            <tr>
-                <th>System</th>
-                <!--<th ng-repeat="day in calendar.daysInMonth">{{day}}</th>-->
-				<th ng-repeat="day in currentMonthDayList()">{{day}}</th>
-			</tr>
-			 
-          <thead>
-          <tbody>
-            <tr ng-repeat="systemline in systemlines">
-			
-				<td class="system"> {{systemline.system}} </td>
-				<td class="element element-corner element-borderstatus-{{statusline.status}}" ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline.system, statusline)">
-					<span class="element-inner-{{statusline.status}} element-inner element-shadow element-corner"></span>
-				</td>
-			
-			</tr>
-          </tbody>      
-        </table>
->>>>>>> 0eabd467ce874ecadaec7eeff166a1d03148744b
-		  </div>  
-	  </div> <!-- row -->
-  
+          </div> <!-- carousel -->
+        </div>  
+      </div> <!-- row -->  
     </div><!--/.container-->    
 
     <!-- Placed at the end of the document so the pages load faster -->
