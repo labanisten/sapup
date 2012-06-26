@@ -49,22 +49,20 @@
                 <table id="systemtab">
                   <thead>
                     <tr>
-                      <th colspan='{{daysInCurrentMonth()}}'>{{currentMonthName()}}</th>
+                      <th class="month" colspan='{{daysInCurrentMonth() + 1}}'>{{currentMonthName()}}</th>
                     </tr>
       
                     <tr>
-                      <th>Week</th>
-                      <th ng-repeat="week in currentMonthWeekList()">{{week}}</th>
+                      <th class="firstcol">Week</th>
+                      <th class="week" ng-repeat="week in currentMonthWeekList" colspan="{{week.colSpan}}">{{week.week}}</th>
                     </tr>
         
                     <tr>
-                      <th>Day</th>
+                      <th class="firstcol" rowspan="2">Day</th>
                       <th ng-repeat="dayName in dayNamesInCurrentMonth()">{{dayName}}</th>
                     </tr>
         
                     <tr>
-                        <th>System</th>
-                        <!--<th ng-repeat="day in calendar.daysInMonth">{{day}}</th>-->
                         <th ng-repeat="day in currentMonthDayList()">{{day}}</th>
                     </tr>
                   </thead>
@@ -72,8 +70,8 @@
                     <tr ng-repeat="systemline in systemlines">
           
                       <td class="system"> {{systemline.system}} </td>
-                      <td class="element element-corner element-borderstatus-{{statusline.status}}" ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline.system, statusline)">
-                        <span class="element-inner-{{statusline.status}} element-inner element-shadow element-corner"></span>
+                      <td  ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline.system, statusline)">
+                        <span class="element-inner-{{statusline.status}} element-inner"></span>
                       </td>
                   
                     </tr>
