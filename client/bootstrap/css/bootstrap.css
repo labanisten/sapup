@@ -4265,6 +4265,17 @@ a.badge:hover {
   background-color: #8cb1da;
   border-radius: 10px 10px 0 0;
   border: none;
+  background-color: #9ebcdc;
+  background-image: -moz-linear-gradient(top, #8cb1da, #b8cddf);
+  background-image: -ms-linear-gradient(top, #8cb1da, #b8cddf);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#8cb1da), to(#b8cddf));
+  background-image: -webkit-linear-gradient(top, #8cb1da, #b8cddf);
+  background-image: -o-linear-gradient(top, #8cb1da, #b8cddf);
+  background-image: linear-gradient(top, #8cb1da, #b8cddf);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#8cb1da', endColorstr='#b8cddf', GradientType=0);
+  height: 40px;
+  font-size: 1.5em;
 }
 .week {
   background-color: #b8cddf;

@@ -53,12 +53,11 @@
                     </tr>
       
                     <tr>
-                      <th class="firstcol">Week</th>
+                      <th class="firstcol week" rowspan="3"></th>
                       <th class="week" ng-repeat="week in currentMonthWeekList" colspan="{{week.colSpan}}">{{week.week}}</th>
                     </tr>
         
                     <tr>
-                      <th class="firstcol" rowspan="2">Day</th>
                       <th ng-repeat="dayName in dayNamesInCurrentMonth()">{{dayName}}</th>
                     </tr>
         
