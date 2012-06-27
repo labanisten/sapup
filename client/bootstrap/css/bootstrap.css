@@ -4209,48 +4209,37 @@ a.badge:hover {
   border-radius: 0;
 }
 .element-inner-freeze {
-  background-color: #f6f650;
-  background-image: -moz-linear-gradient(top, #ffff86, #e8e800);
-  background-image: -ms-linear-gradient(top, #ffff86, #e8e800);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffff86), to(#e8e800));
-  background-image: -webkit-linear-gradient(top, #ffff86, #e8e800);
-  background-image: -o-linear-gradient(top, #ffff86, #e8e800);
-  background-image: linear-gradient(top, #ffff86, #e8e800);
+  background-color: #e1b2b2;
+  background-image: -moz-linear-gradient(top, #d59595, #f2dede);
+  background-image: -ms-linear-gradient(top, #d59595, #f2dede);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#d59595), to(#f2dede));
+  background-image: -webkit-linear-gradient(top, #d59595, #f2dede);
+  background-image: -o-linear-gradient(top, #d59595, #f2dede);
+  background-image: linear-gradient(top, #d59595, #f2dede);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffff86', endColorstr='#e8e800', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d59595', endColorstr='#f2dede', GradientType=0);
 }
 .element-inner-upgrade {
-  background-color: #da4f49;
-  background-image: -moz-linear-gradient(top, #ee5f5b, #bd362f);
-  background-image: -ms-linear-gradient(top, #ee5f5b, #bd362f);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ee5f5b), to(#bd362f));
-  background-image: -webkit-linear-gradient(top, #ee5f5b, #bd362f);
-  background-image: -o-linear-gradient(top, #ee5f5b, #bd362f);
-  background-image: linear-gradient(top, #ee5f5b, #bd362f);
+  background-color: #f6eaac;
+  background-image: -moz-linear-gradient(top, #f2e187, #fcf8e3);
+  background-image: -ms-linear-gradient(top, #f2e187, #fcf8e3);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f2e187), to(#fcf8e3));
+  background-image: -webkit-linear-gradient(top, #f2e187, #fcf8e3);
+  background-image: -o-linear-gradient(top, #f2e187, #fcf8e3);
+  background-image: linear-gradient(top, #f2e187, #fcf8e3);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ee5f5b', endColorstr='#bd362f', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f2e187', endColorstr='#fcf8e3', GradientType=0);
 }
 .element-inner-maintenance {
-  background-color: #da4f49;
-  background-image: -moz-linear-gradient(top, #ee5f5b, #bd362f);
-  background-image: -ms-linear-gradient(top, #ee5f5b, #bd362f);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ee5f5b), to(#bd362f));
-  background-image: -webkit-linear-gradient(top, #ee5f5b, #bd362f);
-  background-image: -o-linear-gradient(top, #ee5f5b, #bd362f);
-  background-image: linear-gradient(top, #ee5f5b, #bd362f);
+  background-color: #a6d5ec;
+  background-image: -moz-linear-gradient(top, #85c5e5, #d9edf7);
+  background-image: -ms-linear-gradient(top, #85c5e5, #d9edf7);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#85c5e5), to(#d9edf7));
+  background-image: -webkit-linear-gradient(top, #85c5e5, #d9edf7);
+  background-image: -o-linear-gradient(top, #85c5e5, #d9edf7);
+  background-image: linear-gradient(top, #85c5e5, #d9edf7);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ee5f5b', endColorstr='#bd362f', GradientType=0);
-}
-.element-inner-test {
-  background-color: #9d39cd;
-  background-image: -moz-linear-gradient(top, #b55fde, #7900b3);
-  background-image: -ms-linear-gradient(top, #b55fde, #7900b3);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#b55fde), to(#7900b3));
-  background-image: -webkit-linear-gradient(top, #b55fde, #7900b3);
-  background-image: -o-linear-gradient(top, #b55fde, #7900b3);
-  background-image: linear-gradient(top, #b55fde, #7900b3);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b55fde', endColorstr='#7900b3', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#85c5e5', endColorstr='#d9edf7', GradientType=0);
 }
 .firstcol {
   min-width: 50px;
@@ -4288,7 +4277,7 @@ table {
 th {
   border: 1px solid #E0E0E0;
   pointer-events: none;
-  background-color: #F0F0F0 ;
+  background-color: #cddcf2 ;
 }
 td {
   border: 1px solid #E0E0E0;

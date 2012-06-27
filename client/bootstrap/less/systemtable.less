@@ -59,23 +59,19 @@
 
 
 .element-inner-freeze {
-  #gradient > .vertical(#FFFF86, #E8E800);
+  #gradient > .vertical(darken(@errorBackground, 20%), @errorBackground);
 }
 
 
 .element-inner-upgrade {
-  #gradient > .vertical(#ee5f5b, #bd362f);
+  #gradient > .vertical(darken(@warningBackground, 20%), @warningBackground);
 }
 
 
 .element-inner-maintenance {
-   #gradient > .vertical(#ee5f5b, #bd362f);
+   #gradient > .vertical(darken(@infoBackground, 20%), @infoBackground);
 }
 
-
-.element-inner-test {
-  #gradient > .vertical(#B55FDE,  #7900B3);
-}
 
 .firstcol {
   min-width: 50px;
@@ -112,7 +108,7 @@ table {
 th {
   border: 1px solid #E0E0E0;
   pointer-events: none;
-  background-color: #F0F0F0 ;
+  background-color: #cddcf2 ;
 }
 
 
