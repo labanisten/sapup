@@ -13,7 +13,7 @@
 	cursor: pointer;
 	width: 100%;
   display: block;
-	min-width: 30px;
+	min-width: 10px;
   border-radius: 1.65em;
    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.8);
 	
@@ -59,17 +59,17 @@
 
 
 .element-inner-freeze {
-  #gradient > .vertical(darken(@errorBackground, 20%), @errorBackground);
+  #gradient > .vertical(darken(#F00000 , 20%), #F00000 );
 }
 
 
 .element-inner-upgrade {
-  #gradient > .vertical(darken(@warningBackground, 20%), @warningBackground);
+  #gradient > .vertical(darken(#FFFF66, 20%), #FFFF66);
 }
 
 
-.element-inner-maintenance {
-   #gradient > .vertical(darken(@infoBackground, 20%), @infoBackground);
+.element-inner-test {
+   #gradient > .vertical(darken(#D0D0D0   , 20%), #D0D0D0);
 }
 
 
