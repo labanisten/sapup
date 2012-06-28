@@ -51,28 +51,23 @@
                     <tr>
                       <th class="month" colspan='{{daysInCurrentMonth() + 1}}'>{{currentMonthName()}}</th>
                     </tr>
-      
                     <tr>
                       <th class="firstcol week" rowspan="3"></th>
                       <th class="week" ng-repeat="week in currentMonthWeekList" colspan="{{week.colSpan}}">{{week.week}}</th>
                     </tr>
-        
                     <tr>
                       <th ng-repeat="dayName in dayNamesInCurrentMonth()">{{dayName}}</th>
                     </tr>
-        
                     <tr>
                         <th ng-repeat="day in currentMonthDayList()">{{day}}</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr ng-repeat="systemline in systemlines">
-          
-                      <td class="system"> {{systemline.system}} </td>
+                      <td class="system">{{systemline.system}}</td>
                       <td  ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline.system, statusline)">
                         <span class="element-inner-{{statusline.status}} element-inner"></span>
                       </td>
-                  
                     </tr>
                   </tbody>      
                 </table>            
