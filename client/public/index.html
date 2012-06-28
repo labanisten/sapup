@@ -41,12 +41,12 @@
     </div>
 	
     <div class="container-fluid">
-	
+
 	  <div class="row-fluid">
         <div class="span2" ng-repeat="alertline in alertlines">
           <!--alert-block-->
             <div class="alert alert-{{alertline.alerttype}} fade in ">
-				<button type="button" class="close" data-dismiss="alert">×</button>
+				<button type="button" class="close" data-dismiss="alert">x</button>
 				<h5 class="alert-heading">{{alertline.title}}</h5>
 				<p>{{alertline.comment}}</p>
             </div>
@@ -67,7 +67,7 @@
 					<input class="span12 datefield" type="date" ng-model="selectedStatusLine.start">
 					<label for="endDate">End</label> 
 					<input class="span12 datefield input-small" id="endDate" type="date" ng-model="selectedStatusLine.end">
-					<label for="comment">Comment</label> 
+					<label for="comment">Comment</label>
 					<textarea class="span12 input-xlarge" id="comment" ng-model="selectedStatusLine.comment"></textarea>
 					<br/>
 					<button class="btn btn-danger">Delete</button>
@@ -136,7 +136,6 @@
         $('.datefield').datepicker({dateFormat: 'dd/mm/yyyy'});
         $('.carousel').carousel('pause');
       });
-	  
        /*$('document').ready(init);
 	  
        function init(){

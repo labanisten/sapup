@@ -9,6 +9,14 @@ angular.module('mongolab', ['ngResource']).
 									params:{charge:true}}}),
 						alerts: $resource('https://api.mongolab.com/api/1/databases/saa_testdb/collections/alert?apiKey=4fd9cdade4b05cb78ca54269')
 						};
+						
+			this.save = function(resource) {
+				resource.$save(function() {
+				console.log('SUCCESS save');
+				}, function() {
+				console.log('ERROR save');
+				});
+			};
 
 		return Systems;
 		

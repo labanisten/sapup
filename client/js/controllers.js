@@ -309,5 +309,6 @@ myModule.controller("TimelineCtrl", function ($scope, Systems) {
 		return date;
 		
 	}
+	
 
 });
