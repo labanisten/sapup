@@ -5,18 +5,20 @@ var myModule = angular.module('systemAvailability', ['mongolab']);
 myModule.controller("TimelineCtrl", function ($scope, Systems) {
 
 
-	$scope.systemlines = getDBdata();
+	$scope.systemlines = getSystemData();
+	$scope.alertlines = getAlertData();
 	
 	
 	var startDate = 20120501,
-	    endDate = 20120530;
+		endDate = 20120530;
 		
 
 	$scope.selectedStatusLine = {
 		system: "",
 		status: "",
 		start: undefined,
-		end: undefined
+		end: undefined,
+		comment: ""
 	};
 
 	$scope.addLine = {
@@ -184,12 +186,11 @@ myModule.controller("TimelineCtrl", function ($scope, Systems) {
 	}
 	
 
-	function getDBdata(){
-
+	function getSystemData(){
 
 		var calendartable = [];
 	
-		var syslines = Systems.query(function(){
+		var syslines = Systems.systems.query(function(){
 	
 			$.each(syslines, function(i, v_system) {
 				calendartable = addEmptyElementsForSystem(v_system.system, calendartable, i);
@@ -201,29 +202,32 @@ myModule.controller("TimelineCtrl", function ($scope, Systems) {
 		});
 
 		return calendartable;
-	
+	}
+
+
+	function getAlertData(){
+
+		var alertLines = Systems.alerts.query(function(){});
+		return alertLines;
 	}
 	
 	
 	$scope.removeStatusElement = function() {
-	
+
 		$.each($scope.systemlines, function(i, v_system) {
 		
 			if (v_system.system == $scope.selectedStatusLine.system) {
 			
 				$.each(v_system.statuslines, function(j, v_status) {
 					
-					if(v_status.start == $scope.selectedStatusLine.start &&
-						v_status.end == $scope.selectedStatusLine.end &&
+					if(v_status.start == convertDateToDatabaseFormat($scope.selectedStatusLine.start) &&
+						v_status.end == convertDateToDatabaseFormat($scope.selectedStatusLine.end) &&
 							v_status.status == $scope.selectedStatusLine.status){
-								
-								//TODO: split line
-								console.log("s_start: " + $scope.systemlines[i].statuslines[j].start);
-								console.log("s_end: " + $scope.systemlines[i].statuslines[j].end);
+
 								$scope.systemlines[i].statuslines.splice(j, 1);
 								
 								for(k = 0; k < (v_status.end - v_status.start) + 1; k++){
-									$scope.systemlines[i].statuslines.push({ "start":parseInt(v_status.start) + k, "end":parseInt(v_status.start) + k, "status":"available" });
+									$scope.systemlines[i].statuslines.push({ "start":(parseInt(v_status.start) + k), "end":(parseInt(v_status.start) + k), "status":"available" });
 								}
 		
 								$scope.systemlines[i].statuslines.sort(custom_sort);
@@ -236,38 +240,16 @@ myModule.controller("TimelineCtrl", function ($scope, Systems) {
 			
 	$scope.addStatusElement = function() {
 	
-		//console.log("start: " + $scope.addLine.start);
-		//console.log("end: " + $scope.addLine.end);
-	
 		$.each($scope.systemlines, function(i, v_system) {
 		
 			if (v_system.system == $scope.addLine.system) {
-			
-				//console.log("t1");
 				$.each(v_system.statuslines, function(j, v_status) {
-					
-					
-					//TODO: add overlap if startdate is inside existing schedule
 					if(v_status.start == $scope.addLine.start &&
 						v_status.end == $scope.addLine.start){
-								
-								//console.log("t2");
-								//$scope.systemlines[i].statuslines.splice(j,1);
-								//$scope.systemlines[i].statuslines[j].start = "";
-								//$scope.systemlines[i].statuslines[j].end = "";
-								
-								//$scope.systemlines[i].statuslines[j].status = "available";
-								
 								if($scope.addLine.start == $scope.addLine.end){
 									$scope.systemlines[i].statuslines[j].status = $scope.addLine.status;
 								}
 								else{
-								
-									//$scope.systemlines[i].statuslines.splice(j,1);
-									//console.log("tstart: " + $scope.addLine.start);
-									//console.log("tend: " + $scope.addLine.end);
-									//console.log("addl len: " + ($scope.addLine.end - v_status.start));
-									
 									for(k = 0; k < ($scope.addLine.end - v_status.start) + 1; k++){
 										if($scope.systemlines[i].statuslines[j + k].status != 'available'){
 											alert("Overlap!!");
@@ -275,77 +257,57 @@ myModule.controller("TimelineCtrl", function ($scope, Systems) {
 										}
 									}
 									
-
 									for(k = 0; k < ($scope.addLine.end - v_status.start) + 1; k++){
-										//console.log("start: " + $scope.systemlines[i].statuslines[j].start);
-										//console.log("end: " + $scope.systemlines[i].statuslines[j].end);
-										//console.log("j: " + j + " k: " + k);
 										$scope.systemlines[i].statuslines.splice(j, 1);
 									}
 									
-									//syslines[i].statuslines.push({"start":prev_end_date + k, "end":prev_end_date + k, "status":"available"});
-									//syslines[i].statuslines.sort(custom_sort);
-								
 									$scope.systemlines[i].statuslines.push({"start":$scope.addLine.start, "end":$scope.addLine.end, "status":$scope.addLine.status});
 									$scope.systemlines[i].statuslines.sort(custom_sort);
 									return false; //jquery break
 								}
-								
-								/*
-								//console.log("pr.status: " + $scope.systemlines[i].statuslines[j - 1].status);
-								if (j > 0 && $scope.systemlines[i].statuslines[j - 1].status == "available")
-								{
-									//console.log("v_status.start: " + v_status.end);
-									//console.log("$scope.systemlines[i].statuslines[j - 1].end: " + $scope.systemlines[i].statuslines[j - 1].end);
-									$scope.systemlines[i].statuslines[j - 1].end = (v_status.end);
-								}*/
 					}
 				});
 			}
 		});
 	};
   
- /*
-	function getSystemLines(){
-		var systemLines = Systems.query();
-		
-	}
-	
-	
-	$scope.addTimeline = function() {
-		$scope.statuslines.push({system:$scope.system, start:$scope.start, end:$scope.end, status:$scope.status});
-	};
-	*/
   
     $scope.showDetails = function(system, statusline) {
 		$scope.selectedStatusLine.system = system;
 		$scope.selectedStatusLine.status = statusline.status;
-		$scope.selectedStatusLine.start = statusline.start;
-		$scope.selectedStatusLine.end = statusline.end;
+		$scope.selectedStatusLine.start = convertDateToViewableFormat(statusline.start);
+		$scope.selectedStatusLine.end = convertDateToViewableFormat(statusline.end);
 	};
-  
-  /*
-	$scope.getSystemLines = function() {
 	
-		var list = $scope.systemlines;
+	
+	function convertDateToViewableFormat(dateString)
+	{
 
-						list.push({system:'P88', statuslines:[
-									{start:'20120501', end:'20120505', status:'freeze'},
-									{start:'20120526', end:'20120530', status:'freeze'}
-									]
-						});
-						  
-		$.each(
-			list, 
-			function(item, val){
-				console.log(item + ' ' + val.system + ' ' + val.statuslines[0].start);
+		var datestring = dateString;
+		var y = datestring.substr(0,4);
+		var m = datestring.substr(4,2);
+		var d = datestring.substr(6,2);
+		//m = m - 1;
+		
+		var date = d + '/' + m + '/' + y;
+		
+		return date;
+		
+	}
+	
+	
+    function convertDateToDatabaseFormat(dateString)
+	{
 
-			}
-		);	
+		var datestring = dateString;
+		var d = datestring.substr(0,2);
+		var m = datestring.substr(3,2);
+		var y = datestring.substr(6,4);
 
-		console.log(list.length);
-		return list;
+		var date = y + m + d;
+		
+		return date;
+		
+	}
 
-	};
- */
 });
