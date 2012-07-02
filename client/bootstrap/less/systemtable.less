@@ -59,17 +59,17 @@
 
 
 .element-inner-freeze {
-  #gradient > .vertical(#8D462F, lighten(#8D462F, 10%) );
+  #gradient > .vertical(@statoilBlueLight, lighten(@statoilBlueLight, 10%) );
 }
 
 
 .element-inner-upgrade {
-  #gradient > .vertical(#EED7A3 , lighten( #EED7A3, 10%));
+  #gradient > .vertical(@statoilOrange , lighten( @statoilOrange, 10%));
 }
 
 
 .element-inner-test {
-   #gradient > .vertical(#CCBDA5, lighten(#CCBDA5, 10%));
+   #gradient > .vertical(@statoilBlueLight, lighten(@statoilBlueLight, 10%));
 }
 
 
@@ -80,23 +80,23 @@
 }
 
 .month {
-  background-color: #8cb1da;
+  background-color: @statoilBlueDark;
   border-radius: 10px 10px 0 0;
   border: none;
-  #gradient > .vertical(#8cb1da, #b8cddf);
+  #gradient > .vertical(darken(@statoilBlue, 20%), @statoilBlue);
   height: 40px;
   font-size: 1.5em;
 
 }
 
 .week {
-  background-color: #b8cddf;
+  background-color: @statoilBlue;
 }
+
 .system {
-  background-color: #b8cddf;
+  background-color: @statoilBlue; 
   font-weight: 800;
-  padding: 0 10px 0 10px;
-  min-width: 40px;
+  text-align: center;
 }
 
 table {
@@ -110,14 +110,17 @@ table {
 th {
   border: 1px solid #E0E0E0;
   pointer-events: none;
-  background-color: #cddcf2 ;
+  background-color: @statoilBlue ;
 }
 
 
 td {
   border: 1px solid #E0E0E0;
   padding: 2px;
-  background-color: #eaf1f6;
+  background-color: @statoilBlueLight;
+  padding: 4px;
+  min-width: 20px;
+
 }
 
 

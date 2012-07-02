@@ -48,8 +48,8 @@ myModule.controller("TimelineCtrl", function ($scope, Systems) {
 		
 		var dayArray = [];
 		
-		for(i = 1; i <= days; i++){
-			dayArray.push(i);
+		for(i = 0; i < days; i++){
+			dayArray.push(i+1);
 		}
 	
 		return dayArray;
@@ -66,21 +66,13 @@ myModule.controller("TimelineCtrl", function ($scope, Systems) {
 		});
 		
 		var weekAndDays = [],
-			lastWeek =  weekArray[0],
-			week =  weekArray[0],
-			colSpan = -1;
+			colSpan = 0;
 
 		for (var i = 0; i < weekArray.length; i++) {
-			lastWeek = week;
-			week = weekArray[i];
 			colSpan++;
-			if (lastWeek !== week ) {
-				weekAndDays.push( {"week":lastWeek, "colSpan":colSpan });
+			if (weekArray[i] !== weekArray[i+1]) {
+				weekAndDays.push( {"week":weekArray[i], "colSpan":colSpan });
 				colSpan = 0;
-			}
-			if ( i == weekArray.length - 1 ) {
-				colSpan++;
-				weekAndDays.push( {"week":lastWeek, "colSpan":colSpan });
 			}
 		}
 

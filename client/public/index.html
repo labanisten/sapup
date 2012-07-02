@@ -13,7 +13,6 @@
     <script src="../js/controllers.js"></script>
 	  <script src="../js/mongolab.js"></script>
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
-   
   </head>
 
   <body ng-controller="TimelineCtrl">
@@ -41,7 +40,6 @@
     </div>
 	
     <div class="container-fluid">
-
 	  <div class="row-fluid">
         <div class="span2" ng-repeat="alertline in alertlines">
           <!--alert-block-->
@@ -104,7 +102,7 @@
                   </thead>
                   <tbody>
                     <tr ng-repeat="systemline in systemlines">
-                      <td class="system">{{systemline.system}}</td>
+                      <td class="system"><span class="badge badge-info">{{systemline.system}}</span></td>
                       <td  ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline.system, statusline)">
                         <span class="element-inner-{{statusline.status}} element-inner"></span>
                       </td>
@@ -128,30 +126,8 @@
     <script src="../js/bootstrap-datepicker.js"></script>
     <script type="text/javascript">
       $(function () {
-        $('.datefield').datepicker({dateFormat: 'dd/mm/yyyy'});
         $('.carousel').carousel('pause');
       });
-       /*$('document').ready(init);
-	  
-       function init(){
-	   
-            $('#item1, #item2').bind('dragstart', function(event) {
-                event.originalEvent.dataTransfer.setData("text/plain", event.target.getAttribute('id'));
-            });
-            
-			// bind the dragover event on the board sections
-            $('#tablecell').bind('dragover', function(event) {
-                event.preventDefault();
-            });
-
-			// bind the drop event on the board sections
-			$('#tablecell').bind('drop', function(event) {
-				var notecard = event.originalEvent.dataTransfer.getData("text/plain");
-				event.target.appendChild(document.getElementById(notecard));
-				event.preventDefault();
-			});
-        }*/
-
     </script>
   </body>
 </html>
