@@ -79,7 +79,7 @@
         <legend>Alerts</legend>
         <div class="control-group">
           <div class="controls">
-            <button class="btn btn-primary">Add alert</button>
+            <button class="btn btn-primary" data-toggle="modal" href="#myModal">Add alert</button>
           </div>
         </div>
       </fieldset>
@@ -123,6 +123,44 @@
   </div>  
 </div> <!-- row -->  
 </div><!--/.container-->    
+
+
+	<div class="modal hide" id="myModal">
+	
+	    <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">×</button>
+			<h3>Add Alert</h3>
+		</div>
+		
+		<div class="modal-body">
+			<form class="alertForm form-horizontal">    
+				<fieldset>
+					<label for="title">Title</label>            
+					<input name="title" ng-model="addAlertLine.title">
+					
+					<label for="alerttype">Alert Type</label>
+					<select name="alerttype" ng-model="addAlertLine.alerttype">
+						<option ng-repeat="alerttype in alerttypes">{{alerttype.type}}</option>
+					</select>
+					
+					<label for="expdate">Expiry Date</label> 
+					<input type="date" ng-model="addAlertLine.expdate">
+					
+					<label for="comment">Comment</label>
+					<textarea name="comment" input-xlarge" id="comment" ng-model="addAlertLine.comment"></textarea>
+				</fieldset>
+	
+			</form>    
+		</div>
+		
+	  <div class="modal-footer">
+		<a href="#" class="btn" data-dismiss="modal">Close</a>
+		<a href="#" class="btn btn-primary" ng-click="addAlert();" data-dismiss="modal">Save changes</a>
+	  </div>
+	  
+	</div>
+	
+	
 
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="../js/jquery-1.7.1.min.js"></script>

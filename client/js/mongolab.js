@@ -3,26 +3,18 @@
 angular.module('mongolab', ['ngResource']).
 	factory('Systems', function($resource) {
 	
-		var Systems = {	systems: $resource('https://api.mongolab.com/api/1/databases/saa_testdb/collections/system/:id?apiKey=4fd9cdade4b05cb78ca54269', 
-									{id:'@id'}, 
-									{save: {method:'POST', 
-									params:{charge:true}}}),
-						alerts: $resource('https://api.mongolab.com/api/1/databases/saa_testdb/collections/alert?apiKey=4fd9cdade4b05cb78ca54269')
-						};
-						
-			this.save = function(resource) {
-				resource.$save(function() {
-				console.log('SUCCESS save');
-				}, function() {
-				console.log('ERROR save');
-				});
-			};
-
-		return Systems;
+		var db = {	systems: $resource('https://api.mongolab.com/api/1/databases/saa_testdb/collections/system/?apiKey=4fd9cdade4b05cb78ca54269'), 	
+					alerttypes: $resource('https://api.mongolab.com/api/1/databases/saa_testdb/collections/alerttype/?apiKey=4fd9cdade4b05cb78ca54269'), 	
+					alerts: $resource('https://api.mongolab.com/api/1/databases/saa_testdb/collections/alert/:id?apiKey=4fd9cdade4b05cb78ca54269',
+										{id: '@id'},
+										{
+											get: {method: 'GET', isArray:true},
+											update: { method: 'PUT' },
+											remove: { method: 'DELETE'} 
+										}
+									 )
+					};
+				
+		return db;
 		
 	});
-	
-	
-	
-	
-	

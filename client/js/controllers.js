@@ -5,6 +5,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 
 	$scope.systemlines = getSystemData();
 	$scope.alertlines = getAlertData();
+	$scope.alerttypes = getAlertTypes();
 
 
 	var startDate = 20120501,
@@ -24,6 +25,13 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 		status: "",
 		start: undefined,
 		end: undefined
+	};
+	
+	$scope.addAlertLine = {
+		title: "",
+		alerttype: "",
+		expdate: undefined,
+		comment: ""
 	};
 
 
@@ -207,6 +215,26 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 	function getAlertData() {
 		var alertLines = Systems.alerts.query(function() {});
 		return alertLines;
+	}
+	
+	
+	function getAlertTypes(){
+		var alertTypes = Systems.alerttypes.query(function(){});	
+		return alertTypes;
+	}
+	
+	
+	$scope.addAlert = function() {
+		
+	    Systems.alerts.save($scope.addAlertLine, function(item){
+			$scope.alertlines.push(item);
+		});
+	
+	}
+	
+	
+	$scope.removeAlert = function(id) {
+	    Systems.alerts.delete({id: id.$oid}, function(){});
 	}
 
 
