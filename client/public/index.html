@@ -1,133 +1,138 @@
 
 <!DOCTYPE html>
 <html ng-app="systemAvailability" lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>System availability</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<head>
+  <meta charset="utf-8">
+  <title>System availability</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-    <script src="http://code.angularjs.org/angular-1.0.0.min.js"></script> 
-	  <script src="http://code.angularjs.org/angular-resource-1.0.0.min.js"></script>
-    <script src="../js/controllers.js"></script>
-	  <script src="../js/mongolab.js"></script>
-    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
-  </head>
+  <script src="http://code.angularjs.org/angular-1.0.0.min.js"></script> 
+  <script src="http://code.angularjs.org/angular-resource-1.0.0.min.js"></script>
+  <script src="../js/controllers.js"></script>
+  <script src="../js/mongolab.js"></script>
+  <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+</head>
 
-  <body ng-controller="TimelineCtrl">
+<body ng-controller="TimelineCtrl">
 
-	<div class="navbar">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="#">System availability</a>
-
-          <div>
-            <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-          </div>
-
-        </div>
+ <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <a class="brand" href="#">System availability</a>
+      <div>
+        <ul class="nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
       </div>
     </div>
-	
-    <div class="container-fluid">
-	  <div class="row-fluid">
-        <div class="span2" ng-repeat="alertline in alertlines">
-          <!--alert-block-->
-            <div class="alert alert-{{alertline.alerttype}} fade in ">
-				<button type="button" class="close" data-dismiss="alert">x</button>
-				<h5 class="alert-heading">{{alertline.title}}</h5>
-				<p>{{alertline.comment}}</p>
-            </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+ <div class="row-fluid">
+  <div class="span2" ng-repeat="alertline in alertlines">
+    <!--alert-block-->
+    <div class="alert alert-{{alertline.alerttype}} fade in ">
+      <button type="button" class="close" data-dismiss="alert">x</button>
+      <h5 class="alert-heading">{{alertline.title}}</h5>
+      <p>{{alertline.comment}}</p>
+    </div>
+  </div>
+</div>
+
+<div class="row-fluid">
+
+  <div class="sideBar span2">
+    <form ng-submit="removeStatusElement()"> 
+      <fieldset>
+        <legend>System status</legend>
+        <div class="control-group">
+          <div class="controls">         
+           <label for="system">System</label>            
+           <input class="span12"  ng-model="selectedStatusLine.system" name="system">
+           <label for="status">Status</label>
+           <input class="span12" ng-model="selectedStatusLine.status" name="status">
+           <label for="startDate">Start</label> 
+           <input class="span12" type="date" ng-model="selectedStatusLine.start">
+           <label for="endDate">End</label> 
+           <input class="span12 input-small" id="endDate" type="date" ng-model="selectedStatusLine.end">
+           <label for="comment">Comment</label>
+           <textarea class="span12 input-xlarge" id="comment" ng-model="selectedStatusLine.comment"></textarea>
+           <br/>
+           <button class="btn btn-primary">Update</button>
+           <button class="btn btn-primary">New</button>
+           <button class="btn btn-danger">Delete</button>
+         </div>
+       </div>
+     </form>      
+     <form>
+      <fieldset>
+        <legend>Alerts</legend>
+        <div class="control-group">
+          <div class="controls">
+            <button class="btn btn-primary">Add alert</button>
+          </div>
         </div>
-	  </div>
-	
-      <div class="row-fluid">
-	  
-		  <div class="sideBar span2">
+      </fieldset>
+    </form>
+  </div>	
 
-			<div class="well">
-				<form class="form-horizontal" ng-submit="removeStatusElement()">          
-					<label for="system">System</label>            
-					<input class="span12"  ng-model="selectedStatusLine.system" name="system">
-					<label for="status">Status</label>
-					<input class="span12" ng-model="selectedStatusLine.status" name="status">
-					<label for="startDate">Start</label> 
-					<input class="span12 datefield" type="date" ng-model="selectedStatusLine.start">
-					<label for="endDate">End</label> 
-					<input class="span12 datefield input-small" id="endDate" type="date" ng-model="selectedStatusLine.end">
-					<label for="comment">Comment</label>
-					<textarea class="span12 input-xlarge" id="comment" ng-model="selectedStatusLine.comment"></textarea>
-					<br/>
-					<button class="btn btn-danger">Delete</button>
-					<button class="btn btn-primary">Update</button>
-				</form>      
-			</div>
-			<div class="well">
-				<button class="btn btn-primary">Add alert</button>
-				<br>
-				<br/>
-				<button class="btn btn-primary">Add StatusElement</button>
-			</div>
-          </div>	
-		
-          <div class="span10">
-          <div id="systemTableCarousel" class="carousel slide">
-            <div class="carousel-inner">
-              <div class="active item">
-                <table id="systemtab">
-                  <thead>
-                    <tr>
-                      <th class="month" colspan='{{daysInCurrentMonth() + 1}}'>{{currentMonthName()}}</th>
-                    </tr>
-                    <tr>
-                      <th class="firstcol week" rowspan="3"></th>
-                      <th class="week" ng-repeat="week in currentMonthWeekList" colspan="{{week.colSpan}}">{{week.week}}</th>
-                    </tr>
-                    <tr>
-                      <th ng-repeat="dayName in dayNamesInCurrentMonth()">{{dayName}}</th>
-                    </tr>
-                    <tr>
-                        <th ng-repeat="day in currentMonthDayList()">{{day}}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr ng-repeat="systemline in systemlines">
-                      <td class="system"><span class="badge badge-info">{{systemline.system}}</span></td>
-                      <td  ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline.system, statusline)">
-                        <span class="element-inner-{{statusline.status}} element-inner"></span>
-                      </td>
-                    </tr>
-                  </tbody>      
-                </table>            
-              </div>
-              <div class="item">Second item...</div>
-              <div class="item">Third item...</div>
-            </div>
-          </div> <!-- carousel -->
-        </div>  
-      </div> <!-- row -->  
-    </div><!--/.container-->    
+  <div class="span10">
+    <div id="systemTableCarousel" class="carousel slide">
+      <div class="carousel-inner">
+        <div class="active item">
+          <table id="systemtab">
+            <thead>
+              <tr>
+                <th class="month" colspan='{{daysInCurrentMonth() + 1}}'>{{currentMonthName()}}</th>
+              </tr>
+              <tr>
+                <th class="firstcol week" rowspan="3"></th>
+                <th class="week" ng-repeat="week in currentMonthWeekList" colspan="{{week.colSpan}}">{{week.week}}</th>
+              </tr>
+              <tr>
+                <th ng-repeat="dayName in dayNamesInCurrentMonth()">{{dayName}}</th>
+              </tr>
+              <tr>
+                <th ng-repeat="day in currentMonthDayList()">{{day}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="systemline in systemlines">
+                <td class="system"><span class="badge badge-info">{{systemline.system}}</span></td>
+                <td  ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline.system, statusline)">
+                  <span class="element-inner-{{statusline.status}} element-inner"></span>
+                </td>
+              </tr>
+            </tbody>      
+          </table>            
+        </div>
+        <div class="item">Second item...</div>
+        <div class="item">Third item...</div>
+      </div>
+    </div> <!-- carousel -->
+  </div>  
+</div> <!-- row -->  
+</div><!--/.container-->    
 
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="../js/jquery-1.7.1.min.js"></script>
-    <script src="../bootstrap/js/bootstrap.js"></script>
-	<script src="../bootstrap/js/bootstrap-popover.js"></script>
-	<script src="../bootstrap/js/bootstrap-collapse.js"></script>
-    <script src="../js/bootstrap-datepicker.js"></script>
-    <script type="text/javascript">
-      $(function () {
-        $('.carousel').carousel('pause');
-      });
-    </script>
-  </body>
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="../js/jquery-1.7.1.min.js"></script>
+<script src="../bootstrap/js/bootstrap.js"></script>
+<script src="../bootstrap/js/bootstrap-popover.js"></script>
+<script src="../bootstrap/js/bootstrap-collapse.js"></script>
+<script type="text/javascript">
+$(function () {
+  $('.carousel').carousel('pause');
+});
+</script>
+</body>
 </html>
