@@ -58,9 +58,11 @@
         <div class="control-group">
           <div class="controls">         
            <label for="system">System</label>            
-           <input class="span12"  ng-model="selectedStatusLine.system" name="system">
+           <input class="span12 tphead" data-provide="typeahead" data-source='["Ahmedabad","Akola","Asansol","Aurangabad","Bangaluru","Baroda","Belgaon","Berhumpur","Calicut","Chennai","Chapra","Cherapunji"]' ng-model="selectedStatusLine.system" name="system">
            <label for="status">Status</label>
-           <input class="span12" ng-model="selectedStatusLine.status" name="status">
+		   <select name="status" ng-model="selectedStatusLine.status">
+				<option ng-repeat="systemstatus in systemstatuses">{{systemstatus.status}}</option>
+			</select>
            <label for="startDate">Start</label> 
            <input class="span12" type="date" ng-model="selectedStatusLine.start">
            <label for="endDate">End</label> 
@@ -125,10 +127,10 @@
 </div><!--/.container-->    
 
 
-	<div class="modal hide" id="myModal">
+	<div class="modal hide fade" id="myModal">
 	
 	    <div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">×</button>
+			<button type="button" class="close" data-dismiss="modal">x</button>
 			<h3>Add Alert</h3>
 		</div>
 		
@@ -169,7 +171,14 @@
 <script src="../bootstrap/js/bootstrap-collapse.js"></script>
 <script type="text/javascript">
 $(function () {
+
+  //var mas = ['Red', 'Green', 'Blue']; 
+  
   $('.carousel').carousel('pause');
+  /*
+	$('.tphead').typeahead({ 
+		 source: mas
+	}) */
 });
 </script>
 </body>

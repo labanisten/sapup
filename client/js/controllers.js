@@ -4,6 +4,8 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 
 
 	$scope.systemlines = getSystemData();
+	$scope.systemnames = getSystemNames();
+	$scope.systemstatuses = getSystemStatuses();
 	$scope.alertlines = getAlertData();
 	$scope.alerttypes = getAlertTypes();
 
@@ -149,7 +151,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 			"system": system,
 			"statuslines": []
 		});
-
+		
 		for (k = 0; k < (endDate - startDate) + 1; k++) {
 			calendartable[index].statuslines.push({
 				"start": startDate + k,
@@ -201,7 +203,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 
 			$.each(syslines, function(i, v_system) {
 				calendartable = addEmptyElementsForSystem(v_system.system, calendartable, i);
-
+				
 				$.each(v_system.statuslines, function(j, v_status) {
 					calendartable = insertCalendarElement(calendartable, v_status, i, j);
 				});
@@ -209,6 +211,27 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 		});
 
 		return calendartable;
+	}
+	
+	
+	function getSystemStatuses(){
+		var systemStatuses = Systems.systemstatuses.query(function(){});	
+		return systemStatuses;
+	}
+	
+	
+	function getSystemNames(){
+	
+		var systemNames = Systems.systemnames.query(function() {
+		
+			//console.log("v_system.name:" + asd);
+				$.each(systemNames, function(j, v_status) {
+					console.log("v_system.name:");
+				});
+			
+		});	
+
+		return systemNames;
 	}
 
 
@@ -303,10 +326,22 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 
 
 	$scope.showDetails = function(system, statusline) {
-		$scope.selectedStatusLine.system = system;
-		$scope.selectedStatusLine.status = statusline.status;
-		$scope.selectedStatusLine.start = convertDateToViewableFormat(statusline.start);
-		$scope.selectedStatusLine.end = convertDateToViewableFormat(statusline.end);
+
+		if(statusline.status != "available")
+		{
+			$scope.selectedStatusLine.system = system;
+			$scope.selectedStatusLine.status = statusline.status;
+			$scope.selectedStatusLine.start = convertDateToViewableFormat(statusline.start);
+			$scope.selectedStatusLine.end = convertDateToViewableFormat(statusline.end);
+		}
+		else
+		{
+			$scope.selectedStatusLine.system = "";
+			$scope.selectedStatusLine.status = "";
+			$scope.selectedStatusLine.start = "";
+			$scope.selectedStatusLine.end = "";
+		}
+		
 	};
 
 
