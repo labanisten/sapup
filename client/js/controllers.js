@@ -10,7 +10,6 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 	var startDate = 20120501,
 		endDate = 20120530;
 
-
 	$scope.selectedStatusLine = {
 		system: "",
 		status: "",
@@ -35,7 +34,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 		daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
 		currentDate: new Date()
 	};
-	
+
 	function getWeek(date) {
 		var onejan = new Date(date.getFullYear(), 0, 1);
 		return Math.ceil((((date - onejan) / 86400000) + onejan.getDay() + 1) / 7);
@@ -46,7 +45,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 
 		var dayArray = [];
 
-		for (i = 0; i < days; i++) {
+		for (i = 0; i< days; i++) {
 			dayArray.push(i + 1);
 		}
 
@@ -105,7 +104,8 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 			dayArray.push($scope.calendar.daysLabel[day_it]);
 			day_it++;
 
-			if (day_it > 6) {
+			if (day_it >
+	6) {
 				day_it = 0;
 			}
 		}
@@ -113,7 +113,16 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 		return dayArray;
 	};
 
+	function numberOfDaysBwtweenDates(fromDate, toDate) {
+		var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+		return Math.abs((fromDate.getTime() - toDate.getTime())/(oneDay)) ;
+	}
 
+	function daysInMonth(month,year) {
+		var dd = new Date(year, month, 0);
+		return dd.getDate();
+	}
+	
 	function custom_sort(a, b) {
 		//return new Date(a.start).getTime() - new Date(b.start).getTime();
 		return a.start - b.start;

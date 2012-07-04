@@ -59,17 +59,18 @@
 
 
 .element-inner-freeze {
-  #gradient > .vertical(@statoilBlueLight, lighten(@statoilBlueLight, 10%) );
+  #gradient > .vertical(@statoilBlue, lighten(@statoilBlue, 10%) );
 }
 
 
 .element-inner-upgrade {
-  #gradient > .vertical(@statoilOrange , lighten( @statoilOrange, 10%));
+  //#gradient > .vertical(darken(@errorBackground , 20%), darken(@errorBackground, 10%);
+  #gradient > .vertical(#C04040, lighten(#C04040, 10%));
 }
 
 
 .element-inner-test {
-   #gradient > .vertical(@statoilBlueLight, lighten(@statoilBlueLight, 10%));
+   #gradient > .vertical(@statoilBlueDarker, lighten(@statoilBlueDarker, 10%));
 }
 
 
@@ -80,21 +81,19 @@
 }
 
 .month {
-  background-color: @statoilBlueDark;
   border-radius: 10px 10px 0 0;
   border: none;
-  #gradient > .vertical(darken(@statoilBlue, 20%), @statoilBlue);
+  #gradient > .vertical(darken(@grayLighter, 10%), @grayLighter);
   height: 40px;
-  font-size: 1.5em;
-
+  font-size: 1.6em;
 }
 
 .week {
-  background-color: @statoilBlue;
+  background-color: @grayLighter;
 }
 
 .system {
-  background-color: @statoilBlue; 
+  background-color: @grayLighter; 
   font-weight: 800;
   text-align: center;
 }
@@ -103,24 +102,23 @@ table {
   width: 100%;
   font: 100% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
   border-collapse: collapse;
-
 }
 
 
 th {
   border: 1px solid #E0E0E0;
   pointer-events: none;
-  background-color: @statoilBlue ;
+  background-color: @grayLighter ;
 }
 
 
 td {
   border: 1px solid #E0E0E0;
   padding: 2px;
-  background-color: @statoilBlueLight;
+  background-color: @grayLighter;
+  //background: rgba(238, 239, 255, 0.4);
   padding: 4px;
   min-width: 20px;
-
 }
 
 
