@@ -224,10 +224,10 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 	
 		var systemNames = Systems.systemnames.query(function() {
 		
-			//console.log("v_system.name:" + asd);
-				$.each(systemNames, function(j, v_status) {
-					console.log("v_system.name:");
-				});
+			$.each(systemNames, function(i, item) {
+				console.log(item.name);
+				list.push(item.name);
+			});
 			
 		});	
 
