@@ -11,7 +11,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 
 
 	var startDate = 20120501,
-		endDate = 20120530;
+		endDate = 20120531;
 
 
 	$scope.selectedStatusLine = {
@@ -222,14 +222,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 	
 	function getSystemNames(){
 	
-		var systemNames = Systems.systemnames.query(function() {
-		
-			$.each(systemNames, function(i, item) {
-				console.log(item.name);
-				list.push(item.name);
-			});
-			
-		});	
+		var systemNames = Systems.systemnames.query(function() {});	
 
 		return systemNames;
 	}
