@@ -8,8 +8,8 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <script src="http://code.angularjs.org/angular-1.0.0.min.js"></script>
-  <script src="http://code.angularjs.org/angular-resource-1.0.0.min.js"></script>
+  <script src="http://code.angularjs.org/angular-1.0.1.min.js"></script>
+  <script src="http://code.angularjs.org/angular-resource-1.0.1.min.js"></script>
   <script src="../js/controllers.js"></script>
   <script src="../js/mongolab.js"></script>
   <link href="../bootstrap/css/bootstrap.css" rel="stylesheet"></head>
@@ -24,120 +24,161 @@
           <span class="icon-bar"></span>
         </a>
         <a class="brand" href="#">System availability</a>
-<!--         <div>
-          <ul class="nav">
-            <li class="active">
-              <a href="#">Home</a>
-            </li>
-            <li>
-              <a href="#about">About</a>
-            </li>
-            <li>
-              <a href="#contact">Contact</a>
-            </li>
-          </ul>
-        </div>
- -->      </div>
+        <!--         <div>
+        <ul class="nav">
+          <li class="active">
+            <a href="#">Home</a>
+          </li>
+          <li>
+            <a href="#about">About</a>
+          </li>
+          <li>
+            <a href="#contact">Contact</a>
+          </li>
+        </ul>
+      </div>
+      -->
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span2" ng-repeat="alertline in alertlines">
+      <!--alert-block-->
+      <div class="alert alert-{{alertline.alerttype}} fade in ">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <h5 class="alert-heading">{{alertline.title}}</h5>
+        <p>{{alertline.comment}}</p>
+      </div>
     </div>
   </div>
 
-  <div class="container-fluid">
-    <div class="row-fluid">
-      <div class="span2" ng-repeat="alertline in alertlines">
-        <!--alert-block-->
-        <div class="alert alert-{{alertline.alerttype}} fade in ">
-          <button type="button" class="close" data-dismiss="alert">x</button>
-          <h5 class="alert-heading">{{alertline.title}}</h5>
-          <p>{{alertline.comment}}</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="row-fluid">
-      <div class="sideBar span2">
-        <form ng-submit="removeStatusElement()">
-          <fieldset>
-            <legend>System status</legend>
-            <div class="control-group">
-              <div class="controls">
-                <label for="system">System</label>
-                <input class="span12"  ng-model="selectedStatusLine.system" name="system">
-                <label for="status">Status</label>
-                <input class="span12" ng-model="selectedStatusLine.status" name="status">
-                <label for="startDate">Start</label>
-                <input class="span12 datepicker" ng-model="selectedStatusLine.start">
-                <label for="endDate">End</label>
-                <input class="span12 datepicker" id="endDate" ng-model="selectedStatusLine.end">
-                <label for="comment">Comment</label>
-                <textarea class="span12 input-xlarge" id="comment" ng-model="selectedStatusLine.comment"></textarea>
-                <br/>
-                <button class="btn btn-primary">Update</button>
-                <button class="btn btn-primary">New</button>
-                <button class="btn btn-danger">Delete</button>
-              </div>
+  <div class="row-fluid">
+    <div class="span2">
+      <form ng-submit="removeStatusElement()">
+        <fieldset>
+          <legend>System status</legend>
+          <div class="control-group">
+            <div class="controls">
+              <label for="system">System</label>
+              <select name="system" ng-model="selectedStatusLine.system" class="input-medium">
+                <option ng-repeat="systemname in systemnames">{{systemname.name}}</option>
+              </select>
+              <label for="status">Status</label>
+              <select name="status" ng-model="selectedStatusLine.status" class="input-medium">
+                <option ng-repeat="systemstatus in systemstatuses">{{systemstatus.status}}</option>
+              </select>
+              <label for="startDate">Start</label>
+              <input class="span12 datepicker" ng-model="selectedStatusLine.start">
+              <label for="endDate">End</label>
+              <input class="span12 datepicker" id="endDate" ng-model="selectedStatusLine.end" class="input-medium">
+              <label for="comment">Comment</label>
+              <textarea class="span12 input-xlarge" id="comment" ng-model="selectedStatusLine.comment" class="input-medium"></textarea>
+              <br/>
+              <button class="btn btn-primary">Update</button>
+              <button class="btn btn-primary">New</button>
+              <button class="btn btn-danger">Delete</button>
             </div>
-          </fieldset>
-        </form>
-        <form>
-          <fieldset>
-            <legend>Alerts</legend>
-            <div class="control-group">
-              <div class="controls">
-                <button class="btn btn-primary">Add alert</button>
-              </div>
-            </div>
-          </fieldset>
-        </form>
-      </div>
-
-      <div class="span10">
-        <div id="systemTableCarousel" class="carousel slide">
-          <div class="carousel-inner">
-            <div class="active item">
-              <table id="systemtab">
-                <thead>
-                  <tr>
-                    <th class="month" colspan='{{daysInCurrentMonth() + 1}}'>{{currentMonthName()}}</th>
-                  </tr>
-                  <tr>
-                    <th class="firstcol week" rowspan="3"></th>
-                    <th class="week" ng-repeat="week in currentMonthWeekList" colspan="{{week.colSpan}}">{{week.week}}</th>
-                  </tr>
-                  <tr>
-                    <th ng-repeat="dayName in dayNamesInCurrentMonth()">{{dayName}}</th>
-                  </tr>
-                  <tr>
-                    <th ng-repeat="day in currentMonthDayList()">{{day}}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr ng-repeat="systemline in systemlines">
-                    <td class="system">
-                      <span class="badge badge-info">{{systemline.system}}</span>
-                    </td>
-                    <td  ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline.system, statusline)">
-                      <span class="element-inner-{{statusline.status}} element-inner"></span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="item">Second item...</div>
-            <div class="item">Third item...</div>
           </div>
+        </fieldset>
+      </form>
+      <form>
+        <fieldset>
+          <legend>Alerts</legend>
+          <div class="control-group">
+            <div class="controls">
+              <button class="btn btn-primary" data-toggle="modal" href="#dialogModal">Add alert</button>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+
+    <div class="span10">
+      <div id="systemTableCarousel" class="carousel slide">
+        <div class="carousel-inner">
+          <div class="active item">
+            <table id="systemtab">
+              <thead>
+                <tr>
+                  <th class="month" colspan='{{daysInCurrentMonth() + 1}}'>{{currentMonthName()}}</th>
+                </tr>
+                <tr>
+                  <th class="firstcol week" rowspan="3"></th>
+                  <th class="week" ng-repeat="week in currentMonthWeekList" colspan="{{week.colSpan}}">{{week.week}}</th>
+                </tr>
+                <tr>
+                  <th ng-repeat="dayName in dayNamesInCurrentMonth()">{{dayName}}</th>
+                </tr>
+                <tr>
+                  <th ng-repeat="day in currentMonthDayList()">{{day}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="systemline in systemlines">
+                  <td class="system">
+                    <span class="badge badge-info">{{systemline.system}}</span>
+                  </td>
+                  <td  ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline.system, statusline)">
+                    <span class="element-inner-{{statusline.status}} element-inner"></span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="item">Second item...</div>
+          <div class="item">Third item...</div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Placed at the end of the document so the pages load faster -->
-  <script src="../js/jquery-1.7.1.min.js"></script>
-  <script src="../bootstrap/js/bootstrap.js"></script>
-  <script src="../bootstrap/js/bootstrap-popover.js"></script>
-  <script src="../bootstrap/js/bootstrap-collapse.js"></script>
-  <script src="../bootstrap/js/bootstrap-datepicker.js"></script>
-  <script type="text/javascript">
+<div class="modal hide fade" id="dialogModal">
+
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Add Alert</h3>
+  </div>
+
+  <div class="modal-body">
+    <form class="alertForm form-horizontal">
+      <fieldset>
+        <label for="title">Title</label>
+        <input name="title" ng-model="addAlertLine.title">
+
+        <label for="alerttype">Alert Type</label>
+        <select name="alerttype" ng-model="addAlertLine.alerttype">
+          <option ng-repeat="alerttype in alerttypes">{{alerttype.type}}</option>
+        </select>
+
+        <label for="expdate">Expiry Date</label>
+        <input type="date" ng-model="addAlertLine.expdate">
+
+        <label for="comment">Comment</label>
+        <textarea name="comment" input-xlarge" id="comment" ng-model="addAlertLine.comment"></textarea>
+      </fieldset>
+
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Close</a>
+    <a href="#" class="btn btn-primary" ng-click="addAlert();" data-dismiss="modal">Save changes</a>
+  </div>
+
+</div>
+
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="../js/jquery-1.7.1.min.js"></script>
+<script src="../bootstrap/js/bootstrap.js"></script>
+<script src="../bootstrap/js/bootstrap-popover.js"></script>
+<script src="../bootstrap/js/bootstrap-collapse.js"></script>
+<script src="../bootstrap/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript">
     $(function () {
+
       $('.carousel').carousel('pause');
       $('.datepicker').datepicker({format:"dd.mm.yyyy", weekStart:1});
     });
