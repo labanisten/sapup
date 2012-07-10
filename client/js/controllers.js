@@ -24,6 +24,37 @@ var myModule = angular.module('systemAvailability', ['mongolab']).
 myModule.controller("TimelineCtrl", function($scope, Systems) {
 
 
+	// Defining the calendar object
+	var calendar = calendar || {};
+	(function(ns) {
+		
+		ns.firstDayInCurrentMonth = (function() {
+			var d = new Date();
+			d.setDate(1);
+			return d;
+		})();
+
+		ns.lastDayInCurrentMonth = (function() {
+			var d = new Date();
+			return new Date(d.getFullYear(), d.getMonth() + 1, 0);
+		})();
+
+		ns.currentDate = new Date();
+
+		ns.dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+		ns.dayLabelsShort = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+		ns.monthLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		ns.daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+	
+		ns.currentMonthName = function() {
+			return this.monthLabels[calendar.currentDate.getMonth()];
+		};
+
+
+	})(calendar);
+
+
+
 	$scope.systemlines = getSystemData();
 	$scope.systemnames = getSystemNames();
 	$scope.systemstatuses = getSystemStatuses();
@@ -65,7 +96,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 	}
 
 	$scope.currentMonthDayList = function() {
-		var days = $scope.calendar.daysInMonth[$scope.calendar.currentDate.getMonth()];
+		var days = $scope.calendar.daysInMonth[calendar.currentDate.getMonth()];
 
 		var dayArray = [];
 
@@ -136,7 +167,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 		return dayArray;
 	};
 
-	function numberOfDaysBwtweenDates(fromDate, toDate) {
+	function numberOfDaysBewtweenDates(fromDate, toDate) {
 		var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
 		return Math.abs((fromDate.getTime() - toDate.getTime())/(oneDay)) ;
 	}
