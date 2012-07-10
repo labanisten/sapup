@@ -4184,25 +4184,8 @@ a.badge:hover {
   width: 100%;
   display: block;
   min-width: 10px;
-  border-radius: 1.65em;
+  -webkit-border-radius: 1.65em;
   border: 1px solid #999999;
-}
-.element-borderstatus-available {
-  cursor: default;
-  /*border: 1px solid rgba(27, 122, 27, 0.64);*/
-
-}
-.element-borderstatus-freeze {
-  border: 1px solid rgba(151, 56, 52, 0.64);
-}
-.element-borderstatus-upgrade {
-  border: 1px solid rgba(151, 56, 52, 0.64);
-}
-.element-borderstatus-maintenance {
-  border: 1px solid rgba(151, 56, 52, 0.64);
-}
-.element-borderstatus-test {
-  border: 1px solid rgba(151, 56, 52, 0.64);
 }
 .element-inner-available {
   cursor: default;
