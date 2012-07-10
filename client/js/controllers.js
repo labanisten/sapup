@@ -1,4 +1,25 @@
-var myModule = angular.module('systemAvailability', ['mongolab']);
+var myModule = angular.module('systemAvailability', ['mongolab']).
+		directive('jqDatepicker', function () {
+			return {
+						link: function postLink(scope, element, attrs) {
+							element.datepicker({
+								dateFormat: "dd/mm/yy",
+								onClose: function (dateText, inst) {
+									if(element.context.id == "sidebarStartDate"){
+										scope.selectedStatusLine.start = dateText;
+									}
+									else if(element.context.id == "sidebarEndDate"){
+										scope.selectedStatusLine.end = dateText;
+									}
+									else if(element.context.id == "alertDialogExpDate"){
+										scope.addAlertLine.expdate = dateText;
+									}
+									scope.$apply();
+								}	
+							});
+						}
+					};
+		});
 
 myModule.controller("TimelineCtrl", function($scope, Systems) {
 
@@ -19,13 +40,6 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 		start: undefined,
 		end: undefined,
 		comment: ""
-	};
-
-	$scope.addLine = {
-		system: "",
-		status: "",
-		start: undefined,
-		end: undefined
 	};
 	
 	$scope.addAlertLine = {
@@ -55,25 +69,24 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 
 		var dayArray = [];
 
-		for (i = 0; i< days; i++) {
+		for (i = 0; i < days; i++) {
 			dayArray.push(i + 1);
 		}
 
 		return dayArray;
 	};
 
-	$scope.currentMonthWeekList = (function() {
+	$scope.currentMonthWeekList = (function () {
 
-		var dayArray = $scope.currentMonthDayList();
-		var weekArray = [];
-		var m = $scope.calendar.currentDate;
+		var dayArray = $scope.currentMonthDayList(),
+		weekArray = [],
+		m = $scope.calendar.currentDate,
+		weekAndDays = [],
+		colSpan = 0;
 
 		$.each(dayArray, function(i, v_day) {
 			weekArray.push(getWeek(new Date(m.getFullYear(), m.getMonth(), i)));
 		});
-
-		var weekAndDays = [],
-			colSpan = 0;
 
 		for (var i = 0; i < weekArray.length; i++) {
 			colSpan++;
@@ -263,8 +276,10 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 	}
 
 
-	$scope.removeStatusElement = function() {
-
+	$scope.removeStatusElement = function(id) {
+	
+		//Systems.systems.delete({id: id.$oid}, function(){});
+		
 		$.each($scope.systemlines, function(i, v_system) {
 
 			if (v_system.system == $scope.selectedStatusLine.system) {
@@ -288,35 +303,37 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 				});
 			}
 		});
+		
+		
+		
 	};
 
 
-	$scope.addStatusElement = function() {
+$scope.addStatusElement = function() {
 
 		$.each($scope.systemlines, function(i, v_system) {
 
-			if (v_system.system == $scope.addLine.system) {
+			if (v_system.system == $scope.selectedStatusLine.system) {
+
 				$.each(v_system.statuslines, function(j, v_status) {
-					if (v_status.start == $scope.addLine.start && v_status.end == $scope.addLine.start) {
-						if ($scope.addLine.start == $scope.addLine.end) {
-							$scope.systemlines[i].statuslines[j].status = $scope.addLine.status;
-						} else {
-							for (k = 0; k < ($scope.addLine.end - v_status.start) + 1; k++) {
-								if ($scope.systemlines[i].statuslines[j + k].status != 'available') {
-									alert("Overlap!!");
-									return false; //jquery break
-								}
+					
+					if (checkNewElementStartDay(v_status)) {
+						
+						if (isNewElementSingleDay()) {
+						
+							$scope.systemlines[i].statuslines[j].status = $scope.selectedStatusLine.status;
+							
+						} 
+						else {
+						
+							if(isNewElementOverlapping(v_status, i, j)){
+								alert("Overlap!");
+								return false;
 							}
+							
+							clearSpaceForNewElement(v_status, i, j);
+							addNewElement(i);
 
-							for (k = 0; k < ($scope.addLine.end - v_status.start) + 1; k++) {
-								$scope.systemlines[i].statuslines.splice(j, 1);
-							}
-
-							$scope.systemlines[i].statuslines.push({
-								"start": $scope.addLine.start,
-								"end": $scope.addLine.end,
-								"status": $scope.addLine.status
-							});
 							$scope.systemlines[i].statuslines.sort(custom_sort);
 							return false; //jquery break
 						}
@@ -324,7 +341,62 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 				});
 			}
 		});
+		
+		Systems.systems.save($scope.selectedStatusLine, function(item){
+			//$scope.alertlines.push(item);
+		});
 	};
+	
+	
+	function isNewElementSingleDay(){
+		var result = false;
+		
+		if (convertDateToDatabaseFormat($scope.selectedStatusLine.start) == convertDateToDatabaseFormat($scope.selectedStatusLine.end)){
+			result = true;
+		}
+		
+		return result;
+	}
+	
+	
+	function addNewElement(index){
+		$scope.systemlines[index].statuslines.push({
+			"start": convertDateToDatabaseFormat($scope.selectedStatusLine.start),
+			"end": convertDateToDatabaseFormat($scope.selectedStatusLine.end),
+			"status": $scope.selectedStatusLine.status
+		});
+	}
+	
+	
+	function clearSpaceForNewElement(element, i, j){
+	
+		for (k = 0; k < (convertDateToDatabaseFormat($scope.selectedStatusLine.end) - element.start) + 1; k++) {
+			$scope.systemlines[i].statuslines.splice(j, 1);
+		}
+		
+	}
+	
+
+	function checkNewElementStartDay(element){
+	
+		var result = false;
+		
+		if (element.start == convertDateToDatabaseFormat($scope.selectedStatusLine.start) && element.end == convertDateToDatabaseFormat($scope.selectedStatusLine.start)){
+			result = true;
+		}
+		
+		return result;
+	}
+	
+	
+	function isNewElementOverlapping(element, i, j)
+	{
+		for (k = 0; k < (convertDateToDatabaseFormat($scope.selectedStatusLine.end) - element.start) + 1; k++) {
+			if ($scope.systemlines[i].statuslines[j + k].status != 'available') {
+				return true; //jquery break
+			}
+		}
+	}
 
 
 	$scope.showDetails = function(system, statusline) {
