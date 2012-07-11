@@ -150,7 +150,12 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 		//return new Date(a.start).getTime() - new Date(b.start).getTime();
 		return a.start - b.start;
 	}
-
+	
+	function ascSystemSort(a, b){
+		var aSystem = a.system;
+		var bSystem = b.system;
+		return (aSystem < bSystem) ? -1 : (aSystem > bSystem) ? 1 : 0;
+	}	
 
 	function convertToDate(dateString) {
 
@@ -167,10 +172,11 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 	}
 
 
-	function addEmptyElementsForSystem(system, calendartable, index) {
+	function addEmptyElementsForSystem(systemItem, calendartable, index) {
 
 		calendartable.push({
-			"system": system,
+			"_id": systemItem._id,
+			"system": systemItem.system,
 			"statuslines": []
 		});
 		
@@ -224,12 +230,14 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 		var syslines = Systems.systems.query(function() {
 
 			$.each(syslines, function(i, v_system) {
-				calendartable = addEmptyElementsForSystem(v_system.system, calendartable, i);
+				calendartable = addEmptyElementsForSystem(v_system, calendartable, i);
 				
 				$.each(v_system.statuslines, function(j, v_status) {
 					calendartable = insertCalendarElement(calendartable, v_status, i, j);
 				});
 			});
+			
+			calendartable.sort(ascSystemSort);
 		});
 
 		return calendartable;
@@ -302,10 +310,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 					}
 				});
 			}
-		});
-		
-		
-		
+		});	
 	};
 
 
@@ -346,15 +351,32 @@ $scope.addStatusElement = function() {
 			}
 		});
 		
-		console.log("savedStatusIndex: " + savedStatusIndex);
-		//var tmpSystemElement;
+		//console.log("savedStatusIndex: " + savedStatusIndex);
+		var systemElement;
+	    var statusItems = [];
+		
+		systemElement = { 
+						  //"_id": $scope.systemlines[savedStatusIndex]._id,
+						  "system": $scope.systemlines[savedStatusIndex].system,
+						  "statuslines": ""
+						};
 		
 		//funka ikkje me $.each
 		for(var j = 0; j < $scope.systemlines[savedStatusIndex].statuslines.length; j++)
 		{
-			console.log("$scope.systemlines[savedStatusIndex].statuslines[j].status: " + $scope.systemlines[savedStatusIndex].statuslines[j].status);
+			//console.log("systemElement.statuslines.status: " + systemElement.statuslines[j].status);					
+			if($scope.systemlines[savedStatusIndex].statuslines[j].status != 'available'){
+				statusItems.push($scope.systemlines[savedStatusIndex].statuslines[j]);
+			}			
 		}
-
+		
+		//console.log("statusItems.length: " + statusItems.length);
+		
+		systemElement.statuslines = statusItems;
+		
+		//console.log("systemElement.statuslines: " + systemElement.statuslines.length);
+		//console.log("systemElement._id: " + systemElement._id.$oid);
+		
 		
 		/*
 		$.each(savedStatusIndex.systemlines, function(qwer, rtuy) {
@@ -362,9 +384,9 @@ $scope.addStatusElement = function() {
 		});
 		*/
 	
-		//Systems.systems.update({id:"4fd9cfa5e4b049bcd5418f99"}, $scope.selectedStatusLine, function(item){
+		Systems.systems.update({id:$scope.systemlines[savedStatusIndex]._id.$oid}, systemElement, function(item){
 			//$scope.alertlines.push(item);
-		//});
+		});
 	};
 	
 	
