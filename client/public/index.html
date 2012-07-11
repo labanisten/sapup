@@ -70,21 +70,21 @@
 			<div class="control-group">
 			  <div class="controls">         
 			   <label for="system">System</label>            
-			   <select name="system" ng-model="selectedStatusLine.system" class="input-medium">
+			   <select name="system" ng-model="systemFormData.system" class="input-medium">
 					<option ng-repeat="systemname in systemnames">{{systemname.name}}</option>
 			   </select>
 			   <label for="status">Status</label>
-			   <select name="status" ng-model="selectedStatusLine.status" class="input-medium">
+			   <select name="status" ng-model="systemFormData.status" class="input-medium">
 					<option ng-repeat="systemstatus in systemstatuses">{{systemstatus.status}}</option>
 				</select>
 			   <label for="startDate">Start</label> 
-			   <input jq-datepicker id="sidebarStartDate" ng-model="selectedStatusLine.start" class="input-medium">
+			   <input jq-datepicker id="sidebarStartDate" ng-model="systemFormData.start" class="input-medium">
 			   <label for="endDate">End</label> 
-			   <input jq-datepicker id="sidebarEndDate" ng-model="selectedStatusLine.end" class="input-medium">
+			   <input jq-datepicker id="sidebarEndDate" ng-model="systemFormData.end" class="input-medium">
 			   <label for="comment">Comment</label>
-			   <textarea id="comment" ng-model="selectedStatusLine.comment" class="input-medium"></textarea>
+			   <textarea id="comment" ng-model="systemFormData.comment" class="input-medium"></textarea>
 			   <br/>
-			   <button class="btn btn-primary">Update</button>
+			   <button class="btn btn-primary" ng-click="updateStatusElement()">Update</button>
 			   <button class="btn btn-primary" ng-click="addStatusElement()">New</button>
 			   <button class="btn btn-danger" ng-click="removeStatusElement()">Delete</button>
 			 </div>
@@ -128,7 +128,7 @@
                   <td class="system">
                     <span class="badge badge-info">{{systemline.system}}</span>
                   </td>
-                  <td  ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline.system, statusline)">
+                  <td  ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline, statusline)">
                     <span class="element-inner-{{statusline.status}} element-inner"></span>
                   </td>
                 </tr>

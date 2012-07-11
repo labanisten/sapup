@@ -6,10 +6,10 @@ var myModule = angular.module('systemAvailability', ['mongolab']).
 								dateFormat: "dd/mm/yy",
 								onClose: function (dateText, inst) {
 									if(element.context.id == "sidebarStartDate"){
-										scope.selectedStatusLine.start = dateText;
+										scope.systemFormData.start = dateText;
 									}
 									else if(element.context.id == "sidebarEndDate"){
-										scope.selectedStatusLine.end = dateText;
+										scope.systemFormData.end = dateText;
 									}
 									else if(element.context.id == "alertDialogExpDate"){
 										scope.addAlertLine.expdate = dateText;
@@ -34,13 +34,25 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 	var startDate = 20120501,
 		endDate = 20120531;
 
-	$scope.selectedStatusLine = {
+	$scope.selectedElement = {
+		_id:"",
 		system: "",
 		status: "",
 		start: undefined,
 		end: undefined,
 		comment: ""
 	};
+	
+	
+	$scope.systemFormData = {
+		_id:"",
+		system: "",
+		status: "",
+		start: undefined,
+		end: undefined,
+		comment: ""
+	};
+	
 	
 	$scope.addAlertLine = {
 		title: "",
@@ -127,8 +139,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 			dayArray.push($scope.calendar.daysLabel[day_it]);
 			day_it++;
 
-			if (day_it >
-	6) {
+			if (day_it > 6) {
 				day_it = 0;
 			}
 		}
@@ -211,7 +222,10 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 
 			});
 
+			calendartable[i].statuslines.sort(custom_sort);
+			
 			calendartable[i].statuslines.push({
+				"index": j,
 				"start": v_status.start,
 				"end": v_status.end,
 				"status": v_status.status
@@ -290,21 +304,14 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 		
 		$.each($scope.systemlines, function(i, v_system) {
 
-			if (v_system.system == $scope.selectedStatusLine.system) {
+			if (v_system.system == $scope.systemFormData.system) {
 
 				$.each(v_system.statuslines, function(j, v_status) {
 
-					if (v_status.start == convertDateToDatabaseFormat($scope.selectedStatusLine.start) && v_status.end == convertDateToDatabaseFormat($scope.selectedStatusLine.end) && v_status.status == $scope.selectedStatusLine.status) {
+					if (v_status.start == convertDateToDatabaseFormat($scope.systemFormData.start) && v_status.end == convertDateToDatabaseFormat($scope.systemFormData.end) && v_status.status == $scope.systemFormData.status) {
 
 						$scope.systemlines[i].statuslines.splice(j, 1);
-
-						for (k = 0; k < (v_status.end - v_status.start) + 1; k++) {
-							$scope.systemlines[i].statuslines.push({
-								"start": (parseInt(v_status.start) + k),
-								"end": (parseInt(v_status.start) + k),
-								"status": "available"
-							});
-						}
+						fillSpaceWithEmptyElements(v_status, i);
 
 						$scope.systemlines[i].statuslines.sort(custom_sort);
 						savedStatusIndex = i;
@@ -315,7 +322,72 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 		
 		updateStatuslineToDB(savedStatusIndex);
 	};
+	
+	
+	function fillSpaceWithEmptyElements(v_status, i){
+	
+		for (k = 0; k < (v_status.end - v_status.start) + 1; k++) {
+			$scope.systemlines[i].statuslines.push({
+				"start": (parseInt(v_status.start) + k),
+				"end": (parseInt(v_status.start) + k),
+				"status": "available"
+			});
+		}
+	}
 
+	
+	$scope.updateStatusElement = function(id) {
+		
+		var updateStatusIndex;
+		
+		$.each($scope.systemlines, function(i, v_system) {
+
+			if (v_system.system == $scope.systemFormData.system) {
+
+				$.each(v_system.statuslines, function(j, v_status) {
+
+					if (v_status.start == $scope.selectedElement.start && v_status.end == $scope.selectedElement.end && v_status.status == $scope.selectedElement.status) {
+						
+						$scope.systemlines[i].statuslines.splice(j, 1);
+						fillSpaceWithEmptyElements(v_status, i);
+						$scope.systemlines[i].statuslines.sort(custom_sort);
+					}
+				});
+				
+				$.each(v_system.statuslines, function(j, v_status) {
+				
+					if (checkNewElementStartDay(v_status)) {
+						if (isNewElementSingleDay()) {
+						
+							$scope.systemlines[i].statuslines[j].status = $scope.systemFormData.status;
+							
+						} 
+						else {
+						
+							if(isNewElementOverlapping(v_status, i, j)){
+								alert("Overlap!");
+								return false;
+							}
+							
+							clearSpaceForNewElement(convertDateToDatabaseFormat($scope.systemFormData.start), i, j);
+							addNewElement(i);
+
+							savedStatusIndex = i;
+							$scope.systemlines[i].statuslines.sort(custom_sort);
+							return false; //jquery break
+						}
+					}
+				});
+				
+				updateStatusIndex = i;
+			}
+		});	
+		
+		//TODO if undefined
+		updateStatuslineToDB(updateStatusIndex);
+	};
+	
+	
 	function updateStatuslineToDB(index){
 	
 		var systemElement;
@@ -345,7 +417,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 
 		$.each($scope.systemlines, function(i, v_system) {
 
-			if (v_system.system == $scope.selectedStatusLine.system) {
+			if (v_system.system == $scope.systemFormData.system) {
 
 				$.each(v_system.statuslines, function(j, v_status) {
 					
@@ -353,7 +425,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 						
 						if (isNewElementSingleDay()) {
 						
-							$scope.systemlines[i].statuslines[j].status = $scope.selectedStatusLine.status;
+							$scope.systemlines[i].statuslines[j].status = $scope.systemFormData.status;
 							
 						} 
 						else {
@@ -363,7 +435,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 								return false;
 							}
 							
-							clearSpaceForNewElement(v_status, i, j);
+							clearSpaceForNewElement(v_status.start, i, j);
 							addNewElement(i);
 
 							$scope.systemlines[i].statuslines.sort(custom_sort);
@@ -383,7 +455,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 	function isNewElementSingleDay(){
 		var result = false;
 		
-		if (convertDateToDatabaseFormat($scope.selectedStatusLine.start) == convertDateToDatabaseFormat($scope.selectedStatusLine.end)){
+		if (convertDateToDatabaseFormat($scope.systemFormData.start) == convertDateToDatabaseFormat($scope.systemFormData.end)){
 			result = true;
 		}
 		
@@ -393,16 +465,16 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 	
 	function addNewElement(index){
 		$scope.systemlines[index].statuslines.push({
-			"start": convertDateToDatabaseFormat($scope.selectedStatusLine.start),
-			"end": convertDateToDatabaseFormat($scope.selectedStatusLine.end),
-			"status": $scope.selectedStatusLine.status
+			"start": convertDateToDatabaseFormat($scope.systemFormData.start),
+			"end": convertDateToDatabaseFormat($scope.systemFormData.end),
+			"status": $scope.systemFormData.status
 		});
 	}
 	
 	
-	function clearSpaceForNewElement(element, i, j){
+	function clearSpaceForNewElement(elementStartDate, i, j){
 	
-		for (k = 0; k < (convertDateToDatabaseFormat($scope.selectedStatusLine.end) - element.start) + 1; k++) {
+		for (k = 0; k < (convertDateToDatabaseFormat($scope.systemFormData.end) - elementStartDate) + 1; k++) {
 			$scope.systemlines[i].statuslines.splice(j, 1);
 		}
 		
@@ -413,7 +485,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 	
 		var result = false;
 		
-		if (element.start == convertDateToDatabaseFormat($scope.selectedStatusLine.start) && element.end == convertDateToDatabaseFormat($scope.selectedStatusLine.start)){
+		if (element.start == convertDateToDatabaseFormat($scope.systemFormData.start) && element.end == convertDateToDatabaseFormat($scope.systemFormData.start)){
 			result = true;
 		}
 		
@@ -423,7 +495,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 	
 	function isNewElementOverlapping(element, i, j)
 	{
-		for (k = 0; k < (convertDateToDatabaseFormat($scope.selectedStatusLine.end) - element.start) + 1; k++) {
+		for (k = 0; k < (convertDateToDatabaseFormat($scope.systemFormData.end) - element.start) + 1; k++) {
 			if ($scope.systemlines[i].statuslines[j + k].status != 'available') {
 				return true; //jquery break
 			}
@@ -431,21 +503,29 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 	}
 
 
-	$scope.showDetails = function(system, statusline) {
+	$scope.showDetails = function(systemLine, statusLine) {
 
-		if(statusline.status != "available")
+		if(statusLine.status != "available")
 		{
-			$scope.selectedStatusLine.system = system;
-			$scope.selectedStatusLine.status = statusline.status;
-			$scope.selectedStatusLine.start = convertDateToViewableFormat(statusline.start);
-			$scope.selectedStatusLine.end = convertDateToViewableFormat(statusline.end);
+			$scope.systemFormData._id = systemLine._id;
+			$scope.systemFormData.system = systemLine.system;
+			$scope.systemFormData.status = statusLine.status;
+			$scope.systemFormData.start = convertDateToViewableFormat(statusLine.start);
+			$scope.systemFormData.end = convertDateToViewableFormat(statusLine.end);
+			
+			$scope.selectedElement._id = systemLine._id;
+			$scope.selectedElement.system = systemLine.system;
+			$scope.selectedElement.status = statusLine.status;
+			$scope.selectedElement.start = statusLine.start;
+			$scope.selectedElement.end = statusLine.end;
+			
 		}
 		else
 		{
-			$scope.selectedStatusLine.system = "";
-			$scope.selectedStatusLine.status = "";
-			$scope.selectedStatusLine.start = "";
-			$scope.selectedStatusLine.end = "";
+			$scope.systemFormData.system = "";
+			$scope.systemFormData.status = "";
+			$scope.systemFormData.start = "";
+			$scope.systemFormData.end = "";
 		}
 		
 	};
