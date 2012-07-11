@@ -285,8 +285,8 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 
 
 	$scope.removeStatusElement = function(id) {
-	
-		//Systems.systems.delete({id: id.$oid}, function(){});
+		
+		var deletedStatusIndex;
 		
 		$.each($scope.systemlines, function(i, v_system) {
 
@@ -307,14 +307,39 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 						}
 
 						$scope.systemlines[i].statuslines.sort(custom_sort);
+						savedStatusIndex = i;
 					}
 				});
 			}
 		});	
+		
+		updateStatuslineToDB(savedStatusIndex);
 	};
 
+	function updateStatuslineToDB(index){
+	
+		var systemElement;
+	    var statusItems = [];
+		
+		systemElement = { 
+						  "system": $scope.systemlines[index].system,
+						  "statuslines": ""
+						};
+		
+		//funka ikkje me $.each
+		for(var j = 0; j < $scope.systemlines[index].statuslines.length; j++)
+		{				
+			if($scope.systemlines[index].statuslines[j].status != 'available'){
+				statusItems.push($scope.systemlines[index].statuslines[j]);
+			}			
+		}
 
-$scope.addStatusElement = function() {
+		systemElement.statuslines = statusItems;
+		Systems.systems.update({id:$scope.systemlines[index]._id.$oid}, systemElement, function(item){});		
+		//Systems.systems.delete({id:$scope.systemlines[savedStatusIndex]._id.$oid}, function(){});
+	}
+
+	$scope.addStatusElement = function() {
 
 		var savedStatusIndex;
 
@@ -351,42 +376,7 @@ $scope.addStatusElement = function() {
 			}
 		});
 		
-		//console.log("savedStatusIndex: " + savedStatusIndex);
-		var systemElement;
-	    var statusItems = [];
-		
-		systemElement = { 
-						  //"_id": $scope.systemlines[savedStatusIndex]._id,
-						  "system": $scope.systemlines[savedStatusIndex].system,
-						  "statuslines": ""
-						};
-		
-		//funka ikkje me $.each
-		for(var j = 0; j < $scope.systemlines[savedStatusIndex].statuslines.length; j++)
-		{
-			//console.log("systemElement.statuslines.status: " + systemElement.statuslines[j].status);					
-			if($scope.systemlines[savedStatusIndex].statuslines[j].status != 'available'){
-				statusItems.push($scope.systemlines[savedStatusIndex].statuslines[j]);
-			}			
-		}
-		
-		//console.log("statusItems.length: " + statusItems.length);
-		
-		systemElement.statuslines = statusItems;
-		
-		//console.log("systemElement.statuslines: " + systemElement.statuslines.length);
-		//console.log("systemElement._id: " + systemElement._id.$oid);
-		
-		
-		/*
-		$.each(savedStatusIndex.systemlines, function(qwer, rtuy) {
-			console.log("t1");
-		});
-		*/
-	
-		Systems.systems.update({id:$scope.systemlines[savedStatusIndex]._id.$oid}, systemElement, function(item){
-			//$scope.alertlines.push(item);
-		});
+		updateStatuslineToDB(savedStatusIndex);
 	};
 	
 	
