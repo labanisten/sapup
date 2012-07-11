@@ -311,6 +311,8 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 
 $scope.addStatusElement = function() {
 
+		var savedStatusIndex;
+
 		$.each($scope.systemlines, function(i, v_system) {
 
 			if (v_system.system == $scope.selectedStatusLine.system) {
@@ -335,6 +337,8 @@ $scope.addStatusElement = function() {
 							addNewElement(i);
 
 							$scope.systemlines[i].statuslines.sort(custom_sort);
+							
+							savedStatusIndex = i;
 							return false; //jquery break
 						}
 					}
@@ -342,9 +346,25 @@ $scope.addStatusElement = function() {
 			}
 		});
 		
-		Systems.systems.save($scope.selectedStatusLine, function(item){
-			//$scope.alertlines.push(item);
+		console.log("savedStatusIndex: " + savedStatusIndex);
+		//var tmpSystemElement;
+		
+		//funka ikkje me $.each
+		for(var j = 0; j < $scope.systemlines[savedStatusIndex].statuslines.length; j++)
+		{
+			console.log("$scope.systemlines[savedStatusIndex].statuslines[j].status: " + $scope.systemlines[savedStatusIndex].statuslines[j].status);
+		}
+
+		
+		/*
+		$.each(savedStatusIndex.systemlines, function(qwer, rtuy) {
+			console.log("t1");
 		});
+		*/
+	
+		//Systems.systems.update({id:"4fd9cfa5e4b049bcd5418f99"}, $scope.selectedStatusLine, function(item){
+			//$scope.alertlines.push(item);
+		//});
 	};
 	
 	
