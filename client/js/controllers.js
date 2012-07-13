@@ -1,69 +1,34 @@
-var myModule = angular.module('systemAvailability', ['mongolab']).
-		directive('jqDatepicker', function () {
-			return {
-						link: function postLink(scope, element, attrs) {
-							element.datepicker({
-								dateFormat: "dd/mm/yy",
-								onClose: function (dateText, inst) {
-									if(element.context.id == "sidebarStartDate"){
-										scope.selectedStatusLine.start = dateText;
-									}
-									else if(element.context.id == "sidebarEndDate"){
-										scope.selectedStatusLine.end = dateText;
-									}
-									else if(element.context.id == "alertDialogExpDate"){
-										scope.addAlertLine.expdate = dateText;
-									}
-									scope.$apply();
-								}	
-							});
-						}
-					};
-		});
-
-myModule.controller("TimelineCtrl", function($scope, Systems) {
-
-
-	// Defining the calendar object
-	var calendar = calendar || {};
-	(function(ns) {
+var myModule = angular.module('systemAvailability', ['mongolabModule', 'calendarModule']);
 		
-		ns.firstDayInCurrentMonth = (function() {
-			var d = new Date();
-			d.setDate(1);
-			return d;
-		})();
+myModule.directive('jqDatepicker', function () {
+	return {
+				link: function postLink(scope, element, attrs) {
+					element.datepicker({
+						dateFormat: "dd.mm.yy",
+						onClose: function (dateText, inst) {
+							if(element.context.id == "sidebarStartDate"){
+								scope.selectedStatusLine.start = dateText;
+							}
+							else if(element.context.id == "sidebarEndDate"){
+								scope.selectedStatusLine.end = dateText;
+							}
+							else if(element.context.id == "alertDialogExpDate"){
+								scope.addAlertLine.expdate = dateText;
+							}
+							scope.$apply();
+						}
+					});
+				}
+			};
+});
 
-		ns.lastDayInCurrentMonth = (function() {
-			var d = new Date();
-			return new Date(d.getFullYear(), d.getMonth() + 1, 0);
-		})();
-
-		ns.currentDate = new Date();
-
-		ns.dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-		ns.dayLabelsShort = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-		ns.monthLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-		ns.daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-	
-		ns.currentMonthName = function() {
-			return this.monthLabels[calendar.currentDate.getMonth()];
-		};
-
-
-	})(calendar);
-
-
+myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 
 	$scope.systemlines = getSystemData();
 	$scope.systemnames = getSystemNames();
 	$scope.systemstatuses = getSystemStatuses();
 	$scope.alertlines = getAlertData();
 	$scope.alerttypes = getAlertTypes();
-
-
-	var startDate = 20120501,
-		endDate = 20120531;
 
 	$scope.selectedStatusLine = {
 		system: "",
@@ -80,101 +45,16 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 		comment: ""
 	};
 
+	$scope.currentMonthDayList = Calendar.currentMonthDayList();
+	$scope.currentMonthWeekList = Calendar.currentMonthWeekList();
+	$scope.currentMonthName = Calendar.currentMonthName();
+	$scope.daysInCurrentMonth =  Calendar.noOfDaysInCurrentMonth;
+	$scope.dayNamesInCurrentMonth = Calendar.dayNamesInCurrentMonth();
 
-	$scope.calendar = {
-
-		daysLabel: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-		daysLabelShort: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
-		monthLabels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-		daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-		currentDate: new Date()
-	};
-
-	function getWeek(date) {
-		var onejan = new Date(date.getFullYear(), 0, 1);
-		return Math.ceil((((date - onejan) / 86400000) + onejan.getDay() + 1) / 7);
-	}
-
-	$scope.currentMonthDayList = function() {
-		var days = $scope.calendar.daysInMonth[calendar.currentDate.getMonth()];
-
-		var dayArray = [];
-
-		for (i = 0; i < days; i++) {
-			dayArray.push(i + 1);
-		}
-
-		return dayArray;
-	};
-
-	$scope.currentMonthWeekList = (function () {
-
-		var dayArray = $scope.currentMonthDayList(),
-		weekArray = [],
-		m = $scope.calendar.currentDate,
-		weekAndDays = [],
-		colSpan = 0;
-
-		$.each(dayArray, function(i, v_day) {
-			weekArray.push(getWeek(new Date(m.getFullYear(), m.getMonth(), i)));
-		});
-
-		for (var i = 0; i < weekArray.length; i++) {
-			colSpan++;
-			if (weekArray[i] !== weekArray[i + 1]) {
-				weekAndDays.push({
-					"week": weekArray[i],
-					"colSpan": colSpan
-				});
-				colSpan = 0;
-			}
-		}
-
-		return weekAndDays;
-	})();
-
-
-	$scope.currentMonthName = function() {
-		return $scope.calendar.monthLabels[$scope.calendar.currentDate.getMonth()];
-	};
-
-
-	$scope.daysInCurrentMonth = function() {
-		return $scope.calendar.daysInMonth[$scope.calendar.currentDate.getMonth()];
-	};
-
-	$scope.dayNamesInCurrentMonth = function() {
-
-		var dayCount = $scope.calendar.daysInMonth[$scope.calendar.currentDate.getMonth()];
-
-		var dayArray = [];
-
-		var date = $scope.calendar.currentDate;
-		var firstDayInMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-
-		var day_it = firstDayInMonth.getDay();
-		for (i = 0; i < dayCount; i++) {
-
-			dayArray.push($scope.calendar.daysLabel[day_it]);
-			day_it++;
-
-			if (day_it >
-	6) {
-				day_it = 0;
-			}
-		}
-
-		return dayArray;
-	};
 
 	function numberOfDaysBewtweenDates(fromDate, toDate) {
 		var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
-		return Math.abs((fromDate.getTime() - toDate.getTime())/(oneDay)) ;
-	}
-
-	function daysInMonth(month,year) {
-		var dd = new Date(year, month, 0);
-		return dd.getDate();
+		return Math.floor((fromDate.getTime() - toDate.getTime())/(oneDay)) ;
 	}
 	
 	function custom_sort(a, b) {
@@ -184,7 +64,6 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 
 
 	function convertToDate(dateString) {
-
 		var datestring = dateString,
 			y = datestring.substr(0, 4),
 			m = datestring.substr(4, 2),
@@ -194,48 +73,42 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 		date = new Date(y, m, d);
 
 		return date;
-
 	}
 
 
 	function addEmptyElementsForSystem(system, calendartable, index) {
-
 		calendartable.push({
 			"system": system,
 			"statuslines": []
 		});
 		
-		for (k = 0; k < (endDate - startDate) + 1; k++) {
+		var calDate = Calendar.getFirstDayInCurrentMonth();
+		var noOfDays = numberOfDaysBewtweenDates(Calendar.lastDayInCurrentMonth, Calendar.firstDayInCurrentMonth);
+		for (k = 0; k < noOfDays + 1; k++) {
+			calDate.setDate(k + 1);
 			calendartable[index].statuslines.push({
-				"start": startDate + k,
-				"end": startDate + k,
+				"start": calDate,
+				"end": calDate,
 				"status": "available"
 			});
 		}
-
 		return calendartable;
 	}
 
 
 	function insertCalendarElement(calendartable, v_status, i, j) {
-
 		if (v_status.start == v_status.end) {
 			calendartable[i].statuslines[j].status = v_status.status;
 		} else {
 
 			$.each(calendartable[i].statuslines, function(j, c_status) {
-
 				if (c_status.start == v_status.start) {
-
 					for (k = 0; k < (v_status.end - v_status.start) + 1; k++) {
 						calendartable[i].statuslines.splice(j, 1);
 					}
-
 					return false; //jquery loopbreak
 				}
-
 			});
-
 			calendartable[i].statuslines.push({
 				"start": v_status.start,
 				"end": v_status.end,
@@ -251,32 +124,24 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 	function getSystemData() {
 
 		var calendartable = [];
-
 		var syslines = Systems.systems.query(function() {
-
 			$.each(syslines, function(i, v_system) {
 				calendartable = addEmptyElementsForSystem(v_system.system, calendartable, i);
-				
 				$.each(v_system.statuslines, function(j, v_status) {
 					calendartable = insertCalendarElement(calendartable, v_status, i, j);
 				});
 			});
 		});
-
 		return calendartable;
 	}
 	
-	
 	function getSystemStatuses(){
-		var systemStatuses = Systems.systemstatuses.query(function(){});	
+		var systemStatuses = Systems.systemstatuses.query(function(){});
 		return systemStatuses;
 	}
 	
-	
 	function getSystemNames(){
-	
-		var systemNames = Systems.systemnames.query(function() {});	
-
+		var systemNames = Systems.systemnames.query(function() {});
 		return systemNames;
 	}
 
@@ -288,29 +153,24 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 	
 	
 	function getAlertTypes(){
-		var alertTypes = Systems.alerttypes.query(function(){});	
+		var alertTypes = Systems.alerttypes.query(function(){});
 		return alertTypes;
 	}
 	
 	
 	$scope.addAlert = function() {
-		
-	    Systems.alerts.save($scope.addAlertLine, function(item){
+		Systems.alerts.save($scope.addAlertLine, function(item){
 			$scope.alertlines.push(item);
 		});
-	
-	}
-	
+	};
 	
 	$scope.removeAlert = function(id) {
-	    Systems.alerts.delete({id: id.$oid}, function(){});
-	}
+		Systems.alerts.delete({id: id.$oid}, function(){});
+	};
 
 
 	$scope.removeStatusElement = function(id) {
-	
 		//Systems.systems.delete({id: id.$oid}, function(){});
-		
 		$.each($scope.systemlines, function(i, v_system) {
 
 			if (v_system.system == $scope.selectedStatusLine.system) {
@@ -354,7 +214,7 @@ $scope.addStatusElement = function() {
 						
 							$scope.systemlines[i].statuslines[j].status = $scope.selectedStatusLine.status;
 							
-						} 
+						}
 						else {
 						
 							if(isNewElementOverlapping(v_status, i, j)){

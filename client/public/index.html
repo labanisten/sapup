@@ -16,6 +16,7 @@
   
   <script src="../js/controllers.js"></script>
   <script src="../js/mongolab.js"></script>
+  <script src="../js/calendar.js"></script>
   <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
   <link href="../css/jquery-ui-1.8.21.custom.css" rel="stylesheet">
   <!--<link href="../css/angular-ui.min.css" rel="stylesheet">-->
@@ -89,6 +90,7 @@
 			   <button class="btn btn-danger" ng-click="removeStatusElement()">Delete</button>
 			 </div>
 		   </div>
+     </fieldset>
 	  </form>      
 			 
       <form>
@@ -110,17 +112,17 @@
             <table id="systemtab">
               <thead>
                 <tr>
-                  <th class="month" colspan='{{daysInCurrentMonth() + 1}}'>{{currentMonthName()}}</th>
+                  <th class="month" colspan='{{daysInCurrentMonth + 1}}'>{{currentMonthName}}</th>
                 </tr>
                 <tr>
                   <th class="firstcol week" rowspan="3"></th>
                   <th class="week" ng-repeat="week in currentMonthWeekList" colspan="{{week.colSpan}}">{{week.week}}</th>
                 </tr>
                 <tr>
-                  <th ng-repeat="dayName in dayNamesInCurrentMonth()">{{dayName}}</th>
+                  <th ng-repeat="dayName in dayNamesInCurrentMonth">{{dayName}}</th>
                 </tr>
                 <tr>
-                  <th ng-repeat="day in currentMonthDayList()">{{day}}</th>
+                  <th ng-repeat="day in currentMonthDayList">{{day}}</th>
                 </tr>
               </thead>
               <tbody>
