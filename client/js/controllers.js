@@ -334,6 +334,22 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 			});
 		}
 	}
+	
+	
+	function findSelectedElement(callbackFunction){
+		var systemIndex;
+		$.each($scope.systemlines, function(i, v_system) {
+			if (v_system.system == $scope.systemFormData.system) {
+				systemIndex = i;
+				
+				$.each(v_system.statuslines, function(j, v_status) {
+					callbackFunction();
+				});
+			}
+		});
+		
+		updateStatuslineToDB(updateStatusIndex);
+	}
 
 	
 	$scope.updateStatusElement = function(id) {
@@ -371,8 +387,6 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 							
 							clearSpaceForNewElement(convertDateToDatabaseFormat($scope.systemFormData.start), i, j);
 							addNewElement(i);
-
-							savedStatusIndex = i;
 							$scope.systemlines[i].statuslines.sort(custom_sort);
 							return false; //jquery break
 						}
@@ -467,7 +481,8 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 		$scope.systemlines[index].statuslines.push({
 			"start": convertDateToDatabaseFormat($scope.systemFormData.start),
 			"end": convertDateToDatabaseFormat($scope.systemFormData.end),
-			"status": $scope.systemFormData.status
+			"status": $scope.systemFormData.status,
+			"comment": $scope.systemFormData.comment
 		});
 	}
 	
@@ -512,12 +527,14 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 			$scope.systemFormData.status = statusLine.status;
 			$scope.systemFormData.start = convertDateToViewableFormat(statusLine.start);
 			$scope.systemFormData.end = convertDateToViewableFormat(statusLine.end);
+			$scope.systemFormData.comment = "";
 			
 			$scope.selectedElement._id = systemLine._id;
 			$scope.selectedElement.system = systemLine.system;
 			$scope.selectedElement.status = statusLine.status;
 			$scope.selectedElement.start = statusLine.start;
 			$scope.selectedElement.end = statusLine.end;
+			$scope.systemFormData.comment = statusLine.comment;
 			
 		}
 		else
@@ -526,6 +543,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 			$scope.systemFormData.status = "";
 			$scope.systemFormData.start = "";
 			$scope.systemFormData.end = "";
+			$scope.systemFormData.comment = "";
 		}
 		
 	};

@@ -97,6 +97,7 @@
           <div class="control-group">
             <div class="controls">
               <button class="btn btn-primary" data-toggle="modal" href="#dialogModal">Add alert</button>
+			  <button class="btn btn-primary" onClick="init()">ert</button>
             </div>
           </div>
         </fieldset>
@@ -128,8 +129,8 @@
                   <td class="system">
                     <span class="badge badge-info">{{systemline.system}}</span>
                   </td>
-                  <td  ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline, statusline)">
-                    <span class="element-inner-{{statusline.status}} element-inner"></span>
+                  <td ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.end - statusline.start + 1}}" ng-click="showDetails(systemline, statusline)">
+                    <span class="element-inner-{{statusline.status}} element-inner" rel="popover" data-original-title="{{statusline.status}} in {{systemline.system}}" data-content="From: {{statusline.start}} <br/> To: {{statusline.end}} <br/> {{statusline.comment}}"></span>
                   </td>
                 </tr>
               </tbody>
@@ -183,11 +184,30 @@
 <script src="../bootstrap/js/bootstrap-popover.js"></script>
 <script src="../bootstrap/js/bootstrap-collapse.js"></script>
 <script type="text/javascript">
+
     $(function () {
 
-      $('.carousel').carousel('pause');
-      $('.datepicker').datepicker({format:"dd.mm.yyyy", weekStart:1});
+		$('.carousel').carousel('pause');
+		//$('.datepicker').datepicker({format:"dd.mm.yyyy", weekStart:1});
+		
     });
-    </script>
+	
+	/*
+	function popover(){
+		console.log("asdas");
+		$("#asd").popover();
+	}
+	*/
+	
+	//$('document').ready(init());
+
+    function init(){
+      $("span[rel=popover]").popover({placement: 'asda'});
+      //$(".collapse").collapse();
+    }
+	
+</script>
+	
+
 </body>
 </html>
