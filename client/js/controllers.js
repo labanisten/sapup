@@ -15,7 +15,7 @@ var myModule = angular.module('systemAvailability', ['mongolab']).
 										scope.addAlertLine.expdate = dateText;
 									}
 									scope.$apply();
-								}	
+								}
 							});
 						}
 					};
@@ -237,15 +237,14 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 	
 	
 	function getSystemStatuses(){
-		var systemStatuses = Systems.systemstatuses.query(function(){});	
+		var systemStatuses = Systems.systemstatuses.query(function(){});
 		return systemStatuses;
 	}
 	
 	
 	function getSystemNames(){
 	
-		var systemNames = Systems.systemnames.query(function() {});	
-
+		var systemNames = Systems.systemnames.query(function() {});
 		return systemNames;
 	}
 
@@ -257,23 +256,23 @@ myModule.controller("TimelineCtrl", function($scope, Systems) {
 	
 	
 	function getAlertTypes(){
-		var alertTypes = Systems.alerttypes.query(function(){});	
+		var alertTypes = Systems.alerttypes.query(function(){});
 		return alertTypes;
 	}
 	
 	
 	$scope.addAlert = function() {
 		
-	    Systems.alerts.save($scope.addAlertLine, function(item){
+		Systems.alerts.save($scope.addAlertLine, function(item){
 			$scope.alertlines.push(item);
 		});
 	
-	}
+	};
 	
 	
 	$scope.removeAlert = function(id) {
-	    Systems.alerts.delete({id: id.$oid}, function(){});
-	}
+		Systems.alerts.delete({id: id.$oid}, function(){});
+	};
 
 
 	$scope.removeStatusElement = function(id) {
@@ -323,7 +322,7 @@ $scope.addStatusElement = function() {
 						
 							$scope.systemlines[i].statuslines[j].status = $scope.selectedStatusLine.status;
 							
-						} 
+						}
 						else {
 						
 							if(isNewElementOverlapping(v_status, i, j)){
@@ -425,7 +424,7 @@ $scope.addStatusElement = function() {
 			m = datestring.substr(4, 2),
 			d = datestring.substr(6, 2);
 
-		var date = d + '/' + m + '/' + y;
+		var date = d + '.' + m + '.' + y;
 
 		return date;
 	}
