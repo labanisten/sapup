@@ -28,6 +28,9 @@ angular.module('calendarModule', []).
 		ns.monthLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 		ns.daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 	
+		ns.currentMonth = ns.currentDate.getMonth();
+		ns.currentYear = ns.currentDate.getFullYear();
+		
 		ns.currentMonthName = function() {
 			return ns.monthLabels[ns.currentDate.getMonth()];
 		};
