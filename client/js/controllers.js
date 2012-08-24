@@ -7,10 +7,10 @@ myModule.directive('jqDatepicker', function () {
 						dateFormat: "dd.mm.yy",
 						onClose: function (dateText, inst) {
 							if(element.context.id == "sidebarStartDate"){
-								scope.selectedStatusLine.start = dateText;
+										scope.systemFormData.start = dateText;
 							}
 							else if(element.context.id == "sidebarEndDate"){
-								scope.selectedStatusLine.end = dateText;
+										scope.systemFormData.end = dateText;
 							}
 							else if(element.context.id == "alertDialogExpDate"){
 								scope.addAlertLine.expdate = dateText;
@@ -30,13 +30,25 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 	$scope.alertlines = getAlertData();
 	$scope.alerttypes = getAlertTypes();
 
-	$scope.selectedStatusLine = {
+	$scope.selectedElement = {
+		_id:"",
 		system: "",
 		status: "",
 		start: undefined,
 		end: undefined,
 		comment: ""
 	};
+	
+	
+	$scope.systemFormData = {
+		_id:"",
+		system: "",
+		status: "",
+		start: undefined,
+		end: undefined,
+		comment: ""
+	};
+	
 	
 	$scope.addAlertLine = {
 		title: "",
@@ -65,7 +77,12 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 		//return new Date(a.start).getTime() - new Date(b.start).getTime();
 		return a.start - b.start;
 	}
-
+	
+	function ascSystemSort(a, b){
+		var aSystem = a.system;
+		var bSystem = b.system;
+		return (aSystem < bSystem) ? -1 : (aSystem > bSystem) ? 1 : 0;
+	}	
 
 	function convertToDate(dateString) {
 		var datestring = dateString,
@@ -83,9 +100,10 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 		return ( dateFromString(fromDate).getMonth() == month && dateFromString(fromDate).getYear() == year ) || ( dateFromString(toDate).getMonth() == month && dateFromString(toDate).getYear() == year );
 	}
 
-	function addEmptyElementsForSystem(system, calendartable, index) {
+	function addEmptyElementsForSystem(systemItem, calendartable, index) {
 		calendartable.push({
-			"system": system,
+			"_id": systemItem._id,
+			"system": systemItem.system,
 			"statuslines": []
 		});
 		
@@ -117,6 +135,8 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 					}
 					
 					var days = numberOfDaysBetweenDates(dateFromString(status.end), dateFromString(status.start));
+			calendartable[i].statuslines.sort(custom_sort);
+			
 					calendartable[i].statuslines.push({
 						"start": dateFromString(status.start),
 						"end": dateFromString(status.end),
@@ -144,6 +164,8 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 					calendartable = insertCalendarElement(calendartable, status, i, j);
 				});
 			});
+			
+			calendartable.sort(ascSystemSort);
 		});
 		return calendartable;
 	}
@@ -184,47 +206,145 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 
 
 	$scope.removeStatusElement = function(id) {
-		//Systems.systems.delete({id: id.$oid}, function(){});
+		var deletedStatusIndex;
 		$.each($scope.systemlines, function(i, v_system) {
-			if (v_system.system == $scope.selectedStatusLine.system) {
+			if (v_system.system == $scope.systemFormData.system) {
 				$.each(v_system.statuslines, function(j, v_status) {
-					if (v_status.start == convertDateToDatabaseFormat($scope.selectedStatusLine.start) && v_status.end == convertDateToDatabaseFormat($scope.selectedStatusLine.end) && v_status.status == $scope.selectedStatusLine.status) {
+					if (v_status.start == convertDateToDatabaseFormat($scope.systemFormData.start) && v_status.end == convertDateToDatabaseFormat($scope.systemFormData.end) && v_status.status == $scope.systemFormData.status) {
 						$scope.systemlines[i].statuslines.splice(j, 1);
-						for (k = 0; k < (v_status.end - v_status.start) + 1; k++) {
-							$scope.systemlines[i].statuslines.push({
-								"start": (parseInt(v_status.start) + k),
-								"end": (parseInt(v_status.start) + k),
-								"status": "available"
-							});
-						}
+						fillSpaceWithEmptyElements(v_status, i);
+
 						$scope.systemlines[i].statuslines.sort(custom_sort);
+						savedStatusIndex = i;
 					}
+				});
+			}
+		});	
+		
+		updateStatuslineToDB(savedStatusIndex);
+	};
+	
+	
+	function fillSpaceWithEmptyElements(v_status, i){
+		for (k = 0; k < (v_status.end - v_status.start) + 1; k++) {
+			$scope.systemlines[i].statuslines.push({
+				"start": (parseInt(v_status.start) + k),
+				"end": (parseInt(v_status.start) + k),
+				"status": "available"
+			});
+		}
+	}
+	
+	
+	function findSelectedElement(callbackFunction){
+		var systemIndex;
+		$.each($scope.systemlines, function(i, v_system) {
+			if (v_system.system == $scope.systemFormData.system) {
+				systemIndex = i;
+				
+				$.each(v_system.statuslines, function(j, v_status) {
+					callbackFunction();
 				});
 			}
 		});
 		
+		updateStatuslineToDB(updateStatusIndex);
+	}
+
+	
+	$scope.updateStatusElement = function(id) {
 		
+		var updateStatusIndex;
 		
+		$.each($scope.systemlines, function(i, v_system) {
+
+			if (v_system.system == $scope.systemFormData.system) {
+
+				$.each(v_system.statuslines, function(j, v_status) {
+
+					if (v_status.start == $scope.selectedElement.start && v_status.end == $scope.selectedElement.end && v_status.status == $scope.selectedElement.status) {
+						
+						$scope.systemlines[i].statuslines.splice(j, 1);
+						fillSpaceWithEmptyElements(v_status, i);
+						$scope.systemlines[i].statuslines.sort(custom_sort);
+					}
+				});
+				
+				$.each(v_system.statuslines, function(j, v_status) {
+				
+					if (checkNewElementStartDay(v_status)) {
+						if (isNewElementSingleDay()) {
+						
+							$scope.systemlines[i].statuslines[j].status = $scope.systemFormData.status;
+							
+						} 
+						else {
+							if(isNewElementOverlapping(v_status, i, j)){
+								alert("Overlap!");
+								return false;
+							}
+							
+							clearSpaceForNewElement(convertDateToDatabaseFormat($scope.systemFormData.start), i, j);
+							addNewElement(i);
+							$scope.systemlines[i].statuslines.sort(custom_sort);
+							return false; //jquery break
+						}
+					}
+				});
+				
+				updateStatusIndex = i;
+			}
+		});	
+		
+		//TODO if undefined
+		updateStatuslineToDB(updateStatusIndex);
 	};
+	
+	
+	function updateStatuslineToDB(index){
+	
+		var systemElement;
+	    var statusItems = [];
+		
+		systemElement = { 
+						  "system": $scope.systemlines[index].system,
+						  "statuslines": ""
+						};
+		
+		//funka ikkje me $.each
+		for(var j = 0; j < $scope.systemlines[index].statuslines.length; j++)
+		{				
+			if($scope.systemlines[index].statuslines[j].status != 'available'){
+				statusItems.push($scope.systemlines[index].statuslines[j]);
+			}			
+		}
 
+		systemElement.statuslines = statusItems;
+		Systems.systems.update({id:$scope.systemlines[index]._id.$oid}, systemElement, function(item){});		
+		//Systems.systems.delete({id:$scope.systemlines[savedStatusIndex]._id.$oid}, function(){});
+	}
 
-$scope.addStatusElement = function() {
+	$scope.addStatusElement = function() {
+
+		var savedStatusIndex;
 
 		$.each($scope.systemlines, function(i, v_system) {
-			if (v_system.system == $scope.selectedStatusLine.system) {
+			if (v_system.system == $scope.systemFormData.system) {
 				$.each(v_system.statuslines, function(j, v_status) {
 					if (checkNewElementStartDay(v_status)) {
 						if (isNewElementSingleDay()) {
-							$scope.systemlines[i].statuslines[j].status = $scope.selectedStatusLine.status;
+							$scope.systemlines[i].statuslines[j].status = $scope.systemFormData.status;
 						}
 						else {
 							if(isNewElementOverlapping(v_status, i, j)){
 								alert("Overlap!");
 								return false;
 							}
-							clearSpaceForNewElement(v_status, i, j);
+							clearSpaceForNewElement(v_status.start, i, j);
 							addNewElement(i);
 							$scope.systemlines[i].statuslines.sort(custom_sort);
+							
+							savedStatusIndex = i;
 							return false; //jquery break
 						}
 					}
@@ -232,15 +352,13 @@ $scope.addStatusElement = function() {
 			}
 		});
 		
-		Systems.systems.save($scope.selectedStatusLine, function(item){
-			//$scope.alertlines.push(item);
-		});
+		updateStatuslineToDB(savedStatusIndex);
 	};
 	
 	
 	function isNewElementSingleDay(){
 		var result = false;
-		if (convertDateToDatabaseFormat($scope.selectedStatusLine.start) == convertDateToDatabaseFormat($scope.selectedStatusLine.end)){
+		if (convertDateToDatabaseFormat($scope.systemFormData.start) == convertDateToDatabaseFormat($scope.systemFormData.end)){
 			result = true;
 		}
 		return result;
@@ -249,15 +367,16 @@ $scope.addStatusElement = function() {
 	
 	function addNewElement(index){
 		$scope.systemlines[index].statuslines.push({
-			"start": convertDateToDatabaseFormat($scope.selectedStatusLine.start),
-			"end": convertDateToDatabaseFormat($scope.selectedStatusLine.end),
-			"status": $scope.selectedStatusLine.status
+			"start": convertDateToDatabaseFormat($scope.systemFormData.start),
+			"end": convertDateToDatabaseFormat($scope.systemFormData.end),
+			"status": $scope.systemFormData.status,
+			"comment": $scope.systemFormData.comment
 		});
 	}
 	
 	
-	function clearSpaceForNewElement(element, i, j){
-		for (k = 0; k < (convertDateToDatabaseFormat($scope.selectedStatusLine.end) - element.start) + 1; k++) {
+	function clearSpaceForNewElement(elementStartDate, i, j){
+		for (k = 0; k < (convertDateToDatabaseFormat($scope.systemFormData.end) - elementStartDate) + 1; k++) {
 			$scope.systemlines[i].statuslines.splice(j, 1);
 		}
 	}
@@ -266,7 +385,7 @@ $scope.addStatusElement = function() {
 	function checkNewElementStartDay(element){
 	
 		var result = false;
-		if (element.start == convertDateToDatabaseFormat($scope.selectedStatusLine.start) && element.end == convertDateToDatabaseFormat($scope.selectedStatusLine.start)){
+		if (element.start == convertDateToDatabaseFormat($scope.systemFormData.start) && element.end == convertDateToDatabaseFormat($scope.systemFormData.start)){
 			result = true;
 		}
 		return result;
@@ -275,7 +394,7 @@ $scope.addStatusElement = function() {
 	
 	function isNewElementOverlapping(element, i, j)
 	{
-		for (k = 0; k < (convertDateToDatabaseFormat($scope.selectedStatusLine.end) - element.start) + 1; k++) {
+		for (k = 0; k < (convertDateToDatabaseFormat($scope.systemFormData.end) - element.start) + 1; k++) {
 			if ($scope.systemlines[i].statuslines[j + k].status != 'available') {
 				return true; //jquery break
 			}
@@ -283,21 +402,32 @@ $scope.addStatusElement = function() {
 	}
 
 
-	$scope.showDetails = function(system, statusline) {
+	$scope.showDetails = function(systemLine, statusLine) {
 
-		if(statusline.status != "available")
+		if(statusLine.status != "available")
 		{
-			$scope.selectedStatusLine.system = system;
-			$scope.selectedStatusLine.status = statusline.status;
-			$scope.selectedStatusLine.start = convertDateToViewableFormat(statusline.start);
-			$scope.selectedStatusLine.end = convertDateToViewableFormat(statusline.end);
+			$scope.systemFormData._id = systemLine._id;
+			$scope.systemFormData.system = systemLine.system;
+			$scope.systemFormData.status = statusLine.status;
+			$scope.systemFormData.start = convertDateToViewableFormat(statusLine.start);
+			$scope.systemFormData.end = convertDateToViewableFormat(statusLine.end);
+			$scope.systemFormData.comment = "";
+			
+			$scope.selectedElement._id = systemLine._id;
+			$scope.selectedElement.system = systemLine.system;
+			$scope.selectedElement.status = statusLine.status;
+			$scope.selectedElement.start = statusLine.start;
+			$scope.selectedElement.end = statusLine.end;
+			$scope.systemFormData.comment = statusLine.comment;
+			
 		}
 		else
 		{
-			$scope.selectedStatusLine.system = "";
-			$scope.selectedStatusLine.status = "";
-			$scope.selectedStatusLine.start = "";
-			$scope.selectedStatusLine.end = "";
+			$scope.systemFormData.system = "";
+			$scope.systemFormData.status = "";
+			$scope.systemFormData.start = "";
+			$scope.systemFormData.end = "";
+			$scope.systemFormData.comment = "";
 		}
 		
 	};
