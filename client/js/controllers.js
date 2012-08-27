@@ -1,26 +1,220 @@
+
+$(document).ready(function()
+{
+	formValidation();
+});
+
+
 var myModule = angular.module('systemAvailability', ['mongolabModule', 'calendarModule']);
 		
 myModule.directive('jqDatepicker', function () {
 	return {
-				link: function postLink(scope, element, attrs) {
-					element.datepicker({
-						dateFormat: "dd.mm.yy",
-						onClose: function (dateText, inst) {
-							if(element.context.id == "sidebarStartDate"){
+						link: function postLink(scope, element, attrs) {
+							element.datepicker({
+								dateFormat: "dd/mm/yy",
+								onClose: function (dateText, inst) {
+									if(element.context.id == "elementStartDate"){
 										scope.systemFormData.start = dateText;
-							}
-							else if(element.context.id == "sidebarEndDate"){
+									}
+									else if(element.context.id == "elementEndDate"){
 										scope.systemFormData.end = dateText;
-							}
-							else if(element.context.id == "alertDialogExpDate"){
-								scope.addAlertLine.expdate = dateText;
-							}
-							scope.$apply();
+									}
+									else if(element.context.id == "alertDialogExpDate"){
+										scope.addAlertLine.expdate = dateText;
+										
+										var dbdate = convertDateToDatabaseFormat(dateText);
+										var currentDate = getDateString(new Date());
+										var daysLeft = dbdate - currentDate;
+										
+										var dayText;
+										if(daysLeft > 1){
+											dayText = "days"
+										}else{
+											dayText = "day"
+										}
+										
+										$("#expireMessage").text("Alertmessage will expire in " + daysLeft + " " + dayText);
+									}
+									scope.$apply();
+								}	
+							});
 						}
-					});
-				}
-			};
+					};
+		}).directive('ngEnterkey', function () {
+			return {
+						link: function postLink(scope, element, attrs) {
+							element.keydown(function(event) {
+								if(event.which == 13){
+								
+									searchStr = 'ng-enterkey="'
+									var ohtml = element[0].outerHTML;
+									
+									var matchPos = ohtml.indexOf(searchStr);
+									
+									if(matchPos > 0){
+										matchPos = matchPos + searchStr.length;	
+										var matchPosEnd = ohtml.indexOf('(', matchPos);
+										
+										var incommingFunction = ohtml.substr(matchPos, matchPosEnd - matchPos);	
+										incommingFunction = 'scope.' + incommingFunction;
+										var incommingFunction = new Function("scope", "return " + incommingFunction + "();");
+										incommingFunction(scope);
+
+									}
+									
+								}
+							});
+						}
+			}
+		});
+
+
+myModule.controller("adminViewCtrl", function($scope, Systems) {
+	
+	$scope.systemnames = getSystemNames();
+	$scope.systemstatuses = getSystemStatuses();
+	$scope.alerttypes = getAlertTypes();
+	$scope.alertlog = getAlertLog();
+	
+	$scope.systemNameInput = "";
+	$scope.statusTypeInput = "";
+	$scope.alertTypeInput = "";
+	
+	
+	
+	function getSystemNames(){
+
+		var systemNames = Systems.systemnames.query(function() {
+			adminTables.updateSystemNamesTable(systemNames);
+		});	
+		
+		//$scope.$digest();
+		
+		return systemNames;
+	}
+	
+	
+	function getSystemStatuses(){
+		var statusTypes = Systems.systemstatuses.query(function(){
+			adminTables.updateStatusTypesTable(statusTypes);
+		});	
+		
+		return statusTypes;
+	}
+	
+	
+	function getAlertTypes(){
+		var alertTypes = Systems.alerttypes.query(function(){
+			adminTables.updateAlertTypesTable(alertTypes);
+		});	
+		
+		return alertTypes;
+	}
+	
+	
+	function getAlertLog(){
+		var alertLog = Systems.alerts.query(function(){
+			adminTables.updateAlertLogTable(alertLog);
+		});	
+		
+		return alertLog;
+	}
+	
+		
+	$scope.saveSystemName = function() {
+
+		if ($scope.systemNameInput != "")
+		{			
+			var sLine = { name: "" };						
+			sLine.name = $scope.systemNameInput.toUpperCase();
+					
+			Systems.systemnames.save(sLine, function(item){
+				adminTables.addLineToSystemNamesTable(sLine.name, item._id.$oid);
+			});				
+		}
+	}
+	
+	
+	$scope.saveStatusType = function() {
+
+		if ($scope.statusTypeInput != "")
+		{			
+			var sLine = { status: $scope.statusTypeInput };			
+					
+			Systems.systemstatuses.save(sLine, function(item){
+				adminTables.addLineToStatusTypesTable(sLine.status, item._id.$oid);
+			});				
+		}
+	}
+	
+	
+	$scope.saveAlertType = function() {
+
+		if ($scope.alertTypeInput != "")
+		{			
+			var sLine = { type: $scope.alertTypeInput };			
+					
+			Systems.alerttypes.save(sLine, function(item){
+				adminTables.addLineToAlertTypesTable(sLine.type, item._id.$oid);
+			});				
+		}
+	}
+	
+	
+	$scope.deleteSystemName = function() {
+	
+		var selectedItem = adminTables.getSystemNameSelected();
+
+		if (selectedItem.hasValue)
+		{
+				Systems.systemnames.remove({id:selectedItem.id},  function(item){
+					adminTables.removeSelectedSystemNamesRow();
+				});	
+		}	
+	}
+	
+	
+	$scope.deleteStatusType = function() {
+	
+		var selectedItem = adminTables.getStatusTypeSelected();
+
+		if (selectedItem.hasValue)
+		{
+				Systems.systemstatuses.remove({id:selectedItem.id},  function(item){
+					adminTables.removeSelectedStatusTypesRow();
+				});	
+		}	
+	}
+	
+	
+	$scope.deleteAlertType = function() {
+	
+		var selectedItem = adminTables.getAlertTypeSelected();
+
+		if (selectedItem.hasValue)
+		{
+				Systems.alerttypes.remove({id:selectedItem.id},  function(item){
+					adminTables.removeSelectedAlertTypesRow();
+				});	
+		}	
+	}
+	
+	
+	$scope.deleteAlertLog = function() {
+	
+		var selectedItem = adminTables.getAlertLogSelected();
+
+		if (selectedItem.hasValue)
+		{
+				Systems.alerts.remove({id:selectedItem.id},  function(item){
+					adminTables.removeSelectedAlertLogRow();
+				});	
+		}	
+	}
+	
+	
 });
+
 
 myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 
@@ -183,8 +377,21 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 
 
 	function getAlertData() {
-		var alertLines = Systems.alerts.query(function() {});
-		return alertLines;
+		var alerts = [];
+		var currentDate = getDateString(new Date());
+
+		var alertLines = Systems.alerts.query(function() {
+		
+			$.each(alertLines, function(i, v_alert) {
+			
+				if(v_alert.expdate >= currentDate){
+					alerts.push(v_alert);
+				}
+				
+			});
+		});
+		
+		return alerts;
 	}
 	
 	
@@ -195,9 +402,15 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 	
 	
 	$scope.addAlert = function() {
-		Systems.alerts.save($scope.addAlertLine, function(item){
-			$scope.alertlines.push(item);
-		});
+		if($("#alertForm").valid()){
+			$('#addalertdialog').modal('hide');	
+			var alertLine = $scope.addAlertLine;
+			alertLine.expdate = convertDateToDatabaseFormat(alertLine.expdate);		
+			Systems.alerts.save(alertLine, function(item){
+				$scope.alertlines.push(item);
+			});		
+			$scope.resetNewAlertForm();
+		}
 	};
 	
 	$scope.removeAlert = function(id) {
@@ -206,22 +419,24 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 
 
 	$scope.removeStatusElement = function(id) {
-		var deletedStatusIndex;
-		$.each($scope.systemlines, function(i, v_system) {
-			if (v_system.system == $scope.systemFormData.system) {
-				$.each(v_system.statuslines, function(j, v_status) {
-					if (v_status.start == convertDateToDatabaseFormat($scope.systemFormData.start) && v_status.end == convertDateToDatabaseFormat($scope.systemFormData.end) && v_status.status == $scope.systemFormData.status) {
-						$scope.systemlines[i].statuslines.splice(j, 1);
-						fillSpaceWithEmptyElements(v_status, i);
+		if($("#elementForm").valid()){
+			var deletedStatusIndex;
+			$.each($scope.systemlines, function(i, v_system) {
+				if (v_system.system == $scope.systemFormData.system) {
+					$.each(v_system.statuslines, function(j, v_status) {
+						if (v_status.start == convertDateToDatabaseFormat($scope.systemFormData.start) && v_status.end == convertDateToDatabaseFormat($scope.systemFormData.end) && v_status.status == $scope.systemFormData.status) {
+							$scope.systemlines[i].statuslines.splice(j, 1);
+							fillSpaceWithEmptyElements(v_status, i);
 
-						$scope.systemlines[i].statuslines.sort(custom_sort);
-						savedStatusIndex = i;
-					}
-				});
-			}
-		});	
-		
-		updateStatuslineToDB(savedStatusIndex);
+							$scope.systemlines[i].statuslines.sort(custom_sort);
+							savedStatusIndex = i;
+						}
+					});
+				}
+			});	
+			
+			updateStatuslineToDB(savedStatusIndex);
+		}
 	};
 	
 	
@@ -253,51 +468,52 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 
 	
 	$scope.updateStatusElement = function(id) {
-		
-		var updateStatusIndex;
-		
-		$.each($scope.systemlines, function(i, v_system) {
 
-			if (v_system.system == $scope.systemFormData.system) {
+		if($("#elementForm").valid()){		
+			var updateStatusIndex;		
+			$.each($scope.systemlines, function(i, v_system) {
 
-				$.each(v_system.statuslines, function(j, v_status) {
+				if (v_system.system == $scope.systemFormData.system) {
 
-					if (v_status.start == $scope.selectedElement.start && v_status.end == $scope.selectedElement.end && v_status.status == $scope.selectedElement.status) {
-						
-						$scope.systemlines[i].statuslines.splice(j, 1);
-						fillSpaceWithEmptyElements(v_status, i);
-						$scope.systemlines[i].statuslines.sort(custom_sort);
-					}
-				});
-				
-				$.each(v_system.statuslines, function(j, v_status) {
-				
-					if (checkNewElementStartDay(v_status)) {
-						if (isNewElementSingleDay()) {
-						
-							$scope.systemlines[i].statuslines[j].status = $scope.systemFormData.status;
+					$.each(v_system.statuslines, function(j, v_status) {
+
+						if (v_status.start == $scope.selectedElement.start && v_status.end == $scope.selectedElement.end && v_status.status == $scope.selectedElement.status) {
 							
-						} 
-						else {
-							if(isNewElementOverlapping(v_status, i, j)){
-								alert("Overlap!");
-								return false;
-							}
-							
-							clearSpaceForNewElement(convertDateToDatabaseFormat($scope.systemFormData.start), i, j);
-							addNewElement(i);
+							$scope.systemlines[i].statuslines.splice(j, 1);
+							fillSpaceWithEmptyElements(v_status, i);
 							$scope.systemlines[i].statuslines.sort(custom_sort);
-							return false; //jquery break
 						}
-					}
-				});
-				
-				updateStatusIndex = i;
-			}
-		});	
-		
-		//TODO if undefined
-		updateStatuslineToDB(updateStatusIndex);
+					});
+					
+					$.each(v_system.statuslines, function(j, v_status) {
+					
+						if (checkNewElementStartDay(v_status)) {
+							if (isNewElementSingleDay()) {
+							
+								$scope.systemlines[i].statuslines[j].status = $scope.systemFormData.status;
+								
+							} 
+							else {
+								if(isNewElementOverlapping(v_status, i, j)){
+									alert("Overlap!");
+									return false;
+								}
+								
+								clearSpaceForNewElement(convertDateToDatabaseFormat($scope.systemFormData.start), i, j);
+								addNewElement(i);
+								$scope.systemlines[i].statuslines.sort(custom_sort);
+								return false; //jquery break
+							}
+						}
+					});
+					
+					updateStatusIndex = i;
+				}
+			});	
+			
+			//TODO if undefined
+			updateStatuslineToDB(updateStatusIndex);
+		}
 	};
 	
 	
@@ -326,33 +542,37 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 
 	$scope.addStatusElement = function() {
 
-		var savedStatusIndex;
+		if($("#elementForm").valid()){
 
-		$.each($scope.systemlines, function(i, v_system) {
-			if (v_system.system == $scope.systemFormData.system) {
-				$.each(v_system.statuslines, function(j, v_status) {
-					if (checkNewElementStartDay(v_status)) {
-						if (isNewElementSingleDay()) {
-							$scope.systemlines[i].statuslines[j].status = $scope.systemFormData.status;
-						}
-						else {
-							if(isNewElementOverlapping(v_status, i, j)){
-								alert("Overlap!");
-								return false;
+			var savedStatusIndex;
+
+			$.each($scope.systemlines, function(i, v_system) {
+				if (v_system.system == $scope.systemFormData.system) {
+					$.each(v_system.statuslines, function(j, v_status) {
+						if (checkNewElementStartDay(v_status)) {
+							if (isNewElementSingleDay()) {
+								$scope.systemlines[i].statuslines[j].status = $scope.systemFormData.status;
 							}
-							clearSpaceForNewElement(v_status.start, i, j);
-							addNewElement(i);
-							$scope.systemlines[i].statuslines.sort(custom_sort);
-							
-							savedStatusIndex = i;
-							return false; //jquery break
+							else {
+								if(isNewElementOverlapping(v_status, i, j)){
+									alert("Overlap!");
+									return false;
+								}
+								clearSpaceForNewElement(v_status.start, i, j);
+								addNewElement(i);
+								$scope.systemlines[i].statuslines.sort(custom_sort);
+								
+								savedStatusIndex = i;
+								return false; //jquery break
+							}
 						}
-					}
-				});
-			}
-		});
-		
-		updateStatuslineToDB(savedStatusIndex);
+					});
+				}
+			});
+			
+			updateStatuslineToDB(savedStatusIndex);
+
+		}
 	};
 	
 	
@@ -462,4 +682,37 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 	function sameDay(date1, date2) {
 		return date1.getFullYear() == date2.getFullYear() && date1.getMonth() == date2.getMonth() && date1.getDate() == date2.getDate();
 	}
+
+
+
+	$scope.resetNewAlertForm = function()
+	{
+		$scope.addAlertLine.title = "";
+		$scope.addAlertLine.alerttype = "";
+		$scope.addAlertLine.expdate = "";
+		$scope.addAlertLine.comment = "";
+		
+		var validator = $("#alertForm").validate();
+        validator.resetForm();
+	   
+		//$('#alertForm').submit = {};
+		//$('#alertForm')[0].reset();
+		
+		$("#alertTitle").parent('.control-group').removeClass('error');
+		$("#alertType").parent('.control-group').removeClass('error');
+		$("#alertDialogExpDate").parent('.control-group').removeClass('error');
+		$("#alertComment").parent('.control-group').removeClass('error');
+		
+		$("#alertTitle").parent('.control-group').removeClass('success');
+		$("#alertType").parent('.control-group').removeClass('success');
+		$("#alertDialogExpDate").parent('.control-group').removeClass('success');
+		$("#alertComment").parent('.control-group').removeClass('success');
+		
+		//$('#alertForm').find('.control-group').removeClass('error');
+		//$('#alertForm').find('.control-group').removeClass('success');
+		
+		$("#expireMessage").text("");
+		
+	}
+
 });
