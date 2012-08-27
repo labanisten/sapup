@@ -338,13 +338,13 @@
 				
 				colorRowAsSelected(this, previousSystemNameRowData.classObject);
 
-				adminTables.setStatusTypeSelected(statusTypesTable.fnGetData(this, 0), 
-												  statusTypesTable.fnGetPosition(this),
-												  statusTypesTable.fnGetData(this, 2));
+				adminTables.setSystemNameSelected(systemNamesTable.fnGetData(this, 0), 
+												  systemNamesTable.fnGetPosition(this),
+												  systemNamesTable.fnGetData(this, 2));
 			}else{
 				previousSystemNameRowData.referance = 0;
 				previousSystemNameRowData.classObject = 0;
-				adminTables.clearAlertTypeSelected();
+				adminTables.clearSystemNameSelected();
 			};
 			
 		});
@@ -381,7 +381,7 @@
 			}else{
 				previousStatusTypeRowData.referance = 0;
 				previousStatusTypeRowData.classObject = 0;
-				adminTables.clearAlertTypeSelected();
+				adminTables.clearStatusTypeSelected();
 			};
 		});
 		
