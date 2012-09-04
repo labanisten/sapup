@@ -6,39 +6,44 @@ angular.module('calendarModule', []).
 
 	(function(ns) {
 		
-		ns.getFirstDayInCurrentMonth = function() {
+		ns.getCurrentMonth = function() {
+			var d = new Date(); 
+			return d.getMonth();
+		}
+
+		ns.getFirstDayInMonth = function(month) {
 			var d = new Date();
 			d.setDate(1);
+			d.setMonth(month);
 			return d;
 		};
 
-		ns.getLastDayInCurrentMonth = function() {
+		ns.getLastDayInMonth = function(month) {
 			var d = new Date();
-			return new Date(d.getFullYear(), d.getMonth() + 1, 0);
+			return new Date(d.getFullYear(), month + 1, 0);
 		};
 
-		ns.firstDayInCurrentMonth = ns.getFirstDayInCurrentMonth();
-
-		ns.lastDayInCurrentMonth = ns.getLastDayInCurrentMonth();
-
 		ns.currentDate = new Date();
+		ns.currentMonth = ns.currentDate.getMonth();
+		ns.currentYear = ns.currentDate.getFullYear();
 
 		ns.dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 		ns.dayLabelsShort = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 		ns.monthLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		ns.monthLabelsShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 		ns.daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 	
-		ns.currentMonth = ns.currentDate.getMonth();
-		ns.currentYear = ns.currentDate.getFullYear();
-		
-		ns.currentMonthName = function() {
-			return ns.monthLabels[ns.currentDate.getMonth()];
+
+		ns.getNoOfDaysInMonth = function(month) {
+			return ns.daysInMonth[month];
+		}
+
+		ns.getMonthName = function(month) {
+			return ns.monthLabels[month];
 		};
 
-		ns.noOfDaysInCurrentMonth = ns.daysInMonth[ns.currentDate.getMonth()];
-
-		ns.currentMonthDayList = function() {
-			var days = ns.daysInMonth[ns.currentDate.getMonth()];
+		ns.getMonthDayList = function(month) {
+			var days = ns.daysInMonth[month];
 
 			var dayArray = [];
 
@@ -55,38 +60,43 @@ angular.module('calendarModule', []).
 		};
 
 
-		ns.currentMonthWeekList = function() {
-			var dayArray = ns.currentMonthDayList(),
-			weekArray = [],
-			m = ns.currentDate,
-			weekAndDays = [],
-			colSpan = 0;
+		ns.getMonthWeekList = function() {
+			
+			var weeks = [];
 
-			$.each(dayArray, function(i, v_day) {
-				weekArray.push(ns.getWeek(new Date(m.getFullYear(), m.getMonth(), i)));
-			});
+			for (var month = 0; month < 12; month++) {
+				var dayArray = ns.getMonthDayList(month),
+				weekArray = [],
+				m = ns.currentDate,
+				weekAndDays = [],
+				colSpan = 0;
 
-			for (var i = 0; i < weekArray.length; i++) {
-				colSpan++;
-				if (weekArray[i] !== weekArray[i + 1]) {
-					weekAndDays.push({
-						"week": weekArray[i],
-						"colSpan": colSpan
-					});
-					colSpan = 0;
+				$.each(dayArray, function(i, v_day) {
+					weekArray.push(ns.getWeek(new Date(m.getFullYear(), month, i)));
+				});
+
+				for (var i = 0; i < weekArray.length; i++) {
+					colSpan++;
+					if (weekArray[i] !== weekArray[i + 1]) {
+						weekAndDays.push({
+							"week": weekArray[i],
+							"colSpan": colSpan
+						});
+						colSpan = 0;
+					}
 				}
+				weeks.push(weekAndDays);
 			}
-
-			return weekAndDays;
+			return weeks;
 		};
 
-		ns.dayNamesInCurrentMonth = function() {
-			var dayCount = ns.daysInMonth[ns.currentDate.getMonth()];
+		ns.getDayNamesInMonth = function(month) {
+			var dayCount = ns.daysInMonth[month];
 
 			var dayArray = [];
 
 			var date = ns.currentDate;
-			var firstDayInMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+			var firstDayInMonth = new Date(date.getFullYear(), month, 1);
 
 			var day_it = firstDayInMonth.getDay();
 			for (i = 0; i < dayCount; i++) {
@@ -101,6 +111,11 @@ angular.module('calendarModule', []).
 
 			return dayArray;
 		};
+
+		ns.numberOfDaysBetweenDates = function(fromDate, toDate) {
+			var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+			return Math.floor((toDate.getTime() - fromDate.getTime())/(oneDay)) ;
+		}
 
 
 	})(calendar);

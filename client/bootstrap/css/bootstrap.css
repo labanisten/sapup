@@ -4231,17 +4231,6 @@ a.badge:hover {
   text-align: center;
 }
 .month {
-  border-radius: 10px 10px 0 0;
-  border: none;
-  background-color: #dfdfdf;
-  background-image: -moz-linear-gradient(top, #d5d5d5, #eeeeee);
-  background-image: -ms-linear-gradient(top, #d5d5d5, #eeeeee);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#d5d5d5), to(#eeeeee));
-  background-image: -webkit-linear-gradient(top, #d5d5d5, #eeeeee);
-  background-image: -o-linear-gradient(top, #d5d5d5, #eeeeee);
-  background-image: linear-gradient(top, #d5d5d5, #eeeeee);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d5d5d5', endColorstr='#eeeeee', GradientType=0);
   height: 40px;
   font-size: 1.6em;
 }

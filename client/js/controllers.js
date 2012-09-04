@@ -9,37 +9,37 @@ var myModule = angular.module('systemAvailability', ['mongolabModule', 'calendar
 		
 myModule.directive('jqDatepicker', function () {
 	return {
-						link: function postLink(scope, element, attrs) {
-							element.datepicker({
-								dateFormat: "dd/mm/yy",
-								onClose: function (dateText, inst) {
-									if(element.context.id == "elementStartDate"){
-										scope.systemFormData.start = dateText;
-									}
-									else if(element.context.id == "elementEndDate"){
-										scope.systemFormData.end = dateText;
-									}
-									else if(element.context.id == "alertDialogExpDate"){
-										scope.addAlertLine.expdate = dateText;
-										
-										var dbdate = convertDateToDatabaseFormat(dateText);
-										var currentDate = getDateString(new Date());
-										var daysLeft = dbdate - currentDate;
-										
-										var dayText;
-										if(daysLeft > 1){
-											dayText = "days"
-										}else{
-											dayText = "day"
+							link: function postLink(scope, element, attrs) {
+								element.datepicker({
+									dateFormat: "dd/mm/yy",
+									onClose: function (dateText, inst) {
+										if(element.context.id == "elementStartDate"){
+											scope.systemFormData.start = dateText;
 										}
-										
-										$("#expireMessage").text("Alertmessage will expire in " + daysLeft + " " + dayText);
-									}
-									scope.$apply();
-								}	
-							});
-						}
-					};
+										else if(element.context.id == "elementEndDate"){
+											scope.systemFormData.end = dateText;
+										}
+										else if(element.context.id == "alertDialogExpDate"){
+											scope.addAlertLine.expdate = dateText;
+											
+											var dbdate = convertDateToDatabaseFormat(dateText);
+											var currentDate = new Date();
+											var daysLeft = dbdate - currentDate;
+											
+											var dayText;
+											if(daysLeft > 1){
+												dayText = "days"
+											}else{
+												dayText = "day"
+											}
+											
+											$("#expireMessage").text("Alertmessage will expire in " + daysLeft + " " + dayText);
+										}
+										scope.$apply();
+									}	
+								});
+							}
+						};
 		}).directive('ngEnterkey', function () {
 			return {
 						link: function postLink(scope, element, attrs) {
@@ -169,9 +169,9 @@ myModule.controller("adminViewCtrl", function($scope, Systems) {
 		{
 				Systems.systemnames.remove({id:selectedItem.id},  function(item){
 					adminTables.removeSelectedSystemNamesRow();
-				});	
-		}	
-	}
+				});
+		}
+	};
 	
 	
 	$scope.deleteStatusType = function() {
@@ -182,9 +182,9 @@ myModule.controller("adminViewCtrl", function($scope, Systems) {
 		{
 				Systems.systemstatuses.remove({id:selectedItem.id},  function(item){
 					adminTables.removeSelectedStatusTypesRow();
-				});	
-		}	
-	}
+				});
+		}
+	};
 	
 	
 	$scope.deleteAlertType = function() {
@@ -195,9 +195,9 @@ myModule.controller("adminViewCtrl", function($scope, Systems) {
 		{
 				Systems.alerttypes.remove({id:selectedItem.id},  function(item){
 					adminTables.removeSelectedAlertTypesRow();
-				});	
-		}	
-	}
+				});
+		}
+	};
 	
 	
 	$scope.deleteAlertLog = function() {
@@ -208,15 +208,18 @@ myModule.controller("adminViewCtrl", function($scope, Systems) {
 		{
 				Systems.alerts.remove({id:selectedItem.id},  function(item){
 					adminTables.removeSelectedAlertLogRow();
-				});	
-		}	
-	}
+				});
+		}
+	};
 	
 	
 });
 
 
 myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
+
+	this.Calendar = Calendar;
+	this.Systems = Systems;
 
 	$scope.systemlines = getSystemData();
 	$scope.systemnames = getSystemNames();
@@ -251,21 +254,17 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 		comment: ""
 	};
 
-	$scope.currentMonthDayList = Calendar.currentMonthDayList();
-	$scope.currentMonthWeekList = Calendar.currentMonthWeekList();
-	$scope.currentMonthName = Calendar.currentMonthName();
-	$scope.selectedMonthName = Calendar.currentMonthName();
-	$scope.selectedMonth = Calendar.currentMonth;
-	$scope.selectedYear = Calendar.currentYear;
+	$scope.monthDayList = Calendar.getMonthDayList;
+	$scope.monthWeekList = Calendar.getMonthWeekList(); 
+	$scope.monthName = Calendar.getMonthName(Calendar.getCurrentMonth());
+	$scope.selectedMonth = Calendar.getCurrentMonth();
+	$scope.selectedYear = Calendar.getCurrentYear;
 
-	$scope.daysInCurrentMonth =  Calendar.noOfDaysInCurrentMonth;
-	$scope.dayNamesInCurrentMonth = Calendar.dayNamesInCurrentMonth();
+	$scope.noOfDaysInMonth =  Calendar.getNoOfDaysInMonth;
+	$scope.dayNamesInMonth = Calendar.getDayNamesInMonth;
 
+	$scope.months = Calendar.monthLabelsShort;
 
-	function numberOfDaysBetweenDates(fromDate, toDate) {
-		var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
-		return Math.floor((fromDate.getTime() - toDate.getTime())/(oneDay)) ;
-	}
 	
 	function custom_sort(a, b) {
 		//return new Date(a.start).getTime() - new Date(b.start).getTime();
@@ -276,7 +275,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 		var aSystem = a.system;
 		var bSystem = b.system;
 		return (aSystem < bSystem) ? -1 : (aSystem > bSystem) ? 1 : 0;
-	}	
+	}
 
 	function convertToDate(dateString) {
 		var datestring = dateString,
@@ -301,7 +300,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 			"statuslines": []
 		});
 		
-		for (k = 1; k < Calendar.noOfDaysInCurrentMonth + 1; k++) {
+		for (k = 1; k < Calendar.getNoOfDaysInMonth($scope.selectedMonth) + 1; k++) {
 			var calDate = new Date();
 			calDate.setDate(k);
 			calendartable[index].statuslines.push({
@@ -316,34 +315,40 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 
 
 	function insertCalendarElement(calendartable, status, i, j) {
-		// If this is a one day status line 
-		if (status.start == status.end && rangeWithinMonthYear(status.start, status.end, $scope.selectedMonth, $scope.selectedYear) ) {
-			calendartable[i].statuslines[j].status = status.status;
-		} else {
+		// If this is a one day status line
+			try {
+					if (status.start == status.end && rangeWithinMonthYear(status.start, status.end, $scope.selectedMonth, $scope.selectedYear) ) {
+						calendartable[i].statuslines[j].status = status.status;
+					} else {
 
-			$.each(calendartable[i].statuslines, function(j, statusline) {
-				
-				if ( sameDay(statusline.start, dateFromString(status.start)) )  {
-					for (k = 0; k < (status.end - status.start) + 1; k++) {
-						calendartable[i].statuslines.splice(j, 1);
+						$.each(calendartable[i].statuslines, function(j, statusline) {
+							
+							if ( sameDay(statusline.start, dateFromString(status.start)) )  {
+								for (k = 0; k < (status.end - status.start) + 1; k++) {
+									calendartable[i].statuslines.splice(j, 1);
+								}
+								
+								var days = Calendar.numberOfDaysBetweenDates(dateFromString(status.end), dateFromString(status.start));
+								calendartable[i].statuslines.sort(custom_sort);
+						
+								calendartable[i].statuslines.push({
+									"start": dateFromString(status.start),
+									"end": dateFromString(status.end),
+									"status": status.status,
+									"colspan": days + 1
+								});
+								calendartable[i].statuslines.sort(custom_sort);
+
+
+								return false; //jquery loopbreak
+							}
+						});
 					}
-					
-					var days = numberOfDaysBetweenDates(dateFromString(status.end), dateFromString(status.start));
-			calendartable[i].statuslines.sort(custom_sort);
-			
-					calendartable[i].statuslines.push({
-						"start": dateFromString(status.start),
-						"end": dateFromString(status.end),
-						"status": status.status,
-						"colspan": numberOfDaysBetweenDates(dateFromString(status.end), dateFromString(status.start)) + 1
-					});
-					calendartable[i].statuslines.sort(custom_sort);
-
-
-					return false; //jquery loopbreak
 				}
-			});
-		}
+				catch(err)
+			{
+				//TODO -- Log data error to admin view
+			}
 
 		return calendartable;
 	}
@@ -353,12 +358,11 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 		var calendartable = [];
 		var syslines = Systems.systems.query(function() {
 			$.each(syslines, function(i, system) {
-				calendartable = addEmptyElementsForSystem(system.system, calendartable, i);
+				calendartable = addEmptyElementsForSystem(system, calendartable, i);
 				$.each(system.statuslines, function(j, status) {
 					calendartable = insertCalendarElement(calendartable, status, i, j);
 				});
 			});
-			
 			calendartable.sort(ascSystemSort);
 		});
 		return calendartable;
@@ -371,14 +375,15 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 	}
 	
 	function getSystemNames(){
-		var systemNames = Systems.systemnames.query(function() {});
+		var systemNames = Systems.systemnames.query(function() {
+		});
 		return systemNames;
 	}
 
 
 	function getAlertData() {
 		var alerts = [];
-		var currentDate = getDateString(new Date());
+		var currentDate = new Date();
 
 		var alertLines = Systems.alerts.query(function() {
 		
@@ -403,12 +408,12 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 	
 	$scope.addAlert = function() {
 		if($("#alertForm").valid()){
-			$('#addalertdialog').modal('hide');	
+			$('#addalertdialog').modal('hide');
 			var alertLine = $scope.addAlertLine;
-			alertLine.expdate = convertDateToDatabaseFormat(alertLine.expdate);		
+			alertLine.expdate = convertDateToDatabaseFormat(alertLine.expdate);
 			Systems.alerts.save(alertLine, function(item){
 				$scope.alertlines.push(item);
-			});		
+			});
 			$scope.resetNewAlertForm();
 		}
 	};
@@ -433,7 +438,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 						}
 					});
 				}
-			});	
+			});
 			
 			updateStatuslineToDB(savedStatusIndex);
 		}
@@ -652,6 +657,10 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 		
 	};
 
+	$scope.gotoMonth = function() {
+			$('.carousel').carousel('next');
+		};
+
 
 	function convertDateToViewableFormat(dateString) {
 		var datestring = dateString,
@@ -682,7 +691,6 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 	function sameDay(date1, date2) {
 		return date1.getFullYear() == date2.getFullYear() && date1.getMonth() == date2.getMonth() && date1.getDate() == date2.getDate();
 	}
-
 
 
 	$scope.resetNewAlertForm = function()
