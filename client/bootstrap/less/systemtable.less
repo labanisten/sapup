@@ -9,13 +9,14 @@
 	
 .element-inner
 {
-	height: 10px;
-	cursor: pointer;
-	width: 100%;
+  height: 10px;
+  cursor: pointer;
+  width: 100%;
   display: block;
-	min-width: 10px;
+  min-width: 10px;
   -webkit-border-radius: 1.65em;
   border: 1px solid @grayLight; 
+  text-align: center;
 
 //   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.8);
 	
@@ -28,6 +29,9 @@
 
 }
 
+.element-inner-selected {
+  #gradient > .vertical(#FAFA11, lighten(#B1A520, 10%));
+}
 
 .element-inner-freeze {
   #gradient > .vertical(@statoilBlue, lighten(@statoilBlue, 10%) );
@@ -39,10 +43,33 @@
 }
 
 
+.element-inner-downtime {
+  #gradient > .vertical(#C04040, lighten(#C04040, 10%));
+}
+
+
 .element-inner-test {
    #gradient > .vertical(@statoilBlueDarker, lighten(@statoilBlueDarker, 10%));
 }
 
+accordion{
+  background-color: @grayLighter;
+}
+
+accordion-heading{
+  background-color: @grayLighter;
+}
+
+.alert-container-header{
+	border: none;
+	#gradient > .vertical(darken(@grayLighter, 10%), @grayLighter);
+	font-size: 1.6em;
+	text-align: center;
+}
+
+.alert-container-body{
+	background-color: @grayLighter;
+}
 
 .firstcol {
   min-width: 50px;

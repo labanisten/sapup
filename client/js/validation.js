@@ -1,8 +1,9 @@
+	
 	$.validator.addMethod(
 		"endDateOffset",
 			function(value, element) {
-				var prevDate = convertDateToDatabaseFormat($("#elementStartDate").attr('value'));
-				var date = convertDateToDatabaseFormat(value);
+				var prevDate = viewDateToDBdate($("#elementStartDate").attr('value'));
+				var date = viewDateToDBdate(value);
 
 				if(date < prevDate){
 					return false;

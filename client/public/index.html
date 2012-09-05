@@ -16,45 +16,61 @@
 	<script src="../js/controllers.js"></script>
 	<script src="../js/mongolab.js"></script>
 	<script src="../js/calendar.js"></script>
+	<script src="../js/calendardata.js"></script>
 	<link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
 	<link href="../css/jquery-ui-1.8.21.custom.css" rel="stylesheet">
 	<!--<link href="../css/angular-ui.min.css" rel="stylesheet">--></head>
 
 <body ng-controller="TimelineCtrl">
 
-	<div class="navbar">
+    <div class="navbar">
 		<div class="navbar-inner">
 			<div class="container">
+			
 				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
+				  <span class="icon-bar"></span>
+				  <span class="icon-bar"></span>
+				  <span class="icon-bar"></span>
 				</a>
 				<a class="brand" href="#">System availability</a>
+		
+				<a class="btn btn-primary pull-right" data-toggle="modal" href="#addalertdialog"><i class="icon-plus icon-white"></i> Add alert</a>
+				<a class="btn btn-primary pull-right" data-toggle="modal" href="#editelementdialog"><i class="icon-th icon-white"></i> Edit elements</a>
+				<a class="btn btn-primary pull-right" href="../public/admin.html"><i class="icon-pencil icon-white"></i> Adminview</a>
 
-				<a class="btn btn-primary" data-toggle="modal" href="#addalertdialog"> <i class="icon-plus icon-white"></i>
-					Add alert
-				</a>
-				<a class="btn btn-primary" data-toggle="modal" href="#addelementdialog"> <i class="icon-plus icon-white"></i>
-					Add element
-				</a>
-				<a class="btn btn-primary" href="../public/admin.html">
-					<i class="icon-pencil icon-white"></i>
-					Adminview
-				</a>
-
-			</div>
+	        </div>
 		</div>
-	</div>
+    </div>
 
 	<div class="container-fluid">
 		<div class="row-fluid">
-			<div class="span2" ng-repeat="alertline in alertlines">
-				<!--alert-block-->
-				<div class="alert alert-block alert-{{alertline.alerttype}} fade in ">
-				<h5 class="alert-heading">{{alertline.title}}</h5>
-				<p>{{alertline.comment}}</p>
+		
+			<div class="accordion" id="accordionContainer">
+		
+				<div class="accordion-group">
+				  <div class="alert-container-header accordion-heading">
+					<h4 class="accordion-toggle" data-toggle="collapse" data-parent="#accordionContainer" href="#collapseOne">
+					  <i class="icon-warning-sign icon-large"></i> Alerts
+					</h4>
+				  </div>
+				  <div id="collapseOne" class="alert-container-body accordion-body in collapse" style="height: auto; ">
+					<div class="accordion-inner">
+										
+						<div id="pop" class="span2" bs-popover ng-repeat="alertline in alertlines" rel="popover" data-content="{{alertline.comment}}" data-original-title="{{alertline.title}}" data-placement="bottom">
+						  <!--alert-block-->
+						  <div class="alert alert-block alert-{{alertline.alerttype}} fade in ">
+							<!--<button type="button" class="close" data-dismiss="alert">x</button>-->
+							<h5 class="alert-heading">{{alertline.title}}</h5>
+							<p>{{alertline.comment}}</p>
+						  </div>
+						</div>	
+		
+					</div>
+				  </div>
+				</div>	
+				
 			</div>
+		
 		</div>
 	</div>
 
@@ -91,11 +107,8 @@
 									<td class="system">
 										<span class="badge badge-info">{{systemline.system}}</span>
 									</td>
-									<td  ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.colspan}}" ng-click="showDetails(systemline.system, statusline)">
-										<span class="element-inner-{{statusline.status}} element-inner" rel="popover" data-original-title="{{statusline.status}} in {{systemline.system}}" data-content="From: {{statusline.start}} <br/>
-										To: {{statusline.end}}
-										<br/>
-										{{statusline.comment}}">
+									<td  ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.colspan}}" ng-click="setSelectetElement(systemline, statusline)">
+										<span class="element-inner element-inner-{{statusline.viewcolor}}"status="{{statusline.status}}" bs-popover bs-popoverhover rel="popover" data-content="Status: {{statusline.status}} </br> Comment: {{statusline.comment}}" data-original-title="{{systemline.system}}" data-placement="bottom" data-trigger="manual" data:delay="300">{{statusline.status}}
 									</span>
 								</td>
 							</tr>
@@ -108,164 +121,159 @@
 		</div>
 	</div>
 </div>
-</div>
+
 
 <div class="modal hide fade" id="addalertdialog">
 
-<div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal">x</button>
-	<h3>Add Alert</h3>
-</div>
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">x</button>
+		<h3>Add Alert</h3>
+	</div>
 
-<div class="modal-body">
-
-	<div class="row-fluid">
-
-		<div class="span6">
-			<form id="alertForm">
-				<!--form-horizontal">
-				-->
-				<fieldset>
-					<div class="control-group">
-						<label for="title">Title</label>
-						<input id="alertTitle" name="title" ng-model="addAlertLine.title"></div>
-
-					<div class="control-group">
+	<div class="modal-body">
+	
+		<div class="row-fluid">
+		
+			<div class="span6">
+				<form id="alertForm"> <!--form-horizontal">-->
+					<fieldset>
+					
+						<div class="control-group">
+							<label for="title">Title</label>
+							<input id="alertTitle" name="title" ng-model="addAlertLine.title">
+						</div>
+						
+						<div class="control-group">
 						<label for="alerttype">Alert Type</label>
-						<select id="alertType" name="alerttype" ng-model="addAlertLine.alerttype">
-							<option value=""></option>
-							<option ng-repeat="alerttype in alerttypes">{{alerttype.type}}</option>
-						</select>
-					</div>
-
-					<div class="control-group">
-						<label for="expdate">Expiry Date</label>
-						<!--<input type="date" ng-model="addAlertLine.expdate">
-						-->
-						<input jq-datepicker id="alertDialogExpDate" name="alertDialogExpDate" ng-model="addAlertLine.expdate" class="input-medium"></div>
-					<div class="control-group">
-						<label for="comment">Comment</label>
-						<textarea id="alertComment" name="comment" class="input-xlarge" id="comment" ng-model="addAlertLine.comment"></textarea>					
-					</div>
-				</fieldset>
-			</form>
-		</div>
-
-		<!--TODO dynamic alertsize-->
-		<div class="span6">
-			<p>Alert preview:</p>
-			<div class="alert alert-{{addAlertLine.alerttype}} fade in " >
-				<button type="button" class="close">x</button>
-				<h5 class="alert-heading">{{addAlertLine.title}}</h5>
-				<p>{{addAlertLine.comment}}</p>
+							<select id="alertType" name="alerttype" ng-model="addAlertLine.alerttype">
+								<option value=""></option>
+								<option ng-repeat="alerttype in alerttypes">{{alerttype.type}}</option>
+							</select>
+						</div>
+						
+						<div class="control-group">
+							<label for="expdate">Expiry Date</label>
+							<!--<input type="date" ng-model="addAlertLine.expdate">-->
+							<input jq-datepicker id="alertDialogExpDate" name="alertDialogExpDate" ng-model="addAlertLine.expdate" class="input-medium">
+						</div>
+						
+						<div class="control-group">
+							<label for="comment">Comment</label>
+							<textarea id="alertComment" name="comment" input-xlarge" id="comment" ng-model="addAlertLine.comment"></textarea>
+						</div>
+						
+					</fieldset>
+				</form>
 			</div>
-
-			<div id="expireMessage"></div>
+			
+			<!--TODO dynamic alertsize-->
+			<div class="span6">		
+				<p>Alert preview:</p>
+				<div class="alert alert-{{addAlertLine.alerttype}} fade in " >
+					<button type="button" class="close">x</button>
+					<h5 class="alert-heading">{{addAlertLine.title}}</h5>
+					<p>{{addAlertLine.comment}}</p>
+				</div>
+				
+				<div id="expireMessage"></div>
+			</div>
+		
 		</div>
-
+		  
+	</div>
+	
+	<div class="modal-footer">
+		<a href="#" class="btn" data-dismiss="modal" ng-click="resetNewAlertForm();">Cancel</a>
+		<button class="btn btn-primary" ng-click="addAlert()">Ok</button>
 	</div>
 
 </div>
+  
+  
+<div class="modal hide fade" id="editelementdialog">
 
-<div class="modal-footer">
-	<a href="#" class="btn" data-dismiss="modal" ng-click="resetNewAlertForm();">Cancel</a>
-	<button class="btn btn-primary" ng-click="addAlert()">Ok</button>
-</div>
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">x</button>
+		<h3>Add Element</h3>
+	</div>
+	
+	<div class="modal-body">
+	
+		<!--<div class="container">-->
+		<div class="span2">
+			<form id="elementForm"> 
+			
+			    <fieldset>
+					<div class="control-group">
+						<div class="controls">     
+					  
+							<div class="control-group">
+								<label for="system">System</label>            
+								<select id="csystem" name="system" ng-model="systemFormData.system" class="input-medium">
+									<option value=""></option>
+									<option ng-repeat="systemname in systemnames">{{systemname.name}}</option>
+								</select>
+							</div>
+							
+							<div class="control-group">
+								<label for="status">Status</label>
+								<select id="cstatus" name="status" ng-model="systemFormData.status" class="input-medium">
+									<option value=""></option>
+									<option ng-repeat="systemstatus in systemstatuses">{{systemstatus.status}}</option>
+								</select>
+							</div>
+							
+							<div class="control-group">
+								<label for="startDate">Start</label> 
+								<input jq-datepicker id="elementStartDate" name="elementStartDate" ng-model="systemFormData.start" class="input-medium">
+							</div>
+							<div class="control-group">
+								<label for="endDate">End</label> 
+								<input jq-datepicker id="elementEndDate" name="elementEndDate" ng-model="systemFormData.end" class="input-medium">
+							</div>
+						   
+							<div class="control-group">
+								<label for="comment">Comment</label>
+								<textarea id="comment" ng-model="systemFormData.comment" class="input-medium" rows="4"></textarea>
+							</div>
+					   
+						</div>
+					</div>
+			    </fieldset>
+				
+			</form>	
+		</div>	
 
-</div>
-
-<div class="modal hide fade" id="addelementdialog">
-
-<div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal">x</button>
-	<h3>Add Element</h3>
-</div>
-
-<div class="modal-body">
-
-	<form id="elementForm">
-		<div class="control-group">
-			<div class="controls">
-
-				<div class="control-group">
-					<label for="system">System</label>
-					<select id="csystem" name="system" ng-model="systemFormData.system" class="input-medium">
-						<option value=""></option>
-						<option ng-repeat="systemname in systemnames">{{systemname.name}}</option>
-					</select>
-				</div>
-
-				<div class="control-group">
-					<label for="status">Status</label>
-					<select id="cstatus" name="status" ng-model="systemFormData.status" class="input-medium">
-						<option value=""></option>
-						<option ng-repeat="systemstatus in systemstatuses">{{systemstatus.status}}</option>
-					</select>
-				</div>
-
-				<div class="control-group">
-					<label for="startDate">Start</label>
-					<input jq-datepicker id="elementStartDate" name="elementStartDate" ng-model="systemFormData.start" class="input-medium"></div>
-				<div class="control-group">
-					<label for="endDate">End</label>
-					<input jq-datepicker id="elementEndDate" name="elementEndDate" ng-model="systemFormData.end" class="input-medium"></div>
-
-				<div class="control-group">
-					<label for="comment">Comment</label>
-					<textarea id="comment" ng-model="systemFormData.comment" class="input-medium"></textarea>
-				</div>
-
-			</div>
+		<div class="span3 offset1">
+			<h6>Events</h6>
+			<pre id="elementModalLog" class="prettyprint" style="height: 340px;">
+				<ul></ul>
+			</pre>
 		</div>
-	</form>
-
+		<!--</div>-->
+	</div>
+	
+	<div class="modal-footer">
+	
+		<a class="btn btn-primary pull-left" ng-click="addStatusElement()"><i class="icon-plus icon-white"></i> New</a>
+		<a class="btn btn-primary pull-left" ng-click="updateStatusElement()"><i class="icon-pencil icon-white"></i> Update</a>
+		<a class="btn btn-danger pull-left" ng-click="removeStatusElement()"><i class="icon-trash icon-white"></i> Delete</a>
+		<a class="btn btn-primary" data-dismiss="modal" onclick="clearModalLog();"><i class="icon-remove icon-white"></i> Close</a>
+		
+	</div>
+	
 </div>
 
-<div class="modal-footer">
-	<!--<a href="#" class="btn" data-dismiss="modal">Cancel</a>
-
-<button class="btn btn-primary" ng-click="updateStatusElement()">Update</button>
-<button class="btn btn-primary" ng-click="addStatusElement()">New</button>
-<button class="btn btn-danger" ng-click="removeStatusElement()">Delete</button>
--->
-<a class="btn btn-primary" ng-click="removeStatusElement()">
-	<i class="icon-trash icon-white"></i>
-	Delete
-</a>
-<a class="btn btn-primary" ng-click="updateStatusElement()">
-	<i class="icon-pencil icon-white"></i>
-	Update
-</a>
-<a class="btn btn-primary" ng-click="addStatusElement()">
-	<i class="icon-plus icon-white"></i>
-	New
-</a>
-
-</div>
-
-</div>
 
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="../bootstrap/js/bootstrap.js"></script>
-<script src="../bootstrap/js/bootstrap-popover.js"></script>
 <script src="../bootstrap/js/bootstrap-collapse.js"></script>
+<script src="../bootstrap/js/bootstrap-tooltip.js"></script>
+<script src="../bootstrap/js/bootstrap-popover.js"></script>
 <script src="../js/jquery.validate.js"></script>
 <script src="../js/validation.js"></script>
 <script src="../js/utils.js"></script>
-
-<script type="text/javascript">
-
-    $(function () {
-
-		// function prevMonth() {
-		// 	$('.carousel').carousel('next');
-		// }
-
-		$('.carousel').carousel('pause');
-    });
-		
-	
-</script>
+<script src="../js/initialize.js"></script>
 
 </body>
 </html>
