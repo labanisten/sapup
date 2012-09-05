@@ -298,7 +298,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Calendar
 
 	$scope.monthDayList = Calendar.getMonthDayList;
 	$scope.monthWeekList = Calendar.getMonthWeekList(); 
-	$scope.monthName = Calendar.getMonthName(Calendar.getCurrentMonth());
+	$scope.monthName = Calendar.getMonthName($scope.selectedMonth);
 	$scope.selectedMonth = Calendar.getCurrentMonth();
 	$scope.selectedYear = Calendar.getCurrentYear;
 
