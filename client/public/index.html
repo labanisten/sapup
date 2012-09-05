@@ -17,12 +17,12 @@
 	<script src="../js/mongolab.js"></script>
 	<script src="../js/calendar.js"></script>
 	<script src="../js/calendardata.js"></script>
+	<script src="../js/storage.js"></script>
 	<link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
 	<link href="../css/jquery-ui-1.8.21.custom.css" rel="stylesheet">
 	<!--<link href="../css/angular-ui.min.css" rel="stylesheet">--></head>
 
-<body ng-controller="TimelineCtrl">
-
+<body ng-controller="TimelineCtrl"> 
     <div class="navbar">
 		<div class="navbar-inner">
 			<div class="container">
@@ -43,6 +43,7 @@
     </div>
 
 	<div class="container-fluid">
+
 		<div class="row-fluid">
 		
 			<div class="accordion" id="accordionContainer">
@@ -72,55 +73,58 @@
 			</div>
 		
 		</div>
-	</div>
+		
+	
 
 
-	<div class="row-fluid" style="margin-bottom: 15px">
-		<div class="span1" ng-repeat="month in months">
-			<button style="width:100%" ng-click="gotoMonth()" class="btn btn-mini btn-info" type="button">{{month}}</button>
-		</div>
-	</div>
-
-	<div class="row-fluid">
-		<div class="span12">
-			<div id="systemTableCarousel" class="carousel slide">
-				<div class="carousel-inner">
-					<div  ng-repeat="month in [0,1,2,3,4,5,6,7,8,9,10,11]" class="item {{ month == selectedMonth && 'active' || ''}}"> 
-						<table id="systemtab">
-							<thead>
-								<tr>
-									<th class="month" colspan='{{noOfDaysInMonth(month) + 1}}'>{{monthName}}</th>
-								</tr>
-								<tr>
-									<th class="firstcol week" rowspan="3"></th>
-									<th class="week" ng-repeat="week in monthWeekList[month]" colspan="{{week.colSpan}}">{{week.week}}</th>
-								</tr>
-								<tr>
-									<th ng-repeat="dayName in dayNamesInMonth(month)">{{dayName}}</th>
-								</tr>
-								<tr>
-									<th ng-repeat="day in monthDayList(month)">{{day}}</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr ng-repeat="systemline in systemlines">
-									<td class="system">
-										<span class="badge badge-info">{{systemline.system}}</span>
-									</td>
-									<td  ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.colspan}}" ng-click="setSelectetElement(systemline, statusline)">
-										<span class="element-inner element-inner-{{statusline.viewcolor}}"status="{{statusline.status}}" bs-popover bs-popoverhover rel="popover" data-content="Status: {{statusline.status}} </br> Comment: {{statusline.comment}}" data-original-title="{{systemline.system}}" data-placement="bottom" data-trigger="manual" data:delay="300">{{statusline.status}}
-									</span>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="item">Second item...</div>
-				<div class="item">Third item...</div>
+		<div class="row-fluid" style="margin-bottom: 15px">
+			<div class="span1" ng-repeat="month in months">
+				<button style="width:100%" ng-click="gotoMonth()" class="btn btn-mini btn-info" type="button">{{month}}</button>
 			</div>
 		</div>
+
+		<div class="row-fluid">
+			<div class="span12">
+				<div id="systemTableCarousel" class="carousel slide">
+					<div class="carousel-inner">
+						<div  ng-repeat="month in [0,1,2,3,4,5,6,7,8,9,10,11]" class="item {{ month == selectedMonth && 'active' || ''}}"> 
+							<table id="systemtab">
+								<thead>
+									<tr>
+										<th class="month" colspan='{{noOfDaysInMonth(month) + 1}}'>{{monthName}}</th>
+									</tr>
+									<tr>
+										<th class="firstcol week" rowspan="3"></th>
+										<th class="week" ng-repeat="week in monthWeekList[month]" colspan="{{week.colSpan}}">{{week.week}}</th>
+									</tr>
+									<tr>
+										<th ng-repeat="dayName in dayNamesInMonth(month)">{{dayName}}</th>
+									</tr>
+									<tr>
+										<th ng-repeat="day in monthDayList(month)">{{day}}</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="systemline in systemlines">
+										<td class="system">
+											<span class="badge badge-info">{{systemline.system}}</span>
+										</td>
+										<td  ng-repeat="statusline in systemline.statuslines" colspan="{{statusline.colspan}}" ng-click="setSelectetElement(systemline, statusline)">
+											<span class="element-inner element-inner-{{statusline.viewcolor}}"status="{{statusline.status}}" bs-popover bs-popoverhover rel="popover" data-content="Status: {{statusline.status}} </br> Comment: {{statusline.comment}}" data-original-title="{{systemline.system}}" data-placement="bottom" data-trigger="manual" data:delay="300">
+											</span>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="item">Second item...</div>
+						<div class="item">Third item...</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 	</div>
-</div>
 
 
 <div class="modal hide fade" id="addalertdialog">
