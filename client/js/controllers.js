@@ -413,6 +413,8 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Calendar
 						$.each(calendartable[i].statuslines, function(j, statusline) {
 							
 							if ( sameDay(statusline.start, dateFromString(status.start)) )  {
+							
+							
 								for (k = 0; k < (status.end - status.start) + 1; k++) {
 									calendartable[i].statuslines.splice(j, 1);
 								}
