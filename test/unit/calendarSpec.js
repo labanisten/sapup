@@ -7,7 +7,8 @@ describe('In the calendar module', function() {
       calendar;
 
   beforeEach(module('systemAvailability'));
-  //beforeEach(module('calendarModule'));
+  beforeEach(module('calendarDataModule'));
+  beforeEach(module('calendarModule'));
 
 
   beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
@@ -52,7 +53,7 @@ describe('In the calendar module', function() {
     });  
   });
 
-  describe('get number of days bwtween two date', function(){
+  describe('get number of days bwtween two dates', function(){
     it('should return the value 5', function() {
       var d1 = new Date();
       d1.setDate(5);
