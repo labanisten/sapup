@@ -7,8 +7,11 @@ angular.module('calendarModule', []).
 	(function(ns) {
 		
 		ns.getCurrentMonth = function() {
-			var d = new Date(); 
-			return d.getMonth();
+			return ns.currentMonth;
+		}
+		
+		ns.getCurrentYear = function() {
+			return ns.currentYear;
 		}
 
 		ns.getFirstDayInMonth = function(month) {
@@ -24,6 +27,7 @@ angular.module('calendarModule', []).
 		};
 
 		ns.currentDate = new Date();
+		
 		ns.currentMonth = ns.currentDate.getMonth();
 		ns.currentYear = ns.currentDate.getFullYear();
 
@@ -33,15 +37,21 @@ angular.module('calendarModule', []).
 		ns.monthLabelsShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 		ns.daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 	
-
+		ns.getMonthName = function() {
+			return ns.monthLabels;
+		};
+	
+		/*
 		ns.getNoOfDaysInMonth = function(month) {
 			return ns.daysInMonth[month];
 		}
+		*/
 
-		ns.getMonthName = function(month) {
-			return ns.monthLabels[month];
-		};
+		ns.getNoOfDaysInMonth = function() {
+			return ns.daysInMonth;
+		}
 
+		/*
 		ns.getMonthDayList = function(month) {
 			var days = ns.daysInMonth[month];
 
@@ -53,6 +63,23 @@ angular.module('calendarModule', []).
 
 			return dayArray;
 		};
+		*/
+		
+		ns.getMonthDayList = function() {
+			
+			var daysInMonths = [];
+			
+			for(var j = 0; j < 12; j++) {	
+				var dayArray = [];
+				for (i = 0; i < ns.daysInMonth[j]; i++) {
+					dayArray.push(i + 1);
+				}
+				daysInMonths.push(dayArray);		
+			}
+
+			return daysInMonths;
+		};
+		
 
 		ns.getWeek = function getWeek(date) {
 			var onejan = new Date(date.getFullYear(), 0, 1);
@@ -65,7 +92,8 @@ angular.module('calendarModule', []).
 			var weeks = [];
 
 			for (var month = 0; month < 12; month++) {
-				var dayArray = ns.getMonthDayList(month),
+				//var mList = ns.getMonthDayList();
+				var dayArray = ns.getMonthDayList()[month],
 				weekArray = [],
 				m = ns.currentDate,
 				weekAndDays = [],

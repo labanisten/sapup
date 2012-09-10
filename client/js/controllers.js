@@ -7,10 +7,10 @@ var myModule = angular.module('systemAvailability', ['mongolabModule', 'calendar
 
 myModule.directive('bsPopoverhover', function(){
     return {
-		link: function postLink(scope, element, attrs) {
-
-				element.hover(function(){
+		restrict: 'C',
+		link: function (scope, element, attrs) {
 				
+				element.hover(function(){
 					//if(scope.selectedElement._id == "") {
 						element.popover('show');
 					//}
@@ -44,6 +44,140 @@ myModule.directive('bsPopoverhover', function(){
 			});*/
 		}
     };
+});
+
+
+myModule.directive('elementClick', function(){
+	return {
+		restrict: 'C',
+		
+		link: function(scope, element, attrs) {
+			element.click(function () {
+				console.log("asdas");
+				element.addClass("selected");
+				//element.removeClass("element-inner-freeze");
+			});
+		}
+	};
+});
+
+
+myModule.directive('systemTable', function($compile){
+	return {
+			restrict: 'E',
+			
+			//replace: true,
+			//transclude: true,	
+			//scope: true,
+			
+			link: function(scope, element, attrs) {
+			
+				scope.$watch('systemlines', function() {
+					buildCalendar();			
+				});
+				
+				scope.$watch('selectedMonth', function() {
+					buildCalendar();
+				});
+				
+				function findMatchingElement(day, statuslines) {
+					var result = "";
+					day = day + 1;
+					
+					$.each(statuslines, function(i, v_line) {
+						var start = convertToDate(v_line.start);
+						var end = convertToDate(v_line.end);
+						
+						if(start.getDate() == day && start.getMonth() == scope.selectedMonth && start.getFullYear() == scope.selectedYear) {
+							//console.log("match: " + start.getDate());
+							result = v_line;
+							result.index = i;
+						}
+						
+					});
+					
+					return result;
+				}
+
+				function buildCalendar() {
+					var template = 	'<table>'+
+				
+									'<thead>'+
+										'<tr>'+
+											'<th class="month" colspan="{{noOfDaysInMonth['+scope.selectedMonth+'] + 1}}">{{monthName['+scope.selectedMonth+']}}</th>'+
+										'</tr>'+
+										'<tr>'+
+											'<th class="firstcol week" rowspan="3"></th>'+
+											'<th class="week" ng-repeat="week in monthWeekList['+scope.selectedMonth+']" colspan="{{week.colSpan}}">{{week.week}}</th>'+
+										'</tr>'+
+										'<tr>'+
+											'<th ng-repeat="dayName in dayNamesInMonth('+scope.selectedMonth+')">{{dayName}}</th>'+
+										'</tr>'+
+										'<tr>'+
+											'<th ng-repeat="day in monthDayList['+scope.selectedMonth+']">{{day}}</th>'+
+										'</tr>'+
+									'</thead>'+
+
+								  '<tbody>';
+
+										console.log("systemlines: " + scope.systemlines.length);
+										
+										for(var i = 0; i < scope.systemlines.length; i++){
+
+											template += '<tr>'+ 
+															'<td class="system">'+
+																'<span class="badge badge-info">{{systemlines['+i+'].system}}</span>'+
+															'</td>';
+														
+											//var statuslines = scope.systemlines[i].statuslines;
+																					
+											//var elementIt = 0;
+											for(var day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
+												
+													var result = findMatchingElement(day, scope.systemlines[i].statuslines);
+													
+													if(result == "") {
+													
+														template += '<td>'+
+																		 
+																		'<span class="element-inner available"'+
+																		'</span>'+	
+																		
+																	'</td>';
+													}else{
+														var colspan = result.end - result.start;
+														template += '<td colspan="'+colspan+'" ng-click="setSelectetElement(systemlines['+i+'], systemlines['+i+'].statuslines['+result.index+'])">'+
+																		 
+																		'<span class="element-inner {{systemlines['+i+'].statuslines['+result.index+'].status}} bs-popoverhover element-click"'+
+																			  'status="{{systemlines['+i+'].statuslines['+result.index+'].status}}"'+
+																			  'rel="popover"'+ 
+																			  'data-content="Status: {{systemlines['+i+'].statuslines['+result.index+'].status}} </br> Comment: {{systemlines['+i+'].statuslines['+result.index+'].comment}}"'+ 
+																			  'data-original-title="{{systemlines['+i+'].system}}"'+
+																			  'data-placement="bottom"'+ 
+																			  'data-trigger="manual"'+ 
+																			  'data:delay="300">'+
+																		'</span>'+	
+																		
+																	'</td>';
+														day = day + colspan - 1;
+													}															
+												
+											}
+											
+											template += '</tr>';
+										}
+										
+									template += '</tr>'+							
+								  '</tbody>';
+								  
+					element.html(template);				
+					$compile(element.contents())(scope);
+				}
+				
+			}
+			
+			
+	}
 });
 
 		
@@ -121,7 +255,9 @@ myModule.controller("adminViewCtrl", function($scope, Systems) {
 	$scope.statusTypeInput = "";
 	$scope.alertTypeInput = "";
 	
-	
+	function buildCal() {
+		return "testcal";
+	}	
 	
 	function getSystemNames(){
 
@@ -295,22 +431,33 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Calendar
 		expdate: undefined,
 		comment: ""
 	};
+	
+	
 
-	$scope.monthDayList = Calendar.getMonthDayList;
+	
+	
+	$scope.monthDayList = Calendar.getMonthDayList();
 	$scope.monthWeekList = Calendar.getMonthWeekList(); 
-	$scope.monthName = Calendar.getMonthName($scope.selectedMonth);
+	$scope.monthName = Calendar.getMonthName();
+	
+	$scope.selectedYear = Calendar.getCurrentYear();
 	$scope.selectedMonth = Calendar.getCurrentMonth();
-	$scope.selectedYear = Calendar.getCurrentYear;
-
-	$scope.noOfDaysInMonth =  Calendar.getNoOfDaysInMonth;
+	
+	$scope.noOfDaysInMonth =  Calendar.getNoOfDaysInMonth();
 	$scope.dayNamesInMonth = Calendar.getDayNamesInMonth;
 
 	$scope.months = Calendar.monthLabelsShort;
-
 	
+	
+	$scope.gotoMonth = function(month) {
+		//$scope.selectedYear = Calendar.getCurrentYear();
+		$scope.selectedMonth = month;
+	};
+
 	function getSystemData() {
 		var calendartable = [];
 		var syslines = Systems.systems.query(function() {
+			/*
 			$.each(syslines, function(i, system) {
 				//calendartable = addEmptyElementsForSystem(system, calendartable, i);
 				calendartable = CalendarData.addEmptyElementsForSystem(system, calendartable, Calendar.getNoOfDaysInMonth($scope.selectedMonth), i);
@@ -319,6 +466,12 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Calendar
 				});
 			});
 			calendartable.sort(ascSystemSort);
+			*/
+			
+			calendartable = CalendarData.setElementOffset(syslines);
+			calendartable.sort(ascSystemSort);
+			$scope.systemlines = calendartable;
+			
 		});
 		return calendartable;
 	}
@@ -578,8 +731,10 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Calendar
 			$scope.systemFormData._id = systemLine._id;
 			$scope.systemFormData.system = systemLine.system;
 			$scope.systemFormData.status = statusLine.status;
-			$scope.systemFormData.start = dateObjectToViewDate(statusLine.start);
-			$scope.systemFormData.end = dateObjectToViewDate(statusLine.end);
+			//$scope.systemFormData.start = dateObjectToViewDate(statusLine.start);
+			//$scope.systemFormData.end = dateObjectToViewDate(statusLine.end);
+			$scope.systemFormData.start = dbDateToViewDate(statusLine.start);
+			$scope.systemFormData.end = dbDateToViewDate(statusLine.end);
 			$scope.systemFormData.comment = "";
 			
 			$scope.selectedElement._id = systemLine._id;
