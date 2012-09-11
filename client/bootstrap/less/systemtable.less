@@ -22,34 +22,34 @@
 	
 }
 
-.element-inner-available {
+.element-inner.available {
   cursor: default;
   visibility: hidden;
   border-radius: 0;
 
 }
 
-.element-inner-selected {
-  #gradient > .vertical(#FAFA11, lighten(#B1A520, 10%));
-}
-
-.element-inner-freeze {
+.element-inner.freeze {
   #gradient > .vertical(@statoilBlue, lighten(@statoilBlue, 10%) );
 }
 
 
-.element-inner-upgrade {
+.element-inner.upgrade {
   #gradient > .vertical(#C04040, lighten(#C04040, 10%));
 }
 
 
-.element-inner-downtime {
+.element-inner.downtime {
   #gradient > .vertical(#C04040, lighten(#C04040, 10%));
 }
 
 
-.element-inner-test {
+.element-inner.test {
    #gradient > .vertical(@statoilBlueDarker, lighten(@statoilBlueDarker, 10%));
+}
+
+.element-inner.selected {
+  #gradient > .vertical(#FAFA11, lighten(#B1A520, 10%));
 }
 
 accordion{

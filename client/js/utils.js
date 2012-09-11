@@ -1,6 +1,6 @@
 	
-	/*	
-	function convertToViewDate(dateString) {
+	
+	function dbDateToViewDate(dateString) {
 		var datestring = dateString,
 			y = datestring.substr(0, 4),
 			m = datestring.substr(4, 2),
@@ -10,7 +10,7 @@
 
 		return date;
 	}
-	*/
+	
 	
 	function clearModalLog()
 	{

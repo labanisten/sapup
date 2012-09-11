@@ -6,7 +6,20 @@ angular.module('calendarDataModule', []).
 
 		(function(ns) {
 	
-	
+			ns.setElementOffset = function(systems) {
+			
+				$.each(systems, function(i, system) {
+					
+					$.each(system, function(j, line) {
+						
+					});
+				
+				});
+				
+				return systems;
+			}
+			
+			
 			ns.addEmptyElementsForSystem = function(systemItem, calendartable, daysInMonth, index) {
 			
 				calendartable.push({
