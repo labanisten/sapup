@@ -185,7 +185,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 	
 	
 	$scope.monthDayList = Calendar.getMonthDayList();
-	$scope.monthWeekList = Calendar.getMonthWeekList(); 
+	$scope.monthWeekList = Calendar.getMonthWeekList();
 	$scope.monthName = Calendar.getMonthName();
 	
 	$scope.selectedYear = Calendar.getCurrentYear();
@@ -193,10 +193,17 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 	
 	$scope.noOfDaysInMonth =  Calendar.getNoOfDaysInMonth();
 	$scope.dayNamesInMonth = Calendar.getDayNamesInMonth;
-
 	$scope.months = Calendar.monthLabelsShort;
+	$scope.monthLabels = Calendar.monthLabels;
 	
-	
+	$scope.selectedYear = Calendar.getCurrentYear();
+	$scope.selectedMonth = Calendar.getCurrentMonth();
+	$scope.selectedMonthLabel = Calendar.getMonthName($scope.selectedMonth);
+
+	$scope.setSelectedMonth = function(month) {
+		$scope.selectedMonth = month;
+	};
+
 	$scope.gotoMonth = function(month) {
 		//$scope.selectedYear = Calendar.getCurrentYear();
 		console.log("go!!");

@@ -73,6 +73,9 @@
 							var start = convertToDate(v_line.start);
 							var end = convertToDate(v_line.end);
 							
+							var sm = start.getMonth();
+							var sel = scope.selectedMonth;
+							
 							if(start.getDate() == day && start.getMonth() == scope.selectedMonth && start.getFullYear() == scope.selectedYear) {
 								result = v_line;
 								result.index = i;
