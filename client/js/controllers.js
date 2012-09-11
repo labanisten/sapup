@@ -1,7 +1,5 @@
 
 
-
-
 var myModule = angular.module('systemAvailability', ['mongolabModule', 'calendarModule', 'calendarDataModule']);
 
 
@@ -11,37 +9,11 @@ myModule.directive('bsPopoverhover', function(){
 		link: function (scope, element, attrs) {
 				
 				element.hover(function(){
-					//if(scope.selectedElement._id == "") {
 						element.popover('show');
-					//}
-					
 				},
 				function() {
-				
-					//if(scope.selectedElement._id == "") {
 						element.popover('hide');
-					//}
 				});		
-			
-			
-			/*element.click(function() {
-				
-				$("#systemtab").find(".element-inner-selected").popover("hide");
-				
-				//if(scope.selectedElement._id == "") {
-					element.popover('show');
-				//}else{
-				//	element.popover('hide');
-				//}
-				
-				
-				//$(this).parent().parent().children().children().each(function(){
-				
-					//console.log("asdas");
-					//$(this).popover('hide');
-				//});
-				
-			});*/
 		}
     };
 });
@@ -65,11 +37,7 @@ myModule.directive('elementClick', function(){
 myModule.directive('systemTable', function($compile){
 	return {
 			restrict: 'E',
-			
-			//replace: true,
-			//transclude: true,	
-			//scope: true,
-			
+
 			link: function(scope, element, attrs) {
 			
 				scope.$watch('systemlines', function() {
@@ -89,7 +57,6 @@ myModule.directive('systemTable', function($compile){
 						var end = convertToDate(v_line.end);
 						
 						if(start.getDate() == day && start.getMonth() == scope.selectedMonth && start.getFullYear() == scope.selectedYear) {
-							//console.log("match: " + start.getDate());
 							result = v_line;
 							result.index = i;
 						}
@@ -117,7 +84,6 @@ myModule.directive('systemTable', function($compile){
 											'<th ng-repeat="day in monthDayList['+scope.selectedMonth+']">{{day}}</th>'+
 										'</tr>'+
 									'</thead>'+
-
 								  '<tbody>';
 
 										console.log("systemlines: " + scope.systemlines.length);
@@ -129,9 +95,6 @@ myModule.directive('systemTable', function($compile){
 																'<span class="badge badge-info">{{systemlines['+i+'].system}}</span>'+
 															'</td>';
 														
-											//var statuslines = scope.systemlines[i].statuslines;
-																					
-											//var elementIt = 0;
 											for(var day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
 												
 													var result = findMatchingElement(day, scope.systemlines[i].statuslines);
@@ -145,7 +108,7 @@ myModule.directive('systemTable', function($compile){
 																		
 																	'</td>';
 													}else{
-														var colspan = result.end - result.start;
+														var colspan = result.end - result.start + 1;
 														template += '<td colspan="'+colspan+'" ng-click="setSelectetElement(systemlines['+i+'], systemlines['+i+'].statuslines['+result.index+'])">'+
 																		 
 																		'<span class="element-inner {{systemlines['+i+'].statuslines['+result.index+'].status}} bs-popoverhover element-click"'+
@@ -433,9 +396,6 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Calendar
 	};
 	
 	
-
-	
-	
 	$scope.monthDayList = Calendar.getMonthDayList();
 	$scope.monthWeekList = Calendar.getMonthWeekList(); 
 	$scope.monthName = Calendar.getMonthName();
@@ -457,21 +417,9 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Calendar
 	function getSystemData() {
 		var calendartable = [];
 		var syslines = Systems.systems.query(function() {
-			/*
-			$.each(syslines, function(i, system) {
-				//calendartable = addEmptyElementsForSystem(system, calendartable, i);
-				calendartable = CalendarData.addEmptyElementsForSystem(system, calendartable, Calendar.getNoOfDaysInMonth($scope.selectedMonth), i);
-				$.each(system.statuslines, function(j, status) {
-					calendartable = insertCalendarElement(calendartable, status, i, j);
-				});
-			});
-			calendartable.sort(ascSystemSort);
-			*/
-			
 			calendartable = CalendarData.setElementOffset(syslines);
 			calendartable.sort(ascSystemSort);
 			$scope.systemlines = calendartable;
-			
 		});
 		return calendartable;
 	}
@@ -492,7 +440,6 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Calendar
 
 	function getAlertData() {
 		var alerts = [];
-		//var currentDate = new Date();
 		var currentDate = getDateString(new Date());
 
 		var alertLines = Systems.alerts.query(function() {
@@ -556,169 +503,90 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Calendar
 	};
 	
 	
-	function insertCalendarElement(calendartable, status, i, j) {
-		// If this is a one day status line
-			try {
-					if (status.start == status.end && rangeWithinMonthYear(status.start, status.end, $scope.selectedMonth, $scope.selectedYear) ) {
-						calendartable[i].statuslines[j].status = status.status;
-					} else {
-
-						$.each(calendartable[i].statuslines, function(j, statusline) {
-							
-							if ( sameDay(statusline.start, dateFromString(status.start)) )  {
-							
-							
-								for (k = 0; k < (status.end - status.start) + 1; k++) {
-									calendartable[i].statuslines.splice(j, 1);
-								}
-								
-								//var days = Calendar.numberOfDaysBetweenDates(dateFromString(status.end), dateFromString(status.start));
-								//calendartable[i].statuslines.sort(custom_sort);
-						
-								calendartable[i].statuslines.push({
-									"start": dateFromString(status.start),
-									"end": dateFromString(status.end),
-									"status": status.status,
-									"viewcolor":status.status,
-									"colspan": numberOfDaysBetweenDates(dateFromString(status.end), dateFromString(status.start)) + 1
-								});
-								calendartable[i].statuslines.sort(custom_sort);
-
-
-								return false; //jquery loopbreak
-							}
-						});
-					}
-				}
-				catch(err)
-			{
-				//TODO -- Log data error to admin view
-			}
-
-		return calendartable;
-	}
-	
-	
 	$scope.updateStatusElement = function(id) {
 
 		if($("#elementForm").valid()){	
-		
-			var systemWasFound = false;		
-			var updateStatusIndex = -1;
-		
+			
 			$.each($scope.systemlines, function(i, v_system) {
-
+					
 				if (v_system.system == $scope.systemFormData.system) {
 				
-					systemWasFound = true;
-					CalendarData.removeCalendarElement(v_system, $scope.selectedElement);
-					CalendarData.findAndAddNewElement(v_system, $scope.systemFormData);
+					systemElement = { 
+						"system": v_system.system,
+						"statuslines": $scope.systemlines[i].statuslines
+					};
 					
-					//set updated element as selected
-					$scope.selectedElement.start = viewDateToDateObject($scope.systemFormData.start);
-					$scope.selectedElement.end = viewDateToDateObject($scope.systemFormData.end);
+					CalendarData.removeCalendarElement(systemElement, $scope.selectedElement);
 					
-					updateStatusIndex = i;
+					var start = viewDateToDBdate($scope.systemFormData.start);
+					var end = viewDateToDBdate($scope.systemFormData.end);
+					
+					statusElement = {
+						"start": start,
+						"end": end,
+						"status": $scope.systemFormData.status
+					}
+					
+					systemElement.statuslines.push(statusElement);
+		
+					Systems.systems.update({id:$scope.systemlines[i]._id.$oid}, systemElement, function(item){
+						addLineToElementModalLog("Element updated in " + $scope.systemlines[i].system);
+						$scope.systemlines = getSystemData();
+					});
+					
+					return false;
+					
+				}else{
+					//addLineToElementModalLog("Error!!!!!");
 				}
-			});	
-			
-			if(systemWasFound){
-				if(updateStatusIndex >= 0){
-					addLineToElementModalLog("Element in " + $scope.systemlines[updateStatusIndex].system + " was updated");
-					updateStatuslineToDB(updateStatusIndex);
-					//CalendarData.updateStatuslineToDB($scope.systemlines[updateStatusIndex]);
-				}else
-					addLineToElementModalLog("Element not added, no room for updated element in " + $scope.systemFormData.system + " on these dates");
-			}else{
-				addLineToElementModalLog("System " + $scope.systemFormData.system + " was not found in database");
-			}
+						
+			});
+		
 		}
+			
 	};
 	
 		
 	$scope.addStatusElement = function() {
 
 		if($("#elementForm").valid()){
-			
-			var systemWasFound = false;		
-			var savedStatusIndex = -1;
 
 			$.each($scope.systemlines, function(i, v_system) {
-			
-				if (v_system.system == $scope.systemFormData.system) {
 				
-					systemWasFound = true;
+					if (v_system.system == $scope.systemFormData.system) {
 					
-					$.each(v_system.statuslines, function(j, v_status) {
-					
-						if (CalendarData.checkNewElementStartDay(v_status, $scope.systemFormData.start)) {
-							if (isNewElementSingleDay($scope.systemFormData)) {
-								$scope.systemlines[i].statuslines[j].status = $scope.systemFormData.status;
-							}
-							else {
-								if(CalendarData.isNewElementOverlapping(v_status, $scope.systemFormData.end, $scope.systemlines[i], j)){
-									return false;
-								}
-								
-								CalendarData.clearSpaceForNewElement(v_status.start, $scope.systemFormData.end, $scope.systemlines[i], j);
-								CalendarData.addNewElement($scope.systemFormData, $scope.systemlines[i].statuslines);
-								
-								$scope.systemlines[i].statuslines.sort(custom_sort);
-								
-								savedStatusIndex = i;
-								return false; //jquery break
-							}
+						systemElement = { 
+							"system": v_system.system,
+							"statuslines": $scope.systemlines[i].statuslines
+						};
+						
+						var start = viewDateToDBdate($scope.systemFormData.start);
+						var end = viewDateToDBdate($scope.systemFormData.end);
+						
+						statusElement = {
+							"start": start,
+							"end": end,
+							"status": $scope.systemFormData.status
 						}
 						
-					});	
-		
-				}
+						systemElement.statuslines.push(statusElement);
+			
+						Systems.systems.update({id:$scope.systemlines[i]._id.$oid}, systemElement, function(item){
+							addLineToElementModalLog("Element added to " + $scope.systemlines[i].system);
+							$scope.systemlines = getSystemData();
+						});
+						
+						return false;
+						
+					}else{
+						//addLineToElementModalLog("Error!!!!!");
+					}
+					
 			});
-			
-			
-			if(systemWasFound){
-				if(savedStatusIndex >= 0){
-					addLineToElementModalLog("Element added to " + $scope.systemlines[savedStatusIndex].system);
-					updateStatuslineToDB(savedStatusIndex);
-					//CalendarData.updateStatuslineToDB($scope.systemlines[savedStatusIndex]);
-				}else
-					addLineToElementModalLog("Element not added, no room for new element in " + $scope.systemFormData.system + " on these dates");
-			}else{
-				addLineToElementModalLog("System " + $scope.systemFormData.system + " was not found in database");
-			}
-
+		
 		}
 	};
 	
-	
-	function updateStatuslineToDB(index){
-	
-		var systemElement;
-		var statusItems = [];
-		
-		systemElement = { 
-		  "system": $scope.systemlines[index].system,
-		  "statuslines": ""
-		};
-		
-		//funka ikkje me $.each
-		// legg over alle element frå statuslines som ikkje har available status
-		for(var j = 0; j < $scope.systemlines[index].statuslines.length; j++)
-		{				
-			if($scope.systemlines[index].statuslines[j].status != 'available'){
-				var tmpObject = jQuery.extend(true, {}, $scope.systemlines[index].statuslines[j]);
-				tmpObject.start = getDateString(tmpObject.start);
-			    tmpObject.end = getDateString(tmpObject.end);
-				delete tmpObject['viewcolor'];
-				statusItems.push(tmpObject);			
-			}			
-		}	
-
-		systemElement.statuslines = statusItems;	
-		Systems.systems.update({id:$scope.systemlines[index]._id.$oid}, systemElement, function(item){});		
-
-	}
-
 	
 	$scope.setSelectetElement = function(systemLine, statusLine) {
 
@@ -740,8 +608,8 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Calendar
 			$scope.selectedElement._id = systemLine._id;
 			$scope.selectedElement.system = systemLine.system;
 			$scope.selectedElement.status = statusLine.status;
-			$scope.selectedElement.start = statusLine.start;
-			$scope.selectedElement.end = statusLine.end;
+			$scope.selectedElement.start = convertToDate(statusLine.start);
+			$scope.selectedElement.end = convertToDate(statusLine.end);
 			//$scope.systemFormData.comment = statusLine.comment;			
 			$scope.selectedElement.statusLineRef = statusLine;
 			
@@ -768,8 +636,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Calendar
 			$scope.selectedElement.start = "";
 			$scope.selectedElement.end = "";
 			$scope.selectedElement.comment = "";
-			
-			//$("#systemtab").find(".element-inner-selected").popover("hide");
+
 		}	
 	};
 	

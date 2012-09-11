@@ -114,13 +114,19 @@ angular.module('calendarDataModule', []).
 			
 			
 			ns.removeCalendarElement = function(system, item) {
+				//itemStart = convertToDate(item.start); 
+				//itemEnd = convertToDate(item.end)
+			
 				$.each(system.statuslines, function(j, v_status) {
-
-					if (v_status.start.getTime() == item.start.getTime() && v_status.end.getTime() == item.end.getTime() && v_status.status == item.status) {
+					var s = convertToDate(v_status.start);
+					var e = convertToDate(v_status.end);
+					
+					if (s.getTime() == item.start.getTime() && e.getTime() == item.end.getTime() && v_status.status == item.status) {
 						
 						system.statuslines.splice(j, 1);
-						ns.fillSpaceWithEmptyElements(v_status, system.statuslines);
-						system.statuslines.sort(custom_sort);
+						return false;
+						//ns.fillSpaceWithEmptyElements(v_status, system.statuslines);
+						//system.statuslines.sort(custom_sort);
 					}
 				});
 			}

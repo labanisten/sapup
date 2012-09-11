@@ -1,5 +1,18 @@
 	
 	
+	function convertToDate(dateString) {
+		var datestring = dateString,
+			y = datestring.substr(0, 4),
+			m = datestring.substr(4, 2),
+			d = datestring.substr(6, 2);
+
+		m = m - 1;
+		date = new Date(y, m, d);
+
+		return date;
+	}
+	
+	
 	function dbDateToViewDate(dateString) {
 		var datestring = dateString,
 			y = datestring.substr(0, 4),
@@ -156,19 +169,6 @@
 		var bSystem = b.system;
 		return (aSystem < bSystem) ? -1 : (aSystem > bSystem) ? 1 : 0;
 	}	
-	
-	
-	function convertToDate(dateString) {
-		var datestring = dateString,
-			y = datestring.substr(0, 4),
-			m = datestring.substr(4, 2),
-			d = datestring.substr(6, 2);
-
-		m = m - 1;
-		date = new Date(y, m, d);
-
-		return date;
-	}
 
 	
 	function rangeWithinMonthYear(fromDate, toDate, month, year) {
