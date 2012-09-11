@@ -14,11 +14,11 @@
 	<script src="http://code.angularjs.org/angular-resource-1.0.1.js"></script>
 
 	<script src="../js/controllers.js"></script>
+	<script src="../js/directives.js"></script>
 	<script src="../js/mongolab.js"></script>
 	<script src="../js/calendar.js"></script>
-	<script src="../js/calendardata.js"></script>
 	<script src="../js/storage.js"></script>
-	<link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+	
 	<link href="../css/jquery-ui-1.8.21.custom.css" rel="stylesheet">
 	<!--<link href="../css/angular-ui.min.css" rel="stylesheet">-->
 </head>
@@ -36,6 +36,7 @@
 				<a class="btn btn-primary pull-right" data-toggle="modal" href="#addalertdialog"><i class="icon-plus icon-white"></i> Add alert</a>
 				<a class="btn btn-primary pull-right" data-toggle="modal" href="#editelementdialog"><i class="icon-th icon-white"></i> Edit elements</a>
 				<a class="btn btn-primary pull-right" href="../public/admin.html"><i class="icon-pencil icon-white"></i> Adminview</a>
+				<a class="btn btn-primary pull-right month-click" onclick="$('#headerbutton').css('border','3px solid red'); console.log('sadasad'); $('#headerbutton').button();"><i class="icon-pencil icon-white"></i> test</a>
 	        </div>
 		</div>
     </div>
@@ -64,25 +65,20 @@
 				</div>	
 			</div>
 		
-	
-		<div class="row-fluid" style="margin-bottom: 15px">
-			<div class="span1" ng-repeat="month in [0,1,2,3,4,5,6,7,8,9,10,11]">
-				<button style="width:100%" ng-click="gotoMonth(month)" class="btn btn-mini" type="button">{{months[month]}}</button>
-			</div>
-		</div>
 
-		<div class="row-fluid">
-			<div class="span12">
-				<div id="systemTableCarousel" class="carousel slide">
-					<div class="carousel-inner">
-						<system-table></system-table>
+			<div class="row-fluid">
+				<div class="span12">
+					<div id="systemTableCarousel" class="carousel slide">
+						<div class="carousel-inner">
+							<system-table></system-table>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 		
+		</div>
+	
 	</div>
-
 
 
 <div class="modal hide fade" id="addalertdialog">
@@ -97,14 +93,13 @@
 		<div class="row-fluid">
 		
 			<div class="span6">
-				<form id="alertForm"> <!--form-horizontal">-->
+				<form id="alertForm">
 					<fieldset>
 					
 						<div class="control-group">
 							<label for="title">Title</label>
 							<input id="alertTitle" name="title" ng-model="addAlertLine.title">
 						</div>
-						
 						<div class="control-group">
 						<label for="alerttype">Alert Type</label>
 							<select id="alertType" name="alerttype" ng-model="addAlertLine.alerttype">
@@ -112,13 +107,10 @@
 								<option ng-repeat="alerttype in alerttypes">{{alerttype.type}}</option>
 							</select>
 						</div>
-						
 						<div class="control-group">
 							<label for="expdate">Expiry Date</label>
-							<!--<input type="date" ng-model="addAlertLine.expdate">-->
 							<input jq-datepicker id="alertDialogExpDate" name="alertDialogExpDate" ng-model="addAlertLine.expdate" class="input-medium">
 						</div>
-						
 						<div class="control-group">
 							<label for="comment">Comment</label>
 							<textarea id="alertComment" name="comment" input-xlarge id="comment" ng-model="addAlertLine.comment"></textarea>
@@ -128,7 +120,6 @@
 				</form>
 			</div>
 			
-			<!--TODO dynamic alertsize-->
 			<div class="span6">		
 				<p>Alert preview:</p>
 				<div class="alert alert-{{addAlertLine.alerttype}} fade in " >
@@ -160,15 +151,14 @@
 	</div>
 	
 	<div class="modal-body">
-	
-		<!--<div class="container">-->
+
 		<div class="span2">
 			<form id="elementForm"> 
 			
 			    <fieldset>
 					<div class="control-group">
 						<div class="controls">     
-					  
+					
 							<div class="control-group">
 								<label for="system">System</label>            
 								<select id="csystem" name="system" ng-model="systemFormData.system" class="input-medium">
@@ -176,15 +166,13 @@
 									<option ng-repeat="systemname in systemnames">{{systemname.name}}</option>
 								</select>
 							</div>
-							
 							<div class="control-group">
 								<label for="status">Status</label>
 								<select id="cstatus" name="status" ng-model="systemFormData.status" class="input-medium">
 									<option value=""></option>
 									<option ng-repeat="systemstatus in systemstatuses">{{systemstatus.status}}</option>
 								</select>
-							</div>
-							
+							</div>			
 							<div class="control-group">
 								<label for="startDate">Start</label> 
 								<input jq-datepicker id="elementStartDate" name="elementStartDate" ng-model="systemFormData.start" class="input-medium">
@@ -192,8 +180,7 @@
 							<div class="control-group">
 								<label for="endDate">End</label> 
 								<input jq-datepicker id="elementEndDate" name="elementEndDate" ng-model="systemFormData.end" class="input-medium">
-							</div>
-						   
+							</div>	   
 							<div class="control-group">
 								<label for="comment">Comment</label>
 								<textarea id="comment" ng-model="systemFormData.comment" class="input-medium" rows="4"></textarea>
@@ -235,6 +222,7 @@
 <script src="../js/validation.js"></script>
 <script src="../js/utils.js"></script>
 <script src="../js/initialize.js"></script>
+<link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
 
 </body>
 </html>
