@@ -118,6 +118,7 @@ angular.module('calendarModule', []).
 			return weeks;
 		};
 
+		
 		ns.getDayNamesInMonth = function(month) {
 			var dayArray = ns.buildDayNameTable(ns.dayLabels, month);
 			return dayArray;

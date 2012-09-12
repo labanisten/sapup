@@ -10,7 +10,11 @@
 					},
 					function() {
 							element.popover('hide');
-					});		
+					});	
+
+					element.click(function() {
+						element.popover('show');
+					});
 			}
 		};
 	});
@@ -28,7 +32,7 @@
 						$(this).css('background-color', 'red');
 					});
 					
-					*/
+					
 					element.parent().find().css('background-color', 'red');
 					
 					if(element.hasClass('selected')){
@@ -115,11 +119,6 @@
 						return result;
 					}
 					
-					/*<div class="row-fluid" style="margin-bottom: 15px">
-						<div class="span1" ng-repeat="month in [0,1,2,3,4,5,6,7,8,9,10,11]">
-							<button style="width:100%" ng-click="gotoMonth(month)" class="btn btn-mini" type="button">{{months[month]}}</button>
-						</div>
-					</div>*/
 
 					function buildCalendar() {
 						var template = 	'<table>'+
@@ -176,9 +175,10 @@
 																			'</td>';
 															}else{
 																var colspan = result.end - result.start + 1;
-																template += '<td colspan="'+colspan+'" ng-click="setSelectetElement(systemlines['+i+'], systemlines['+i+'].statuslines['+result.index+'])">'+
-																				 
-																				'<span class="element-inner {{systemlines['+i+'].statuslines['+result.index+'].status}} bs-popoverhover element-click"'+
+																//template += '<td colspan="'+colspan+'" ng-click="setSelectetElement(systemlines['+i+'], systemlines['+i+'].statuslines['+result.index+'])">'+
+																template += '<td ng:class="getClassForElement('+i+','+result.index+')"  colspan="'+colspan+'">'+
+																
+																				'<span class="element-inner {{systemlines['+i+'].statuslines['+result.index+'].status}} bs-popoverhover element-click" ng:class="getClassForElement('+i+','+result.index+')" ng-click="selectElement($event, '+i+','+result.index+')"'+
 																					  'status="{{systemlines['+i+'].statuslines['+result.index+'].status}}"'+
 																					  'rel="popover"'+ 
 																					  'data-content="Status: {{systemlines['+i+'].statuslines['+result.index+'].status}} </br> Comment: {{systemlines['+i+'].statuslines['+result.index+'].comment}}"'+ 

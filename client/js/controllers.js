@@ -155,13 +155,15 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 	$scope.alerttypes = getAlertTypes();
 
 	$scope.selectedElement = {
-		_id:"",
+		_id: "",
 		system: "",
 		status: "",
 		start: undefined,
 		end: undefined,
 		comment: "",
-		statusLineRef:""
+		sysIndex: -1,
+		elmIndex: -1
+		//hasValue: false
 	};
 	
 	
@@ -182,7 +184,6 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 		comment: ""
 	};
 	
-	
 	$scope.monthDayList = Calendar.getMonthDayList();
 	$scope.monthWeekList = Calendar.getMonthWeekList();
 	$scope.monthName = Calendar.getMonthName();
@@ -200,10 +201,32 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 	$scope.selectedMonth = Calendar.getCurrentMonth();
 	$scope.selectedMonthLabel = Calendar.getMonthName($scope.selectedMonth);
 
-	$scope.setSelectedMonth = function(month) {
-		$scope.selectedMonth = month;
+	$scope.getClassForElement = function(sysIndex, elmIndex) {
+		var result = "";
+		if (sysIndex == $scope.selectedElement.sysIndex && elmIndex == $scope.selectedElement.elmIndex) {result = "selected";};
+		return result;
+	}	
+	
+	function isAlreadySelected(sysIndex, elmIndex) {
+		var result = false;
+		if($scope.selectedElement.sysIndex == sysIndex && $scope.selectedElement.elmIndex == elmIndex) {result = true;}
+		return result;
+	}
+	
+	$scope.selectElement = function(event, sysIndex, elmIndex) {
+		if(isAlreadySelected(sysIndex, elmIndex)) {
+			$scope.selectedElement.elmIndex = -1;
+			$scope.selectedElement.sysIndex = -1;
+			clearSelectedElement();
+			clearSystemFormData();	
+		}else{	
+			$scope.selectedElement.elmIndex = elmIndex;
+			$scope.selectedElement.sysIndex = sysIndex;
+			setSelectedElement(sysIndex, elmIndex);
+			setSystemFormData(sysIndex, elmIndex);
+		}
 	};
-
+	
 	$scope.getClassForMonth = function(month) {
 		if (month == $scope.selectedMonth) {
 			return "span1 month selectedmonth";
@@ -211,16 +234,14 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 			return "span1 month";
 		};
 	}
-
+	
 	$scope.gotoMonth = function(event, month) {
 		//$scope.selectedYear = Calend ar.getCurrentYear();
-		console.log("go!!");
 		$scope.selectedMonth = month;
 
 		var elem = angular.element(event.srcElement);
 		//elem.addClass("selectedmonth");
-		elem[0].className += " selectedmonth";
-		
+		elem[0].className += " selectedmonth";	
 	};
 
 	function getSystemData() {
@@ -241,8 +262,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 	
 	
 	function getSystemNames(){
-		var systemNames = Systems.systemnames.query(function() {
-		});
+		var systemNames = Systems.systemnames.query(function(){});
 		return systemNames;
 	}
 
@@ -287,7 +307,6 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 	$scope.removeAlert = function(id) {
 		Systems.alerts.delete({id: id.$oid}, function(){});
 	};
-
 
 	$scope.removeStatusElement = function(id) {
 		if($("#elementForm").valid()){
@@ -347,11 +366,8 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 				}else{
 					//addLineToElementModalLog("Error!!!!!");
 				}
-						
 			});
-		
 		}
-			
 	};
 	
 		
@@ -388,63 +404,50 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 						
 					}else{
 						//addLineToElementModalLog("Error!!!!!");
-					}
-					
+					}			
 			});
-		
 		}
 	};
 	
+	function setSelectedElement(sysIndex, elmIndex) {
+		var sys = $scope.systemlines[sysIndex];
+		var elm = $scope.systemlines[sysIndex].statuslines[elmIndex];
+		$scope.selectedElement._id = sys.id;
+		$scope.selectedElement.system = sys.system;
+		$scope.selectedElement.status = elm.status;
+		$scope.selectedElement.start = convertToDate(elm.start);
+		$scope.selectedElement.end = convertToDate(elm.end);
+		//$scope.systemFormData.comment = statusLine.comment;			
+	}
+
+	function setSystemFormData(sysIndex, elmIndex) {
+		var sys = $scope.systemlines[sysIndex];
+		var elm = $scope.systemlines[sysIndex].statuslines[elmIndex];
+		$scope.systemFormData._id = sys.id;
+		$scope.systemFormData.system = sys.system;
+		$scope.systemFormData.status = elm.status;
+		//$scope.systemFormData.start = dateObjectToViewDate(statusLine.start);
+		//$scope.systemFormData.end = dateObjectToViewDate(statusLine.end);
+		$scope.systemFormData.start = dbDateToViewDate(elm.start);
+		$scope.systemFormData.end = dbDateToViewDate(elm.end);
+		$scope.systemFormData.comment = "";
+	}
 	
-	/*
-	$scope.setSelectetElement = function(systemLine, statusLine) {
-
-		if(true){
-
-
-			$scope.systemFormData._id = systemLine._id;
-			$scope.systemFormData.system = systemLine.system;
-			$scope.systemFormData.status = statusLine.status;
-			//$scope.systemFormData.start = dateObjectToViewDate(statusLine.start);
-			//$scope.systemFormData.end = dateObjectToViewDate(statusLine.end);
-			$scope.systemFormData.start = dbDateToViewDate(statusLine.start);
-			$scope.systemFormData.end = dbDateToViewDate(statusLine.end);
-			$scope.systemFormData.comment = "";
-			
-			$scope.selectedElement._id = systemLine._id;
-			$scope.selectedElement.system = systemLine.system;
-			$scope.selectedElement.status = statusLine.status;
-			$scope.selectedElement.start = convertToDate(statusLine.start);
-			$scope.selectedElement.end = convertToDate(statusLine.end);
-			//$scope.systemFormData.comment = statusLine.comment;			
-			$scope.selectedElement.statusLineRef = statusLine;
-			
-			statusLine.viewcolor = 'selected';
-		}
-		else
-		{
-			statusLine.viewcolor = statusLine.status;
-			
-			if($scope.selectedElement.statusLineRef != ""){
-				$scope.selectedElement.statusLineRef.viewcolor = $scope.selectedElement.statusLineRef.status;
-			}
-			
-			$scope.systemFormData.system = "";
-			$scope.systemFormData.status = "";
-			$scope.systemFormData.start = "";
-			$scope.systemFormData.end = "";
-			$scope.systemFormData.comment = "";
-			
-			
-			$scope.selectedElement._id = "";
-			$scope.selectedElement.system = "";
-			$scope.selectedElement.status = "";
-			$scope.selectedElement.start = "";
-			$scope.selectedElement.end = "";
-			$scope.selectedElement.comment = "";
-
-		}	
-	};
-	*/
+	function clearSelectedElement() {
+		$scope.selectedElement._id = "";
+		$scope.selectedElement.system = "";
+		$scope.selectedElement.status = "";
+		$scope.selectedElement.start = "";
+		$scope.selectedElement.end = "";
+		$scope.selectedElement.comment = "";
+	}
+	
+	function clearSystemFormData() {
+		$scope.systemFormData.system = "";
+		$scope.systemFormData.status = "";
+		$scope.systemFormData.start = "";
+		$scope.systemFormData.end = "";
+		$scope.systemFormData.comment = "";
+	}
 	
 });
