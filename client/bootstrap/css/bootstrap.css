@@ -719,8 +719,9 @@ accordion-heading{background-color:#eeeeee;}
 .alert-container-header{border:none;background-color:#dfdfdf;background-image:-moz-linear-gradient(top, #d5d5d5, #eeeeee);background-image:-ms-linear-gradient(top, #d5d5d5, #eeeeee);background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#d5d5d5), to(#eeeeee));background-image:-webkit-linear-gradient(top, #d5d5d5, #eeeeee);background-image:-o-linear-gradient(top, #d5d5d5, #eeeeee);background-image:linear-gradient(top, #d5d5d5, #eeeeee);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#d5d5d5', endColorstr='#eeeeee', GradientType=0);font-size:1.6em;text-align:center;}
 .alert-container-body{background-color:#eeeeee;}
 .firstcol{min-width:50px;background-color:#8cb1da;text-align:center;}
-.month{height:40px;font-size:1.6em;pointer-events:auto;line-height:50px;}
-.selected{color:red;font-size:2em;}
+.months{height:40px;font-size:1.6em;line-height:50px;cursor:pointer;pointer-events:auto;color:#345970;}
+.month:hover:not(.selectedmonth){color:#3a1558;font-size:2em;-webkit-transition-property:font-size;-webkit-transition-duration:0.2s;}
+.selectedmonth{color:#cd007a;font-size:2em;}
 .week{background-color:#eeeeee;}
 .system{background-color:#eeeeee;font-weight:800;text-align:center;}
 table{width:100%;font:100% "Lucida Grande","Trebuchet MS",Verdana,sans-serif;border-collapse:collapse;}

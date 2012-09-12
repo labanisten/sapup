@@ -67,11 +67,10 @@
 	myModule.directive('monthClick', function(){
 		return {
 			restrict: 'C',
-			
 			link: function(scope, element, attrs) {
 				element.click(function () {
 					console.log("month");
-					element.addClass("selected");
+					element.addClass("selectedmonth");
 				});
 			}
 		};
@@ -83,11 +82,8 @@
 	myModule.directive('systemTable', function($compile){
 		return {
 				restrict: 'E',
-				
 				//replace: true,
 				//transclude: true,	
-				//scope: true,
-
 				link: function(scope, element, attrs) {
 				
 					scope.$watch('systemlines', function() {
@@ -127,13 +123,13 @@
 
 					function buildCalendar() {
 						var template = 	'<table>'+
-					
 											'<thead>'+
 												'<tr>'+
 													//'<th class="month" colspan="{{noOfDaysInMonth['+scope.selectedMonth+'] + 1}}">{{monthName['+scope.selectedMonth+']}}</th>'+
-														'<th class="month" colspan="{{noOfDaysInMonth['+scope.selectedMonth+'] + 1}}">'+
-															'<div class="span1" ng-repeat="month in [0,1,2,3,4,5,6,7,8,9,10,11]">'+
-																'<a class="month-click" style="width:100%" ng-click="gotoMonth(month)">{{months[month]}}</a>'+
+													'<th class="months" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
+														'<div ng:class="getClassForMonth(month)" ng-click="gotoMonth($event, month)" ng-repeat="month in [0,1,2,3,4,5,6,7,8,9,10,11]">'+
+															// '<span class="month-click" style="width:100%" ng-click="gotoMonth(month)">{{months[month]}}</span>'+
+															'{{months[month]}}' +
 															'</div>'+
 														'</th>'+
 												'</tr>'+
