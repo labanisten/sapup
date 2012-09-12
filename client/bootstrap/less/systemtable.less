@@ -77,15 +77,24 @@ accordion-heading{
   text-align: center;
 }
 
-.month {
+.months {
   height: 40px;
   font-size: 1.6em;
-  pointer-events: auto;
   line-height:50px;
+  cursor: pointer;
+  pointer-events: auto;
+  color: #345970;
 }
 
-.selected { 
-	color:red; 
+.month:hover:not(.selectedmonth)  {
+  color:#3a1558;
+  font-size:2em;
+  -webkit-transition-property: font-size;
+  -webkit-transition-duration: 0.2s;
+}
+
+.selectedmonth { 
+	color:#cd007a; 
 	font-size:2em;
 }
 

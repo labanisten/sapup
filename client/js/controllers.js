@@ -48,7 +48,6 @@ myModule.controller("adminViewCtrl", function($scope, Systems) {
 		return alertLog;
 	}
 	
-		
 	$scope.saveSystemName = function() {
 
 		if ($scope.systemNameInput != "")
@@ -204,10 +203,23 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 		$scope.selectedMonth = month;
 	};
 
-	$scope.gotoMonth = function(month) {
-		//$scope.selectedYear = Calendar.getCurrentYear();
+	$scope.getClassForMonth = function(month) {
+		if (month == $scope.selectedMonth) {
+			return "span1 month selectedmonth";
+		} else {
+			return "span1 month";
+		};
+	}
+
+	$scope.gotoMonth = function(event, month) {
+		//$scope.selectedYear = Calend ar.getCurrentYear();
 		console.log("go!!");
 		$scope.selectedMonth = month;
+
+		var elem = angular.element(event.srcElement);
+		//elem.addClass("selectedmonth");
+		elem[0].className += " selectedmonth";
+		
 	};
 
 	function getSystemData() {
