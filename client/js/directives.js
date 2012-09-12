@@ -22,13 +22,6 @@
 			
 			link: function(scope, element, attrs) {
 				element.click(function () {
-					/*
-					element.parent().parent().children().each(function(){
-						//$(this).removeClass("selected");
-						$(this).css('background-color', 'red');
-					});
-					
-					*/
 					element.parent().find().css('background-color', 'red');
 					
 					if(element.hasClass('selected')){
@@ -38,25 +31,6 @@
 					}
 					
 					var systemLine = attrs
-
-					/*
-					var systemLine;
-					var statusLine;
-					
-					scope.systemFormData._id = systemLine._id;
-					scope.systemFormData.system = systemLine.system;
-					scope.systemFormData.status = statusLine.status;
-					scope.systemFormData.start = dbDateToViewDate(statusLine.start);
-					scope.systemFormData.end = dbDateToViewDate(statusLine.end);
-					scope.systemFormData.comment = "";
-					
-					scope.selectedElement._id = systemLine._id;
-					scope.selectedElement.system = systemLine.system;
-					scope.selectedElement.status = statusLine.status;
-					scope.selectedElement.start = convertToDate(statusLine.start);
-					scope.selectedElement.end = convertToDate(statusLine.end);		
-					scope.selectedElement.statusLineRef = statusLine;
-					*/
 				});
 			
 			}
@@ -115,20 +89,13 @@
 						return result;
 					}
 					
-					/*<div class="row-fluid" style="margin-bottom: 15px">
-						<div class="span1" ng-repeat="month in [0,1,2,3,4,5,6,7,8,9,10,11]">
-							<button style="width:100%" ng-click="gotoMonth(month)" class="btn btn-mini" type="button">{{months[month]}}</button>
-						</div>
-					</div>*/
 
 					function buildCalendar() {
 						var template = 	'<table>'+
 											'<thead>'+
 												'<tr>'+
-													//'<th class="month" colspan="{{noOfDaysInMonth['+scope.selectedMonth+'] + 1}}">{{monthName['+scope.selectedMonth+']}}</th>'+
 													'<th class="months" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
 														'<div ng:class="getClassForMonth(month)" ng-click="gotoMonth($event, month)" ng-repeat="month in [0,1,2,3,4,5,6,7,8,9,10,11]">'+
-															// '<span class="month-click" style="width:100%" ng-click="gotoMonth(month)">{{months[month]}}</span>'+
 															'{{months[month]}}' +
 															'</div>'+
 														'</th>'+

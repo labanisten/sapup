@@ -41,30 +41,11 @@ angular.module('calendarModule', ['utilsModule']).
 			return ns.monthLabels;
 		};
 	
-		/*
-		ns.getNoOfDaysInMonth = function(month) {
-			return ns.daysInMonth[month];
-		}
-		*/
-
 		ns.getNoOfDaysInMonth = function() {
 			return ns.daysInMonth;
 		}
 
-		/*
-		ns.getMonthDayList = function(month) {
-			var days = ns.daysInMonth[month];
-
-			var dayArray = [];
-
-			for (i = 0; i < days; i++) {
-				dayArray.push(i + 1);
-			}
-
-			return dayArray;
-		};
-		*/
-		
+	
 		ns.getMonthDayList = function() {
 			
 			var daysInMonths = [];

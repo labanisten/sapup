@@ -213,12 +213,8 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 	}
 
 	$scope.gotoMonth = function(event, month) {
-		//$scope.selectedYear = Calend ar.getCurrentYear();
-		console.log("go!!");
 		$scope.selectedMonth = month;
-
 		var elem = angular.element(event.srcElement);
-		//elem.addClass("selectedmonth");
 		elem[0].className += " selectedmonth";
 		
 	};
@@ -394,57 +390,5 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 		
 		}
 	};
-	
-	
-	/*
-	$scope.setSelectetElement = function(systemLine, statusLine) {
 
-		if(true){
-
-
-			$scope.systemFormData._id = systemLine._id;
-			$scope.systemFormData.system = systemLine.system;
-			$scope.systemFormData.status = statusLine.status;
-			//$scope.systemFormData.start = dateObjectToViewDate(statusLine.start);
-			//$scope.systemFormData.end = dateObjectToViewDate(statusLine.end);
-			$scope.systemFormData.start = dbDateToViewDate(statusLine.start);
-			$scope.systemFormData.end = dbDateToViewDate(statusLine.end);
-			$scope.systemFormData.comment = "";
-			
-			$scope.selectedElement._id = systemLine._id;
-			$scope.selectedElement.system = systemLine.system;
-			$scope.selectedElement.status = statusLine.status;
-			$scope.selectedElement.start = convertToDate(statusLine.start);
-			$scope.selectedElement.end = convertToDate(statusLine.end);
-			//$scope.systemFormData.comment = statusLine.comment;			
-			$scope.selectedElement.statusLineRef = statusLine;
-			
-			statusLine.viewcolor = 'selected';
-		}
-		else
-		{
-			statusLine.viewcolor = statusLine.status;
-			
-			if($scope.selectedElement.statusLineRef != ""){
-				$scope.selectedElement.statusLineRef.viewcolor = $scope.selectedElement.statusLineRef.status;
-			}
-			
-			$scope.systemFormData.system = "";
-			$scope.systemFormData.status = "";
-			$scope.systemFormData.start = "";
-			$scope.systemFormData.end = "";
-			$scope.systemFormData.comment = "";
-			
-			
-			$scope.selectedElement._id = "";
-			$scope.selectedElement.system = "";
-			$scope.selectedElement.status = "";
-			$scope.selectedElement.start = "";
-			$scope.selectedElement.end = "";
-			$scope.selectedElement.comment = "";
-
-		}	
-	};
-	*/
-	
 });
