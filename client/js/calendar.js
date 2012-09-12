@@ -1,5 +1,5 @@
 
-angular.module('calendarModule', []).
+angular.module('calendarModule', ['utilsModule']).
 	factory('Calendar', function() {
 
 	var calendar = calendar || {};
@@ -81,7 +81,7 @@ angular.module('calendarModule', []).
 		};
 		
 
-		ns.getWeek = function getWeek(date) {
+		ns.getWeek = function(date) {
 			var onejan = new Date(date.getFullYear(), 0, 1);
 			return Math.ceil((((date - onejan) / 86400000) + onejan.getDay() + 1) / 7);
 		};

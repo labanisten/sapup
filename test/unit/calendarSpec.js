@@ -7,8 +7,8 @@ describe('In the calendar module', function() {
       calendar;
 
   beforeEach(module('systemAvailability'));
-  beforeEach(module('calendarDataModule'));
   beforeEach(module('calendarModule'));
+  beforeEach(module('utilsModule'));
 
 
   beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
@@ -45,11 +45,11 @@ describe('In the calendar module', function() {
   describe('get month name', function(){
     it('should return the value January', function() {
       var d = new Date();             
-      expect(ctrl.Calendar.getMonthName(0)).toBe('January');
+      expect(ctrl.Calendar.getMonthName()[0]).toBe('January');
     });  
     it('should return the value December', function() {
       var d = new Date();             
-      expect(ctrl.Calendar.getMonthName(11)).toBe('December');
+      expect(ctrl.Calendar.getMonthName()[11]).toBe('December');
     });  
   });
 

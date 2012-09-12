@@ -1,6 +1,6 @@
-var myModule = angular.module('systemAvailability', ['mongolabModule', 'calendarModule']);
+var myModule = angular.module('systemAvailability', ['mongolabModule', 'calendarModule', 'utilsModule']);
 
-myModule.controller("adminViewCtrl", function($scope, Systems) {
+myModule.controller("adminViewCtrl", function($scope, Systems, Utils) {
 	
 	$scope.systemnames = getSystemNames();
 	$scope.systemstatuses = getSystemStatuses();
@@ -143,7 +143,7 @@ myModule.controller("adminViewCtrl", function($scope, Systems) {
 });
 
 
-myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
+myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 
 	this.Calendar = Calendar;
 	this.Systems = Systems;
@@ -227,7 +227,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 		var calendartable = [];
 		var syslines = Systems.systems.query(function() {
 			calendartable = syslines;
-			calendartable.sort(ascSystemSort);
+			calendartable.sort(Utils.ascSystemSort);
 			$scope.systemlines = calendartable;
 		});
 		return calendartable;
@@ -249,7 +249,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 
 	function getAlertData() {
 		var alerts = [];
-		var currentDate = getDateString(new Date());
+		var currentDate = Utils.getDateString(new Date());
 
 		var alertLines = Systems.alerts.query(function() {
 		

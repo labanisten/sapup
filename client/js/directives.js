@@ -79,7 +79,7 @@
 	
 
 
-	myModule.directive('systemTable', function($compile){
+	myModule.directive('systemTable', function($compile, Utils){
 		return {
 				restrict: 'E',
 				//replace: true,
@@ -99,8 +99,8 @@
 						day = day + 1;
 						
 						$.each(statuslines, function(i, v_line) {
-							var start = convertToDate(v_line.start);
-							var end = convertToDate(v_line.end);
+							var start = Utils.convertToDate(v_line.start);
+							var end = Utils.convertToDate(v_line.end);
 							
 							var sm = start.getMonth();
 							var sel = scope.selectedMonth;

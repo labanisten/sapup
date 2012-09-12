@@ -1,6 +1,12 @@
+
+angular.module('utilsModule', []).
+	factory('Utils', function() {	
 	
+	var utils = utils || {};
+
+	(function(ns) {
 	
-	function convertToDate(dateString) {
+	 ns.convertToDate = function(dateString) {
 		var datestring = dateString,
 			y = datestring.substr(0, 4),
 			m = datestring.substr(4, 2),
@@ -10,10 +16,10 @@
 		date = new Date(y, m, d);
 
 		return date;
-	}
+	};
 	
 	
-	function dbDateToViewDate(dateString) {
+	ns.dbDateToViewDate = function(dateString) {
 		var datestring = dateString,
 			y = datestring.substr(0, 4),
 			m = datestring.substr(4, 2),
@@ -22,21 +28,21 @@
 		var date = d + '.' + m + '.' + y;
 
 		return date;
-	}
+	};
 	
 	
-	function clearModalLog()
+	ns.clearModalLog = function()
 	{
 		$("#elementModalLog ul").empty();	
-	}
+	};
 	
-	function addLineToElementModalLog(text)
+	ns.addLineToElementModalLog = function(text)
 	{
 		$("#elementModalLog ul").append("<li>"+text+".</li>");	
-	}
+	};
 	
 	
-	function dateObjectToViewDate(date)
+	ns.dateObjectToViewDate = function(date)
 	{
 		var y = new String(date.getFullYear());
 		m = padZeroFront(date.getMonth() + 1);
@@ -46,10 +52,10 @@
 		
 		return date;
 		
-	}
+	};
 
 
-	function viewDateToDBdate(dateString) {
+	ns.viewDateToDBdate = function(dateString) {
 		var datestring = dateString,
 			d = datestring.substr(0, 2),
 			m = datestring.substr(3, 2),
@@ -57,9 +63,9 @@
 			date = y + m + d;
 
 		return date;
-	}
+	};
 	
-	function viewDateToDateObject(dateString)
+	ns.viewDateToDateObject = function(dateString)
 	{
 		var datestring = dateString,
 		d = datestring.substr(0, 2),
@@ -67,10 +73,10 @@
 		y = datestring.substr(6, 4);
 		
 		return new Date(y, m - 1, d);
-	}
+	};
 	
 	
-	function padZeroFront(str)
+	ns.padZeroFront = function(str)
 	{
 		
 		if(str < 10)
@@ -78,30 +84,30 @@
 		
 		return str;
 		
-	}
+	};
 	
 	
-	function getDateString(date)
+	ns.getDateString = function(date)
 	{
 		var dateString = new String(date.getFullYear());
-		dateString = dateString.concat(padZeroFront(date.getMonth() + 1));
-		dateString = dateString.concat(padZeroFront(date.getDate()));
+		dateString = dateString.concat(ns.padZeroFront(date.getMonth() + 1));
+		dateString = dateString.concat(ns.padZeroFront(date.getDate()));
 		return dateString;
 		
-	}
+	};
 	
 	
-	function dateFromString(dateString) {
+	ns.dateFromString = function(dateString) {
 		return new Date( dateString.substr(0, 4), dateString.substr(4, 2) - 1, dateString.substr(6,2) );
-	}
+	};
 
 	
-	function sameDay(date1, date2) {
+	ns.sameDay = function(date1, date2) {
 		return date1.getFullYear() == date2.getFullYear() && date1.getMonth() == date2.getMonth() && date1.getDate() == date2.getDate();
-	}
+	};
 	
 	
-	function resetDateTime(date)
+	ns.resetDateTime = function (date)
 	{
 		
 		date.setHours(0);
@@ -111,10 +117,10 @@
 		
 		return date;
 		
-	}
+	};
 	
 	
-	function resetNewAlertForm() {
+	ns.resetNewAlertForm = function() {
 	
 		var validator = $("#alertForm").validate();
         validator.resetForm();
@@ -137,10 +143,10 @@
 		
 		$("#expireMessage").text("");
 	
-	}
+	};
 	
 	
-	function isNewElementSingleDay(date){
+	ns.isNewElementSingleDay = function(date){
 		var result = false;
 		var startDate = viewDateToDateObject(date.start);
 		var endDate = viewDateToDateObject(date.end);
@@ -149,33 +155,34 @@
 			result = true;
 		}
 		return result;
-	}
+	};
 	
 	
-	function numberOfDaysBetweenDates(fromDate, toDate) {
+	ns.numberOfDaysBetweenDates = function(fromDate, toDate) {
 		var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
 		return Math.floor((fromDate.getTime() - toDate.getTime())/(oneDay)) ;
-	}
+	};
 	
 	
-	function custom_sort(a, b) {
+	ns.custom_sort = function(a, b) {
 		//return new Date(a.start).getTime() - new Date(b.start).getTime();
 		return a.start.getTime() - b.start.getTime();
-	}
+	};
 	
 	
-	function ascSystemSort(a, b){
+	ns.ascSystemSort = function(a, b){
 		var aSystem = a.system;
 		var bSystem = b.system;
 		return (aSystem < bSystem) ? -1 : (aSystem > bSystem) ? 1 : 0;
-	}	
+	};	
 
 	
-	function rangeWithinMonthYear(fromDate, toDate, month, year) {
+	ns.rangeWithinMonthYear = function(fromDate, toDate, month, year) {
 		return ( dateFromString(fromDate).getMonth() == month && dateFromString(fromDate).getYear() == year ) || ( dateFromString(toDate).getMonth() == month && dateFromString(toDate).getYear() == year );
-	}
+	};
 	
-	
-	
-	
-	
+	})(utils);
+
+	return utils; 
+
+});
