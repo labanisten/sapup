@@ -14,16 +14,51 @@
 			}
 		};
 	});
-
-
+	
+	
 	myModule.directive('elementClick', function(){
 		return {
 			restrict: 'C',
 			
 			link: function(scope, element, attrs) {
 				element.click(function () {
-					element.addClass("selected");
+					/*
+					element.parent().parent().children().each(function(){
+						//$(this).removeClass("selected");
+						$(this).css('background-color', 'red');
+					});
+					
+					*/
+					element.parent().find().css('background-color', 'red');
+					
+					if(element.hasClass('selected')){
+						element.removeClass("selected");
+					}else{
+						element.addClass("selected");
+					}
+					
+					var systemLine = attrs
+
+					/*
+					var systemLine;
+					var statusLine;
+					
+					scope.systemFormData._id = systemLine._id;
+					scope.systemFormData.system = systemLine.system;
+					scope.systemFormData.status = statusLine.status;
+					scope.systemFormData.start = dbDateToViewDate(statusLine.start);
+					scope.systemFormData.end = dbDateToViewDate(statusLine.end);
+					scope.systemFormData.comment = "";
+					
+					scope.selectedElement._id = systemLine._id;
+					scope.selectedElement.system = systemLine.system;
+					scope.selectedElement.status = statusLine.status;
+					scope.selectedElement.start = convertToDate(statusLine.start);
+					scope.selectedElement.end = convertToDate(statusLine.end);		
+					scope.selectedElement.statusLineRef = statusLine;
+					*/
 				});
+			
 			}
 		};
 	});
@@ -47,8 +82,8 @@
 	myModule.directive('systemTable', function($compile){
 		return {
 				restrict: 'E',
-				replace: true,
-				transclude: true,	
+				//replace: true,
+				//transclude: true,	
 				link: function(scope, element, attrs) {
 				
 					scope.$watch('systemlines', function() {
@@ -88,76 +123,84 @@
 
 					function buildCalendar() {
 						var template = 	'<table>'+
-										'<thead>'+
-											'<tr>'+
-												//'<th class="month" colspan="{{noOfDaysInMonth['+scope.selectedMonth+'] + 1}}">{{monthName['+scope.selectedMonth+']}}</th>'+
+											'<thead>'+
+												'<tr>'+
+													//'<th class="month" colspan="{{noOfDaysInMonth['+scope.selectedMonth+'] + 1}}">{{monthName['+scope.selectedMonth+']}}</th>'+
 													'<th class="months" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
 														'<div ng:class="getClassForMonth(month)" ng-click="gotoMonth($event, month)" ng-repeat="month in [0,1,2,3,4,5,6,7,8,9,10,11]">'+
 															// '<span class="month-click" style="width:100%" ng-click="gotoMonth(month)">{{months[month]}}</span>'+
 															'{{months[month]}}' +
-														'</div>'+
-													'</th>'+
-											'</tr>'+
-											'<tr>'+
-												'<th class="firstcol week" rowspan="3"></th>'+
-												'<th class="week" ng-repeat="week in monthWeekList[' + scope.selectedMonth + ']" colspan="{{week.colSpan}}">{{week.week}}</th>'+
-											'</tr>'+
-											'<tr>'+
-												'<th ng-repeat="dayName in dayNamesInMonth(' + scope.selectedMonth + ')">{{dayName}}</th>'+
-											'</tr>'+
-											'<tr>'+
-												'<th ng-repeat="day in monthDayList[' + scope.selectedMonth + ']">{{day}}</th>'+
-											'</tr>'+
-										'</thead>'+
-									  '<tbody>';
+															'</div>'+
+														'</th>'+
+												'</tr>'+
+												'<tr>'+
+													'<th class="firstcol week" rowspan="4"></th>'+
+													'<th class="week" ng-repeat="week in monthWeekList['+scope.selectedMonth+']" colspan="{{week.colSpan}}">{{week.week}}</th>'+
+												'</tr>'+
+												
+												'<tr class="dayNames">'+
+													'<th ng-repeat="dayName in dayNamesInMonth('+scope.selectedMonth+')">{{dayName}}</th>'+
+												'</tr>'+
+												
+												'<tr class="shortDayNames">'+
+													'<th ng-repeat="shortDayName in shortDayNamesInMonth('+scope.selectedMonth+')">{{shortDayName}}</th>'+
+												'</tr>'+
+												
+												'<tr>'+
+													'<th ng-repeat="day in monthDayList['+scope.selectedMonth+']">{{day}}</th>'+
+												'</tr>'+
+												
+											'</thead>'+
+											'<tbody>';
 
-											console.log("systemlines: " + scope.systemlines.length);
-											
-											for(var i = 0; i < scope.systemlines.length; i++){
+												console.log("systemlines: " + scope.systemlines.length);
+												
+												for(var i = 0; i < scope.systemlines.length; i++){
 
-												template += '<tr>'+ 
-																'<td class="system">'+
-																	'<span class="badge badge-info">{{systemlines['+i+'].system}}</span>'+
-																'</td>';
+													template += '<tr>'+ 
+																	'<td class="system">'+
+																		'<span class="badge badge-info">{{systemlines['+i+'].system}}</span>'+
+																	'</td>';
+																
+													for(var day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
+														
+															var result = findMatchingElement(day, scope.systemlines[i].statuslines);
 															
-												for(var day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
-													
-														var result = findMatchingElement(day, scope.systemlines[i].statuslines);
+															if(result == "") {
+															
+																template += '<td>'+
+																				 
+																				'<span class="element-inner available"'+
+																				'</span>'+	
+																				
+																			'</td>';
+															}else{
+																var colspan = result.end - result.start + 1;
+																template += '<td colspan="'+colspan+'" ng-click="setSelectetElement(systemlines['+i+'], systemlines['+i+'].statuslines['+result.index+'])">'+
+																				 
+																				'<span class="element-inner {{systemlines['+i+'].statuslines['+result.index+'].status}} bs-popoverhover element-click"'+
+																					  'status="{{systemlines['+i+'].statuslines['+result.index+'].status}}"'+
+																					  'rel="popover"'+ 
+																					  'data-content="Status: {{systemlines['+i+'].statuslines['+result.index+'].status}} </br> Comment: {{systemlines['+i+'].statuslines['+result.index+'].comment}}"'+ 
+																					  'data-original-title="{{systemlines['+i+'].system}}"'+
+																					  'data-placement="bottom"'+ 
+																					  'data-trigger="manual"'+ 
+																					  'system="'+i+'"'+
+																					  'emlindex="'+result.index+'"'+
+																				'</span>'+	
+																				
+																			'</td>';
+																day = day + colspan - 1;
+															}															
 														
-														if(result == "") {
-														
-															template += '<td>'+
-																			 
-																			'<span class="element-inner available"'+
-																			'</span>'+	
-																			
-																		'</td>';
-														}else{
-															var colspan = result.end - result.start + 1;
-															template += '<td colspan="'+colspan+'" ng-click="setSelectetElement(systemlines['+i+'], systemlines['+i+'].statuslines['+result.index+'])">'+
-																			 
-																			'<span class="element-inner {{systemlines['+i+'].statuslines['+result.index+'].status}} bs-popoverhover element-click"'+
-																				  'status="{{systemlines['+i+'].statuslines['+result.index+'].status}}"'+
-																				  'rel="popover"'+ 
-																				  'data-content="Status: {{systemlines['+i+'].statuslines['+result.index+'].status}} </br> Comment: {{systemlines['+i+'].statuslines['+result.index+'].comment}}"'+ 
-																				  'data-original-title="{{systemlines['+i+'].system}}"'+
-																				  'data-placement="bottom"'+ 
-																				  'data-trigger="manual"'+ 
-																				  'data:delay="300">'+
-																			'</span>'+	
-																			
-																		'</td>';
-															day = day + colspan - 1;
-														}															
+													}
 													
+													template += '</tr>';
 												}
 												
-												template += '</tr>';
-											}
-											
-										template += '</tr>'+							
-									  '</tbody>'+
-									  '<table>';
+												template += '</tr>'+							
+										    '</tbody>'+
+									  '</table>';
 									  
 						element.html(template);				
 						$compile(element.contents())(scope);
