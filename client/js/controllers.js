@@ -193,6 +193,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 	
 	$scope.noOfDaysInMonth =  Calendar.getNoOfDaysInMonth();
 	$scope.dayNamesInMonth = Calendar.getDayNamesInMonth;
+	$scope.shortDayNamesInMonth = Calendar.getShortDayNamesInMonth;
 	$scope.months = Calendar.monthLabelsShort;
 	$scope.monthLabels = Calendar.monthLabels;
 	
@@ -383,14 +384,12 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 	};
 	
 	
+	/*
 	$scope.setSelectetElement = function(systemLine, statusLine) {
 
-		if(statusLine.viewcolor != "available" && statusLine.viewcolor != "selected"){
+		if(true){
 
-			if($scope.selectedElement.statusLineRef != ""){
-				$scope.selectedElement.statusLineRef.viewcolor = $scope.selectedElement.statusLineRef.status;
-			}
-				
+
 			$scope.systemFormData._id = systemLine._id;
 			$scope.systemFormData.system = systemLine.system;
 			$scope.systemFormData.status = statusLine.status;
@@ -434,6 +433,6 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 
 		}	
 	};
-	
+	*/
 	
 });

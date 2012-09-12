@@ -119,6 +119,18 @@ angular.module('calendarModule', []).
 		};
 
 		ns.getDayNamesInMonth = function(month) {
+			var dayArray = ns.buildDayNameTable(ns.dayLabels, month);
+			return dayArray;
+		};
+		
+		
+		ns.getShortDayNamesInMonth = function(month) {
+			var dayArray = ns.buildDayNameTable(ns.dayLabelsShort, month);
+			return dayArray;
+		};
+		
+		
+		ns.buildDayNameTable = function(lableTable, month) {
 			var dayCount = ns.daysInMonth[month];
 
 			var dayArray = [];
@@ -129,7 +141,7 @@ angular.module('calendarModule', []).
 			var day_it = firstDayInMonth.getDay();
 			for (i = 0; i < dayCount; i++) {
 
-				dayArray.push(ns.dayLabels[day_it]);
+				dayArray.push(lableTable[day_it]);
 				day_it++;
 
 				if (day_it > 6) {
@@ -139,6 +151,8 @@ angular.module('calendarModule', []).
 
 			return dayArray;
 		};
+		
+		
 
 		ns.numberOfDaysBetweenDates = function(fromDate, toDate) {
 			var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds

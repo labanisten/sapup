@@ -117,13 +117,31 @@ td {
   border: 1px solid #E0E0E0;
   background-color: @grayLighter;
   padding: 2px;
-  min-width: 20px;
+  min-width: 5px;
 }
 
 
 .freeze:hover {
  color:red;
 }
+
+
+.shortDayNames{
+	display:none;
+}
+
+
+@media (max-width: 950px) {
+	.dayNames{
+		display:none;
+	}
+	
+	thead .shortDayNames{
+		display: table-row;
+	}
+	
+}
+
 
 
 
