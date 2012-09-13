@@ -8978,8 +8978,6 @@ function createHttpBackend($browser, XHR, $browserDefer, callbacks, rawDocument,
       });
     } else {
       var xhr = new XHR();
-      // var xhr = new XDomainRequest();
-
       xhr.open(method, url, true);
       forEach(headers, function(value, key) {
         if (value) xhr.setRequestHeader(key, value);
