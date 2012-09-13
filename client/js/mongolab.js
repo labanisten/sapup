@@ -1,13 +1,13 @@
 angular.module('mongolabModule', ['ngResource']).
 	factory('Systems', function($resource) {
 	
-		var db = {	systems: $resource('http://mongodb/saa_testdb/system/',
+		var db = {	systems: $resource('/mongodb/saa_testdb/system/',
 									   {},
 									   {
 											update: { method: 'PUT' }									   
 									   }), 
 		
-					systemnames: $resource('http://mongodb/saa_testdb/systemname/',	
+					systemnames: $resource('/mongodb/saa_testdb/systemname/',	
 										{},
 										{
 											update: { method: 'PUT'},
@@ -15,14 +15,14 @@ angular.module('mongolabModule', ['ngResource']).
 										}
 					),	
 					
-					systemstatuses: $resource('http://mongodb/saa_testdb/systemstatus/',
+					systemstatuses: $resource('/mongodb/saa_testdb/systemstatus/',
 										{},
 										{
 											remove: { method: 'DELETE'}
 										}		
 					), 
 					
-					alerttypes: $resource('http://mongodb/saa_testdb/alerttype/',
+					alerttypes: $resource('/mongodb/saa_testdb/alerttype/',
 										{},
 										{
 											remove: { method: 'DELETE'}
@@ -30,7 +30,7 @@ angular.module('mongolabModule', ['ngResource']).
 					
 					),
 					
-					alerts: $resource('http://mongodb/saa_testdb/alert/',
+					alerts: $resource('/mongodb/saa_testdb/alert/',
 										{},
 										{
 											get: {method: 'GET', isArray:true},
