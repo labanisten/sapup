@@ -147,6 +147,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 
 	this.Calendar = Calendar;
 	this.Systems = Systems;
+	this.Utils = Utils;
 
 	$scope.systemlines = getSystemData();
 	$scope.systemnames = getSystemNames();
@@ -203,9 +204,14 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 
 	$scope.getClassForElement = function(sysIndex, elmIndex) {
 		//class="element-inner {{systemlines['+i+'].statuslines['+result.index+'].status}} element-click"
-		var systemString = $scope.systemlines[sysIndex].statuslines[elmIndex].status;
-		var classString = "element-inner element-click " + systemString;
-		if (sysIndex == $scope.selectedElement.sysIndex && elmIndex == $scope.selectedElement.elmIndex) {classString += " selected";};
+		var classString = "";
+		
+		if($scope.systemlines.length > 0) {
+			var systemString = $scope.systemlines[sysIndex].statuslines[elmIndex].status;
+			classString = "element-inner element-click " + systemString;
+			if (sysIndex == $scope.selectedElement.sysIndex && elmIndex == $scope.selectedElement.elmIndex) {classString += " selected";};
+		}
+		
 		return classString;
 	}	
 	
@@ -289,7 +295,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 		if($("#alertForm").valid()){
 			$('#addalertdialog').modal('hide');
 			var alertLine = $scope.addAlertLine;
-			alertLine.expdate = convertDateToDatabaseFormat(alertLine.expdate);
+			alertLine.expdate = Utils.viewDateToDBdate(alertLine.expdate);
 			Systems.alerts.save(alertLine, function(item){
 				$scope.alertlines.push(item);
 			});
@@ -303,25 +309,52 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 
 	$scope.removeStatusElement = function(id) {
 		if($("#elementForm").valid()){
-			var deletedStatusIndex;
+		
+			//var deletedStatusIndex;
+			
 			$.each($scope.systemlines, function(i, v_system) {
+			
 				if (v_system.system == $scope.systemFormData.system) {
+				
 					$.each(v_system.statuslines, function(j, v_status) {
-						if (v_status.start == viewDateToDBdate($scope.systemFormData.start) && v_status.end == viewDateToDBdate($scope.systemFormData.end) && v_status.status == $scope.systemFormData.status) {
+						if (v_status.start == Utils.viewDateToDBdate($scope.systemFormData.start) && v_status.end == Utils.viewDateToDBdate($scope.systemFormData.end) && v_status.status == $scope.systemFormData.status) {
+							
 							$scope.systemlines[i].statuslines.splice(j, 1);
-							CalendarData.fillSpaceWithEmptyElements(v_status, $scope.systemlines[i].statuslines);
+							
+							Systems.systems.remove({id:$scope.systemlines[i]._id.$oid}, function(item){
+							});
+							
+							return false;
+							/*CalendarData.fillSpaceWithEmptyElements(v_status, $scope.systemlines[i].statuslines);
 
 							$scope.systemlines[i].statuslines.sort(custom_sort);
-							savedStatusIndex = i;
+							savedStatusIndex = i;*/
+							//console.log("sad");
 						}
 					});
 				}
+				
 			});	
 			
-			updateStatuslineToDB(savedStatusIndex);
+			//updateStatuslineToDB(savedStatusIndex);
 		}
 	};
 	
+	
+	function removeCalendarElement(system, item) {
+	
+		$.each(system.statuslines, function(j, v_status) {
+			var statusStart = Utils.convertToDate(v_status.start);
+			var statusEnd = Utils.convertToDate(v_status.end);
+			
+			if (statusStart.getTime() == item.start.getTime() && statusEnd.getTime() == item.end.getTime() && v_status.status == item.status) {
+				
+				system.statuslines.splice(j, 1);
+				return false;
+			}
+		});
+	}
+			
 	
 	$scope.updateStatusElement = function(id) {
 
@@ -336,21 +369,23 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 						"statuslines": $scope.systemlines[i].statuslines
 					};
 					
-					CalendarData.removeCalendarElement(systemElement, $scope.selectedElement);
+					removeCalendarElement(systemElement, $scope.selectedElement);
 					
-					var start = viewDateToDBdate($scope.systemFormData.start);
-					var end = viewDateToDBdate($scope.systemFormData.end);
+					var start = Utils.viewDateToDBdate($scope.systemFormData.start);
+					var end = Utils.viewDateToDBdate($scope.systemFormData.end);
 					
 					statusElement = {
 						"start": start,
 						"end": end,
-						"status": $scope.systemFormData.status
+						"status": $scope.systemFormData.status,
+						"comment": $scope.systemFormData.comment 
 					}
 					
 					systemElement.statuslines.push(statusElement);
 		
 					Systems.systems.update({id:$scope.systemlines[i]._id.$oid}, systemElement, function(item){
-						addLineToElementModalLog("Element updated in " + $scope.systemlines[i].system);
+						Utils.addLineToElementModalLog("Element updated in " + $scope.systemlines[i].system);
+						$scope.unSelectElement();
 						$scope.systemlines = getSystemData();
 					});
 					
@@ -377,19 +412,21 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 							"statuslines": $scope.systemlines[i].statuslines
 						};
 						
-						var start = viewDateToDBdate($scope.systemFormData.start);
-						var end = viewDateToDBdate($scope.systemFormData.end);
+						var start = Utils.viewDateToDBdate($scope.systemFormData.start);
+						var end = Utils.viewDateToDBdate($scope.systemFormData.end);
 						
 						statusElement = {
 							"start": start,
 							"end": end,
-							"status": $scope.systemFormData.status
+							"status": $scope.systemFormData.status,
+							"comment": $scope.systemFormData.comment 
 						}
 						
 						systemElement.statuslines.push(statusElement);
 			
 						Systems.systems.update({id:$scope.systemlines[i]._id.$oid}, systemElement, function(item){
-							addLineToElementModalLog("Element added to " + $scope.systemlines[i].system);
+							Utils.addLineToElementModalLog("Element added to " + $scope.systemlines[i].system);
+							$scope.unSelectElement();
 							$scope.systemlines = getSystemData();
 						});
 						
@@ -408,6 +445,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 		fillSelectedElement(sysIndex, elmIndex);
 		fillSystemFormData(sysIndex, elmIndex);
 	}
+	
 	$scope.unSelectElement = function() {
 		$scope.selectedElement.elmIndex = -1;
 		$scope.selectedElement.sysIndex = -1;
@@ -421,8 +459,8 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 		$scope.selectedElement._id = sys.id;
 		$scope.selectedElement.system = sys.system;
 		$scope.selectedElement.status = elm.status;
-		$scope.selectedElement.start = convertToDate(elm.start);
-		$scope.selectedElement.end = convertToDate(elm.end);
+		$scope.selectedElement.start = Utils.convertToDate(elm.start);
+		$scope.selectedElement.end = Utils.convertToDate(elm.end);
 		//$scope.systemFormData.comment = statusLine.comment;			
 	}
 	function fillSystemFormData(sysIndex, elmIndex) {
@@ -433,8 +471,8 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 		$scope.systemFormData.status = elm.status;
 		//$scope.systemFormData.start = dateObjectToViewDate(statusLine.start);
 		//$scope.systemFormData.end = dateObjectToViewDate(statusLine.end);
-		$scope.systemFormData.start = dbDateToViewDate(elm.start);
-		$scope.systemFormData.end = dbDateToViewDate(elm.end);
+		$scope.systemFormData.start = Utils.dbDateToViewDate(elm.start);
+		$scope.systemFormData.end = Utils.dbDateToViewDate(elm.end);
 		$scope.systemFormData.comment = "";
 	}
 	
@@ -456,10 +494,10 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 	}
 	
 	$scope.callModal = function(event) {
-		//$scope.unSelectElement();
-		//var elem = angular.element(event.srcElement);
-		//elem.popover('hide');
-		
 		$("#editelementdialog").modal('show');
+	}
+	
+	$scope.clearModalLog = function(event) {
+		Utils.clearModalLog();
 	}
 });

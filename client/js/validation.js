@@ -1,9 +1,19 @@
 	
+	function conv(dateString) {
+		var datestring = dateString,
+			d = datestring.substr(0, 2),
+			m = datestring.substr(3, 2),
+			y = datestring.substr(6, 4),
+			date = y + m + d;
+
+		return date;
+	};
+	
 	$.validator.addMethod(
 		"endDateOffset",
 			function(value, element) {
-				var prevDate = viewDateToDBdate($("#elementStartDate").attr('value'));
-				var date = viewDateToDBdate(value);
+				var prevDate = conv($("#elementStartDate").attr('value'));
+				var date = conv(value);
 
 				if(date < prevDate){
 					return false;

@@ -4,20 +4,18 @@
 			restrict: 'A',
 			link: function (scope, element, attrs) {
 			
-					element.click(function() {
-					
-						element.parent().parent().children().each(function(){
-							$(this).children(".filledcell").each(function(){
-								//$(this).find("span").css("background-color","#5FFFFF");
-								$(this).find("span").popover('hide');
-							});
+				element.click(function() {
+				
+					element.parent().parent().children().each(function(){
+						$(this).children(".filledcell").each(function(){
+							//$(this).find("span").css("background-color","#5FFFFF");
+							$(this).find("span").popover('hide');
 						});
-						
-						scope.unSelectElement();
-						scope.$apply();
 					});
 					
-					
+					scope.unSelectElement();
+					scope.$apply();
+				});	
 			}
 		};
 	});
@@ -35,7 +33,7 @@
 				
 				//var editButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" data-toggle="modal" href="#editelementdialog"><i class="icon-pencil icon-white"></i></a>';
 				var editButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="callModal($event);"><i class="icon-pencil icon-white"></i></a>';
-				var deleteButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right"><i class="icon-trash icon-white"></i></a>'
+				var deleteButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="removeStatusElement();"><i class="icon-trash icon-white"></i></a>'
 				//var titleString = '<div><p>' + systeml.system + ' - ' + statusl.status + '</p>' + '<div class="btn-group">' + deleteButtonTemplate + editButtonTemplate + '</div></div>';
 				var titleString = systeml.system + ' - ' + statusl.status + deleteButtonTemplate + editButtonTemplate;
 				var contentString = statusl.comment;
@@ -53,22 +51,49 @@
 					//var asd = data;
 					//scope.dismiss = function(scope) { element.popover('hide'); };
 					
-					var data = titleString;
+				var data = titleString;
 					
-					element.popover({
-						title: function() {
-							$timeout(function(){
-								$compile(element.data('popover').tip())(scope);
-							});	
-							return data;
-						},
-						trigger: 'manual',
-						placement:'bottom',
-						html: true
-					});
+				element.popover({
+					title: function() {
+						$timeout(function(){
+							$compile(element.data('popover').tip())(scope);
+						});	
+						return data;
+					},
+					trigger: 'manual',
+					placement:'bottom',
+					html: true
+				});
 					
 				//});
 				
+				element.click(function() {
+				
+					// Hide any active popover except ouself
+					/*$("body > .popover").each(function() {
+						var $this = $(this);
+						var asd = element.data('popover');
+						
+						if(!element.data('popover').$element.is(element)) 
+							$this.popover('hide');
+							
+					});*/
+					
+					$("tbody").children().each(function() {
+						$(this).children('.filledcell').each(function() {
+							$(this).children().each(function() {
+								var $this = $(this);
+								var test = $this.data('popover');
+								if(typeof test != "undefined") {
+									if(!$this.data('popover').$element.is(element)) {
+										$this.popover('hide');
+										element.popover('show');
+									}
+								}
+							});
+						});
+					});
+				});
 				
 				
 				element.hover(function(){
@@ -81,6 +106,7 @@
 						element.popover('hide');
 					}
 				});	
+				
 				
 			}
 		};
@@ -166,7 +192,7 @@
 											'</thead>'+
 											'<tbody>';
 
-												console.log("systemlines: " + scope.systemlines.length);
+												//console.log("systemlines: " + scope.systemlines.length);
 												
 												for(var i = 0; i < scope.systemlines.length; i++){
 
@@ -225,39 +251,39 @@
 	});
 
 			
-	myModule.directive('jqDatepicker', function () {
+	myModule.directive('jqDatepicker', function (Utils) {
 		return {
-							link: function postLink(scope, element, attrs) {
-								element.datepicker({
-									dateFormat: "dd.mm.yy",
-									onClose: function (dateText, inst) {
-										if(element.context.id == "elementStartDate"){
-											scope.systemFormData.start = dateText;
-										}
-										else if(element.context.id == "elementEndDate"){
-											scope.systemFormData.end = dateText;
-										}
-										else if(element.context.id == "alertDialogExpDate"){
-											scope.addAlertLine.expdate = dateText;
-											
-											var dbdate = viewDateToDBdate(dateText);
-											var currentDate = getDateString(new Date());
-											var daysLeft = dbdate - currentDate;
-											
-											var dayText;
-											if(daysLeft > 1){
-												dayText = "days"
-											}else{
-												dayText = "day"
-											}
-											
-											$("#expireMessage").text("Alertmessage will expire in " + daysLeft + " " + dayText);
-										}
-										scope.$apply();
-									}	
-								});
+			link: function postLink(scope, element, attrs) {
+				element.datepicker({
+					dateFormat: "dd.mm.yy",
+					onClose: function (dateText, inst) {
+						if(element.context.id == "elementStartDate"){
+							scope.systemFormData.start = dateText;
+						}
+						else if(element.context.id == "elementEndDate"){
+							scope.systemFormData.end = dateText;
+						}
+						else if(element.context.id == "alertDialogExpDate"){
+							scope.addAlertLine.expdate = dateText;
+							
+							var dbdate = Utils.viewDateToDBdate(dateText);
+							var currentDate = getDateString(new Date());
+							var daysLeft = dbdate - currentDate;
+							
+							var dayText;
+							if(daysLeft > 1){
+								dayText = "days"
+							}else{
+								dayText = "day"
 							}
-						};
+							
+							$("#expireMessage").text("Alertmessage will expire in " + daysLeft + " " + dayText);
+						}
+						scope.$apply();
+					}	
+				});
+			}
+		};
 	});					
 	
 	
