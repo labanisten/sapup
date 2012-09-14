@@ -1,6 +1,6 @@
-var myModule = angular.module('systemAvailability', ['mongolabModule', 'calendarModule']);
+var myModule = angular.module('systemAvailability', ['mongolabModule', 'calendarModule', 'utilsModule']);
 
-myModule.controller("adminViewCtrl", function($scope, Systems) {
+myModule.controller("adminViewCtrl", function($scope, Systems, Utils) {
 	
 	$scope.systemnames = getSystemNames();
 	$scope.systemstatuses = getSystemStatuses();
@@ -143,7 +143,7 @@ myModule.controller("adminViewCtrl", function($scope, Systems) {
 });
 
 
-myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
+myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 
 	this.Calendar = Calendar;
 	this.Systems = Systems;
@@ -232,11 +232,8 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 	}
 	
 	$scope.gotoMonth = function(event, month) {
-		//$scope.selectedYear = Calend ar.getCurrentYear();
 		$scope.selectedMonth = month;
-
 		var elem = angular.element(event.srcElement);
-		//elem.addClass("selectedmonth");
 		elem[0].className += " selectedmonth";	
 	};
 
@@ -244,7 +241,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 		var calendartable = [];
 		var syslines = Systems.systems.query(function() {
 			calendartable = syslines;
-			calendartable.sort(ascSystemSort);
+			calendartable.sort(Utils.ascSystemSort);
 			$scope.systemlines = calendartable;
 		});
 		return calendartable;
@@ -265,7 +262,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 
 	function getAlertData() {
 		var alerts = [];
-		var currentDate = getDateString(new Date());
+		var currentDate = Utils.getDateString(new Date());
 
 		var alertLines = Systems.alerts.query(function() {
 		
@@ -411,7 +408,6 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 		fillSelectedElement(sysIndex, elmIndex);
 		fillSystemFormData(sysIndex, elmIndex);
 	}
-	
 	$scope.unSelectElement = function() {
 		$scope.selectedElement.elmIndex = -1;
 		$scope.selectedElement.sysIndex = -1;
@@ -429,7 +425,6 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 		$scope.selectedElement.end = convertToDate(elm.end);
 		//$scope.systemFormData.comment = statusLine.comment;			
 	}
-
 	function fillSystemFormData(sysIndex, elmIndex) {
 		var sys = $scope.systemlines[sysIndex];
 		var elm = $scope.systemlines[sysIndex].statuslines[elmIndex];
@@ -467,5 +462,4 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 		
 		$("#editelementdialog").modal('show');
 	}
-	
 });

@@ -38,4 +38,4 @@ nbproject
 node_modules
 
 #CSS 
-client\bootstrap\css\*
+client/bootstrap/css/

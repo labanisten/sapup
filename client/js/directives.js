@@ -99,7 +99,7 @@
 	});
 	
 
-	myModule.directive('systemTable', function($compile){
+	myModule.directive('systemTable', function($compile, Utils){
 		return {
 				restrict: 'E',
 				//replace: true,
@@ -119,8 +119,8 @@
 						day = day + 1;
 						
 						$.each(statuslines, function(i, v_line) {
-							var start = convertToDate(v_line.start);
-							var end = convertToDate(v_line.end);
+							var start = Utils.convertToDate(v_line.start);
+							var end = Utils.convertToDate(v_line.end);
 							
 							var sm = start.getMonth();
 							var sel = scope.selectedMonth;
@@ -140,10 +140,8 @@
 						var template = 	'<table>'+
 											'<thead>'+
 												'<tr>'+
-													//'<th class="month" colspan="{{noOfDaysInMonth['+scope.selectedMonth+'] + 1}}">{{monthName['+scope.selectedMonth+']}}</th>'+
 													'<th class="months" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
 														'<div ng:class="getClassForMonth(month)" ng-click="gotoMonth($event, month)" ng-repeat="month in [0,1,2,3,4,5,6,7,8,9,10,11]">'+
-															// '<span class="month-click" style="width:100%" ng-click="gotoMonth(month)">{{months[month]}}</span>'+
 															'{{months[month]}}' +
 															'</div>'+
 														'</th>'+

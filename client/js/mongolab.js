@@ -1,4 +1,3 @@
-
 angular.module('mongolabModule', ['ngResource']).
 	factory('Systems', function($resource) {
 	

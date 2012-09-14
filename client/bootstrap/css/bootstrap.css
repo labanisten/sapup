@@ -720,7 +720,7 @@ accordion-heading{background-color:#eeeeee;}
 .alert-container-body{background-color:#eeeeee;}
 .firstcol{min-width:50px;background-color:#8cb1da;text-align:center;}
 .months{height:40px;font-size:1.6em;line-height:50px;cursor:pointer;pointer-events:auto;color:#345970;}
-.month:hover:not(.selectedmonth){color:#3a1558;font-size:2em;-webkit-transition-property:font-size;-webkit-transition-duration:0.2s;}
+.month:hover:not(.selectedmonth){color:#3a1558;font-size:2em;-webkit-transition:font-size;-moz-transition:font-size;-ms-transition:font-size;-o-transition:font-size;transition:font-size;-webkit-transition:0.2s;-moz-transition:0.2s;-ms-transition:0.2s;-o-transition:0.2s;transition:0.2s;}
 .selectedmonth{color:#cd007a;font-size:2em;}
 .week{background-color:#eeeeee;}
 .system{background-color:#eeeeee;font-weight:800;text-align:center;}

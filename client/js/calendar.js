@@ -1,5 +1,5 @@
 
-angular.module('calendarModule', []).
+angular.module('calendarModule', ['utilsModule']).
 	factory('Calendar', function() {
 
 	var calendar = calendar || {};
@@ -41,30 +41,11 @@ angular.module('calendarModule', []).
 			return ns.monthLabels;
 		};
 	
-		/*
-		ns.getNoOfDaysInMonth = function(month) {
-			return ns.daysInMonth[month];
-		}
-		*/
-
 		ns.getNoOfDaysInMonth = function() {
 			return ns.daysInMonth;
 		}
 
-		/*
-		ns.getMonthDayList = function(month) {
-			var days = ns.daysInMonth[month];
-
-			var dayArray = [];
-
-			for (i = 0; i < days; i++) {
-				dayArray.push(i + 1);
-			}
-
-			return dayArray;
-		};
-		*/
-		
+	
 		ns.getMonthDayList = function() {
 			
 			var daysInMonths = [];
@@ -81,7 +62,7 @@ angular.module('calendarModule', []).
 		};
 		
 
-		ns.getWeek = function getWeek(date) {
+		ns.getWeek = function(date) {
 			var onejan = new Date(date.getFullYear(), 0, 1);
 			return Math.ceil((((date - onejan) / 86400000) + onejan.getDay() + 1) / 7);
 		};
