@@ -1,68 +1,87 @@
 
-
-	myModule.directive('bsPopoverhover', function(){
+	myModule.directive('clearSelect', function(){
 		return {
-			restrict: 'C',
+			restrict: 'A',
 			link: function (scope, element, attrs) {
-					
-					element.hover(function(){
-							element.popover('show');
-					},
-					function() {
-							element.popover('hide');
-					});	
-
+			
 					element.click(function() {
-						element.popover('show');
+					
+						element.parent().parent().children().each(function(){
+							$(this).children(".filledcell").each(function(){
+								//$(this).find("span").css("background-color","#5FFFFF");
+								$(this).find("span").popover('hide');
+							});
+						});
+						
+						scope.unSelectElement();
+						scope.$apply();
 					});
+					
+					
 			}
 		};
 	});
 	
-	
-	myModule.directive('elementClick', function(){
+
+	myModule.directive('bsPopoverhover', function($compile, $http, $timeout){
 		return {
-			restrict: 'C',
-			
-			link: function(scope, element, attrs) {
-				element.click(function () {
-					/*
-					element.parent().parent().children().each(function(){
-						//$(this).removeClass("selected");
-						$(this).css('background-color', 'red');
+			restrict: 'A',
+			link: function (scope, element, attrs) {
+				
+				var sysIndex = element.attr("sysIndex");
+				var elmIndex = element.attr("elmIndex");
+				var systeml = scope.systemlines[sysIndex];
+				var statusl = scope.systemlines[sysIndex].statuslines[elmIndex];
+				
+				//var editButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" data-toggle="modal" href="#editelementdialog"><i class="icon-pencil icon-white"></i></a>';
+				var editButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="callModal($event);"><i class="icon-pencil icon-white"></i></a>';
+				var deleteButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right"><i class="icon-trash icon-white"></i></a>'
+				//var titleString = '<div><p>' + systeml.system + ' - ' + statusl.status + '</p>' + '<div class="btn-group">' + deleteButtonTemplate + editButtonTemplate + '</div></div>';
+				var titleString = systeml.system + ' - ' + statusl.status + deleteButtonTemplate + editButtonTemplate;
+				var contentString = statusl.comment;
+
+				
+				/*var ad = element.data('popover');
+				element.popover({title: titleString, content: contentString, trigger: 'manual', placement:"bottom"}).click(function(){ console.log("sads")});	*/
+				
+				
+				//$compile(asd.contents())(scope);
+				
+				
+				
+				//$http.get(attrs.bsPopover).success(function(data) {
+					//var asd = data;
+					//scope.dismiss = function(scope) { element.popover('hide'); };
+					
+					var data = titleString;
+					
+					element.popover({
+						title: function() {
+							$timeout(function(){
+								$compile(element.data('popover').tip())(scope);
+							});	
+							return data;
+						},
+						trigger: 'manual',
+						placement:'bottom',
+						html: true
 					});
 					
-					
-					element.parent().find().css('background-color', 'red');
-					
-					if(element.hasClass('selected')){
-						element.removeClass("selected");
-					}else{
-						element.addClass("selected");
+				//});
+				
+				
+				
+				element.hover(function(){
+					if(scope.selectedElement.elmIndex == -1 && scope.selectedElement.sysIndex == -1) {
+						element.popover('show');
 					}
-					
-					var systemLine = attrs
-
-					/*
-					var systemLine;
-					var statusLine;
-					
-					scope.systemFormData._id = systemLine._id;
-					scope.systemFormData.system = systemLine.system;
-					scope.systemFormData.status = statusLine.status;
-					scope.systemFormData.start = dbDateToViewDate(statusLine.start);
-					scope.systemFormData.end = dbDateToViewDate(statusLine.end);
-					scope.systemFormData.comment = "";
-					
-					scope.selectedElement._id = systemLine._id;
-					scope.selectedElement.system = systemLine.system;
-					scope.selectedElement.status = statusLine.status;
-					scope.selectedElement.start = convertToDate(statusLine.start);
-					scope.selectedElement.end = convertToDate(statusLine.end);		
-					scope.selectedElement.statusLineRef = statusLine;
-					*/
-				});
-			
+				},
+				function() {
+					if(scope.selectedElement.elmIndex == -1 && scope.selectedElement.sysIndex == -1) {
+						element.popover('hide');
+					}
+				});	
+				
 			}
 		};
 	});
@@ -73,15 +92,12 @@
 			restrict: 'C',
 			link: function(scope, element, attrs) {
 				element.click(function () {
-					console.log("month");
 					element.addClass("selectedmonth");
 				});
 			}
 		};
 	});
 	
-	
-
 
 	myModule.directive('systemTable', function($compile){
 		return {
@@ -167,26 +183,26 @@
 															
 															if(result == "") {
 															
-																template += '<td>'+
-																				 
-																				'<span class="element-inner available"'+
-																				'</span>'+	
-																				
+																template += '<td clear-select>'+ 
+																				//'<span class="element-inner available"'+
+																				//'</span>'+	
 																			'</td>';
 															}else{
 																var colspan = result.end - result.start + 1;
 																//template += '<td colspan="'+colspan+'" ng-click="setSelectetElement(systemlines['+i+'], systemlines['+i+'].statuslines['+result.index+'])">'+
-																template += '<td ng:class="getClassForElement('+i+','+result.index+')"  colspan="'+colspan+'">'+
+																template += '<td class="filledcell" colspan="'+colspan+'">'+
 																
-																				'<span class="element-inner {{systemlines['+i+'].statuslines['+result.index+'].status}} bs-popoverhover element-click" ng:class="getClassForElement('+i+','+result.index+')" ng-click="selectElement($event, '+i+','+result.index+')"'+
-																					  'status="{{systemlines['+i+'].statuslines['+result.index+'].status}}"'+
-																					  'rel="popover"'+ 
-																					  'data-content="Status: {{systemlines['+i+'].statuslines['+result.index+'].status}} </br> Comment: {{systemlines['+i+'].statuslines['+result.index+'].comment}}"'+ 
-																					  'data-original-title="{{systemlines['+i+'].system}}"'+
-																					  'data-placement="bottom"'+ 
-																					  'data-trigger="manual"'+ 
-																					  'system="'+i+'"'+
-																					  'emlindex="'+result.index+'"'+
+																				'<span ng:class="getClassForElement('+i+','+result.index+')" ng-click="selectElement($event, '+i+','+result.index+')" bs-popoverhover sysIndex="'+i+'" elmIndex="'+result.index+'"'+ 
+																					  //'status="{{systemlines['+i+'].statuslines['+result.index+'].status}}"'+
+																					  'bs-popover="popover.html"'+
+																					  'rel="popover">'+ 
+																					  //'data-content="Status: {{systemlines['+i+'].statuslines['+result.index+'].status}} </br>'+ 
+																					  //'Comment: {{systemlines['+i+'].statuslines['+result.index+'].comment}}">'+ 
+																					  //'data-original-title="{{systemlines['+i+'].system}}"'+
+																					  //'data-placement="bottom"'+ 
+																					  //'data-trigger="manual"'+ 
+																					  //'system="'+i+'"'+
+																					  //'emlindex="'+result.index+'"'+
 																				'</span>'+	
 																				
 																			'</td>';
@@ -206,10 +222,7 @@
 						$compile(element.contents())(scope);
 						
 					}
-					
-				}
-				
-				
+				}		
 		}
 	});
 

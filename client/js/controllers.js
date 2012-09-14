@@ -197,14 +197,16 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 	$scope.months = Calendar.monthLabelsShort;
 	$scope.monthLabels = Calendar.monthLabels;
 	
-	$scope.selectedYear = Calendar.getCurrentYear();
-	$scope.selectedMonth = Calendar.getCurrentMonth();
+	//$scope.selectedYear = Calendar.getCurrentYear();
+	//$scope.selectedMonth = Calendar.getCurrentMonth();
 	$scope.selectedMonthLabel = Calendar.getMonthName($scope.selectedMonth);
 
 	$scope.getClassForElement = function(sysIndex, elmIndex) {
-		var result = "";
-		if (sysIndex == $scope.selectedElement.sysIndex && elmIndex == $scope.selectedElement.elmIndex) {result = "selected";};
-		return result;
+		//class="element-inner {{systemlines['+i+'].statuslines['+result.index+'].status}} element-click"
+		var systemString = $scope.systemlines[sysIndex].statuslines[elmIndex].status;
+		var classString = "element-inner element-click " + systemString;
+		if (sysIndex == $scope.selectedElement.sysIndex && elmIndex == $scope.selectedElement.elmIndex) {classString += " selected";};
+		return classString;
 	}	
 	
 	function isAlreadySelected(sysIndex, elmIndex) {
@@ -215,15 +217,9 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 	
 	$scope.selectElement = function(event, sysIndex, elmIndex) {
 		if(isAlreadySelected(sysIndex, elmIndex)) {
-			$scope.selectedElement.elmIndex = -1;
-			$scope.selectedElement.sysIndex = -1;
-			clearSelectedElement();
-			clearSystemFormData();	
+			$scope.unSelectElement();
 		}else{	
-			$scope.selectedElement.elmIndex = elmIndex;
-			$scope.selectedElement.sysIndex = sysIndex;
-			setSelectedElement(sysIndex, elmIndex);
-			setSystemFormData(sysIndex, elmIndex);
+			$scope.setSelectedElement(sysIndex, elmIndex);
 		}
 	};
 	
@@ -408,8 +404,22 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 			});
 		}
 	};
+
+	$scope.setSelectedElement = function(sysIndex, elmIndex) {
+		$scope.selectedElement.elmIndex = elmIndex;
+		$scope.selectedElement.sysIndex = sysIndex;
+		fillSelectedElement(sysIndex, elmIndex);
+		fillSystemFormData(sysIndex, elmIndex);
+	}
 	
-	function setSelectedElement(sysIndex, elmIndex) {
+	$scope.unSelectElement = function() {
+		$scope.selectedElement.elmIndex = -1;
+		$scope.selectedElement.sysIndex = -1;
+		clearSelectedElement();
+		clearSystemFormData();	
+	}
+	
+	function fillSelectedElement(sysIndex, elmIndex) {
 		var sys = $scope.systemlines[sysIndex];
 		var elm = $scope.systemlines[sysIndex].statuslines[elmIndex];
 		$scope.selectedElement._id = sys.id;
@@ -420,7 +430,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 		//$scope.systemFormData.comment = statusLine.comment;			
 	}
 
-	function setSystemFormData(sysIndex, elmIndex) {
+	function fillSystemFormData(sysIndex, elmIndex) {
 		var sys = $scope.systemlines[sysIndex];
 		var elm = $scope.systemlines[sysIndex].statuslines[elmIndex];
 		$scope.systemFormData._id = sys.id;
@@ -448,6 +458,14 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar) {
 		$scope.systemFormData.start = "";
 		$scope.systemFormData.end = "";
 		$scope.systemFormData.comment = "";
+	}
+	
+	$scope.callModal = function(event) {
+		//$scope.unSelectElement();
+		//var elem = angular.element(event.srcElement);
+		//elem.popover('hide');
+		
+		$("#editelementdialog").modal('show');
 	}
 	
 });

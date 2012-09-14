@@ -610,9 +610,9 @@ button.btn.btn-mini,input[type="submit"].btn.btn-mini{*padding-top:1px;*padding-
 .pager .next a{float:right;}
 .pager .previous a{float:left;}
 .pager .disabled a,.pager .disabled a:hover{color:#999999;background-color:#fff;cursor:default;}
-.modal-open .dropdown-menu{z-index:2050;}
+.modal-open{}.modal-open .dropdown-menu{z-index:2050;}
 .modal-open .dropdown.open{*z-index:2050;}
-.modal-open .popover{z-index:2060;}
+.modal-open .popover{z-index:1010;}
 .modal-open .tooltip{z-index:2070;}
 .modal-backdrop{position:fixed;top:0;right:0;bottom:0;left:0;z-index:1040;background-color:#000000;}.modal-backdrop.fade{opacity:0;}
 .modal-backdrop,.modal-backdrop.fade.in{opacity:0.8;filter:alpha(opacity=80);}
