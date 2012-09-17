@@ -168,6 +168,18 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 	};
 	
 	
+	$scope.hoverElement = {
+		_id: "",
+		system: "",
+		status: "",
+		start: undefined,
+		end: undefined,
+		comment: "",
+		element:""
+		//hasValue: false
+	};
+	
+	
 	$scope.systemFormData = {
 		_id:"",
 		system: "",
@@ -453,6 +465,27 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 		clearSystemFormData();	
 	}
 	
+	$scope.setHoverElement = function(sysIndex, elmIndex, element) {
+		var sys = $scope.systemlines[sysIndex];
+		var elm = $scope.systemlines[sysIndex].statuslines[elmIndex];
+		$scope.hoverElement._id = sys.id;
+		$scope.hoverElement.system = sys.system;
+		$scope.hoverElement.status = elm.status;
+		$scope.hoverElement.start = Utils.dbDateToViewDate(elm.start);
+		$scope.hoverElement.end = Utils.dbDateToViewDate(elm.end);
+		$scope.hoverElement.comment = elm.comment;	
+		$scope.hoverElement.element = element;
+	}
+	
+	$scope.clearHoverElement = function() {
+		$scope.hoverElement._id = "";
+		$scope.hoverElement.system = "";
+		$scope.hoverElement.status = "";
+		$scope.hoverElement.start = "";
+		$scope.hoverElement.end = "";
+		$scope.hoverElement.comment = "";
+	}
+	
 	function fillSelectedElement(sysIndex, elmIndex) {
 		var sys = $scope.systemlines[sysIndex];
 		var elm = $scope.systemlines[sysIndex].statuslines[elmIndex];
@@ -463,6 +496,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 		$scope.selectedElement.end = Utils.convertToDate(elm.end);
 		//$scope.systemFormData.comment = statusLine.comment;			
 	}
+	
 	function fillSystemFormData(sysIndex, elmIndex) {
 		var sys = $scope.systemlines[sysIndex];
 		var elm = $scope.systemlines[sysIndex].statuslines[elmIndex];

@@ -44,7 +44,7 @@
 					Add alert
 				</a>
 				<a class="btn btn-primary pull-right" data-toggle="modal" href="#editelementdialog"><i class="icon-th icon-white"></i> 
-					Edit elements
+					Add elements
 				</a>
 				<a class="btn btn-primary pull-right" href="../public/admin.html">
 					<i class="icon-pencil icon-white"></i>
@@ -222,11 +222,11 @@
 				<i class="icon-plus icon-white"></i>
 				New
 			</a>
-			<a class="btn btn-primary pull-left" ng-click="updateStatusElement()">
+			<a class="btn btn-primary pull-left" ng-click="updateStatusElement()" clear-popovers-and-selections>
 				<i class="icon-pencil icon-white"></i>
 				Update
 			</a>
-			<a class="btn btn-danger pull-left" ng-click="removeStatusElement()">
+			<a class="btn btn-danger pull-left" ng-click="removeStatusElement()" clear-popovers-and-selections>
 				<i class="icon-trash icon-white"></i>
 				Delete
 			</a>
