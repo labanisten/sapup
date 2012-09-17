@@ -2,8 +2,11 @@
 	$(document).ready(function()
 	{
 		formValidation();
-		
-
+		/*
+		window.onresize = function(event) {
+			console.log("resize");
+		}
+		*/
 /*
         $('#systemTableCarousel').click(
             function(){

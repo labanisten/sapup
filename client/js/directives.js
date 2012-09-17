@@ -7,21 +7,7 @@
 				element.click(function() {
 				
 					if(scope.selectedElement.elmIndex > -1 && scope.selectedElement.sysIndex > -1) {
-						/*
-						$("tbody").children().each(function() {
-							$(this).children('.filledcell').each(function() {
-								$(this).children().each(function() {
-									if(typeof $(this).data('popover') != "undefined") {
-											$(this).popover('hide');
-									}
-								});
-							});
-						});
-						*/
-						
-
 						scope.hoverElement.element.popover('hide');
-						//scope.setHoverElement(element.attr('sysIndex'), element.attr('elmIndex'), element);
 						scope.clearHoverElement();
 						scope.unSelectElement();
 						scope.$apply();
@@ -45,7 +31,7 @@
 				
 				//var editButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" data-toggle="modal" href="#editelementdialog"><i class="icon-pencil icon-white"></i></a>';
 				var editButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="callModal($event);"><i class="icon-pencil icon-white"></i></a>';
-				var deleteButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="removeStatusElement();"><i class="icon-trash icon-white"></i></a>'
+				var deleteButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="removeStatusElement();" clear-popovers-and-selections><i class="icon-trash icon-white"></i></a>'
 				var titleString = systeml.system + ' - ' + statusl.status + deleteButtonTemplate + editButtonTemplate;
 				
 				
@@ -53,7 +39,8 @@
 				
 				//TODO style popovercontent
 				var testcontent = '<div>'+
-									  '<p>Date: {{hoverElement.start}} - {{hoverElement.end}}</p>'+
+									  '<p>{{hoverElement.start}} - {{hoverElement.end}}</p>'+
+									  '</br>'+
 									  '<p>{{hoverElement.comment}}</p>'+
 								  '</div>';
 
@@ -78,45 +65,13 @@
 					
 				
 				element.click(function() {
-				
-					//if(scope.selectedElement.elmIndex > -1 && scope.selectedElement.sysIndex > -1) {
-						/*
-						scope.setHoverElement(element.attr('sysIndex'), element.attr('elmIndex'));
-						
-						//TODO only if item is selected
-						$("tbody").children().each(function() {
-							$(this).children('.filledcell').each(function() {
-								$(this).children().each(function() {
-									//TODO prevent hide + show
-									//var $this = $(this);
-									var test = $(this).data('popover');
-									if(typeof test != "undefined") {
-										//viss loop element er ulik click element
-										if(!$(this).data('popover').$element.is(element)) {
-											$(this).popover('hide');
-											console.log("true");
-										}else{
-											console.log("false");
-											element.popover('show');
-										}
-										
-									}
-									
-								});
-							});
-						});
-					
-					console.log("click, not selected")
-					*/
-					
+
 					if(element != scope.hoverElement.element) {
 						scope.hoverElement.element.popover('hide');
 						scope.setHoverElement(element.attr('sysIndex'), element.attr('elmIndex'), element);
 						element.popover('show');
 					}
 					
-						
-					//}
 				});
 				
 				
@@ -138,19 +93,7 @@
 		};
 	});
 	
-	/*
-	myModule.directive('monthClick', function(){
-		return {
-			restrict: 'C',
-			link: function(scope, element, attrs) {
-				element.click(function () {
-					element.addClass("selectedmonth");
-				});
-			}
-		};
-	});
-	*/
-
+	
 	myModule.directive('systemTable', function($compile, Utils){
 		return {
 				restrict: 'E',
@@ -253,7 +196,7 @@
 																				
 																			'</td>';
 																day = day + colspan - 1;
-															}															
+															}
 														
 													}
 													

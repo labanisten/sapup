@@ -219,6 +219,12 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 		var classString = "";
 		
 		if($scope.systemlines.length > 0) {
+		
+			/*if(sysIndex == 12){
+			 console.log("");
+			}*/
+			
+			//console.log("sys: " + sysIndex + " elm: " + elmIndex + " status: " + $scope.systemlines[sysIndex].statuslines[elmIndex].status);
 			var systemString = $scope.systemlines[sysIndex].statuslines[elmIndex].status;
 			classString = "element-inner element-click " + systemString;
 			if (sysIndex == $scope.selectedElement.sysIndex && elmIndex == $scope.selectedElement.elmIndex) {classString += " selected";};
@@ -319,41 +325,77 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 		Systems.alerts.delete({id: id.$oid}, function(){});
 	};
 
-	$scope.removeStatusElement = function(id) {
-		if($("#elementForm").valid()){
-		
-			//var deletedStatusIndex;
+	$scope.removeStatusElement = function() {
+	
+		$.each($scope.systemlines, function(i, v_system) {
+					
+			if (v_system.system == $scope.systemFormData.system) {
 			
-			$.each($scope.systemlines, function(i, v_system) {
-			
-				if (v_system.system == $scope.systemFormData.system) {
+				//var newObject = jQuery.extend({},true, $scope.systemlines[i].statuslines);
+				var lines = [];
 				
-					$.each(v_system.statuslines, function(j, v_status) {
-						if (v_status.start == Utils.viewDateToDBdate($scope.systemFormData.start) && v_status.end == Utils.viewDateToDBdate($scope.systemFormData.end) && v_status.status == $scope.systemFormData.status) {
-							
-							$scope.systemlines[i].statuslines.splice(j, 1);
-							
-							Systems.systems.remove({id:$scope.systemlines[i]._id.$oid}, function(item){
-							});
-							
-							return false;
-							/*CalendarData.fillSpaceWithEmptyElements(v_status, $scope.systemlines[i].statuslines);
-
-							$scope.systemlines[i].statuslines.sort(custom_sort);
-							savedStatusIndex = i;*/
-							//console.log("sad");
-						}
-					});
-				}
+				$.each(v_system.statuslines, function(j, v_status) {
+					var s = Utils.getDateString($scope.selectedElement.start);
+					var e = Utils.getDateString($scope.selectedElement.end);
+					if(v_status.start != s || 
+						v_status.end != e ||
+							v_status.status != $scope.selectedElement.status) {
+						lines.push(v_status);
+					}
+					
+				});
 				
-			});	
-			
-			//updateStatuslineToDB(savedStatusIndex);
-		}
+				var systemElement = { 
+					"system": v_system.system,
+					"statuslines": lines
+				};
+				
+				//spliceCalendarElement(systemElement, $scope.selectedElement);
+				
+				//var start = Utils.viewDateToDBdate($scope.systemFormData.start);
+				//var end = Utils.viewDateToDBdate($scope.systemFormData.end);
+				
+				/*var statusElement = {
+					"start": start,
+					"end": end,
+					"status": $scope.systemFormData.status,
+					"comment": $scope.systemFormData.comment 
+				}*/
+				
+				//systemElement.statuslines.push(statusElement);
+	
+				
+				Systems.systems.update({id:$scope.systemlines[i]._id.$oid}, systemElement, function(item){
+					//$scope.unSelectElement();
+					//$scope.clearHoverElement();
+					$scope.systemlines = getSystemData();
+				});
+				
+				return false;
+				
+			}else{
+				//addLineToElementModalLog("Error!!!!!");
+			}
+		});
 	};
 	
 	
-	function removeCalendarElement(system, item) {
+	function removeElementInDataBase(system, item) {
+	
+		$.each(system.statuslines, function(j, v_status) {
+			var statusStart = Utils.convertToDate(v_status.start);
+			var statusEnd = Utils.convertToDate(v_status.end);
+			
+			if (statusStart.getTime() == item.start.getTime() && statusEnd.getTime() == item.end.getTime() && v_status.status == item.status) {
+				
+				system.statuslines.splice(j, 1);
+				return false;
+			}
+		});
+	}
+	
+	
+	function spliceCalendarElement(system, item) {
 	
 		$.each(system.statuslines, function(j, v_status) {
 			var statusStart = Utils.convertToDate(v_status.start);
@@ -368,7 +410,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 	}
 			
 	
-	$scope.updateStatusElement = function(id) {
+	$scope.updateStatusElement = function() {
 
 		if($("#elementForm").valid()){	
 			
@@ -376,17 +418,17 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 					
 				if (v_system.system == $scope.systemFormData.system) {
 				
-					systemElement = { 
+					var systemElement = { 
 						"system": v_system.system,
 						"statuslines": $scope.systemlines[i].statuslines
 					};
 					
-					removeCalendarElement(systemElement, $scope.selectedElement);
+					spliceCalendarElement(systemElement, $scope.selectedElement);
 					
 					var start = Utils.viewDateToDBdate($scope.systemFormData.start);
 					var end = Utils.viewDateToDBdate($scope.systemFormData.end);
 					
-					statusElement = {
+					var statusElement = {
 						"start": start,
 						"end": end,
 						"status": $scope.systemFormData.status,
@@ -397,7 +439,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 		
 					Systems.systems.update({id:$scope.systemlines[i]._id.$oid}, systemElement, function(item){
 						Utils.addLineToElementModalLog("Element updated in " + $scope.systemlines[i].system);
-						$scope.unSelectElement();
+						//$scope.unSelectElement();
 						$scope.systemlines = getSystemData();
 					});
 					
@@ -419,7 +461,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 				
 					if (v_system.system == $scope.systemFormData.system) {
 					
-						systemElement = { 
+						var systemElement = { 
 							"system": v_system.system,
 							"statuslines": $scope.systemlines[i].statuslines
 						};
@@ -427,7 +469,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 						var start = Utils.viewDateToDBdate($scope.systemFormData.start);
 						var end = Utils.viewDateToDBdate($scope.systemFormData.end);
 						
-						statusElement = {
+						var statusElement = {
 							"start": start,
 							"end": end,
 							"status": $scope.systemFormData.status,
@@ -507,7 +549,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 		//$scope.systemFormData.end = dateObjectToViewDate(statusLine.end);
 		$scope.systemFormData.start = Utils.dbDateToViewDate(elm.start);
 		$scope.systemFormData.end = Utils.dbDateToViewDate(elm.end);
-		$scope.systemFormData.comment = "";
+		$scope.systemFormData.comment = elm.comment;
 	}
 	
 	function clearSelectedElement() {
