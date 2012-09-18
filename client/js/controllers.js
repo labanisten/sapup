@@ -175,8 +175,8 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 		start: undefined,
 		end: undefined,
 		comment: "",
-		element:""
-		//hasValue: false
+		element:"",
+		hasValue: false
 	};
 	
 	
@@ -227,7 +227,9 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 			//console.log("sys: " + sysIndex + " elm: " + elmIndex + " status: " + $scope.systemlines[sysIndex].statuslines[elmIndex].status);
 			var systemString = $scope.systemlines[sysIndex].statuslines[elmIndex].status;
 			classString = "element-inner element-click " + systemString;
-			if (sysIndex == $scope.selectedElement.sysIndex && elmIndex == $scope.selectedElement.elmIndex) {classString += " selected";};
+			if (sysIndex == $scope.selectedElement.sysIndex && elmIndex == $scope.selectedElement.elmIndex) {
+				classString += " selected";
+			};
 		}
 		
 		return classString;
@@ -326,13 +328,13 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 	};
 
 	$scope.removeStatusElement = function() {
-	
+	console.log("sada");
 		$.each($scope.systemlines, function(i, v_system) {
 					
-			if (v_system.system == $scope.systemFormData.system) {
+			if (v_system.system == $scope.selectedElement.system) {
 			
 				//var newObject = jQuery.extend({},true, $scope.systemlines[i].statuslines);
-				var lines = [];
+				/*var lines = [];
 				
 				$.each(v_system.statuslines, function(j, v_status) {
 					var s = Utils.getDateString($scope.selectedElement.start);
@@ -348,27 +350,39 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 				var systemElement = { 
 					"system": v_system.system,
 					"statuslines": lines
-				};
+				};*/
 				
-				//spliceCalendarElement(systemElement, $scope.selectedElement);
+							
 				
-				//var start = Utils.viewDateToDBdate($scope.systemFormData.start);
-				//var end = Utils.viewDateToDBdate($scope.systemFormData.end);
+				var systemElement = { 
+						"system": v_system.system,
+						"statuslines": $scope.systemlines[i].statuslines
+					};
+					
+					spliceCalendarElement(systemElement, $scope.selectedElement);
+					//$scope.clearHoverElement();
+					//$scope.unSelectElement();	
+					//$('#maintable').remove();
+					//$scope.systemlines = getSystemData();
+					//$scope.systemlines = [];
 				
-				/*var statusElement = {
-					"start": start,
-					"end": end,
-					"status": $scope.systemFormData.status,
-					"comment": $scope.systemFormData.comment 
-				}*/
 				
-				//systemElement.statuslines.push(statusElement);
-	
+				
+				
+				
+				/*scope.hoverElement.element.popover('hide');
+				scope.clearHoverElement();
+				scope.unSelectElement();
+				scope.$apply();*/
+				//$scope.$destroy();
+				
 				
 				Systems.systems.update({id:$scope.systemlines[i]._id.$oid}, systemElement, function(item){
-					//$scope.unSelectElement();
-					//$scope.clearHoverElement();
-					$scope.systemlines = getSystemData();
+					
+					//$scope.systemlines = [];
+					console.log("db");
+					getSystemData();
+					//$scope.apply();
 				});
 				
 				return false;
@@ -412,7 +426,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 	
 	$scope.updateStatusElement = function() {
 
-		if($("#elementForm").valid()){	
+		//if($("#elementForm").valid()){	
 			
 			$.each($scope.systemlines, function(i, v_system) {
 					
@@ -424,7 +438,7 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 					};
 					
 					spliceCalendarElement(systemElement, $scope.selectedElement);
-					
+			/*		
 					var start = Utils.viewDateToDBdate($scope.systemFormData.start);
 					var end = Utils.viewDateToDBdate($scope.systemFormData.end);
 					
@@ -442,14 +456,14 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 						//$scope.unSelectElement();
 						$scope.systemlines = getSystemData();
 					});
-					
+					*/
 					return false;
 					
 				}else{
 					//addLineToElementModalLog("Error!!!!!");
 				}
 			});
-		}
+		//}
 	};
 	
 		
@@ -517,15 +531,19 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 		$scope.hoverElement.end = Utils.dbDateToViewDate(elm.end);
 		$scope.hoverElement.comment = elm.comment;	
 		$scope.hoverElement.element = element;
+		$scope.hoverElement.hasValue = true;
 	}
 	
 	$scope.clearHoverElement = function() {
-		$scope.hoverElement._id = "";
-		$scope.hoverElement.system = "";
-		$scope.hoverElement.status = "";
-		$scope.hoverElement.start = "";
-		$scope.hoverElement.end = "";
-		$scope.hoverElement.comment = "";
+		if($scope.hoverElement.hasValue) {
+			$scope.hoverElement._id = "";
+			$scope.hoverElement.system = "";
+			$scope.hoverElement.status = "";
+			$scope.hoverElement.start = "";
+			$scope.hoverElement.end = "";
+			$scope.hoverElement.comment = "";
+			$scope.hoverElement.hasValue = false;
+		}
 	}
 	
 	function fillSelectedElement(sysIndex, elmIndex) {

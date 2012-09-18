@@ -6,7 +6,7 @@
 			
 				element.click(function() {
 				
-					if(scope.selectedElement.elmIndex > -1 && scope.selectedElement.sysIndex > -1) {
+					if(scope.selectedElement.elmIndex > -1 && scope.selectedElement.sysIndex > -1 && scope.hoverElement.hasValue) {
 						scope.hoverElement.element.popover('hide');
 						scope.clearHoverElement();
 						scope.unSelectElement();
@@ -31,7 +31,7 @@
 				
 				//var editButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" data-toggle="modal" href="#editelementdialog"><i class="icon-pencil icon-white"></i></a>';
 				var editButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="callModal($event);"><i class="icon-pencil icon-white"></i></a>';
-				var deleteButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="removeStatusElement();" clear-popovers-and-selections><i class="icon-trash icon-white"></i></a>'
+				var deleteButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="removeStatusElement();"><i class="icon-trash icon-white"></i></a>'
 				var titleString = systeml.system + ' - ' + statusl.status + deleteButtonTemplate + editButtonTemplate;
 				
 				
@@ -93,7 +93,7 @@
 		};
 	});
 	
-	
+	var stopRecursive;
 	myModule.directive('systemTable', function($compile, Utils){
 		return {
 				restrict: 'E',
@@ -101,8 +101,14 @@
 				//transclude: true,	
 				link: function(scope, element, attrs) {
 				
-					scope.$watch('systemlines', function() {
-						buildCalendar();			
+					scope.$watch('systemlines', function(newVal, oldVal) {
+						if (stopRecursive === newVal) {
+							return;
+						}
+						
+						buildCalendar();
+
+						stopRecursive = angular.copy(newVal);
 					});
 					
 					scope.$watch('selectedMonth', function() {
@@ -132,7 +138,7 @@
 					
 
 					function buildCalendar() {
-						var template = 	'<table>'+
+						var template = 	'<table id="maintable">'+
 											'<thead>'+
 												'<tr>'+
 													'<th class="months" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
@@ -188,8 +194,8 @@
 																
 																				'<span ng:class="getClassForElement('+i+','+result.index+')"'+ 
 																					  'ng-click="selectElement($event, '+i+','+result.index+')"'+ 
-																					  'bs-popoverhover sysIndex="'+i+'"'+
-																					  'elmIndex="'+result.index+'"'+ 
+																					  //'bs-popoverhover sysIndex="'+i+'"'+
+																					  //'elmIndex="'+result.index+'"'+ 
 																					  //'bs-popover="popover.html"'+
 																					  'rel="popover">'+ 
 																				'</span>'+	
