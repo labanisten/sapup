@@ -1,7 +1,7 @@
-var myModule = angular.module('systemAvailability', ['mongodbModule', 'calendarModule', 'utilsModule', 'directiveModule', 'validationModule']);
+var myModule = angular.module('systemAvailability', ['mongodbModule', 'calendarModule', 'utilsModule', 'directiveModule']);
 
 
-myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils, Validation) {
+myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 	this.Utils = Utils;
 	$scope.systemlines = getSystemData(); 
