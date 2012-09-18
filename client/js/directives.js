@@ -238,7 +238,7 @@
 							scope.addAlertLine.expdate = dateText;
 							
 							var dbdate = Utils.viewDateToDBdate(dateText);
-							var currentDate = getDateString(new Date());
+							var currentDate = Utils.getDateString(new Date());
 							var daysLeft = dbdate - currentDate;
 							
 							var dayText;
