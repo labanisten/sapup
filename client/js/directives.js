@@ -120,7 +120,7 @@
 											'</thead>'+
 											'<tbody>';
 
-												console.log("systemlines: " + scope.systemlines.length);
+												//console.log("systemlines: " + scope.systemlines.length);
 												
 												for(var i = 0; i < scope.systemlines.length; i++){
 
@@ -181,7 +181,7 @@
 	});
 
 			
-	myModule.directive('jqDatepicker', function () {
+	myModule.directive('jqDatepicker', function (Utils) {
 		return {
 							link: function postLink(scope, element, attrs) {
 								element.datepicker({
@@ -196,8 +196,8 @@
 										else if(element.context.id == "alertDialogExpDate"){
 											scope.addAlertLine.expdate = dateText;
 											
-											var dbdate = viewDateToDBdate(dateText);
-											var currentDate = getDateString(new Date());
+											var dbdate = Utils.viewDateToDateObject(dateText);
+											var currentDate = Utils.getDateString(new Date());
 											var daysLeft = dbdate - currentDate;
 											
 											var dayText;

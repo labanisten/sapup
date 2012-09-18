@@ -55,7 +55,7 @@ angular.module('utilsModule', []).
 	};
 
 
-	ns.viewDateToDBdate = function(dateString) {
+	ns.viewDateToDBDate = function(dateString) {
 		var datestring = dateString,
 			d = datestring.substr(0, 2),
 			m = datestring.substr(3, 2),

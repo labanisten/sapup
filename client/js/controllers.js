@@ -1,6 +1,6 @@
-var myModule = angular.module('systemAvailability', ['mongolabModule', 'calendarModule', 'utilsModule']);
+var myModule = angular.module('systemAvailability', ['mongodbModule', 'calendarModule', 'utilsModule', 'adminModule', 'initializeModule']);
 
-myModule.controller("adminViewCtrl", function($scope, Systems, Utils) {
+myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 	
 	$scope.systemnames = getSystemNames();
 	$scope.systemstatuses = getSystemStatuses();
@@ -14,128 +14,145 @@ myModule.controller("adminViewCtrl", function($scope, Systems, Utils) {
 	
 	function getSystemNames(){
 
-		var systemNames = Systems.systemnames.query(function() {
-			adminTables.updateSystemNamesTable(systemNames);
-		});	
+		var promise = db.Systemname.get(); 
+		promise.then(function(data) {
+			admin.updateSystemNamesTable(data);
+  		});
 
-		return systemNames;
+		return [];
 	}
 	
 	
 	function getSystemStatuses(){
-		var statusTypes = Systems.systemstatuses.query(function(){
-			adminTables.updateStatusTypesTable(statusTypes);
-		});	
-		
-		return statusTypes;
+
+		var promise = db.Systemstatus.get(); 
+		promise.then(function(data) {
+			admin.updateStatusTypesTable(data);
+  		});
+
+		return []; 
 	}
 	
 	
 	function getAlertTypes(){
-		var alertTypes = Systems.alerttypes.query(function(){
-			adminTables.updateAlertTypesTable(alertTypes);
-		});	
-		
-		return alertTypes;
+	
+		var promise = db.Alerttype.get(); 
+		promise.then(function(data) {
+			admin.updateAlertTypesTable(data);
+  		});
+
+		return []; 
 	}
 	
 	
 	function getAlertLog(){
-		var alertLog = Systems.alerts.query(function(){
-			adminTables.updateAlertLogTable(alertLog);
-		});	
-		
-		return alertLog;
+	
+		var promise = db.Alert.get(); 
+		promise.then(function(data) {
+			admin.updateAlertLogTable(data)
+  		});
+
+		return []; 
 	}
 	
 	$scope.saveSystemName = function() {
 
-		if ($scope.systemNameInput != "")
-		{			
-			var sLine = { name: "" };						
-			sLine.name = $scope.systemNameInput.toUpperCase();
-					
-			Systems.systemnames.save(sLine, function(item){
-				adminTables.addLineToSystemNamesTable(sLine.name, item._id.$oid);
-			});				
+		if ($scope.systemNameInput) {			
+			var systemname = new db.Systemname(); 
+			systemname.name = $scope.systemNameInput.toUpperCase();
+			systemname.create().then(function(newSystemname) {
+			   admin.addLineToSystemNamesTable(newSystemname);
+			});
 		}
 	}
 	
 	
 	$scope.saveStatusType = function() {
 
-		if ($scope.statusTypeInput != "")
-		{			
-			var sLine = { status: $scope.statusTypeInput };			
-					
-			Systems.systemstatuses.save(sLine, function(item){
-				adminTables.addLineToStatusTypesTable(sLine.status, item._id.$oid);
-			});				
+		if ($scope.statusTypeInput) {			
+			var systemstatus = new db.Systemstatus(); 
+			systemstatus.status = $scope.statusTypeInput;
+			systemstatus.create().then(function(newSystemstatus) {
+			   admin.addLineToStatusTypesTable(newSystemstatus);
+			});
 		}
 	}
 	
 	
 	$scope.saveAlertType = function() {
 
-		if ($scope.alertTypeInput != "")
-		{			
-			var sLine = { type: $scope.alertTypeInput };			
-					
-			Systems.alerttypes.save(sLine, function(item){
-				adminTables.addLineToAlertTypesTable(sLine.type, item._id.$oid);
-			});				
+		if ($scope.alertTypeInput) {			
+			var alerttype = new db.Alerttype(); 
+			alerttype.type = $scope.alertTypeInput;
+			alerttype.create().then(function(newAlerttype) {
+			   admin.addLineToAlertTypesTable(newAlerttype);
+			});
 		}
+
 	}
 	
 	
 	$scope.deleteSystemName = function() {
 	
-		var selectedItem = adminTables.getSystemNameSelected();
+		var selectedItem = admin.getSystemNameSelected();
 
 		if (selectedItem.hasValue)
 		{
-				Systems.systemnames.remove({id:selectedItem.id},  function(item){
-					adminTables.removeSelectedSystemNamesRow();
-				});
+			db.Systemname.remove(selectedItem.id).then(function(response) {
+					if (response.data.ok) {
+						admin.removeSelectedSystemNamesRow();					
+					} else {
+						//Unable to delete
+					}
+			});
 		}
 	};
 	
 	
 	$scope.deleteStatusType = function() {
 	
-		var selectedItem = adminTables.getStatusTypeSelected();
+		var selectedItem = admin.getStatusTypeSelected();
 
-		if (selectedItem.hasValue)
-		{
-				Systems.systemstatuses.remove({id:selectedItem.id},  function(item){
-					adminTables.removeSelectedStatusTypesRow();
-				});
+		if (selectedItem.hasValue) {
+			db.Systemstatus.remove(selectedItem.id).then(function(response) {
+					if (response.data.ok) {
+						admin.removeSelectedStatusTypesRow();					
+					} else {
+						//Unable to delete
+					}
+			});
 		}
 	};
 	
 	
 	$scope.deleteAlertType = function() {
 	
-		var selectedItem = adminTables.getAlertTypeSelected();
+		var selectedItem = admin.getAlertTypeSelected();
 
-		if (selectedItem.hasValue)
-		{
-				Systems.alerttypes.remove({id:selectedItem.id},  function(item){
-					adminTables.removeSelectedAlertTypesRow();
-				});
+		if (selectedItem.hasValue) {
+			db.Alerttype.remove(selectedItem.id).then(function(response) {
+					if (response.data.ok) {
+						admin.removeSelectedAlertTypesRow();
+					} else {
+						//Unable to delete
+					}
+			});
 		}
 	};
 	
 	
 	$scope.deleteAlertLog = function() {
 	
-		var selectedItem = adminTables.getAlertLogSelected();
+		var selectedItem = admin.getAlertLogSelected();
 
-		if (selectedItem.hasValue)
-		{
-				Systems.alerts.remove({id:selectedItem.id},  function(item){
-					adminTables.removeSelectedAlertLogRow();
-				});
+		if (selectedItem.hasValue) {
+			db.Alert.remove(selectedItem.id).then(function(response) {
+					if (response.data.ok) {
+						admin.removeSelectedAlertLogRow();
+					} else {
+						//Unable to delete
+					}
+			});
 		}
 	};
 	
@@ -143,12 +160,9 @@ myModule.controller("adminViewCtrl", function($scope, Systems, Utils) {
 });
 
 
-myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
+myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
-	this.Calendar = Calendar;
-	this.Systems = Systems;
-
-	$scope.systemlines = getSystemData();
+	$scope.systemlines = getSystemData(); 
 	$scope.systemnames = getSystemNames();
 	$scope.systemstatuses = getSystemStatuses();
 	$scope.alertlines = getAlertData();
@@ -220,26 +234,36 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 	};
 
 	function getSystemData() {
-		var calendartable = [];
-		var syslines = Systems.systems.query(function() {
-			calendartable = syslines;
-			calendartable.sort(Utils.ascSystemSort);
-			$scope.systemlines = calendartable;
-		});
-		return calendartable;
+
+		var promise = db.System.get(); 
+		promise.then(function(data) {
+			$scope.systemlines = data; 
+  		});
+
+		return [];
+
 	}
 	
 	
 	function getSystemStatuses(){
-		var systemStatuses = Systems.systemstatuses.query(function(){});
-		return systemStatuses;
+
+		var promise = db.Systemstatus.get(); 
+		promise.then(function(data) {
+			$scope.systemstatuses = data.rows; 
+  		});
+
+		return []; 
 	}
 	
 	
 	function getSystemNames(){
-		var systemNames = Systems.systemnames.query(function() {
-		});
-		return systemNames;
+
+		var promise = db.Systemname.get(); 
+		promise.then(function(data) {
+			$scope.systemNames = data.rows; 
+  		});
+
+		return [];
 	}
 
 
@@ -247,42 +271,55 @@ myModule.controller("TimelineCtrl", function($scope, Systems, Calendar, Utils) {
 		var alerts = [];
 		var currentDate = Utils.getDateString(new Date());
 
-		var alertLines = Systems.alerts.query(function() {
+		var promise = db.Alert.get(); 
+		promise.then(function(data) {
+			$.each(data, function(i, v_alert) {
 		
-			$.each(alertLines, function(i, v_alert) {
-			
 				if(v_alert.expdate >= currentDate){
 					alerts.push(v_alert);
 				}
 				
 			});
-		});
-		
-		return alerts;
+  			$scope.alertlines = alerts;
+
+  		});
+		return [];
 	}
 	
 	
 	function getAlertTypes(){
-		var alertTypes = Systems.alerttypes.query(function(){});
-		return alertTypes;
+
+		var promise = db.Alerttype.get(); 
+		promise.then(function(data) {
+			$scope.alerttypes = data; 
+  		});
+		return []; 
 	}
 	
 	
 	$scope.addAlert = function() {
 		if($("#alertForm").valid()){
-			$('#addalertdialog').modal('hide');
-			var alertLine = $scope.addAlertLine;
-			alertLine.expdate = convertDateToDatabaseFormat(alertLine.expdate);
-			Systems.alerts.save(alertLine, function(item){
-				$scope.alertlines.push(item);
+			$('#addalertdialog').modal('hide');			
+			var alert = new db.Alert($scope.addAlertLine); 
+			alert.expdate = Utils.viewDateToDBDate(alert.expdate);
+			alert.create().then(function(newAlert) {
+			   $scope.alertlines.push(newAlert);
 			});
-			$scope.resetNewAlertForm();
+			Utils.resetNewAlertForm();
 		}
 	};
 	
 	$scope.removeAlert = function(id) {
-		Systems.alerts.delete({id: id.$oid}, function(){});
+		db.alert.remove(id).then(function(response) {
+					if (response.data.ok) {
+						//success
+					} else {
+						//Unable to delete
+					}
+			});
+
 	};
+
 
 
 	$scope.removeStatusElement = function(id) {

@@ -1,41 +1,42 @@
 angular.module('mongolabModule', ['ngResource']).
 	factory('Systems', function($resource) {
 	
-		var db = {	systems: $resource('https://api.mongolab.com/api/1/databases/saa_testdb/collections/system/:id?apiKey=4fd9cdade4b05cb78ca54269',
-									   {id: '@id'},
+		var db = {	systems: $resource('/mongodb/saa_testdb/system/:id/',
+									   {},
 									   {
+									   		query: {method: 'GET', isArray:false},
 											update: { method: 'PUT' }									   
 									   }), 
 		
-					systemnames: $resource('https://api.mongolab.com/api/1/databases/saa_testdb/collections/systemname/:id?apiKey=4fd9cdade4b05cb78ca54269',	
-										{id:'@id'},
+					systemnames: $resource('/mongodb/saa_testdb/systemname/:id',	
+										{},
 										{
 											update: { method: 'PUT'},
 											remove: { method: 'DELETE'}
 										}
 					),	
 					
-					systemstatuses: $resource('https://api.mongolab.com/api/1/databases/saa_testdb/collections/systemstatus/:id?apiKey=4fd9cdade4b05cb78ca54269',
-										{id:'@id'},
+					systemstatuses: $resource('/mongodb/saa_testdb/systemstatus/:id',
+										{},
 										{
 											remove: { method: 'DELETE'}
 										}		
 					), 
 					
-					alerttypes: $resource('https://api.mongolab.com/api/1/databases/saa_testdb/collections/alerttype/:id?apiKey=4fd9cdade4b05cb78ca54269',
-										{id:'@id'},
+					alerttypes: $resource('/mongodb/saa_testdb/alerttype/:id',
+										{},
 										{
 											remove: { method: 'DELETE'}
-										}	
+										}
 					
-					), 	
+					),
 					
-					alerts: $resource('https://api.mongolab.com/api/1/databases/saa_testdb/collections/alert/:id?apiKey=4fd9cdade4b05cb78ca54269',
-										{id: '@id'},
+					alerts: $resource('/mongodb/saa_testdb/alert/:id',
+										{},
 										{
 											get: {method: 'GET', isArray:true},
 											update: { method: 'PUT'},
-											remove: { method: 'DELETE'} 
+											remove: { method: 'DELETE'}
 										}
 									 )
 					};
