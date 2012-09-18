@@ -162,6 +162,7 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 
 myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
+	this.Utils = Utils;
 	$scope.systemlines = getSystemData(); 
 	$scope.systemnames = getSystemNames();
 	$scope.systemstatuses = getSystemStatuses();
@@ -169,13 +170,27 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.alerttypes = getAlertTypes();
 
 	$scope.selectedElement = {
-		_id:"",
+		_id: "",
 		system: "",
 		status: "",
 		start: undefined,
 		end: undefined,
 		comment: "",
-		statusLineRef:""
+		sysIndex: -1,
+		elmIndex: -1
+		//hasValue: false
+	};
+	
+	
+	$scope.hoverElement = {
+		_id: "",
+		system: "",
+		status: "",
+		start: undefined,
+		end: undefined,
+		comment: "",
+		element:""
+		//hasValue: false
 	};
 	
 	
@@ -196,7 +211,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		comment: ""
 	};
 	
-	
 	$scope.monthDayList = Calendar.getMonthDayList();
 	$scope.monthWeekList = Calendar.getMonthWeekList();
 	$scope.monthName = Calendar.getMonthName();
@@ -210,14 +224,43 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.months = Calendar.monthLabelsShort;
 	$scope.monthLabels = Calendar.monthLabels;
 	
-	$scope.selectedYear = Calendar.getCurrentYear();
-	$scope.selectedMonth = Calendar.getCurrentMonth();
+	//$scope.selectedYear = Calendar.getCurrentYear();
+	//$scope.selectedMonth = Calendar.getCurrentMonth();
 	$scope.selectedMonthLabel = Calendar.getMonthName($scope.selectedMonth);
 
-	$scope.setSelectedMonth = function(month) {
-		$scope.selectedMonth = month;
+	$scope.getClassForElement = function(sysIndex, elmIndex) {
+		//class="element-inner {{systemlines['+i+'].statuslines['+result.index+'].status}} element-click"
+		var classString = "";
+		
+		if($scope.systemlines.length > 0) {
+		
+			/*if(sysIndex == 12){
+			 console.log("");
+			}*/
+			
+			//console.log("sys: " + sysIndex + " elm: " + elmIndex + " status: " + $scope.systemlines[sysIndex].statuslines[elmIndex].status);
+			var systemString = $scope.systemlines[sysIndex].statuslines[elmIndex].status;
+			classString = "element-inner element-click " + systemString;
+			if (sysIndex == $scope.selectedElement.sysIndex && elmIndex == $scope.selectedElement.elmIndex) {classString += " selected";};
+		}
+		
+		return classString;
+	}	
+	
+	function isAlreadySelected(sysIndex, elmIndex) {
+		var result = false;
+		if($scope.selectedElement.sysIndex == sysIndex && $scope.selectedElement.elmIndex == elmIndex) {result = true;}
+		return result;
+	}
+	
+	$scope.selectElement = function(event, sysIndex, elmIndex) {
+		if(isAlreadySelected(sysIndex, elmIndex)) {
+			$scope.unSelectElement();
+		}else{	
+			$scope.setSelectedElement(sysIndex, elmIndex);
+		}
 	};
-
+	
 	$scope.getClassForMonth = function(month) {
 		if (month == $scope.selectedMonth) {
 			return "span1 month selectedmonth";
@@ -225,12 +268,11 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			return "span1 month";
 		};
 	}
-
+	
 	$scope.gotoMonth = function(event, month) {
 		$scope.selectedMonth = month;
 		var elem = angular.element(event.srcElement);
-		elem[0].className += " selectedmonth";
-		
+		elem[0].className += " selectedmonth";	
 	};
 
 	function getSystemData() {
@@ -321,30 +363,92 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	};
 
 
-
-	$scope.removeStatusElement = function(id) {
-		if($("#elementForm").valid()){
-			var deletedStatusIndex;
-			$.each($scope.systemlines, function(i, v_system) {
-				if (v_system.system == $scope.systemFormData.system) {
-					$.each(v_system.statuslines, function(j, v_status) {
-						if (v_status.start == viewDateToDBdate($scope.systemFormData.start) && v_status.end == viewDateToDBdate($scope.systemFormData.end) && v_status.status == $scope.systemFormData.status) {
-							$scope.systemlines[i].statuslines.splice(j, 1);
-							CalendarData.fillSpaceWithEmptyElements(v_status, $scope.systemlines[i].statuslines);
-
-							$scope.systemlines[i].statuslines.sort(custom_sort);
-							savedStatusIndex = i;
-						}
-					});
-				}
-			});	
+	$scope.removeStatusElement = function() {
+	
+		$.each($scope.systemlines, function(i, v_system) {
+					
+			if (v_system.system == $scope.systemFormData.system) {
 			
-			updateStatuslineToDB(savedStatusIndex);
-		}
+				//var newObject = jQuery.extend({},true, $scope.systemlines[i].statuslines);
+				var lines = [];
+				
+				$.each(v_system.statuslines, function(j, v_status) {
+					var s = Utils.getDateString($scope.selectedElement.start);
+					var e = Utils.getDateString($scope.selectedElement.end);
+					if(v_status.start != s || 
+						v_status.end != e ||
+							v_status.status != $scope.selectedElement.status) {
+						lines.push(v_status);
+					}
+					
+				});
+				
+				var systemElement = { 
+					"system": v_system.system,
+					"statuslines": lines
+				};
+				
+				//spliceCalendarElement(systemElement, $scope.selectedElement);
+				
+				//var start = Utils.viewDateToDBdate($scope.systemFormData.start);
+				//var end = Utils.viewDateToDBdate($scope.systemFormData.end);
+				
+				/*var statusElement = {
+					"start": start,
+					"end": end,
+					"status": $scope.systemFormData.status,
+					"comment": $scope.systemFormData.comment 
+				}*/
+				
+				//systemElement.statuslines.push(statusElement);
+	
+				
+				Systems.systems.update({id:$scope.systemlines[i]._id.$oid}, systemElement, function(item){
+					//$scope.unSelectElement();
+					//$scope.clearHoverElement();
+					$scope.systemlines = getSystemData();
+				});
+				
+				return false;
+				
+			}else{
+				//addLineToElementModalLog("Error!!!!!");
+			}
+		});
 	};
 	
 	
-	$scope.updateStatusElement = function(id) {
+	function removeElementInDataBase(system, item) {
+	
+		$.each(system.statuslines, function(j, v_status) {
+			var statusStart = Utils.convertToDate(v_status.start);
+			var statusEnd = Utils.convertToDate(v_status.end);
+			
+			if (statusStart.getTime() == item.start.getTime() && statusEnd.getTime() == item.end.getTime() && v_status.status == item.status) {
+				
+				system.statuslines.splice(j, 1);
+				return false;
+			}
+		});
+	}
+	
+	
+	function spliceCalendarElement(system, item) {
+	
+		$.each(system.statuslines, function(j, v_status) {
+			var statusStart = Utils.convertToDate(v_status.start);
+			var statusEnd = Utils.convertToDate(v_status.end);
+			
+			if (statusStart.getTime() == item.start.getTime() && statusEnd.getTime() == item.end.getTime() && v_status.status == item.status) {
+				
+				system.statuslines.splice(j, 1);
+				return false;
+			}
+		});
+	}
+			
+	
+	$scope.updateStatusElement = function() {
 
 		if($("#elementForm").valid()){	
 			
@@ -352,26 +456,28 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 					
 				if (v_system.system == $scope.systemFormData.system) {
 				
-					systemElement = { 
+					var systemElement = { 
 						"system": v_system.system,
 						"statuslines": $scope.systemlines[i].statuslines
 					};
 					
-					CalendarData.removeCalendarElement(systemElement, $scope.selectedElement);
+					spliceCalendarElement(systemElement, $scope.selectedElement);
 					
-					var start = viewDateToDBdate($scope.systemFormData.start);
-					var end = viewDateToDBdate($scope.systemFormData.end);
+					var start = Utils.viewDateToDBdate($scope.systemFormData.start);
+					var end = Utils.viewDateToDBdate($scope.systemFormData.end);
 					
-					statusElement = {
+					var statusElement = {
 						"start": start,
 						"end": end,
-						"status": $scope.systemFormData.status
+						"status": $scope.systemFormData.status,
+						"comment": $scope.systemFormData.comment 
 					}
 					
 					systemElement.statuslines.push(statusElement);
 		
 					Systems.systems.update({id:$scope.systemlines[i]._id.$oid}, systemElement, function(item){
-						addLineToElementModalLog("Element updated in " + $scope.systemlines[i].system);
+						Utils.addLineToElementModalLog("Element updated in " + $scope.systemlines[i].system);
+						//$scope.unSelectElement();
 						$scope.systemlines = getSystemData();
 					});
 					
@@ -380,11 +486,8 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				}else{
 					//addLineToElementModalLog("Error!!!!!");
 				}
-						
 			});
-		
 		}
-			
 	};
 	
 		
@@ -396,24 +499,26 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				
 					if (v_system.system == $scope.systemFormData.system) {
 					
-						systemElement = { 
+						var systemElement = { 
 							"system": v_system.system,
 							"statuslines": $scope.systemlines[i].statuslines
 						};
 						
-						var start = viewDateToDBdate($scope.systemFormData.start);
-						var end = viewDateToDBdate($scope.systemFormData.end);
+						var start = Utils.viewDateToDBdate($scope.systemFormData.start);
+						var end = Utils.viewDateToDBdate($scope.systemFormData.end);
 						
-						statusElement = {
+						var statusElement = {
 							"start": start,
 							"end": end,
-							"status": $scope.systemFormData.status
+							"status": $scope.systemFormData.status,
+							"comment": $scope.systemFormData.comment 
 						}
 						
 						systemElement.statuslines.push(statusElement);
 			
 						Systems.systems.update({id:$scope.systemlines[i]._id.$oid}, systemElement, function(item){
-							addLineToElementModalLog("Element added to " + $scope.systemlines[i].system);
+							Utils.addLineToElementModalLog("Element added to " + $scope.systemlines[i].system);
+							$scope.unSelectElement();
 							$scope.systemlines = getSystemData();
 						});
 						
@@ -421,11 +526,92 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 						
 					}else{
 						//addLineToElementModalLog("Error!!!!!");
-					}
-					
+					}			
 			});
-		
 		}
 	};
 
+	$scope.setSelectedElement = function(sysIndex, elmIndex) {
+		$scope.selectedElement.elmIndex = elmIndex;
+		$scope.selectedElement.sysIndex = sysIndex;
+		fillSelectedElement(sysIndex, elmIndex);
+		fillSystemFormData(sysIndex, elmIndex);
+	}
+	
+	$scope.unSelectElement = function() {
+		$scope.selectedElement.elmIndex = -1;
+		$scope.selectedElement.sysIndex = -1;
+		clearSelectedElement();
+		clearSystemFormData();	
+	}
+	
+	$scope.setHoverElement = function(sysIndex, elmIndex, element) {
+		var sys = $scope.systemlines[sysIndex];
+		var elm = $scope.systemlines[sysIndex].statuslines[elmIndex];
+		$scope.hoverElement._id = sys.id;
+		$scope.hoverElement.system = sys.system;
+		$scope.hoverElement.status = elm.status;
+		$scope.hoverElement.start = Utils.dbDateToViewDate(elm.start);
+		$scope.hoverElement.end = Utils.dbDateToViewDate(elm.end);
+		$scope.hoverElement.comment = elm.comment;	
+		$scope.hoverElement.element = element;
+	}
+	
+	$scope.clearHoverElement = function() {
+		$scope.hoverElement._id = "";
+		$scope.hoverElement.system = "";
+		$scope.hoverElement.status = "";
+		$scope.hoverElement.start = "";
+		$scope.hoverElement.end = "";
+		$scope.hoverElement.comment = "";
+	}
+	
+	function fillSelectedElement(sysIndex, elmIndex) {
+		var sys = $scope.systemlines[sysIndex];
+		var elm = $scope.systemlines[sysIndex].statuslines[elmIndex];
+		$scope.selectedElement._id = sys.id;
+		$scope.selectedElement.system = sys.system;
+		$scope.selectedElement.status = elm.status;
+		$scope.selectedElement.start = Utils.convertToDate(elm.start);
+		$scope.selectedElement.end = Utils.convertToDate(elm.end);
+		//$scope.systemFormData.comment = statusLine.comment;			
+	}
+	
+	function fillSystemFormData(sysIndex, elmIndex) {
+		var sys = $scope.systemlines[sysIndex];
+		var elm = $scope.systemlines[sysIndex].statuslines[elmIndex];
+		$scope.systemFormData._id = sys.id;
+		$scope.systemFormData.system = sys.system;
+		$scope.systemFormData.status = elm.status;
+		//$scope.systemFormData.start = dateObjectToViewDate(statusLine.start);
+		//$scope.systemFormData.end = dateObjectToViewDate(statusLine.end);
+		$scope.systemFormData.start = Utils.dbDateToViewDate(elm.start);
+		$scope.systemFormData.end = Utils.dbDateToViewDate(elm.end);
+		$scope.systemFormData.comment = elm.comment;
+	}
+	
+	function clearSelectedElement() {
+		$scope.selectedElement._id = "";
+		$scope.selectedElement.system = "";
+		$scope.selectedElement.status = "";
+		$scope.selectedElement.start = "";
+		$scope.selectedElement.end = "";
+		$scope.selectedElement.comment = "";
+	}
+	
+	function clearSystemFormData() {
+		$scope.systemFormData.system = "";
+		$scope.systemFormData.status = "";
+		$scope.systemFormData.start = "";
+		$scope.systemFormData.end = "";
+		$scope.systemFormData.comment = "";
+	}
+	
+	$scope.callModal = function(event) {
+		$("#editelementdialog").modal('show');
+	}
+	
+	$scope.clearModalLog = function(event) {
+		Utils.clearModalLog();
+	}
 });

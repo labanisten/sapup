@@ -7,11 +7,12 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<script src="../js/jquery-1.7.2.min.js"></script>
+	<!--<script src="../js/jquery-1.7.2.min.js"></script>-->
+	<script src="../js/jquery-1.8.0.js"></script>
 	<script src="../js/jquery-ui-1.8.21.custom.min.js"></script>
-
 	<script src="../js/angular.js"></script>
 	<script src="../js/angular-resource.js"></script>
+	<!--<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>-->
 	<script src="../js/controllers.js"></script>
 	<script src="../js/directives.js"></script>
 	<script src="../js/mongodb.js"></script>
@@ -28,17 +29,22 @@
 	<div class="navbar">
 		<div class="navbar-inner">
 			<div class="container">
+				
+				<!--
 				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
-				</a>
+				</a>-->
+				
+				<!--<img src="../css/images/statoil_vertical_neg_80x40.png"/>-->
+				
 				<a class="brand" href="#">System availability</a>
 				<a class="btn btn-primary pull-right" data-toggle="modal" href="#addalertdialog"> <i class="icon-plus icon-white"></i>
 					Add alert
 				</a>
 				<a class="btn btn-primary pull-right" data-toggle="modal" href="#editelementdialog"><i class="icon-th icon-white"></i> 
-					Edit elements
+					Add elements
 				</a>
 				<a class="btn btn-primary pull-right" href="../public/admin.html">
 					<i class="icon-pencil icon-white"></i>
@@ -59,6 +65,7 @@
 							Alerts
 						</h4>
 					</div>
+					
 					<div id="collapseOne" class="alert-container-body accordion-body in collapse" style="height: auto; ">
 						<div class="accordion-inner">
 
@@ -68,8 +75,10 @@
 									<p>{{alertline.comment}}</p>
 								</div>
 							</div>
+							
 						</div>
 					</div>
+					
 				</div>
 			</div>
 
@@ -98,8 +107,7 @@
 
 				<div class="span6">
 				<form id="alertForm">
-						<!--form-horizontal">
-						-->
+						<!--form-horizontal">-->
 						<fieldset>
 
 							<div class="control-group">
@@ -116,7 +124,6 @@
 
 							<div class="control-group">
 								<label for="expdate">Expiry Date</label>
-								-->
 								<input jq-datepicker id="alertDialogExpDate" name="alertDialogExpDate" ng-model="addAlertLine.expdate" class="input-medium"></div>
 
 							<div class="control-group">
@@ -159,7 +166,6 @@
 
 		<div class="modal-body">
 
-			-->
 			<div class="span2">
 				<form id="elementForm">
 
@@ -212,19 +218,19 @@
 
 		<div class="modal-footer">
 
-			<a class="btn btn-primary pull-left" ng-click="addStatusElement()">
+			<a class="btn btn-primary pull-left" ng-click="addStatusElement()" clear-popovers-and-selections>
 				<i class="icon-plus icon-white"></i>
 				New
 			</a>
-			<a class="btn btn-primary pull-left" ng-click="updateStatusElement()">
+			<a class="btn btn-primary pull-left" ng-click="updateStatusElement()" clear-popovers-and-selections>
 				<i class="icon-pencil icon-white"></i>
 				Update
 			</a>
-			<a class="btn btn-danger pull-left" ng-click="removeStatusElement()">
+			<a class="btn btn-danger pull-left" ng-click="removeStatusElement()" clear-popovers-and-selections>
 				<i class="icon-trash icon-white"></i>
 				Delete
 			</a>
-			<a class="btn btn-primary" data-dismiss="modal" onclick="clearModalLog();">
+			<a class="btn btn-primary" data-dismiss="modal" ng-click="clearModalLog();">
 				<i class="icon-remove icon-white"></i>
 				Close
 			</a>
