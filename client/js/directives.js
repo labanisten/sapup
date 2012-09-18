@@ -1,4 +1,6 @@
 
+	var myModule = angular.module('directiveModule', ['utilsModule']);
+	
 	myModule.directive('clearPopoversAndSelections', function(){
 		return {
 			restrict: 'A',
@@ -210,7 +212,7 @@
 												}
 												
 												template += '</tr>'+							
-										    '</tbody>'+
+											'</tbody>'+
 									  '</table>';
 									  
 						element.html(template);				
@@ -287,3 +289,5 @@
 					}
 		}
 	});
+		
+	
