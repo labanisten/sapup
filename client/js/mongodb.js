@@ -30,10 +30,17 @@ angular.module('mongodbModule', []).
 					});					
 				}
 
-				ns[name].prototype.create = create = function() {
+				ns[name].prototype.create = function() {
 					var resource = this;
 				 	return $http.post(DB_URL + DB_NAME + '/' + url + '/', resource).then(function(response) {
 					 	resource.id = response.data[0]._id;
+						return resource;
+					});
+				};
+
+				ns[name].prototype.update = function(id) {
+					var resource = this;
+				 	return $http.put(DB_URL + DB_NAME + '/' + url + '/' + id, resource).then(function(response) {
 						return resource;
 					});
 				};

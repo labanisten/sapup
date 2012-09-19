@@ -43,6 +43,15 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		end: undefined,
 		comment: ""
 	};
+
+	$scope.system = {
+		system: "",
+		status: "",
+		start: undefined,
+		end: undefined,
+		comment: "",
+		statuslines: []
+	};
 	
 	
 	$scope.addAlertLine = {
@@ -134,7 +143,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 		var promise = db.Systemstatus.get(); 
 		promise.then(function(data) {
-			$scope.systemstatuses = data.rows; 
+			$scope.systemstatuses = data; 
   		});
 
 		return []; 
@@ -145,7 +154,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 		var promise = db.Systemname.get(); 
 		promise.then(function(data) {
-			$scope.systemNames = data.rows; 
+			$scope.systemnames = data; 
   		});
 
 		return [];
@@ -351,37 +360,63 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		if($("#elementForm").valid()){
 
 			$.each($scope.systemlines, function(i, v_system) {
-				
-					if (v_system.system == $scope.systemFormData.system) {
 					
-						var systemElement = { 
-							"system": v_system.system,
-							"statuslines": $scope.systemlines[i].statuslines
-						};
-						
-						var start = Utils.viewDateToDBdate($scope.systemFormData.start);
-						var end = Utils.viewDateToDBdate($scope.systemFormData.end);
-						
-						var statusElement = {
-							"start": start,
-							"end": end,
-							"status": $scope.systemFormData.status,
-							"comment": $scope.systemFormData.comment 
-						}
-						
-						systemElement.statuslines.push(statusElement);
-			
-						Systems.systems.update({id:$scope.systemlines[i]._id.$oid}, systemElement, function(item){
-							Utils.addLineToElementModalLog("Element added to " + $scope.systemlines[i].system);
-							$scope.unSelectElement();
-							$scope.systemlines = getSystemData();
-						});
-						
-						return false;
-						
-					}else{
-						//addLineToElementModalLog("Error!!!!!");
-					}			
+				if (v_system.system == $scope.systemFormData.system) {
+					var systemElement = { 
+						"system": v_system.system,
+						"statuslines": $scope.systemlines[i].statuslines
+					};
+					
+					var start = Utils.viewDateToDBDate($scope.systemFormData.start);
+					var end = Utils.viewDateToDBDate($scope.systemFormData.end);
+					
+					var statusElement = {
+						"start": start,
+						"end": end,
+						"status": $scope.systemFormData.status,
+						"comment": $scope.systemFormData.comment 
+					}
+					
+					
+					systemElement.statuslines.push(statusElement);
+
+					system = new db.System(systemElement);
+
+					system.update(v_system._id).then(function(newSystemElement) {
+						Utils.addLineToElementModalLog("Element added to " + $scope.systemlines[i].system);
+						$scope.unSelectElement();
+						$scope.systemlines = getSystemData();
+					})
+
+					
+					
+				}else{
+					//Post new system 
+					var systemElement = { 
+						"system": $scope.systemFormData.system,
+						"statuslines": []
+					};
+					
+					var start = Utils.viewDateToDBDate($scope.systemFormData.start);
+					var end = Utils.viewDateToDBDate($scope.systemFormData.end);
+					
+					var statusElement = {
+						"start": start,
+						"end": end,
+						"status": $scope.systemFormData.status,
+						"comment": $scope.systemFormData.comment 
+					}
+									
+					systemElement.statuslines.push(statusElement);
+					
+					system = new db.System(systemElement);
+					system.create().then(function(newSystemElement) {
+						Utils.addLineToElementModalLog("Element added to " + $scope.systemlines[i].system);
+						$scope.unSelectElement();
+						$scope.systemlines = getSystemData();
+					})
+				}			
+				return false;
 			});
 		}
 	};

@@ -108,7 +108,11 @@
 							return;
 						}
 						
-						buildCalendar();
+						if (scope.systemlines.length > 0 && dataComplete) {
+							buildCalendar();
+						} else if (scope.systemlines.length > 0) {
+							dataComplete = true; 
+						}
 
 						stopRecursive = angular.copy(newVal);
 					});
@@ -116,7 +120,19 @@
 					scope.$watch('selectedMonth', function() {
 						buildCalendar();
 					});
+
+					scope.$watch('systemnames', function() {
+
+						if (scope.systemnames.length > 0 && dataComplete) {
+							buildCalendar();
+						} else if (scope.systemnames.length > 0) {
+							dataComplete = true; 
+						}
 					
+					});
+					
+					var dataComplete = false; 
+
 					function findMatchingElement(day, statuslines) {
 						var result = "";
 						day = day + 1;
@@ -172,43 +188,50 @@
 
 												//console.log("systemlines: " + scope.systemlines.length);
 												
-												for(var i = 0; i < scope.systemlines.length; i++){
-
+												var system = scope.system;
+												for(var i = 0; i < scope.systemnames.length; i++){
+													for(var j = 0; j < scope.systemlines.length; j++){
+														if (scope.systemnames[i].name == scope.systemlines[j].system) {
+															system = scope.systemlines[j];
+															break;
+														}
+													}
 													template += '<tr>'+ 
 																	'<td class="system">'+
-																		'<span class="badge badge-info">{{systemlines['+i+'].system}}</span>'+
+																		'<span class="badge badge-info">{{systemnames['+i+'].name}}</span>'+
 																	'</td>';
 																
 													for(var day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
 														
-															var result = findMatchingElement(day, scope.systemlines[i].statuslines);
-															
-															if(result == "") {
-															
-																template += '<td clear-popovers-and-selections>'+ 
-																				//'<span class="element-inner available"'+
-																				//'</span>'+	
-																			'</td>';
-															}else{
-																var colspan = result.end - result.start + 1;
-																//template += '<td colspan="'+colspan+'" ng-click="setSelectetElement(systemlines['+i+'], systemlines['+i+'].statuslines['+result.index+'])">'+
-																template += '<td class="filledcell" colspan="'+colspan+'">'+
-																
-																				'<span ng:class="getClassForElement('+i+','+result.index+')"'+ 
-																					  'ng-click="selectElement($event, '+i+','+result.index+')"'+ 
-																					  //'bs-popoverhover sysIndex="'+i+'"'+
-																					  //'elmIndex="'+result.index+'"'+ 
-																					  //'bs-popover="popover.html"'+
-																					  'rel="popover">'+ 
-																				'</span>'+	
-																				
-																			'</td>';
-																day = day + colspan - 1;
-															}
+														var result = findMatchingElement(day, system.statuslines);
 														
+														if(result == "") {
+														
+															template += '<td clear-popovers-and-selections>'+ 
+																			//'<span class="element-inner available"'+
+																			//'</span>'+	
+																		'</td>';
+														}else{
+															var colspan = result.end - result.start + 1;
+															//template += '<td colspan="'+colspan+'" ng-click="setSelectetElement(systemlines['+i+'], systemlines['+i+'].statuslines['+result.index+'])">'+
+															template += '<td class="filledcell" colspan="'+colspan+'">'+
+															
+																			'<span ng:class="getClassForElement('+j+','+result.index+')"'+ 
+																				  'ng-click="selectElement($event, '+j+','+result.index+')"'+ 
+																				  //'bs-popoverhover sysIndex="'+i+'"'+
+																				  //'elmIndex="'+result.index+'"'+ 
+																				  //'bs-popover="popover.html"'+
+																				  'rel="popover">'+ 
+																			'</span>'+	
+																			
+																		'</td>';
+															day = day + colspan - 1;
+														}
+															
 													}
-													
+														
 													template += '</tr>';
+													
 												}
 												
 												template += '</tr>'+							
