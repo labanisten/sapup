@@ -428,7 +428,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	function fillSelectedElement(sysIndex, elmIndex) {
 		var sys = $scope.systemlines[sysIndex];
 		var elm = $scope.systemlines[sysIndex].statuslines[elmIndex];
-		$scope.selectedElement._id = sys.id;
+		$scope.selectedElement._id = sys._id;
 		$scope.selectedElement.system = sys.system;
 		$scope.selectedElement.status = elm.status;
 		$scope.selectedElement.start = Utils.convertToDate(elm.start);
@@ -439,7 +439,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	function fillSystemFormData(sysIndex, elmIndex) {
 		var sys = $scope.systemlines[sysIndex];
 		var elm = $scope.systemlines[sysIndex].statuslines[elmIndex];
-		$scope.systemFormData._id = sys.id;
+		$scope.systemFormData._id = sys._id;
 		$scope.systemFormData.system = sys.system;
 		$scope.systemFormData.status = elm.status;
 		//$scope.systemFormData.start = dateObjectToViewDate(statusLine.start);

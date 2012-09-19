@@ -196,8 +196,8 @@
 																
 																				'<span ng:class="getClassForElement('+i+','+result.index+')"'+ 
 																					  'ng-click="selectElement($event, '+i+','+result.index+')"'+ 
-																					  //'bs-popoverhover sysIndex="'+i+'"'+
-																					  //'elmIndex="'+result.index+'"'+ 
+																					  'bs-popoverhover sysIndex="'+i+'"'+
+																					  'elmIndex="'+result.index+'"'+ 
 																					  //'bs-popover="popover.html"'+
 																					  'rel="popover">'+ 
 																				'</span>'+	
