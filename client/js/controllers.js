@@ -264,13 +264,20 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				scope.$apply();*/
 				//$scope.$destroy();
 				
-				
+				/*
 				Systems.systems.update({id:$scope.systemlines[i]._id.$oid}, systemElement, function(item){
 					
 					//$scope.systemlines = [];
 					console.log("db");
 					getSystemData();
 					//$scope.apply();
+				});*/
+				
+				system = new db.System(systemElement);
+				system.update(v_system._id).then(function(newSystemElement) {
+					//Utils.addLineToElementModalLog("Element added to " + $scope.systemlines[i].system);
+					$scope.unSelectElement();
+					getSystemData();
 				});
 				
 				return false;

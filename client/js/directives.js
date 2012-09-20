@@ -33,7 +33,7 @@
 				
 				//var editButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" data-toggle="modal" href="#editelementdialog"><i class="icon-pencil icon-white"></i></a>';
 				var editButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="callModal($event);"><i class="icon-pencil icon-white"></i></a>';
-				var deleteButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="removeStatusElement();"><i class="icon-trash icon-white"></i></a>'
+				var deleteButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="removeStatusElement();"><i class="icon-trash icon-white"></i></a>';
 				var titleString = systeml.system + ' - ' + statusl.status + deleteButtonTemplate + editButtonTemplate;
 				
 				
@@ -95,7 +95,7 @@
 		};
 	});
 	
-	var stopRecursive;
+	
 	myModule.directive('systemTable', function($compile, Utils){
 		return {
 				restrict: 'E',
@@ -103,35 +103,46 @@
 				//transclude: true,	
 				link: function(scope, element, attrs) {
 				
-					scope.$watch('systemlines', function(newVal, oldVal) {
-						if (stopRecursive === newVal) {
-							return;
-						}
-						
-						if (scope.systemlines.length > 0 && dataComplete) {
-							buildCalendar();
-						} else if (scope.systemlines.length > 0) {
+					var stopRecursive;
+					var dataComplete = false; 
+					
+					
+					function isDataReady(dataTab) {
+						var result = false;
+						if (dataTab.length > 0 && dataComplete) {
+							result = true;
+						} else if (dataTab.length > 0) {
 							dataComplete = true; 
+						}
+						return result;
+					}
+					
+					
+					scope.$watch('systemlines', function(newVal, oldVal) {
+					
+						if (stopRecursive === newVal) {return;}
+
+						if(isDataReady(scope.systemlines)){
+							buildCalendar();
 						}
 
 						stopRecursive = angular.copy(newVal);
 					});
 					
+					
 					scope.$watch('selectedMonth', function() {
 						buildCalendar();
 					});
 
+					
 					scope.$watch('systemnames', function() {
 
-						if (scope.systemnames.length > 0 && dataComplete) {
+						if(isDataReady(scope.systemnames)){
 							buildCalendar();
-						} else if (scope.systemnames.length > 0) {
-							dataComplete = true; 
 						}
 					
 					});
 					
-					var dataComplete = false; 
 
 					function findMatchingElement(day, statuslines) {
 						var result = "";
@@ -189,13 +200,16 @@
 												//console.log("systemlines: " + scope.systemlines.length);
 												
 												var system = scope.system;
+												
 												for(var i = 0; i < scope.systemnames.length; i++){
+												
 													for(var j = 0; j < scope.systemlines.length; j++){
 														if (scope.systemnames[i].name == scope.systemlines[j].system) {
 															system = scope.systemlines[j];
 															break;
 														}
 													}
+													
 													template += '<tr>'+ 
 																	'<td class="system">'+
 																		'<span class="badge badge-info">{{systemnames['+i+'].name}}</span>'+
@@ -218,8 +232,9 @@
 															
 																			'<span ng:class="getClassForElement('+j+','+result.index+')"'+ 
 																				  'ng-click="selectElement($event, '+j+','+result.index+')"'+ 
-																					  'bs-popoverhover sysIndex="'+i+'"'+
-																					  'elmIndex="'+result.index+'"'+ 
+																				  'bs-popoverhover'+ 
+																				  'sysIndex="'+i+'"'+
+																				  'elmIndex="'+result.index+'"'+ 
 																				  //'bs-popover="popover.html"'+
 																				  'rel="popover">'+ 
 																			'</span>'+	
