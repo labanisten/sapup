@@ -1,7 +1,7 @@
 
-	var myModule = angular.module('directiveModule', ['utilsModule']);
+	var directiveModule = angular.module('directiveModule', ['utilsModule']);
 	
-	myModule.directive('clearPopoversAndSelections', function(){
+	directiveModule.directive('clearPopoversAndSelections', function(){
 		return {
 			restrict: 'A',
 			link: function (scope, element, attrs) {
@@ -21,7 +21,7 @@
 	});
 	
 
-	myModule.directive('bsPopoverhover', function($compile, $http, $timeout){
+	directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout){
 		return {
 			restrict: 'A',
 			link: function (scope, element, attrs) {
@@ -96,7 +96,7 @@
 	});
 	
 	
-	myModule.directive('systemTable', function($compile, Utils){
+	directiveModule.directive('systemTable', function($compile, Utils){
 		return {
 				restrict: 'E',
 				//replace: true,
@@ -165,6 +165,69 @@
 						return result;
 					}
 					
+					
+					function systemExist(systemName) {
+						var match = {
+							result: false,
+							index: -1
+						};
+					
+						for(var j = 0; j < scope.systemlines.length; j++){
+							
+							if (systemName == scope.systemlines[j].system) {
+								//system = scope.systemlines[j];
+								match.result = true;
+								match.index = j;
+								break;
+							}	
+						}
+						
+						return match;
+					}
+					
+					
+					function buildTemplateForExistingSystem(systemIndex) {
+						
+						var template = '<tr><td class="system"><span class="badge badge-info">{{systemlines['+systemIndex+'].system}}</span></td>';
+						for(var day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
+							
+							var elementIndex = findMatchingElement(day, scope.systemlines[systemIndex].statuslines);
+							if(elementIndex == "") {
+								template += '<td clear-popovers-and-selections></td>';
+							}else{
+								var colspan = elementIndex.end - elementIndex.start + 1;
+								template += '<td class="filledcell" colspan="'+colspan+'">'+
+								
+												'<span ng:class="getClassForElement('+systemIndex+','+elementIndex.index+')"'+ 
+													  'ng-click="selectElement($event, '+systemIndex+','+elementIndex.index+')"'+ 
+													  'bs-popoverhover '+ 
+													  'sysIndex="'+systemIndex+'"'+
+													  'elmIndex="'+elementIndex.index+'"'+ 
+													  //'bs-popover="popover.html"'+
+													  'rel="popover">'+ 
+												'</span>'+	
+												
+											'</td>';
+								day = day + colspan - 1;
+							}
+						}
+							
+						template += '</tr>';
+						return template;
+					}
+					
+					
+					function buildTemplateForNoneExistingSystem(systemName) {
+					
+						var template = '<tr><td class="system"><span class="badge badge-info">'+systemName+'</span></td>';
+						for(var day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
+							template += '<td clear-popovers-and-selections></td>';
+						}
+							
+						template += '</tr>';
+						return template;
+					}
+					
 
 					function buildCalendar() {
 						var template = 	'<table id="maintable">'+
@@ -197,61 +260,18 @@
 											'</thead>'+
 											'<tbody>';
 
-												//console.log("systemlines: " + scope.systemlines.length);
-												
-												var system = scope.system;
-												
 												for(var i = 0; i < scope.systemnames.length; i++){
-												
-													for(var j = 0; j < scope.systemlines.length; j++){
-														if (scope.systemnames[i].name == scope.systemlines[j].system) {
-															system = scope.systemlines[j];
-															break;
-														}
+
+													var systemMatch = systemExist(scope.systemnames[i].name);
+													if(systemMatch.result) {
+														template += buildTemplateForExistingSystem(systemMatch.index)
+													}else {
+														template += buildTemplateForNoneExistingSystem(scope.systemnames[i].name);
 													}
-													
-													template += '<tr>'+ 
-																	'<td class="system">'+
-																		'<span class="badge badge-info">{{systemnames['+i+'].name}}</span>'+
-																	'</td>';
-																
-													for(var day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
-														
-														var result = findMatchingElement(day, system.statuslines);
-														
-														if(result == "") {
-														
-															template += '<td clear-popovers-and-selections>'+ 
-																			//'<span class="element-inner available"'+
-																			//'</span>'+	
-																		'</td>';
-														}else{
-															var colspan = result.end - result.start + 1;
-															//template += '<td colspan="'+colspan+'" ng-click="setSelectetElement(systemlines['+i+'], systemlines['+i+'].statuslines['+result.index+'])">'+
-															template += '<td class="filledcell" colspan="'+colspan+'">'+
-															
-																			'<span ng:class="getClassForElement('+j+','+result.index+')"'+ 
-																				  'ng-click="selectElement($event, '+j+','+result.index+')"'+ 
-																				  'bs-popoverhover'+ 
-																				  'sysIndex="'+i+'"'+
-																				  'elmIndex="'+result.index+'"'+ 
-																				  //'bs-popover="popover.html"'+
-																				  'rel="popover">'+ 
-																			'</span>'+	
-																			
-																		'</td>';
-															day = day + colspan - 1;
-														}
-															
-													}
-														
-													template += '</tr>';
-													
 												}
 												
-												template += '</tr>'+							
-											'</tbody>'+
-									  '</table>';
+								template += '</tbody>'+
+									    '</table>';
 									  
 						element.html(template);				
 						$compile(element.contents())(scope);
@@ -262,7 +282,7 @@
 	});
 
 			
-	myModule.directive('jqDatepicker', function (Utils) {
+	directiveModule.directive('jqDatepicker', function (Utils) {
 		return {
 			link: function postLink(scope, element, attrs) {
 				element.datepicker({
@@ -298,7 +318,7 @@
 	});					
 	
 	
-	myModule.directive('ngEnterkey', function () {
+	directiveModule.directive('ngEnterkey', function () {
 		return {
 					link: function postLink(scope, element, attrs) {
 						element.keydown(function(event) {
