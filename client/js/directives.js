@@ -5,7 +5,6 @@
 		return {
 			restrict: 'A',
 			link: function (scope, element, attrs) {
-			
 				element.click(function() {
 				
 					if(scope.selectedElement.elmIndex > -1 && scope.selectedElement.sysIndex > -1 && scope.hoverElement.hasValue) {
@@ -14,7 +13,6 @@
 						scope.unSelectElement();
 						scope.$apply();
 					}
-					
 				});	
 			}
 		};
@@ -31,9 +29,8 @@
 				var systeml = scope.systemlines[sysIndex];
 				var statusl = scope.systemlines[sysIndex].statuslines[elmIndex];
 				
-				//var editButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" data-toggle="modal" href="#editelementdialog"><i class="icon-pencil icon-white"></i></a>';
 				var editButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="callModal($event);"><i class="icon-pencil icon-white"></i></a>';
-				var deleteButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="removeStatusElement();"><i class="icon-trash icon-white"></i></a>';
+				var deleteButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="removeStatusElement();" clear-popovers-and-selections><i class="icon-trash icon-white"></i></a>';
 				var titleString = systeml.system + ' - ' + statusl.status + deleteButtonTemplate + editButtonTemplate;
 				
 				
@@ -80,14 +77,12 @@
 				element.hover(function(){
 					if(scope.selectedElement.elmIndex == -1 && scope.selectedElement.sysIndex == -1) {
 						scope.setHoverElement(element.attr('sysIndex'), element.attr('elmIndex'), element);
-						//scope.$apply();
 						element.popover('show');
 					}
 				},
 				function() {
 					if(scope.selectedElement.elmIndex == -1 && scope.selectedElement.sysIndex == -1) {
 						scope.clearHoverElement();
-						//scope.$apply();
 						element.popover('hide');
 					}
 				});				
@@ -173,9 +168,7 @@
 						};
 					
 						for(var j = 0; j < scope.systemlines.length; j++){
-							
 							if (systemName == scope.systemlines[j].system) {
-								//system = scope.systemlines[j];
 								match.result = true;
 								match.index = j;
 								break;
@@ -203,7 +196,6 @@
 													  'bs-popoverhover '+ 
 													  'sysIndex="'+systemIndex+'"'+
 													  'elmIndex="'+elementIndex.index+'"'+ 
-													  //'bs-popover="popover.html"'+
 													  'rel="popover">'+ 
 												'</span>'+	
 												
@@ -234,8 +226,7 @@
 											'<thead>'+
 												'<tr>'+
 													'<th class="months" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
-														//TODO clear popovers before monthchange
-														'<div ng:class="getClassForMonth(month)" ng-click="gotoMonth($event, month)" ng-repeat="month in [0,1,2,3,4,5,6,7,8,9,10,11]">'+
+														'<div clear-popovers-and-selections ng:class="getClassForMonth(month)" ng-click="gotoMonth($event, month)" ng-repeat="month in [0,1,2,3,4,5,6,7,8,9,10,11]">'+
 															'{{months[month]}}' +
 														'</div>'+
 													'</th>'+

@@ -22,7 +22,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		//hasValue: false
 	};
 	
-	
 	$scope.hoverElement = {
 		_id: "",
 		system: "",
@@ -33,7 +32,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		element:"",
 		hasValue: false
 	};
-	
 	
 	$scope.systemFormData = {
 		_id:"",
@@ -53,7 +51,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		statuslines: []
 	};
 	
-	
 	$scope.addAlertLine = {
 		title: "",
 		alerttype: "",
@@ -64,36 +61,35 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.monthDayList = Calendar.getMonthDayList();
 	$scope.monthWeekList = Calendar.getMonthWeekList();
 	$scope.monthName = Calendar.getMonthName();
-	
 	$scope.selectedYear = Calendar.getCurrentYear();
 	$scope.selectedMonth = Calendar.getCurrentMonth();
-	
 	$scope.noOfDaysInMonth =  Calendar.getNoOfDaysInMonth();
 	$scope.dayNamesInMonth = Calendar.getDayNamesInMonth;
 	$scope.shortDayNamesInMonth = Calendar.getShortDayNamesInMonth;
 	$scope.months = Calendar.monthLabelsShort;
 	$scope.monthLabels = Calendar.monthLabels;
-	
-	//$scope.selectedYear = Calendar.getCurrentYear();
-	//$scope.selectedMonth = Calendar.getCurrentMonth();
 	$scope.selectedMonthLabel = Calendar.getMonthName($scope.selectedMonth);
-
+	
+	function elementExists(sysIndex, elmIndex) {
+		var result = false;
+		if($scope.systemlines[sysIndex].statuslines[elmIndex]) {
+			result = true;
+		}
+		return result;
+	}
+	
 	$scope.getClassForElement = function(sysIndex, elmIndex) {
-		//class="element-inner {{systemlines['+i+'].statuslines['+result.index+'].status}} element-click"
 		var classString = "";
-		
 		if($scope.systemlines.length > 0) {
-		
-			/*if(sysIndex == 12){
-			 console.log("");
-			}*/
-			
-			//console.log("sys: " + sysIndex + " elm: " + elmIndex + " status: " + $scope.systemlines[sysIndex].statuslines[elmIndex].status);
-			var systemString = $scope.systemlines[sysIndex].statuslines[elmIndex].status;
-			classString = "element-inner element-click " + systemString;
-			if (sysIndex == $scope.selectedElement.sysIndex && elmIndex == $scope.selectedElement.elmIndex) {
-				classString += " selected";
-			};
+
+			if(elementExists(sysIndex, elmIndex)){
+				var systemString = $scope.systemlines[sysIndex].statuslines[elmIndex].status;
+				
+				classString = "element-inner element-click " + systemString;
+				if (sysIndex == $scope.selectedElement.sysIndex && elmIndex == $scope.selectedElement.elmIndex) {
+					classString += " selected";
+				};
+			}
 		}
 		
 		return classString;
@@ -138,7 +134,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 	}
 	
-	
 	function getSystemStatuses(){
 
 		var promise = db.Systemstatus.get(); 
@@ -149,7 +144,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		return []; 
 	}
 	
-	
 	function getSystemNames(){
 
 		var promise = db.Systemname.get(); 
@@ -159,7 +153,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 		return [];
 	}
-
 
 	function getAlertData() {
 		var alerts = [];
@@ -180,7 +173,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		return [];
 	}
 	
-	
 	function getAlertTypes(){
 
 		var promise = db.Alerttype.get(); 
@@ -189,7 +181,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
   		});
 		return []; 
 	}
-	
 	
 	$scope.addAlert = function() {
 		if($("#alertForm").valid()){
@@ -205,74 +196,26 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	
 	$scope.removeAlert = function(id) {
 		db.alert.remove(id).then(function(response) {
-					if (response.data.ok) {
-						//success
-					} else {
-						//Unable to delete
-					}
-			});
-
+			if (response.data.ok) {
+				//success
+			} else {
+				//Unable to delete
+			}
+		});
 	};
 
-
 	$scope.removeStatusElement = function() {
-	console.log("sada");
 		$.each($scope.systemlines, function(i, v_system) {
 					
 			if (v_system.system == $scope.selectedElement.system) {
-			
-				//var newObject = jQuery.extend({},true, $scope.systemlines[i].statuslines);
-				/*var lines = [];
-				
-				$.each(v_system.statuslines, function(j, v_status) {
-					var s = Utils.getDateString($scope.selectedElement.start);
-					var e = Utils.getDateString($scope.selectedElement.end);
-					if(v_status.start != s || 
-						v_status.end != e ||
-							v_status.status != $scope.selectedElement.status) {
-						lines.push(v_status);
-					}
-					
-				});
-				
-				var systemElement = { 
-					"system": v_system.system,
-					"statuslines": lines
-				};*/
-				
-							
-				
+
 				var systemElement = { 
 						"system": v_system.system,
 						"statuslines": $scope.systemlines[i].statuslines
 					};
 					
-					spliceCalendarElement(systemElement, $scope.selectedElement);
-					//$scope.clearHoverElement();
-					//$scope.unSelectElement();	
-					//$('#maintable').remove();
-					//$scope.systemlines = getSystemData();
-					//$scope.systemlines = [];
-				
-				
-				
-				
-				
-				/*scope.hoverElement.element.popover('hide');
-				scope.clearHoverElement();
-				scope.unSelectElement();
-				scope.$apply();*/
-				//$scope.$destroy();
-				
-				/*
-				Systems.systems.update({id:$scope.systemlines[i]._id.$oid}, systemElement, function(item){
+				spliceCalendarElement(systemElement, $scope.selectedElement);
 					
-					//$scope.systemlines = [];
-					console.log("db");
-					getSystemData();
-					//$scope.apply();
-				});*/
-				
 				system = new db.System(systemElement);
 				system.update(v_system._id).then(function(newSystemElement) {
 					//Utils.addLineToElementModalLog("Element added to " + $scope.systemlines[i].system);
@@ -288,7 +231,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		});
 	};
 	
-	
 	function removeElementInDataBase(system, item) {
 	
 		$.each(system.statuslines, function(j, v_status) {
@@ -303,7 +245,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		});
 	}
 	
-	
 	function spliceCalendarElement(system, item) {
 	
 		$.each(system.statuslines, function(j, v_status) {
@@ -317,7 +258,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			}
 		});
 	}
-			
 	
 	$scope.updateStatusElement = function() {
 
@@ -360,7 +300,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			});
 		//}
 	};
-	
 		
 	$scope.addStatusElement = function() {
 
