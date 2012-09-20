@@ -364,68 +364,69 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		
 	$scope.addStatusElement = function() {
 
-		if($("#elementForm").valid()){
+		if ($("#elementForm").valid()) {
 
-			$.each($scope.systemlines, function(i, v_system) {
-					
-				if (v_system.system == $scope.systemFormData.system) {
-					var systemElement = { 
-						"system": v_system.system,
-						"statuslines": $scope.systemlines[i].statuslines
-					};
-					
-					var start = Utils.viewDateToDBDate($scope.systemFormData.start);
-					var end = Utils.viewDateToDBDate($scope.systemFormData.end);
-					
-					var statusElement = {
-						"start": start,
-						"end": end,
-						"status": $scope.systemFormData.status,
-						"comment": $scope.systemFormData.comment 
-					}
-					
-					
-					systemElement.statuslines.push(statusElement);
+			var existingSystem;
+			for (var i=1; i < $scope.systemlines.length; i++) {
+				if ( $scope.systemlines[i].system == $scope.systemFormData.system) { 
+					existingSystem = $scope.systemlines[i];
+					break; 
+				}
+			}
 
-					system = new db.System(systemElement);
 
-					system.update(v_system._id).then(function(newSystemElement) {
-						Utils.addLineToElementModalLog("Element added to " + $scope.systemlines[i].system);
-						$scope.unSelectElement();
-						$scope.systemlines = getSystemData();
-					})
+			if (existingSystem) {
+				//Update existing system 
+				var systemElement = { 
+					"system": existingSystem.system,
+					"statuslines": existingSystem.statuslines
+				};
+				
+				var statusElement = {
+					"start": Utils.viewDateToDBDate($scope.systemFormData.start),
+					"end": Utils.viewDateToDBDate($scope.systemFormData.end),
+					"status": $scope.systemFormData.status,
+					"comment": $scope.systemFormData.comment 
+				}
+				
+				
+				systemElement.statuslines.push(statusElement);
 
-					
-					
-				}else{
-					//Post new system 
-					var systemElement = { 
-						"system": $scope.systemFormData.system,
-						"statuslines": []
-					};
-					
-					var start = Utils.viewDateToDBDate($scope.systemFormData.start);
-					var end = Utils.viewDateToDBDate($scope.systemFormData.end);
-					
-					var statusElement = {
-						"start": start,
-						"end": end,
-						"status": $scope.systemFormData.status,
-						"comment": $scope.systemFormData.comment 
-					}
-									
-					systemElement.statuslines.push(statusElement);
-					
-					system = new db.System(systemElement);
-					system.create().then(function(newSystemElement) {
-						Utils.addLineToElementModalLog("Element added to " + $scope.systemlines[i].system);
-						$scope.unSelectElement();
-						$scope.systemlines = getSystemData();
-					})
-				}			
-				return false;
-			});
-		}
+				system = new db.System(systemElement);
+
+				system.update(existingSystem._id).then(function(newSystemElement) {
+					Utils.addLineToElementModalLog("Element added to " + existingSystem.system);
+					$scope.unSelectElement();
+					$scope.systemlines = getSystemData();
+				})
+
+				
+				
+			} else {
+				//Post new system 
+				var systemElement = { 
+					"system": $scope.systemFormData.system,
+					"statuslines": []
+				};
+				
+				var statusElement = {
+					"start": Utils.viewDateToDBDate($scope.systemFormData.start),
+					"end": Utils.viewDateToDBDate($scope.systemFormData.end),
+					"status": $scope.systemFormData.status,
+					"comment": $scope.systemFormData.comment 
+				}
+								
+				systemElement.statuslines.push(statusElement);
+				
+				var system = new db.System(systemElement);
+				system.create().then(function(newSystemElement) {
+					Utils.addLineToElementModalLog("Element added to " + newSystemElement.system);
+					$scope.unSelectElement();
+					$scope.systemlines = getSystemData();
+				})
+
+			}
+		}	
 	};
 
 	$scope.setSelectedElement = function(sysIndex, elmIndex) {
