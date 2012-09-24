@@ -280,10 +280,10 @@
 					dateFormat: "dd.mm.yy",
 					onClose: function (dateText, inst) {
 						if(element.context.id == "elementStartDate"){
-							scope.systemFormData.start = dateText;
+							scope.updateFormData.start = dateText;
 						}
 						else if(element.context.id == "elementEndDate"){
-							scope.systemFormData.end = dateText;
+							scope.updateFormData.end = dateText;
 						}
 						else if(element.context.id == "alertDialogExpDate"){
 							scope.addAlertLine.expdate = dateText;

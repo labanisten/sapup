@@ -157,7 +157,97 @@
 
 	</div>
 
+	
+	
+	
+	
 	<div class="modal hide fade" id="editelementdialog">
+
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">x</button>
+			<h3>Update Element</h3>
+		</div>
+
+		<div class="modal-body">
+
+			<div class="span2">
+				<form id="elementForm">
+
+					<fieldset>
+						<div class="control-group">
+							<div class="controls">
+
+								<div class="control-group">
+									<label for="system">System</label>
+									<!
+									<select id="csystem" name="system" ng-model="updateFormData.system" class="input-medium">
+										<option value=""></option>
+										<option ng-repeat="systemname in systemnames">{{systemname.name}}</option>
+									</select>
+									<input id="cstatus" name="status" ng-model="updateFormData.status" class="input-medium">
+								</div>
+
+								<div class="control-group">
+									<label for="status">Status</label>
+									<select id="cstatus" name="status" ng-model="updateFormData.status" class="input-medium">
+										<option value=""></option>
+										<option ng-repeat="systemstatus in systemstatuses">{{systemstatus.status}}</option>
+									</select>
+								</div>
+
+								<div class="control-group">
+									<label for="startDate">Start</label>
+									<input jq-datepicker id="elementStartDate" name="elementStartDate" ng-model="updateFormData.start" class="input-medium"></div>
+								<div class="control-group">
+									<label for="endDate">End</label>
+									<input jq-datepicker id="elementEndDate" name="elementEndDate" ng-model="updateFormData.end" class="input-medium"></div>
+
+								<div class="control-group">
+									<label for="comment">Comment</label>
+									<textarea id="comment" ng-model="updateFormData.comment" class="input-medium" rows="4"></textarea>
+								</div>
+
+							</div>
+						</div>
+					</fieldset>
+
+				</form>
+			</div>
+
+			<div class="span3 offset1">
+				<h6>Events</h6>
+				<pre id="elementModalLog" class="prettyprint" style="height: 340px;">
+				<ul></ul>
+			</pre>
+			</div>
+		</div>
+
+		<div class="modal-footer">
+
+			<!--<a class="btn btn-primary pull-left" ng-click="addStatusElement()" clear-popovers-and-selections>
+				<i class="icon-plus icon-white"></i>
+				New
+			</a>-->
+			<a class="btn btn-primary pull-left" ng-click="updateStatusElement()" clear-popovers-and-selections>
+				<i class="icon-pencil icon-white"></i>
+				Update
+			</a>
+			<a class="btn btn-danger pull-left" ng-click="removeStatusElement()" clear-popovers-and-selections>
+				<i class="icon-trash icon-white"></i>
+				Delete
+			</a>
+			<a class="btn btn-primary" data-dismiss="modal" ng-click="clearModalLog();">
+				<i class="icon-remove icon-white"></i>
+				Close
+			</a>
+
+		</div>
+
+	</div>
+	
+	
+	
+	<div class="modal hide fade" id="addelementdialog">
 
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal">x</button>
@@ -175,7 +265,7 @@
 
 								<div class="control-group">
 									<label for="system">System</label>
-									<select id="csystem" name="system" ng-model="systemFormData.system" class="input-medium">
+									<select id="csystem" name="system" ng-model="updateFormData.system" class="input-medium">
 										<option value=""></option>
 										<option ng-repeat="systemname in systemnames">{{systemname.name}}</option>
 									</select>
@@ -183,7 +273,7 @@
 
 								<div class="control-group">
 									<label for="status">Status</label>
-									<select id="cstatus" name="status" ng-model="systemFormData.status" class="input-medium">
+									<select id="cstatus" name="status" ng-model="updateFormData.status" class="input-medium">
 										<option value=""></option>
 										<option ng-repeat="systemstatus in systemstatuses">{{systemstatus.status}}</option>
 									</select>
@@ -191,14 +281,14 @@
 
 								<div class="control-group">
 									<label for="startDate">Start</label>
-									<input jq-datepicker id="elementStartDate" name="elementStartDate" ng-model="systemFormData.start" class="input-medium"></div>
+									<input jq-datepicker id="elementStartDate" name="elementStartDate" ng-model="updateFormData.start" class="input-medium"></div>
 								<div class="control-group">
 									<label for="endDate">End</label>
-									<input jq-datepicker id="elementEndDate" name="elementEndDate" ng-model="systemFormData.end" class="input-medium"></div>
+									<input jq-datepicker id="elementEndDate" name="elementEndDate" ng-model="updateFormData.end" class="input-medium"></div>
 
 								<div class="control-group">
 									<label for="comment">Comment</label>
-									<textarea id="comment" ng-model="systemFormData.comment" class="input-medium" rows="4"></textarea>
+									<textarea id="comment" ng-model="updateFormData.comment" class="input-medium" rows="4"></textarea>
 								</div>
 
 							</div>
@@ -222,14 +312,6 @@
 				<i class="icon-plus icon-white"></i>
 				New
 			</a>
-			<a class="btn btn-primary pull-left" ng-click="updateStatusElement()" clear-popovers-and-selections>
-				<i class="icon-pencil icon-white"></i>
-				Update
-			</a>
-			<a class="btn btn-danger pull-left" ng-click="removeStatusElement()" clear-popovers-and-selections>
-				<i class="icon-trash icon-white"></i>
-				Delete
-			</a>
 			<a class="btn btn-primary" data-dismiss="modal" ng-click="clearModalLog();">
 				<i class="icon-remove icon-white"></i>
 				Close
@@ -238,6 +320,11 @@
 		</div>
 
 	</div>
+	
+
+	
+	
+	
 
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script src="../bootstrap/js/bootstrap.js"></script>

@@ -1,4 +1,4 @@
-var myModule = angular.module('systemAvailability', ['mongodbModule', 'utilsModule', 'adminModule']);
+var myModule = angular.module('systemAvailability', ['mongodbModule', 'utilsModule', 'adminModule', 'directiveModule']);
 
 myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 	
