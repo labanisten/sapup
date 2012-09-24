@@ -279,11 +279,15 @@
 				element.datepicker({
 					dateFormat: "dd.mm.yy",
 					onClose: function (dateText, inst) {
-						if(element.context.id == "elementStartDate"){
+						if(element.context.id == "updateFormStartDate"){
 							scope.updateFormData.start = dateText;
 						}
-						else if(element.context.id == "elementEndDate"){
+						else if(element.context.id == "updateFormEndDate"){
 							scope.updateFormData.end = dateText;
+						}else if(element.context.id == "newFormStartDate"){
+							scope.addFormData.start = dateText;
+						}else if(element.context.id == "newFormEndDate"){
+							scope.addFormData.end = dateText;
 						}
 						else if(element.context.id == "alertDialogExpDate"){
 							scope.addAlertLine.expdate = dateText;

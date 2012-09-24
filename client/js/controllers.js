@@ -41,6 +41,15 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		end: undefined,
 		comment: ""
 	};
+	
+	$scope.addFormData = {
+		_id:"",
+		system: "",
+		status: "",
+		start: undefined,
+		end: undefined,
+		comment: ""
+	};
 
 	$scope.system = {
 		system: "",
@@ -231,6 +240,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		});
 	};
 	
+	/*
 	function removeElementInDataBase(system, item) {
 	
 		$.each(system.statuslines, function(j, v_status) {
@@ -258,11 +268,12 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			}
 		});
 	}
+	*/
 	
 	$scope.updateStatusElement = function() {
 
 		//if($("#elementForm").valid()){	
-			
+			/*
 			$.each($scope.systemlines, function(i, v_system) {
 					
 				if (v_system.system == $scope.updateFormData.system) {
@@ -273,9 +284,9 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 					};
 					
 					spliceCalendarElement(systemElement, $scope.selectedElement);
-			/*		
-					var start = Utils.viewDateToDBdate($scope.updateFormData.start);
-					var end = Utils.viewDateToDBdate($scope.updateFormData.end);
+					
+					var start = Utils.viewDateToDBDate($scope.updateFormData.start);
+					var end = Utils.viewDateToDBDate($scope.updateFormData.end);
 					
 					var statusElement = {
 						"start": start,
@@ -291,14 +302,15 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 						//$scope.unSelectElement();
 						$scope.systemlines = getSystemData();
 					});
-					*/
+					
+					
 					return false;
 					
 				}else{
 					//addLineToElementModalLog("Error!!!!!");
 				}
 			});
-		//}
+		//}*/
 	};
 		
 	$scope.addStatusElement = function() {
@@ -307,7 +319,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 			var existingSystem;
 			for (var i=1; i < $scope.systemlines.length; i++) {
-				if ( $scope.systemlines[i].system == $scope.updateFormData.system) { 
+				if ( $scope.systemlines[i].system == $scope.addFormData.system) { 
 					existingSystem = $scope.systemlines[i];
 					break; 
 				}
@@ -322,16 +334,16 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				};
 				
 				var statusElement = {
-					"start": Utils.viewDateToDBDate($scope.updateFormData.start),
-					"end": Utils.viewDateToDBDate($scope.updateFormData.end),
-					"status": $scope.updateFormData.status,
-					"comment": $scope.updateFormData.comment 
+					"start": Utils.viewDateToDBDate($scope.addFormData.start),
+					"end": Utils.viewDateToDBDate($scope.addFormData.end),
+					"status": $scope.addFormData.status,
+					"comment": $scope.addFormData.comment 
 				}
 				
 				
 				systemElement.statuslines.push(statusElement);
 
-				system = new db.System(systemElement);
+				var system = new db.System(systemElement);
 
 				system.update(existingSystem._id).then(function(newSystemElement) {
 					Utils.addLineToElementModalLog("Element added to " + existingSystem.system);
@@ -344,20 +356,21 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			} else {
 				//Post new system 
 				var systemElement = { 
-					"system": $scope.updateFormData.system,
+					"system": $scope.addFormData.system,
 					"statuslines": []
 				};
 				
 				var statusElement = {
-					"start": Utils.viewDateToDBDate($scope.updateFormData.start),
-					"end": Utils.viewDateToDBDate($scope.updateFormData.end),
-					"status": $scope.updateFormData.status,
-					"comment": $scope.updateFormData.comment 
+					"start": Utils.viewDateToDBDate($scope.addFormData.start),
+					"end": Utils.viewDateToDBDate($scope.addFormData.end),
+					"status": $scope.addFormData.status,
+					"comment": $scope.addFormData.comment 
 				}
 								
 				systemElement.statuslines.push(statusElement);
 				
 				var system = new db.System(systemElement);
+				
 				system.create().then(function(newSystemElement) {
 					Utils.addLineToElementModalLog("Element added to " + newSystemElement.system);
 					$scope.unSelectElement();
