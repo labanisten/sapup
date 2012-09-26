@@ -1,7 +1,7 @@
 angular.module('mongodbModule', []).
 	factory('db', function($http) {
 	
-		var DB_URL = "/centos-nosql-vm.cloudapp.net:3000/"; 
+		var DB_URL = "/mongodb/"; 
 		var DB_NAME = "test";
 		
 		var db = db || {};
