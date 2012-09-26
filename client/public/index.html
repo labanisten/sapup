@@ -57,29 +57,47 @@
 	<div class="container-fluid">
 
 		<div class="row-fluid">
-			<div class="accordion" id="accordionContainer">
-				<div class="accordion-group">
-					<div class="alert-container-header accordion-heading">
-						<h4 class="accordion-toggle" data-toggle="collapse" data-parent="#accordionContainer" href="#collapseOne">
-							<i class="icon-warning-sign icon-large"></i>
-							Alerts
-						</h4>
-					</div>
+		
+			<div class="row-fluid">
+			
+				<div class="accordion span11" id="accordionContainer">
+				
+					<div class="accordion-group">
 					
-					<div id="collapseOne" class="alert-container-body accordion-body in collapse" style="height: auto; ">
-						<div class="accordion-inner">
-
-							<div id="pop" class="span2" bs-popover ng-repeat="alertline in alertlines" rel="popover" data-content="{{alertline.comment}}" data-original-title="{{alertline.title}}" data-placement="bottom">
-								<div class="alert alert-block alert-{{alertline.alerttype}} fade in ">
-									<h5 class="alert-heading">{{alertline.title}}</h5>
-									<p>{{alertline.comment}}</p>
-								</div>
-							</div>
-							
+						<div class="alert-container-header accordion-heading">
+							<h4 class="accordion-toggle" data-toggle="collapse" data-parent="#accordionContainer" href="#collapseOne">
+								<i class="icon-warning-sign icon-large"></i>
+								Alerts
+							</h4>
 						</div>
+						
+						<div id="collapseOne" class="alert-container-body accordion-body in collapse" style="height: auto; ">
+							<div class="accordion-inner">
+
+								<div id="pop" class="span2" bs-popover ng-repeat="alertline in alertlines" rel="popover" data-content="{{alertline.comment}}" data-original-title="{{alertline.title}}" data-placement="bottom">
+									<div class="alert alert-block alert-{{alertline.alerttype}} fade in ">
+										<h5 class="alert-heading">{{alertline.title}}</h5>
+										<p>{{alertline.comment}}</p>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+						
 					</div>
 					
 				</div>
+				
+				<div class="legend span1">
+					<div class="legendheader">
+						Color
+						<button type="button" class="close" data-dismiss="modal">x</button>
+					</div>
+					<div class="legendbox">
+						<span class="row-fluid element-inner {{status.status}} legendheight nopointer" ng-repeat="status in systemstatuses">{{status.status}}</span>
+					</div>
+				</div>
+			
 			</div>
 
 			<div class="row-fluid">
@@ -91,6 +109,7 @@
 					</div>
 				</div>
 			</div>
+			
 		</div>
 	</div>
 

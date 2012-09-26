@@ -727,9 +727,13 @@ accordion-heading{background-color:#eeeeee;}
 table{width:100%;font:100% "Lucida Grande","Trebuchet MS",Verdana,sans-serif;border-collapse:collapse;}
 th{border:1px solid #E0E0E0;pointer-events:none;background-color:#eeeeee;}
 td{border:1px solid #E0E0E0;background-color:#eeeeee;padding:2px;min-width:5px;}
-.freeze:hover{color:red;}
-.shortDayNames{display:none;}
-@media (max-width:950px){.dayNames{display:none;} thead .shortDayNames{display:table-row;} .months{height:40px;font-size:1em;line-height:50px;cursor:pointer;pointer-events:auto;color:#345970;}}.carousel{position:relative;margin-bottom:18px;line-height:1;}
+.shortdaynames{display:none;}
+.legend{margin-bottom:20px;border:1px solid #e5e5e5;}
+.legend .legendheader{width:auto;height:18px;padding:8px;font-weight:800;text-align:center;background-color:#eeeeee;border-bottom:1px solid #e5e5e5;background-image:-moz-linear-gradient(top, #d5d5d5, #eeeeee);background-image:-ms-linear-gradient(top, #d5d5d5, #eeeeee);background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#d5d5d5), to(#eeeeee));background-image:-webkit-linear-gradient(top, #d5d5d5, #eeeeee);background-image:-o-linear-gradient(top, #d5d5d5, #eeeeee);background-image:linear-gradient(top, #d5d5d5, #eeeeee);background-repeat:repeat-x;}
+.legend .legendbox{width:auto;height:auto;background-color:#eeeeee;padding:9px 15px;}
+.legend .legendheight{height:15px;}
+.nopointer{pointer-events:none;}
+@media (max-width:950px){.daynames{display:none;} thead .shortdaynames{display:table-row;} .months{height:40px;font-size:1em;line-height:50px;cursor:pointer;pointer-events:auto;color:#345970;}}.carousel{position:relative;margin-bottom:18px;line-height:1;}
 .carousel-inner{overflow:hidden;width:100%;position:relative;}
 .carousel .item{display:none;position:relative;-webkit-transition:0.6s ease-in-out left;-moz-transition:0.6s ease-in-out left;-ms-transition:0.6s ease-in-out left;-o-transition:0.6s ease-in-out left;transition:0.6s ease-in-out left;}
 .carousel .item>img{display:block;line-height:1;}

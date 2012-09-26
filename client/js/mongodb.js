@@ -30,10 +30,13 @@ angular.module('mongodbModule', []).
 					});					
 				}
 
+				//TODO returnera berre ok
 				ns[name].prototype.create = function() {
 					var resource = this;
 				 	return $http.post(DB_URL + DB_NAME + '/' + url + '/', resource).then(function(response) {
-					 	resource.id = response.data[0]._id;
+						if(!response.data.ok){
+							resource.id = response.data[0]._id;
+						}
 						return resource;
 					});
 				};

@@ -6,10 +6,10 @@ angular.module('adminModule', ['utilsModule']).
 			"bFilter": false,
 			"bLengthChange": false,
 			"iDisplayLength": 20,
-	
+	/*
 			"aoColumnDefs": [ 
                         { "bSearchable": false, "bVisible": false, "aTargets": [ 2 ] }
-                    ]
+                    ]*/
 		});
 		
 		
@@ -18,19 +18,19 @@ angular.module('adminModule', ['utilsModule']).
 			"bLengthChange": false,
 			"iDisplayLength": 30,
 				
-			"aoColumnDefs": [ 
+			/*"aoColumnDefs": [ 
                         { "bSearchable": false, "bVisible": false, "aTargets": [ 2 ] }
-                    ]
+                    ]*/
 		});
 		
 		$('#alertTypesTable').dataTable({
 			"bFilter": false,
 			"bLengthChange": false,
 			"iDisplayLength": 30,
-				
+				/*
 			"aoColumnDefs": [ 
                         { "bSearchable": false, "bVisible": false, "aTargets": [ 2 ] }
-                    ]
+                    ]*/
 		});
 		
 		
@@ -38,10 +38,10 @@ angular.module('adminModule', ['utilsModule']).
 			"bFilter": false,
 			"bLengthChange": false,
 			"iDisplayLength": 30,
-				
+				/*
 			"aoColumnDefs": [ 
                         { "bSearchable": false, "bVisible": false, "aTargets": [ 4 ] }
-                    ]
+                    ]*/
 		});
 	}).
 	factory('admin', function(Utils) {
