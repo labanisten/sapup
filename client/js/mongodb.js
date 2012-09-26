@@ -1,7 +1,7 @@
 angular.module('mongodbModule', []).
 	factory('db', function($http) {
 	
-		var DB_URL = "/mongodb/"; 
+		var DB_URL = "mongodb://"; 
 		var DB_NAME = "test";
 		
 		var db = db || {};
