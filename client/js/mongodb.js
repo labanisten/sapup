@@ -3,6 +3,7 @@ angular.module('mongodbModule', []).
 	
 		var DB_URL = "/mongodb/"; 
 		var DB_NAME = "saa_testdb";
+		//var DB_NAME = "test";
 		
 		var db = db || {};
 		
