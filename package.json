@@ -1,5 +1,5 @@
 {
-  "name": "system availability application",
+  "name": "system_availability_application",
   "version": "0.0.1",
   "main": "./server/server"
 }
