@@ -6,7 +6,17 @@
     var dbServer = new mongodb.Server("168.63.58.169", 27017, {});
 	var db = new mongodb.Db('test', dbServer, {});
 	
+	var allowCrossDomain = function(req, res, next) {
+		res.header('Access-Control-Allow-Origin', "*");
+		res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+		res.header('Access-Control-Allow-Headers', 'Content-Type');
+		next();
+	}
+	
 	app.use(express.bodyParser({}));
+	app.use(allowCrossDomain);
+	
+
 	
 	/*app.use (function(req, res, next) {
 		var data='';
