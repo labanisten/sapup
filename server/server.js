@@ -16,6 +16,8 @@
 	app.use(express.bodyParser({}));
 	app.use(allowCrossDomain);
 	
+	app.use("/", express.static("client/public/index.html"));
+	
 
 	
 	/*app.use (function(req, res, next) {
@@ -91,9 +93,10 @@
 			 }
 	}
 
+	/*
 	app.get('/', function(req, res){
 	  res.send('REST server');
-	});
+	});*/
 	
 	app.all('/*', function(req, res, next) {
 	  res.header("Access-Control-Allow-Origin", "*");
