@@ -16,7 +16,7 @@
 	app.use(express.bodyParser({}));
 	app.use(allowCrossDomain);
 	
-	//app.use("/", express.static("client/public/"));
+	app.use("/", express.static("client/public/"));
 	
 
 	
@@ -98,11 +98,29 @@
 	  res.send('REST server');
 	});*/
 	
+	/*
+	app.get('/css', function(req, res){
+		var uid = req.params.uid;
+		res.sendfile('./client/css/');
+	});
+	
+	app.get('/js', function(req, res){
+		var uid = req.params.uid;
+		res.sendfile('./client/js/');
+	});
+	
+	app.get('/bootstrap', function(req, res){
+		var uid = req.params.uid;
+		var path = req.params[0] ? req.params[0] : 'index.html';
+		res.sendfile('./client/public/' + path);
+	});
+	
 	app.get('/*', function(req, res){
-    var uid = req.params.uid;
-    var path = req.params[0] ? req.params[0] : 'index.html';
-    res.sendfile('./client/public/' + path);
-});
+		var uid = req.params.uid;
+		var path = req.params[0] ? req.params[0] : 'index.html';
+		res.sendfile('./client/public/' + path);
+	});
+	*/
 	
 	app.all('/*', function(req, res, next) {
 	  res.header("Access-Control-Allow-Origin", "*");
