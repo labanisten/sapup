@@ -1,81 +1,131 @@
-//var app = require('express').createServer(),
-//	resource = require('express-resource');
+	var express = require('express');
+	var app = express.createServer();
 
-var express = require("express"),
-	http = require("http"),
-    app = express.createServer();
+	var mongodb = require('mongodb');
+	var BSON = mongodb.BSONPure;
+    var dbServer = new mongodb.Server("10.216.209.142", 27017, {});
+	var db = new mongodb.Db('sa-portal', dbServer, {});
+	
+	app.use(express.bodyParser({}));
+	
+	/*app.use (function(req, res, next) {
+		var data='';
+		req.setEncoding('utf8');
+		req.on('data', function(chunk) { 
+		   data += chunk;
+		});
 
-	//mongodb = require('mongodb');
-    //dbServer = new mongodb.Server("127.0.0.1", 27017, {}),
-    //db = new mongodb.Db('saa_testdb', dbServer, {}),
-   // db = require('mongojs').connect('saa_testdb', ['systemname']);
+		req.on('end', function() {
+			req.body = data;
+			next();
+		});
+	});*/
+	
+	
+	var restServices = {
+		get: function(req, res){
+				var resource = req.path.replace(/^\/|\/$/g, '');
 
-/*
-db.systemname.find(function(err, docs) {
-    
-});
-*/
-console.log("__dirname: " + __dirname);
-app.use("/", express.static('../client/public'));
-app.use("/js", express.static('../client/js'));
-app.use("/bootstrap", express.static('../client/bootstrap'));
-app.use("/images", express.static('../client/images'));
-//app.use("/bootstrap/css", express.static('../client/bootstrap/css'));
-//app.use("/bootstrap/js", express.static('../client/bootstrap/js'));
-app.use("/css", express.static('../client/css'));
-//app.use("/index", express.static('../client/public'));
-//app.use("/admin", express.static('../client/public/admin'));
-//app.use("/mongodb", express.static('http://centos-nosql-vm.cloudapp.net:3000'));
+			    db.open(function(err, db) {
+					db.collection(resource, function(err, collection) {
+						collection.find().toArray(function(err, items) {
+							res.send(items);
+							db.close();
+						});
+					});
+			    });
+			 },
+		post:  function(req, res){
+				var resource = req.path.replace(/^\/|\/$/g, '');
 
-app.get('/mongodb/test/system', function(req, res){
+			    db.open(function(err, db) {
+					db.collection(resource, function(err, collection) {
+						collection.insert(req.body, function(err, items) {
+							res.send(items);
+							db.close();
+						});
+					});
+			    });
+			 },
+		put:  function(req, res){	
+				var resource = req.path.replace(/^\/|\/$/g, '');
+				resource = splitOnSlash(resource);
+				var itemId = {'_id': new BSON.ObjectID(req.params.id)};
+				
+			    db.open(function(err, db) {
+					db.collection(resource, function(err, collection) {
+						collection.update(itemId, req.body, true, function(err, result) {
+							var reponse = getResponse(err, '{"put":ok}');
+							res.header('Content-Type', 'application/json');
+							res.send(reponse);
+							db.close();
+						});
+					});
+			    });
+			 },
+		delete:  function(req, res){
+				var resource = req.path.replace(/^\/|\/$/g, '');
+				resource = splitOnSlash(resource);				
+				var itemId = {'_id': new BSON.ObjectID(req.params.id)};
+				
+			    db.open(function(err, db) {
+					db.collection(resource, function(err, collection) {
+						collection.remove(itemId, function(err, result) {
+							var reponse = getResponse(err, '{"delete":ok}');
+							res.header('Content-Type', 'application/json');
+							res.send(reponse);
+							db.close();
+						});
+					});
+			    });
+			 }
+	}
 
-	//res.redirect('http://bbc.co.uk');
-
-	http.get({host:'centos-nosql-vm.cloudapp.net:3000', path:'/test/system'},function(mongoRes){
-  		console.log("Got response: " + res.statusCode);
-		}).on('error', function(e) {
-		  console.log("Got error: " + e.message);
-	})
-
-
-});
-
-
-app.listen(1337);
-console.log('Server running at http://127.0.0.1:1337/');
-
-/*
-app.get('/system', function(req, res){
-	db.open(function(err, db) {
-	    db.collection("system", function(err, collection) {
-	    	collection.find().toArray(function(err, items) {
-	        	res.send(items);
-	        	db.close();
-	    	});
-	    });
-  	});
-});
-
-app.get('/systemname', function(req, res){
-	var query = req.query["query"]; 
-	console.log("Asked for " + query);
-	if (query) {
-		db.systemname.find(JSON.parse(query), function(err, docs) {
-		    res.send(docs);
-		});	
-	} else {
-		db.systemname.find(function(err, docs) {
-		    res.send(docs);
-		});			
+	app.get('/', function(req, res){
+	  res.send('REST server');
+	});
+	
+	app.get('/systems', function(req, res) {restServices.get(req, res);});
+	app.get('/systemname', function(req, res) {restservices.get(req, res);});
+	app.get('/alerttype', function(req, res) {restservices.get(req, res);});
+	app.get('/systemstatus', function(req, res) {restservices.get(req, res);});
+	app.get('/alerts', function(req, res) {restServices.get(req, res);});
+	
+	app.post('/systems', function(req, res) {restServices.post(req, res);});
+	app.post('/systemname', function(req, res) {restServices.post(req, res);});
+	app.post('/alerttype', function(req, res) {restServices.post(req, res);});
+	app.post('/systemstatus', function(req, res) {restServices.post(req, res);});
+	app.post('/alerts', function(req, res) {restServices.post(req, res);});
+	
+	app.put('/systems/:id', function(req, res) {restServices.put(req, res);});
+	app.put('/systemname/:id', function(req, res) {restServices.put(req, res);});
+	app.put('/alerttype/:id', function(req, res) {restServices.put(req, res);});
+	app.put('/systemstatus/:id', function(req, res) {restServices.put(req, res);});
+	app.put('/alerts/:id', function(req, res) {restServices.put(req, res);});
+	
+	app.delete('/systems/:id', function(req, res) {restServices.delete(req, res);});
+	app.delete('/systemname/:id', function(req, res) {restServices.delete(req, res);});
+	app.delete('/alerttype/:id', function(req, res) {restServices.delete(req, res);});
+	app.delete('/systemstatus/:id', function(req, res) {restServices.delete(req, res);});
+	app.delete('/alerts/:id', function(req, res) {restServices.delete(req, res);});
+	
+	function getResponse(error, result) {
+		var resStr;
+		if(!error){
+			resStr = result;
+		}else{
+			resStr = error;
+		}
+		return resStr;
 	}
 	
-	// db.open(function(err, db) {
-	//     db.collection("systemname", function(err, collection) {
-	//     	collection.find(query).toArray(function(err, item
-	//         	res.send(items);
-	//         	db.close();
-	//     	});
-	//     });
- //  	});
-});
-*/
+	function splitOnSlash(str) {
+	  var i = str.indexOf('/');
+	  str = str.substring(0, i);
+	  return str;
+	}
+
+	var port = process.env.PORT || 4000;
+	app.listen(port, function() {
+		console.log("Listening on " + port);
+	});

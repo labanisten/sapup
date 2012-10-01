@@ -1,1 +1,0 @@
-var db = require('mongojs').connect(databaseURL, [systemname]);
