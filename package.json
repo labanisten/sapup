@@ -1,9 +1,14 @@
 {
-  "name": "system_availability_application",
+  "name": "saa_nodeserver",
   "version": "0.0.1",
-  "main": "./server/server",
-  
-  "scripts": {
-	"start":"node ./server/server"
+
+
+  "dependencies": {
+    "express": "2.x",
+    "stylus": ">= 0.0.1",
+    "ejs": ">= 0.4.3",
+    "node-uuid": ">= 1.2.0",
+    "azure": ">= 0.5.1"
+	, "mongodb": ">= 1.0.0"
   }
 }
