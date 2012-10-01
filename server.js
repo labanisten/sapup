@@ -6,7 +6,19 @@
     var dbServer = new mongodb.Server("168.63.58.169", 27017, {});
 	var db = new mongodb.Db('test', dbServer, {});
 	
+	var allowCrossDomain = function(req, res, next) {
+		res.header('Access-Control-Allow-Origin', "*");
+		res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+		res.header('Access-Control-Allow-Headers', 'X-Requested-With');
+		next();
+	}
+	
 	app.use(express.bodyParser({}));
+	app.use(allowCrossDomain);
+	
+	app.use("/", express.static("client/public/index.html"));
+	
+
 	
 	/*app.use (function(req, res, next) {
 		var data='';
@@ -81,8 +93,15 @@
 			 }
 	}
 
+	/*
 	app.get('/', function(req, res){
 	  res.send('REST server');
+	});*/
+	
+	app.all('/*', function(req, res, next) {
+	  res.header("Access-Control-Allow-Origin", "*");
+	  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	  next();
 	});
 	
 	app.get('/systems', function(req, res) {restServices.get(req, res);});
