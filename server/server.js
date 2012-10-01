@@ -4,7 +4,7 @@
 	var mongodb = require('mongodb');
 	var BSON = mongodb.BSONPure;
     var dbServer = new mongodb.Server("168.63.58.169", 27017, {});
-	var db = new mongodb.Db('sa-portal', dbServer, {});
+	var db = new mongodb.Db('test', dbServer, {});
 	
 	app.use(express.bodyParser({}));
 	
