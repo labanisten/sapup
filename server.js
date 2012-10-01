@@ -16,6 +16,9 @@
 	app.use(express.bodyParser({}));
 	app.use(allowCrossDomain);
 	
+	//app.use('/client', express.static(__dirname + '/client'));
+	//app.use(express.static(__dirname + '/public'));
+	
 	app.use("/", express.static("/client/public"));
 	
 
@@ -121,12 +124,12 @@
 		res.sendfile('./client/public/' + path);
 	});
 	*/
-	
+	/*
 	app.all('/*', function(req, res, next) {
 	  res.header("Access-Control-Allow-Origin", "*");
 	  res.header("Access-Control-Allow-Headers", "X-Requested-With");
 	  next();
-	});
+	});*/
 	
 	app.get('/systems', function(req, res) {restServices.get(req, res);});
 	app.get('/systemname', function(req, res) {restservices.get(req, res);});
