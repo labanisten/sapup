@@ -16,7 +16,7 @@
 	app.use(express.bodyParser({}));
 	app.use(allowCrossDomain);
 	
-	app.use("/", express.static("client/public/index.html"));
+	//app.use("/", express.static("client/public/"));
 	
 
 	
@@ -97,6 +97,12 @@
 	app.get('/', function(req, res){
 	  res.send('REST server');
 	});*/
+	
+	app.get('/*', function(req, res){
+    var uid = req.params.uid;
+    var path = req.params[0] ? req.params[0] : 'index.html';
+    res.sendfile('./client/public/' + path);
+});
 	
 	app.all('/*', function(req, res, next) {
 	  res.header("Access-Control-Allow-Origin", "*");
