@@ -1,0 +1,5 @@
+{
+  "name": "system availability application",
+  "version": "0.0.1",
+  "main": "./server/server"
+}
