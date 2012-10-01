@@ -16,7 +16,7 @@
 	app.use(express.bodyParser({}));
 	app.use(allowCrossDomain);
 	
-	app.use("/", express.static("client/public/index.html"));
+	app.use("/", express.static("client/public/"));
 	
 
 	
