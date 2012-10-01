@@ -95,6 +95,12 @@
 	  res.send('REST server');
 	});
 	
+	app.all('/*', function(req, res, next) {
+	  res.header("Access-Control-Allow-Origin", "*");
+	  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	  next();
+	});
+	
 	app.get('/systems', function(req, res) {restServices.get(req, res);});
 	app.get('/systemname', function(req, res) {restservices.get(req, res);});
 	app.get('/alerttype', function(req, res) {restservices.get(req, res);});
