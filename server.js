@@ -3,7 +3,7 @@
 
 	var mongodb = require('mongodb');
 	var BSON = mongodb.BSONPure;
-    var dbServer = new mongodb.Server("http://centos-nosql-vm.cloudapp.net", 27017, {});
+    var dbServer = new mongodb.Server("centos-nosql-vm.cloudapp.net", 27017, {});
 	var db = new mongodb.Db('test', dbServer, {});
 	
 	var allowCrossDomain = function(req, res, next) {
