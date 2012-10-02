@@ -53,6 +53,7 @@
 							db.close();
 						});
 					});
+					if(err){res.send(err);}
 			    });
 			 },
 		post:  function(req, res){
