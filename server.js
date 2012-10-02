@@ -68,6 +68,9 @@
 	var restServices = {
 		get: function(req, res){
 				pool.acquire(function(err, db) {
+					if (err) {
+						return res.end("CONNECTION error: " + err);
+					}
 					var resource = req.path.replace(/^\/|\/$/g, '');
 					console.log("req.path :" + req.path);
 					console.log("resource :" + resource);
