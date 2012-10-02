@@ -10,5 +10,6 @@
     "node-uuid": ">= 1.2.0",
     "azure": ">= 0.5.1",
 	"mongodb": ">= 1.0.0"
+	"generic-pool": ">= 0.0.0"
   }
 }
