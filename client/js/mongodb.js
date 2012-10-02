@@ -50,9 +50,9 @@ angular.module('mongodbModule', []).
 			};
 		
 			addResource("System", "systems");
-			addResource("Systemname", "systemname");
-			addResource("Alerttype", "alerttype");
-			addResource("Systemstatus", "systemstatus");
+			addResource("Systemname", "systemnames");
+			addResource("Alerttype", "alerttypes");
+			addResource("Systemstatus", "systemstatuses");
 			addResource("Alert", "alerts");
 		
 		})(db);
