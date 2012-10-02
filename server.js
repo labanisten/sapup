@@ -7,9 +7,8 @@
 	
 	var pool = generic_pool.Pool({
 		name: 'mongodb',
-		max: 10,
+		max: 20,
 		create: function(callback) {
-			console.log("open db");
 			var dbServer = new mongodb.Server("centos-nosql-vm.cloudapp.net", 27017, {});
 			//var dbServer = new mongodb.Server("10.216.209.142", 27017, {});
 			var db = new mongodb.Db('test', dbServer, {});
@@ -20,7 +19,6 @@
 
 		},
 		destroy: function(db) {
-			console.log("close db");
 			db.close();
 		}
 	});
@@ -40,8 +38,6 @@
 	app.use(express.bodyParser({}));
 	//app.use(allowCrossDomain);
 	
-	//app.use("/client/js", express.static("/client/js"));
-	console.log("__dirname: " + __dirname);
 	app.use("/", express.static(__dirname + "/client/public"));
 	app.use("/images", express.static(__dirname + "/images"));
 	app.use("/css/images", express.static(__dirname + "/css/images"));
@@ -68,68 +64,64 @@
 	var restServices = {
 		get: function(req, res){
 				pool.acquire(function(err, db) {
-					if (err) {
-						return res.end("CONNECTION error: " + err);
-					}
+					if(err) {return res.end("At connection, " + err);}
 					var resource = req.path.replace(/^\/|\/$/g, '');
-					console.log("req.path :" + req.path);
-					console.log("resource :" + resource);
-					//db.open(function(err, db) {
-						db.collection(resource, function(err, collection) {
-							console.log("t1 " + err);
-							collection.find().toArray(function(err, items) {
-								console.log("t2 " + err);
-								res.send(items);
-								//db.close();
-								pool.release(db);
-							});
+					
+					db.collection(resource, function(err, collection) {
+						collection.find().toArray(function(err, items) {
+							res.send(items);
+							pool.release(db);
 						});
-					//});
+					});
 				});
 			 },
 		post:  function(req, res){
-				var resource = req.path.replace(/^\/|\/$/g, '');
-
-			    db.open(function(err, db) {
+				pool.acquire(function(err, db) {
+					if (err) {return res.end("At connection, " + err);}
+					var resource = req.path.replace(/^\/|\/$/g, '');
+					
 					db.collection(resource, function(err, collection) {
 						collection.insert(req.body, function(err, items) {
 							res.send(items);
-							db.close();
+							pool.release(db);
 						});
-					});
-			    });
+					});	
+				});
 			 },
 		put:  function(req, res){	
-				var resource = req.path.replace(/^\/|\/$/g, '');
-				resource = splitOnSlash(resource);
-				var itemId = {'_id': new BSON.ObjectID(req.params.id)};
-				
-			    db.open(function(err, db) {
+				pool.acquire(function(err, db) {
+					if (err) {return res.end("At connection, " + err);}
+					var resource = req.path.replace(/^\/|\/$/g, '');
+					resource = splitOnSlash(resource);
+					var itemId = {'_id': new BSON.ObjectID(req.params.id)};
+					
 					db.collection(resource, function(err, collection) {
 						collection.update(itemId, req.body, true, function(err, result) {
 							var reponse = getResponse(err, '{"put":ok}');
 							res.header('Content-Type', 'application/json');
 							res.send(reponse);
-							db.close();
+							pool.release(db);
 						});
 					});
-			    });
+				});
 			 },
 		delete:  function(req, res){
-				var resource = req.path.replace(/^\/|\/$/g, '');
-				resource = splitOnSlash(resource);				
-				var itemId = {'_id': new BSON.ObjectID(req.params.id)};
-				
-			    db.open(function(err, db) {
+				pool.acquire(function(err, db) {
+					if (err) {return res.end("At connection, " + err);}
+					var resource = req.path.replace(/^\/|\/$/g, '');
+					resource = splitOnSlash(resource);				
+					var itemId = {'_id': new BSON.ObjectID(req.params.id)};
+					
 					db.collection(resource, function(err, collection) {
 						collection.remove(itemId, function(err, result) {
 							var reponse = getResponse(err, '{"delete":ok}');
 							res.header('Content-Type', 'application/json');
 							res.send(reponse);
-							db.close();
+							pool.release(db);
 						});
 					});
-			    });
+
+				});
 			 }
 	}
 
