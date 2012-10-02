@@ -45,7 +45,8 @@
 	var restServices = {
 		get: function(req, res){
 				var resource = req.path.replace(/^\/|\/$/g, '');
-
+				console.log("req.path :" + req.path);
+				console.log("resource :" + resource);
 			    db.open(function(err, db) {
 					db.collection(resource, function(err, collection) {
 						collection.find().toArray(function(err, items) {
@@ -53,7 +54,7 @@
 							db.close();
 						});
 					});
-					if(err){res.send(err);}
+					if(err){console.log("open err :" + err);}
 			    });
 			 },
 		post:  function(req, res){
