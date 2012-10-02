@@ -1,10 +1,32 @@
 	var express = require('express');
-	var app = express.createServer();
-
 	var mongodb = require('mongodb');
+	var generic_pool = require('generic-pool');
+
+	var app = express.createServer();
 	var BSON = mongodb.BSONPure;
-    var dbServer = new mongodb.Server("centos-nosql-vm.cloudapp.net", 27017, {});
-	var db = new mongodb.Db('test', dbServer, {});
+	
+	var pool = generic_pool.Pool({
+		name: 'mongodb',
+		max: 10,
+		create: function(callback) {
+			console.log("open db");
+			var dbServer = new mongodb.Server("centos-nosql-vm.cloudapp.net", 27017, {});
+			//var dbServer = new mongodb.Server("10.216.209.142", 27017, {});
+			var db = new mongodb.Db('test', dbServer, {});
+			
+			db.open(function(err, db) {
+				callback(err, db);
+			});
+
+		},
+		destroy: function(db) {
+			console.log("close db");
+			db.close();
+		}
+	});
+
+    //var dbServer = new mongodb.Server("centos-nosql-vm.cloudapp.net", 27017, {});
+	//var db = new mongodb.Db('test', dbServer, {});
 	
 	/*
 	var allowCrossDomain = function(req, res, next) {
@@ -14,6 +36,7 @@
 		next();
 	}
 	*/
+	
 	app.use(express.bodyParser({}));
 	//app.use(allowCrossDomain);
 	
@@ -44,18 +67,22 @@
 	
 	var restServices = {
 		get: function(req, res){
-				var resource = req.path.replace(/^\/|\/$/g, '');
-				console.log("req.path :" + req.path);
-				console.log("resource :" + resource);
-			    db.open(function(err, db) {
-					db.collection(resource, function(err, collection) {
-						collection.find().toArray(function(err, items) {
-							res.send(items);
-							db.close();
+				pool.acquire(function(err, db) {
+					var resource = req.path.replace(/^\/|\/$/g, '');
+					console.log("req.path :" + req.path);
+					console.log("resource :" + resource);
+					//db.open(function(err, db) {
+						db.collection(resource, function(err, collection) {
+							console.log("t1 " + err);
+							collection.find().toArray(function(err, items) {
+								console.log("t2 " + err);
+								res.send(items);
+								//db.close();
+								pool.release(db);
+							});
 						});
-					});
-					if(err){console.log("open err :" + err);}
-			    });
+					//});
+				});
 			 },
 		post:  function(req, res){
 				var resource = req.path.replace(/^\/|\/$/g, '');
