@@ -3,7 +3,7 @@
 
 	var mongodb = require('mongodb');
 	var BSON = mongodb.BSONPure;
-    var dbServer = new mongodb.Server("168.63.58.169", 27017, {});
+    var dbServer = new mongodb.Server("http://centos-nosql-vm.cloudapp.net", 27017, {});
 	var db = new mongodb.Db('test', dbServer, {});
 	
 	var allowCrossDomain = function(req, res, next) {
@@ -17,7 +17,6 @@
 	app.use(allowCrossDomain);
 	
 	//app.use("/client/js", express.static("/client/js"));
-	console.log("__dirname: " + __dirname);
 	app.use("/", express.static(__dirname + "/client/public"));
 	app.use("/js", express.static(__dirname + "/client/js"));
 	app.use("/css", express.static(__dirname + "/client/css"));
