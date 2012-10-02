@@ -112,9 +112,9 @@
 	*/
 	
 	app.get('/systems', function(req, res) {restServices.get(req, res);});
-	app.get('/systemname', function(req, res) {restservices.get(req, res);});
-	app.get('/alerttype', function(req, res) {restservices.get(req, res);});
-	app.get('/systemstatus', function(req, res) {restservices.get(req, res);});
+	app.get('/systemnames', function(req, res) {restServices.get(req, res);});
+	app.get('/alerttypes', function(req, res) {restServices.get(req, res);});
+	app.get('/systemstatuses', function(req, res) {restServices.get(req, res);});
 	app.get('/alerts', function(req, res) {restServices.get(req, res);});
 	
 	app.post('/systems', function(req, res) {restServices.post(req, res);});
