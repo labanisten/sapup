@@ -16,7 +16,12 @@
 	app.use(express.bodyParser({}));
 	app.use(allowCrossDomain);
 	
-	app.use("/", express.static("/client/"));
+	//app.use("/client/js", express.static("/client/js"));
+	console.log("__dirname: " + __dirname);
+	app.use("/", express.static(__dirname + "/client/public"));
+	app.use("/js", express.static(__dirname + "/client/js"));
+	app.use("/css", express.static(__dirname + "/client/css"));
+	app.use("/bootstrap", express.static(__dirname + "/client/bootstrap"));
 	
 
 	
