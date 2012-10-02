@@ -17,6 +17,7 @@
 	app.use(allowCrossDomain);
 	
 	//app.use("/client/js", express.static("/client/js"));
+	console.log("__dirname: " + __dirname);
 	app.use("/", express.static(__dirname + "/client/public"));
 	app.use("/js", express.static(__dirname + "/client/js"));
 	app.use("/css", express.static(__dirname + "/client/css"));
