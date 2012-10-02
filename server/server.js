@@ -39,8 +39,8 @@
 	//app.use(allowCrossDomain);
 	
 	app.use("/", express.static(__dirname + "/client/public"));
-	app.use("/images", express.static(__dirname + "/images"));
-	app.use("/css/images", express.static(__dirname + "/css/images"));
+	app.use("/images", express.static(__dirname + "/client/images"));
+	app.use("/css/images", express.static(__dirname + "/client/css/images"));
 	app.use("/js", express.static(__dirname + "/client/js"));
 	app.use("/css", express.static(__dirname + "/client/css"));
 	app.use("/bootstrap", express.static(__dirname + "/client/bootstrap"));
