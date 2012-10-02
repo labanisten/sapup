@@ -134,27 +134,27 @@
 	});
 	
 	app.get('/systems', function(req, res) {restServices.get(req, res);});
-	app.get('/systemname', function(req, res) {restservices.get(req, res);});
-	app.get('/alerttype', function(req, res) {restservices.get(req, res);});
-	app.get('/systemstatus', function(req, res) {restservices.get(req, res);});
+	app.get('/systemnames', function(req, res) {restservices.get(req, res);});
+	app.get('/alerttypes', function(req, res) {restservices.get(req, res);});
+	app.get('/systemstatuses', function(req, res) {restservices.get(req, res);});
 	app.get('/alerts', function(req, res) {restServices.get(req, res);});
 	
 	app.post('/systems', function(req, res) {restServices.post(req, res);});
-	app.post('/systemname', function(req, res) {restServices.post(req, res);});
-	app.post('/alerttype', function(req, res) {restServices.post(req, res);});
-	app.post('/systemstatus', function(req, res) {restServices.post(req, res);});
+	app.post('/systemnames', function(req, res) {restServices.post(req, res);});
+	app.post('/alerttypes', function(req, res) {restServices.post(req, res);});
+	app.post('/systemstatuses', function(req, res) {restServices.post(req, res);});
 	app.post('/alerts', function(req, res) {restServices.post(req, res);});
 	
 	app.put('/systems/:id', function(req, res) {restServices.put(req, res);});
-	app.put('/systemname/:id', function(req, res) {restServices.put(req, res);});
-	app.put('/alerttype/:id', function(req, res) {restServices.put(req, res);});
-	app.put('/systemstatus/:id', function(req, res) {restServices.put(req, res);});
+	app.put('/systemnames/:id', function(req, res) {restServices.put(req, res);});
+	app.put('/alerttypes/:id', function(req, res) {restServices.put(req, res);});
+	app.put('/systemstatuses/:id', function(req, res) {restServices.put(req, res);});
 	app.put('/alerts/:id', function(req, res) {restServices.put(req, res);});
 	
 	app.delete('/systems/:id', function(req, res) {restServices.delete(req, res);});
-	app.delete('/systemname/:id', function(req, res) {restServices.delete(req, res);});
-	app.delete('/alerttype/:id', function(req, res) {restServices.delete(req, res);});
-	app.delete('/systemstatus/:id', function(req, res) {restServices.delete(req, res);});
+	app.delete('/systemnames/:id', function(req, res) {restServices.delete(req, res);});
+	app.delete('/alerttypes/:id', function(req, res) {restServices.delete(req, res);});
+	app.delete('/systemstatuses/:id', function(req, res) {restServices.delete(req, res);});
 	app.delete('/alerts/:id', function(req, res) {restServices.delete(req, res);});
 	
 	function getResponse(error, result) {

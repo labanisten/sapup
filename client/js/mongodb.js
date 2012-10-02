@@ -2,7 +2,6 @@ angular.module('mongodbModule', []).
 	factory('db', function($http) {
 	
 		var DB_URL = "http://systemavailability.azurewebsites.net/"; 
-		var DB_NAME = "test";
 		//var DB_NAME = "test";
 		
 		var db = db || {};
@@ -15,18 +14,18 @@ angular.module('mongodbModule', []).
 
 				ns[name].get = function(query) {
 					if (query) {
-						return $http.get(DB_URL + DB_NAME + '/' + url + '/' + '?query=' + JSON.stringify(query)).then(function(repsonse){
+						return $http.get(DB_URL + '/' + url + '/' + '?query=' + JSON.stringify(query)).then(function(repsonse){
 							return repsonse.data;
 						});					
 					} else {
-						return $http.get(DB_URL + DB_NAME + '/' + url + '/').then(function(repsonse){
+						return $http.get(DB_URL + '/' + url + '/').then(function(repsonse){
 							return repsonse.data;
 						});
 					}
 				};
 
 				ns[name].remove = function(id) {
-				 	return $http.delete(DB_URL + DB_NAME + '/' + url + '/' + id).then(function(response) {					 	
+				 	return $http.delete(DB_URL + '/' + url + '/' + id).then(function(response) {					 	
 						return response;
 					});					
 				}
@@ -34,7 +33,7 @@ angular.module('mongodbModule', []).
 				//TODO returnera berre ok
 				ns[name].prototype.create = function() {
 					var resource = this;
-				 	return $http.post(DB_URL + DB_NAME + '/' + url + '/', resource).then(function(response) {
+				 	return $http.post(DB_URL + '/' + url + '/', resource).then(function(response) {
 						if(!response.data.ok){
 							resource.id = response.data[0]._id;
 						}
@@ -44,17 +43,17 @@ angular.module('mongodbModule', []).
 
 				ns[name].prototype.update = function(id) {
 					var resource = this;
-				 	return $http.put(DB_URL + DB_NAME + '/' + url + '/' + id, resource).then(function(response) {
+				 	return $http.put(DB_URL + '/' + url + '/' + id, resource).then(function(response) {
 						return resource;
 					});
 				};
 			};
 		
-			addResource("System", "system");
-			addResource("Systemname", "systemname");
-			addResource("Alerttype", "alerttype");
-			addResource("Systemstatus", "systemstatus");
-			addResource("Alert", "alert");
+			addResource("System", "systems");
+			addResource("Systemname", "systemnames");
+			addResource("Alerttype", "alerttypes");
+			addResource("Systemstatus", "systemstatuses");
+			addResource("Alert", "alerts");
 		
 		})(db);
 
