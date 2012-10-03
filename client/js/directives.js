@@ -236,11 +236,11 @@
 													'<th class="week" ng-repeat="week in monthWeekList['+scope.selectedMonth+']" colspan="{{week.colSpan}}">{{week.week}}</th>'+
 												'</tr>'+
 												
-												'<tr class="dayNames">'+
+												'<tr class="daynames">'+
 													'<th ng-repeat="dayName in dayNamesInMonth('+scope.selectedMonth+')">{{dayName}}</th>'+
 												'</tr>'+
 												
-												'<tr class="shortDayNames">'+
+												'<tr class="shortdaynames">'+
 													'<th ng-repeat="shortDayName in shortDayNamesInMonth('+scope.selectedMonth+')">{{shortDayName}}</th>'+
 												'</tr>'+
 												
