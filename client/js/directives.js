@@ -196,8 +196,7 @@
 													  'bs-popoverhover '+ 
 													  'sysIndex="'+systemIndex+'"'+
 													  'elmIndex="'+elementIndex.index+'"'+ 
-													  'rel="popover"'+ 
-													  'animate="in">'+
+													  'rel="popover">'+ 
 												'</span>'+	
 												
 											'</td>';

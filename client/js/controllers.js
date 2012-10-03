@@ -214,8 +214,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	};
 
 	$scope.removeStatusElement = function() {
-		$.each($scope.systemlines, function(i, v_system) {
-					
+		$.each($scope.systemlines, function(i, v_system) {				
 			if (v_system.system == $scope.selectedElement.system) {
 
 				var systemElement = { 
@@ -227,15 +226,10 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 					
 				system = new db.System(systemElement);
 				system.update(v_system._id).then(function(newSystemElement) {
-					//Utils.addLineToElementModalLog("Element added to " + $scope.systemlines[i].system);
 					$scope.unSelectElement();
 					getSystemData();
 				});
-				
 				return false;
-				
-			}else{
-				//addLineToElementModalLog("Error!!!!!");
 			}
 		});
 	};
