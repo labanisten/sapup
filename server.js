@@ -23,21 +23,8 @@
 		}
 	});
 
-    //var dbServer = new mongodb.Server("centos-nosql-vm.cloudapp.net", 27017, {});
-	//var db = new mongodb.Db('test', dbServer, {});
-	
-	/*
-	var allowCrossDomain = function(req, res, next) {
-		res.header('Access-Control-Allow-Origin', "*");
-		res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-		res.header('Access-Control-Allow-Headers', 'X-Requested-With');
-		next();
-	}
-	*/
-	
 	app.use(express.bodyParser({}));
-	//app.use(allowCrossDomain);
-	
+
 	app.use("/", express.static(__dirname + "/client/public"));
 	app.use("/public", express.static(__dirname + "/client/public"));
 	app.use("/images", express.static(__dirname + "/client/images"));
@@ -45,22 +32,6 @@
 	app.use("/js", express.static(__dirname + "/client/js"));
 	app.use("/css", express.static(__dirname + "/client/css"));
 	app.use("/bootstrap", express.static(__dirname + "/client/bootstrap"));
-	
-
-	
-	/*app.use (function(req, res, next) {
-		var data='';
-		req.setEncoding('utf8');
-		req.on('data', function(chunk) { 
-		   data += chunk;
-		});
-
-		req.on('end', function() {
-			req.body = data;
-			next();
-		});
-	});*/
-	
 	
 	var restServices = {
 		get: function(req, res){
@@ -98,7 +69,7 @@
 					
 					db.collection(resource, function(err, collection) {
 						collection.update(itemId, req.body, true, function(err, result) {
-							var reponse = getResponse(err, '{"put":ok}');
+							var reponse = getResponse(err, '{"put":"ok"}');
 							res.header('Content-Type', 'application/json');
 							res.send(reponse);
 							pool.release(db);
@@ -115,7 +86,7 @@
 					
 					db.collection(resource, function(err, collection) {
 						collection.remove(itemId, function(err, result) {
-							var reponse = getResponse(err, '{"delete":ok}');
+							var reponse = getResponse(err, '{"delete":"ok"}');
 							res.header('Content-Type', 'application/json');
 							res.send(reponse);
 							pool.release(db);
@@ -126,14 +97,6 @@
 			 }
 	}
 
-	/*
-	app.all('/*', function(req, res, next) {
-	  res.header("Access-Control-Allow-Origin", "*");
-	  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-	  next();
-	});
-	*/
-	
 	app.get('/systems', function(req, res) {restServices.get(req, res);});
 	app.get('/systemnames', function(req, res) {restServices.get(req, res);});
 	app.get('/alerttypes', function(req, res) {restServices.get(req, res);});
