@@ -254,6 +254,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			}
 		});
 	}
+	*/
 	
 	function spliceCalendarElement(system, item) {
 	
@@ -268,7 +269,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			}
 		});
 	}
-	*/
+	
 	
 	$scope.updateStatusElement = function() {
 
