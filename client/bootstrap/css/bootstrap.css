@@ -734,7 +734,7 @@ td{border:1px solid #E0E0E0;background-color:#eeeeee;padding:2px;min-width:5px;}
 .legend .legendbox{width:auto;height:auto;background-color:#eeeeee;padding:9px 15px;}
 .legend .legendheight{height:15px;}
 .nopointer{pointer-events:none;}
-@media (max-width:950px){.daynames{display:none;} thead .shortdaynames{display:table-row;} .months{height:40px;font-size:1em;line-height:50px;cursor:pointer;pointer-events:auto;color:#345970;}}@media (max-width:600px){#maintable{font:80% "Lucida Grande","Trebuchet MS",Verdana,sans-serif;} .navbar{display:none;} #accordionContainer{display:none;}}.carousel{position:relative;margin-bottom:18px;line-height:1;}
+@media (max-width:950px){.daynames{display:none;} thead .shortdaynames{display:table-row;} .months{height:40px;font-size:1em;line-height:50px;cursor:pointer;pointer-events:auto;color:#345970;}}@media (max-width:550px){#maintable{font:80% "Lucida Grande","Trebuchet MS",Verdana,sans-serif;} .navbar{display:none;} #accordionContainer{display:none;}}.carousel{position:relative;margin-bottom:18px;line-height:1;}
 .carousel-inner{overflow:hidden;width:100%;position:relative;}
 .carousel .item{display:none;position:relative;-webkit-transition:0.6s ease-in-out left;-moz-transition:0.6s ease-in-out left;-ms-transition:0.6s ease-in-out left;-o-transition:0.6s ease-in-out left;transition:0.6s ease-in-out left;}
 .carousel .item>img{display:block;line-height:1;}
