@@ -234,22 +234,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		});
 	};
 	
-	/*
-	function removeElementInDataBase(system, item) {
-	
-		$.each(system.statuslines, function(j, v_status) {
-			var statusStart = Utils.convertToDate(v_status.start);
-			var statusEnd = Utils.convertToDate(v_status.end);
-			
-			if (statusStart.getTime() == item.start.getTime() && statusEnd.getTime() == item.end.getTime() && v_status.status == item.status) {
-				
-				system.statuslines.splice(j, 1);
-				return false;
-			}
-		});
-	}
-	*/
-	
 	function spliceCalendarElement(system, item) {
 	
 		$.each(system.statuslines, function(j, v_status) {
@@ -306,6 +290,41 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				}
 			});
 		//}*/
+		
+		var existingSystem;
+		for (var i=1; i < $scope.systemlines.length; i++) {
+			if ( $scope.systemlines[i].system == $scope.addFormData.system) { 
+				existingSystem = $scope.systemlines[i];
+				break; 
+			}
+		}
+
+
+		if (existingSystem) {
+			//Update existing system 
+			var systemElement = { 
+				"system": existingSystem.system,
+				"statuslines": existingSystem.statuslines
+			};
+			
+			var statusElement = {
+				"start": Utils.viewDateToDBDate($scope.addFormData.start),
+				"end": Utils.viewDateToDBDate($scope.addFormData.end),
+				"status": $scope.addFormData.status,
+				"comment": $scope.addFormData.comment 
+			}
+			
+			spliceCalendarElement(systemElement, $scope.selectedElement);
+			systemElement.statuslines.push(statusElement);
+
+			var system = new db.System(systemElement);
+
+			system.update(existingSystem._id).then(function(newSystemElement) {
+				Utils.addLineToElementModalLog("Element in system " + existingSystem.system + "updated");
+				$scope.unSelectElement();
+				$scope.systemlines = getSystemData();
+			})
+		}
 	};
 		
 	$scope.addStatusElement = function() {
