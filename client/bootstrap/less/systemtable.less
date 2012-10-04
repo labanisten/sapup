@@ -175,9 +175,11 @@ td {
 .legend .legendbox{
 	width: auto;
 	height: auto;
+	min
 	background-color: #eeeeee;
 	/*margin-bottom: 2px;*/
 	padding: 9px 15px;
+	min-width: 100px;
 }
 
 .legend .legendheight{
@@ -190,11 +192,12 @@ td {
 
 
 @media (max-width: 950px) {
+
 	.daynames{
 		display:none;
 	}
 	
-	thead .shortdaynames{
+	thead .shortdaynames{ 
 		display: table-row;
 	}
 	
@@ -205,6 +208,10 @@ td {
 	  cursor: pointer;
 	  pointer-events: auto;
 	  color: #345970;
+	}
+	
+	table {
+	  font: 80% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
 	}
 	
 }

@@ -252,43 +252,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.updateStatusElement = function() {
 
 		//if($("#elementForm").valid()){	
-			/*
-			$.each($scope.systemlines, function(i, v_system) {
-					
-				if (v_system.system == $scope.updateFormData.system) {
-				
-					var systemElement = { 
-						"system": v_system.system,
-						"statuslines": $scope.systemlines[i].statuslines
-					};
-					
-					spliceCalendarElement(systemElement, $scope.selectedElement);
-					
-					var start = Utils.viewDateToDBDate($scope.updateFormData.start);
-					var end = Utils.viewDateToDBDate($scope.updateFormData.end);
-					
-					var statusElement = {
-						"start": start,
-						"end": end,
-						"status": $scope.updateFormData.status,
-						"comment": $scope.updateFormData.comment 
-					}
-					
-					systemElement.statuslines.push(statusElement);
-		
-					Systems.systems.update({id:$scope.systemlines[i]._id.$oid}, systemElement, function(item){
-						Utils.addLineToElementModalLog("Element updated in " + $scope.systemlines[i].system);
-						//$scope.unSelectElement();
-						$scope.systemlines = getSystemData();
-					});
-					
-					
-					return false;
-					
-				}else{
-					//addLineToElementModalLog("Error!!!!!");
-				}
-			});
 		//}*/
 		
 		var existingSystem;
@@ -299,9 +262,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			}
 		}
 
-
 		if (existingSystem) {
-			//Update existing system 
 			var systemElement = { 
 				"system": existingSystem.system,
 				"statuslines": existingSystem.statuslines
@@ -318,9 +279,8 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			systemElement.statuslines.push(statusElement);
 
 			var system = new db.System(systemElement);
-
 			system.update(existingSystem._id).then(function(newSystemElement) {
-				Utils.addLineToElementModalLog("Element in system " + existingSystem.system + "updated");
+				Utils.addLineToElementModalLog("Element updated");
 				$scope.unSelectElement();
 				getSystemData();
 			})
