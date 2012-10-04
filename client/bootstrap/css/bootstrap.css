@@ -720,6 +720,9 @@ accordion-heading{background-color:#eeeeee;}
 .alert-container-header{border:none;background-color:#dfdfdf;background-image:-moz-linear-gradient(top, #d5d5d5, #eeeeee);background-image:-ms-linear-gradient(top, #d5d5d5, #eeeeee);background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#d5d5d5), to(#eeeeee));background-image:-webkit-linear-gradient(top, #d5d5d5, #eeeeee);background-image:-o-linear-gradient(top, #d5d5d5, #eeeeee);background-image:linear-gradient(top, #d5d5d5, #eeeeee);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#d5d5d5', endColorstr='#eeeeee', GradientType=0);font-size:1.6em;text-align:center;}
 .alert-container-body{background-color:#eeeeee;}
 .firstcol{min-width:50px;background-color:#8cb1da;text-align:center;}
+.year{height:40px;font-size:2em;line-height:50px;pointer-events:auto;}
+.yeararrow{margin:7px;cursor:pointer;}
+.yeartext{margin:0px 10px;color:#cd007a;}
 .months{height:40px;font-size:1.6em;line-height:50px;cursor:pointer;pointer-events:auto;color:#345970;}
 .month:hover:not(.selectedmonth){color:#3a1558;font-size:2em;-webkit-transition:font-size;-moz-transition:font-size;-ms-transition:font-size;-o-transition:font-size;transition:font-size;-webkit-transition:0.2s;-moz-transition:0.2s;-ms-transition:0.2s;-o-transition:0.2s;transition:0.2s;}
 .selectedmonth{color:#cd007a;font-size:2em;}

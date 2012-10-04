@@ -14,18 +14,6 @@ angular.module('calendarModule', ['utilsModule']).
 			return ns.currentYear;
 		}
 
-		ns.getFirstDayInMonth = function(month) {
-			var d = new Date();
-			d.setDate(1);
-			d.setMonth(month);
-			return d;
-		};
-
-		ns.getLastDayInMonth = function(month) {
-			var d = new Date();
-			return new Date(d.getFullYear(), month + 1, 0);
-		};
-
 		ns.currentDate = new Date();
 		
 		ns.currentMonth = ns.currentDate.getMonth();

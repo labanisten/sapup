@@ -224,6 +224,15 @@
 					function buildCalendar() {
 						var template = 	'<table id="maintable">'+
 											'<thead>'+
+											
+												'<tr>'+
+													'<th class="year" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
+														'<i class="yeararrow icon-chevron-left" ng-click="gotoPreviousYear()"></i>'+
+														'<span class="yeartext">{{selectedYear}}</span>'+
+														'<i class="yeararrow icon-chevron-right"  ng-click="gotoNextYear()" ng-click=""></i>'+
+													'</th>'+
+												'</tr>'+
+												
 												'<tr>'+
 													'<th class="months" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
 														'<div clear-popovers-and-selections ng:class="getClassForMonth(month)" ng-click="gotoMonth($event, month)" ng-repeat="month in [0,1,2,3,4,5,6,7,8,9,10,11]">'+

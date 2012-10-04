@@ -124,12 +124,22 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		} else {
 			return "span1 month";
 		};
-	}
+	};
 	
 	$scope.gotoMonth = function(event, month) {
 		$scope.selectedMonth = month;
 		var elem = angular.element(event.srcElement);
 		elem[0].className += " selectedmonth";	
+	};
+	
+	$scope.gotoPreviousYear = function() {
+		$scope.selectedYear = $scope.selectedYear - 1;
+		getSystemData();
+	};
+	
+	$scope.gotoNextYear = function() {
+		$scope.selectedYear = $scope.selectedYear + 1;
+		getSystemData();
 	};
 
 	function getSystemData() {
