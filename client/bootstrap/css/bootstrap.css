@@ -707,7 +707,7 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .hero-unit{padding:60px;margin-bottom:30px;background-color:#eeeeee;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;}.hero-unit h1{margin-bottom:0;font-size:60px;line-height:1;color:inherit;letter-spacing:-1px;}
 .hero-unit p{font-size:18px;font-weight:200;line-height:27px;color:inherit;}
 .element{padding:0;}
-.element-inner{height:10px;cursor:pointer;width:100%;display:block;min-width:10px;-webkit-border-radius:1.65em;border:1px solid #999999;text-align:center;-moz-transition:all 1s;-webkit-transition:all 1s;-ms-transition:all 1s;-o-transition:all 1s;transition:all 1s;}
+.element-inner{height:10px;cursor:pointer;width:100%;display:block;min-width:10px;-webkit-border-radius:1.65em;border:1px solid #999999;text-align:center;}
 .element-inner.available{cursor:default;visibility:hidden;border-radius:0;}
 .element-inner.freeze{background-color:#abb4c6;background-image:-moz-linear-gradient(top, #9fa9be, #bdc4d3);background-image:-ms-linear-gradient(top, #9fa9be, #bdc4d3);background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#9fa9be), to(#bdc4d3));background-image:-webkit-linear-gradient(top, #9fa9be, #bdc4d3);background-image:-o-linear-gradient(top, #9fa9be, #bdc4d3);background-image:linear-gradient(top, #9fa9be, #bdc4d3);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#9fa9be', endColorstr='#bdc4d3', GradientType=0);}
 .element-inner.upgrade{background-color:#c54f4f;background-image:-moz-linear-gradient(top, #c04040, #cd6666);background-image:-ms-linear-gradient(top, #c04040, #cd6666);background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#c04040), to(#cd6666));background-image:-webkit-linear-gradient(top, #c04040, #cd6666);background-image:-o-linear-gradient(top, #c04040, #cd6666);background-image:linear-gradient(top, #c04040, #cd6666);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#c04040', endColorstr='#cd6666', GradientType=0);}
@@ -729,12 +729,12 @@ table{width:100%;font:100% "Lucida Grande","Trebuchet MS",Verdana,sans-serif;bor
 th{border:1px solid #E0E0E0;pointer-events:none;background-color:#eeeeee;}
 td{border:1px solid #E0E0E0;background-color:#eeeeee;padding:2px;min-width:5px;}
 .shortdaynames{display:none;}
-.legend{margin-bottom:20px;border:1px solid #e5e5e5;}
+.legend{margin-bottom:20px;border:1px solid #e5e5e5;min-width:100px;}
 .legend .legendheader{width:auto;height:18px;padding:8px;font-weight:800;text-align:center;background-color:#eeeeee;border-bottom:1px solid #e5e5e5;background-image:-moz-linear-gradient(top, #d5d5d5, #eeeeee);background-image:-ms-linear-gradient(top, #d5d5d5, #eeeeee);background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#d5d5d5), to(#eeeeee));background-image:-webkit-linear-gradient(top, #d5d5d5, #eeeeee);background-image:-o-linear-gradient(top, #d5d5d5, #eeeeee);background-image:linear-gradient(top, #d5d5d5, #eeeeee);background-repeat:repeat-x;}
 .legend .legendbox{width:auto;height:auto;background-color:#eeeeee;padding:9px 15px;}
 .legend .legendheight{height:15px;}
 .nopointer{pointer-events:none;}
-@media (max-width:950px){.daynames{display:none;} thead .shortdaynames{display:table-row;} .months{height:40px;font-size:1em;line-height:50px;cursor:pointer;pointer-events:auto;color:#345970;}}.carousel{position:relative;margin-bottom:18px;line-height:1;}
+@media (max-width:950px){.daynames{display:none;} thead .shortdaynames{display:table-row;} .months{height:40px;font-size:1em;line-height:50px;cursor:pointer;pointer-events:auto;color:#345970;}}@media (max-width:600px){#maintable{font:80% "Lucida Grande","Trebuchet MS",Verdana,sans-serif;} .navbar{display:none;} #accordionContainer{display:none;}}.carousel{position:relative;margin-bottom:18px;line-height:1;}
 .carousel-inner{overflow:hidden;width:100%;position:relative;}
 .carousel .item{display:none;position:relative;-webkit-transition:0.6s ease-in-out left;-moz-transition:0.6s ease-in-out left;-ms-transition:0.6s ease-in-out left;-o-transition:0.6s ease-in-out left;transition:0.6s ease-in-out left;}
 .carousel .item>img{display:block;line-height:1;}

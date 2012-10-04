@@ -3,7 +3,7 @@
 
 .element
 {
-	padding: 0;  
+	padding: 0;   
 }
 
 	
@@ -18,11 +18,12 @@
   border: 1px solid @grayLight; 
   text-align: center;
   
+  /*
   -moz-transition: all 1s;
   -webkit-transition: all 1s;
   -ms-transition: all 1s;
   -o-transition: all 1s;
-  transition: all 1s;
+  transition: all 1s;*/
 
 /*  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.8);*/
 	
@@ -151,8 +152,8 @@ td {
 }
 
 .legend {
-	margin-bottom: 20px;
-	border: 1px solid #e5e5e5;
+	margin-bottom: 20px; 
+	border: 1px solid #e5e5e5; 
 	min-width: 100px;
 }
 
@@ -176,7 +177,6 @@ td {
 .legend .legendbox{
 	width: auto;
 	height: auto;
-	min
 	background-color: #eeeeee;
 	/*margin-bottom: 2px;*/
 	padding: 9px 15px;
@@ -210,10 +210,20 @@ td {
 	  color: #345970;
 	}
 	
+}
+
+@media (max-width: 600px) {
 	#maintable {
 	  font: 80% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
 	}
 	
+	.navbar {
+		display:none;
+	}
+	
+	#accordionContainer {
+		display:none;
+	}
 }
 
 
