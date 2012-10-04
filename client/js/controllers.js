@@ -293,7 +293,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		
 		var existingSystem;
 		for (var i=1; i < $scope.systemlines.length; i++) {
-			if ( $scope.systemlines[i].system == $scope.addFormData.system) { 
+			if ( $scope.systemlines[i].system == $scope.updateFormData.system) { 
 				existingSystem = $scope.systemlines[i];
 				break; 
 			}
@@ -308,10 +308,10 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			};
 			
 			var statusElement = {
-				"start": Utils.viewDateToDBDate($scope.addFormData.start),
-				"end": Utils.viewDateToDBDate($scope.addFormData.end),
-				"status": $scope.addFormData.status,
-				"comment": $scope.addFormData.comment 
+				"start": Utils.viewDateToDBDate($scope.updateFormData.start),
+				"end": Utils.viewDateToDBDate($scope.updateFormData.end),
+				"status": $scope.updateFormData.status,
+				"comment": $scope.updateFormData.comment 
 			}
 			
 			spliceCalendarElement(systemElement, $scope.selectedElement);
@@ -322,7 +322,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			system.update(existingSystem._id).then(function(newSystemElement) {
 				Utils.addLineToElementModalLog("Element in system " + existingSystem.system + "updated");
 				$scope.unSelectElement();
-				$scope.systemlines = getSystemData();
+				getSystemData();
 			})
 		}
 	};
@@ -362,7 +362,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				system.update(existingSystem._id).then(function(newSystemElement) {
 					Utils.addLineToElementModalLog("Element added to " + existingSystem.system);
 					$scope.unSelectElement();
-					$scope.systemlines = getSystemData();
+					getSystemData();
 				})
 
 				
@@ -388,7 +388,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				system.create().then(function(newSystemElement) {
 					Utils.addLineToElementModalLog("Element added to " + newSystemElement.system);
 					$scope.unSelectElement();
-					$scope.systemlines = getSystemData();
+					getSystemData();
 				})
 
 			}
