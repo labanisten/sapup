@@ -4,12 +4,15 @@
 
 	var app = express.createServer();
 	var BSON = mongodb.BSONPure;
+	var MONGODB_URL = process.env.MONGODB_URL; 
+	var MONGODB_PORT = process.env.MONGODB_PORT; 
+
 	
 	var pool = generic_pool.Pool({
 		name: 'mongodb',
 		max: 20,
 		create: function(callback) {
-			var dbServer = new mongodb.Server("centos-nosql-vm.cloudapp.net", 27017, {});
+			var dbServer = new mongodb.Server(MONGODB_URL, MONGODB_PORT, {});
 			//var dbServer = new mongodb.Server("10.216.209.142", 27017, {});
 			var db = new mongodb.Db('test', dbServer, {});
 			
