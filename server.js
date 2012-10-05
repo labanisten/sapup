@@ -12,7 +12,7 @@
 		name: 'mongodb',
 		max: 20,
 		create: function(callback) {
-			var dbServer = new mongodb.Server(centos-nosql-vm.cloudapp.net, 27017, {});
+			var dbServer = new mongodb.Server('centos-nosql-vm.cloudapp.net', 27017, {});
 			//var dbServer = new mongodb.Server("10.216.209.142", 27017, {});
 			var db = new mongodb.Db('test', dbServer, {});
 			
