@@ -3,6 +3,7 @@ angular.module('mongodbModule', []).
 	
 		var DB_URL = "http://systemavailability.azurewebsites.net"; 
 		//var DB_URL = "/mongodb/test";
+		//var DB_URL = "/mongodbloc";
 		//var DB_NAME = "test";
 		
 		var db = db || {};
@@ -19,7 +20,8 @@ angular.module('mongodbModule', []).
 							return repsonse.data;
 						});					
 					} else {
-						return $http.get(DB_URL + '/' + url + '/').then(function(repsonse){
+						var seconds = new Date().getTime() / 1000;
+						return $http.get(DB_URL + '/' + url + '/' + '?' + seconds).then(function(repsonse){
 							return repsonse.data;
 						});
 					}

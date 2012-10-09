@@ -723,6 +723,8 @@ accordion-heading{background-color:#eeeeee;}
 .year{height:40px;font-size:2em;line-height:50px;pointer-events:auto;}
 .yeararrow{margin:7px;cursor:pointer;}
 .yeartext{margin:0px 10px;color:#cd007a;}
+.year .yeartextprev{font-size:0.5em;}
+.year .yeartextnext{font-size:0.6em;}
 .months{height:40px;font-size:1.6em;line-height:50px;cursor:pointer;pointer-events:auto;color:#345970;}
 .month:hover:not(.selectedmonth){color:#3a1558;font-size:2em;-webkit-transition:font-size;-moz-transition:font-size;-ms-transition:font-size;-o-transition:font-size;transition:font-size;-webkit-transition:0.2s;-moz-transition:0.2s;-ms-transition:0.2s;-o-transition:0.2s;transition:0.2s;}
 .selectedmonth{color:#cd007a;font-size:2em;}
