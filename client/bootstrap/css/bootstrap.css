@@ -471,7 +471,7 @@ button.btn.btn-mini,input[type="submit"].btn.btn-mini{*padding-top:1px;*padding-
 .dropup .btn-large .caret{border-bottom:5px solid #000000;border-top:0;}
 .btn-primary .caret,.btn-warning .caret,.btn-danger .caret,.btn-info .caret,.btn-success .caret,.btn-inverse .caret{border-top-color:#ffffff;border-bottom-color:#ffffff;opacity:0.75;filter:alpha(opacity=75);}
 .alert{padding:8px 35px 8px 14px;margin-bottom:18px;text-shadow:0 1px 0 rgba(255, 255, 255, 0.5);background-color:#fcf8e3;border:1px solid #fbeed5;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;color:#c09853;}
-.alert-heading{color:inherit;}
+.alert h4{margin:0;}
 .alert .close{position:relative;top:-2px;right:-21px;line-height:18px;}
 .alert-success{background-color:#dff0d8;border-color:#d6e9c6;color:#468847;}
 .alert-danger,.alert-error{background-color:#f2dede;border-color:#eed3d7;color:#b94a48;}
@@ -723,8 +723,6 @@ accordion-heading{background-color:#eeeeee;}
 .year{height:40px;font-size:2em;line-height:50px;pointer-events:auto;}
 .yeararrow{margin:7px;cursor:pointer;}
 .yeartext{margin:0px 10px;color:#cd007a;}
-.year .yeartextprev{font-size:0.5em;}
-.year .yeartextnext{font-size:0.6em;}
 .months{height:40px;font-size:1.6em;line-height:50px;cursor:pointer;pointer-events:auto;color:#345970;}
 .month:hover:not(.selectedmonth){color:#3a1558;font-size:2em;-webkit-transition:font-size;-moz-transition:font-size;-ms-transition:font-size;-o-transition:font-size;transition:font-size;-webkit-transition:0.2s;-moz-transition:0.2s;-ms-transition:0.2s;-o-transition:0.2s;transition:0.2s;}
 .selectedmonth{color:#cd007a;font-size:2em;}
