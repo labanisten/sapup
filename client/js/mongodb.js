@@ -1,9 +1,6 @@
 angular.module('mongodbModule', []).
 	factory('db', function($http) {
 	
-		// var DB_URL = "http://systemavailability.azurewebsites.net"; 
-		var DB_URL = ""; 
-		
 		
 		var db = db || {};
 		

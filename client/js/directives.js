@@ -164,7 +164,7 @@
 								result = v_line;
 								result.index = i;
 								
-							}else if(start.getMonth() < scope.selectedMonth && end.getMonth() == scope.selectedMonth && day == 1) {
+							}else if(start.getMonth() < scope.selectedMonth && end.getMonth() == scope.selectedMonth && day == 1 && start.getFullYear() == scope.selectedYear) {
 
 								v_line.isStartDateInPrevMonth = true;
 								var tmpDate = new String();
@@ -174,7 +174,7 @@
 								result = v_line;
 								result.index = i;
 								
-							}else if(start.getMonth() < scope.selectedMonth && end.getMonth() > scope.selectedMonth && day == 1) {
+							}else if(start.getMonth() < scope.selectedMonth && end.getMonth() > scope.selectedMonth && day == 1 && start.getFullYear() == scope.selectedYear) {
 								v_line.isInsideSelectedMonth = true;
 								
 								var tmpDate = new String();
