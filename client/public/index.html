@@ -10,23 +10,6 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	
-	<!--script src="../js/jquery-1.8.0.js"></script>
-	<script src="../js/jquery-ui-1.8.21.custom.min.js"></script>
-	
-	<script src="../js/angular.js"></script>
-	<script src="../js/angular-resource.js"></script>
-
-	<script src="../js/controllers.js"></script>
-	<script src="../js/directives.js"></script>
-	<script src="../js/mongodb.js"></script>
-	<script src="../js/calendar.js"></script>
-	<script src="../js/utils.js"></script>	
-
-	<link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
-	<link href="../css/jquery-ui-1.8.21.custom.css" rel="stylesheet"-->
-	
-	
     <script src="js/jquery-1.8.0.js"></script>
 	<script src="js/jquery-ui-1.8.21.custom.min.js"></script>
 	
@@ -50,13 +33,6 @@
 	<div class="navbar navbar-inverse">
 		<div class="navbar-inner">
 			<div class="container">
-			
-				<!--
-				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</a>-->
 
 				<a class="brand" href="#">System availability</a>
 				<a class="btn btn-primary pull-right" data-toggle="modal" href="#addalertdialog"> <i class="icon-plus icon-white"></i>
@@ -69,82 +45,6 @@
 					<i class="icon-pencil icon-white"></i>
 					Adminview
 				</a>
-				<!-- <a class="pull-right" href="#"><img src="images/statoil_logo_black.png"></a> -->
-
-				
-				<!--
-				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</a>-->
-				
-				<!--<img src="../css/images/statoil_vertical_neg_80x40.png"/>-->
-				<!--a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</a>
-				
-				<a class="brand" href="#">System availability</a>
-				
-				<ul class="nav">
-                      <li class="active"><a href="#">Home</a></li>
-                      <li><a href="#">Link</a></li>
-                      <li><a href="#">Link</a></li>
-                      <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                          <li><a href="#">Action</a></li>
-                          <li><a href="#">Another action</a></li>
-                          <li><a href="#">Something else here</a></li>
-                          <li class="divider"></li>
-                          <li class="nav-header">Nav header</li>
-                          <li><a href="#">Separated link</a></li>
-                          <li><a href="#">One more separated link</a></li>
-                        </ul>
-                      </li>
-                 </ul-->
-		  
-				<!--
-				<ul class="nav">  
-				<li>
-					<a class="brand" href="#">System availability</a>
-					
-					<div class="btn-group">
-					
-						<a class="btn dropdown-toggle" data-toggle="dropdown">
-							Options
-							<span class="caret"></span>
-						</a>
-						
-						 <ul class="dropdown-menu">
-							<li><a href="#">Another action</a></li>
-							<li><a href="#">Another action</a></li>
-							<li class="divider"></li>
-							<li><a href="#">Another action</a></li>
-						 </ul>
-					 </div>
-				</li> 
-
-				<li>
-					<a class="btn btn-primary pull-right" data-toggle="modal" href="#addalertdialog"> <i class="icon-plus icon-white"></i>
-						Add alert
-					</a>
-				</li>
-				<li>
-					<a class="btn btn-primary pull-right" data-toggle="modal" href="#addelementdialog"><i class="icon-th icon-white"></i> 
-						Add elements
-					</a>
-				</li>
-				<li>
-					<a class="btn btn-primary pull-right" href="admin.html">
-						<i class="icon-pencil icon-white"></i>
-						Adminview
-					</a>
-				</li>
-				</ul>
-				-->
 			</div>
 		</div>
 	</div>
@@ -295,11 +195,6 @@
 
 								<div class="control-group">
 									<label for="system">System</label>
-									<!--
-									<select id="csystem" name="system" ng-model="updateFormData.system" class="input-medium">
-										<option value=""></option>
-										<option ng-repeat="systemname in systemnames">{{systemname.name}}</option>
-									</select>-->
 									<input id="cstatus" name="status" ng-model="updateFormData.system" class="input-medium uneditable-input">
 								</div>
 
@@ -340,20 +235,10 @@
 
 		<div class="modal-footer">
 
-			<!--<a class="btn btn-primary pull-left" ng-click="addStatusElement()" clear-popovers-and-selections>
-				<i class="icon-plus icon-white"></i>
-				New
-			</a>-->
 			<a class="btn btn-primary" ng-click="updateStatusElement()" clear-popovers-and-selections>
 				<i class="icon-pencil icon-white"></i>
 				Update
 			</a>
-			<!--
-			<a class="btn btn-danger" ng-click="removeStatusElement()" clear-popovers-and-selections>
-				<i class="icon-trash icon-white"></i>
-				Delete
-			</a>
-			-->
 			<a class="btn" data-dismiss="modal" ng-click="clearModalLog();">
 				<i class="icon-remove"></i>
 				Close
@@ -449,15 +334,7 @@
 	<script src="bootstrap/js/bootstrap-dropdown.js"></script>
 	<script src="js/jquery.validate.js"></script>
 	<script src="js/validation.js"></script>	
-	
-	
-	<!--script src="../bootstrap/js/bootstrap.js"></script>
-	<script src="../bootstrap/js/bootstrap-collapse.js"></script>
-	<script src="../bootstrap/js/bootstrap-tooltip.js"></script>
-	<script src="../bootstrap/js/bootstrap-popover.js"></script>
-	<script src="../bootstrap/js/bootstrap-dropdown.js"></script>
-	<script src="../js/jquery.validate.js"></script>
-	<script src="../js/validation.js"></script-->
+
 	
 	<!-- User voice Widget -->
 	<script type="text/javascript">
