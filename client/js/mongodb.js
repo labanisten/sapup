@@ -1,7 +1,6 @@
 angular.module('mongodbModule', []).
 	factory('db', function($http) {
 	
-		
 		var db = db || {};
 		
 		(function(ns) {
@@ -12,19 +11,19 @@ angular.module('mongodbModule', []).
 
 				ns[name].get = function(query) {
 					if (query) {
-						return $http.get(DB_URL + '/' + url + '/' + '?query=' + JSON.stringify(query)).then(function(repsonse){
+						return $http.get('/' + url + '/' + '?query=' + JSON.stringify(query)).then(function(repsonse){
 							return repsonse.data;
 						});					
 					} else {
 						var seconds = new Date().getTime() / 1000;
-						return $http.get(DB_URL + '/' + url + '/' + '?' + seconds).then(function(repsonse){
+						return $http.get('/' + url + '/' + '?' + seconds).then(function(repsonse){
 							return repsonse.data;
 						});
 					}
 				};
 
 				ns[name].remove = function(id) {
-				 	return $http.delete(DB_URL + '/' + url + '/' + id).then(function(response) {					 	
+				 	return $http.delete('/' + url + '/' + id).then(function(response) {					 	
 						return response;
 					});					
 				}
@@ -32,7 +31,7 @@ angular.module('mongodbModule', []).
 				//TODO returnera berre ok
 				ns[name].prototype.create = function() {
 					var resource = this;
-				 	return $http.post(DB_URL + '/' + url + '/', resource).then(function(response) {
+				 	return $http.post('/' + url + '/', resource).then(function(response) {
 						if(!response.data.ok){
 							resource.id = response.data[0]._id;
 						}
@@ -42,7 +41,7 @@ angular.module('mongodbModule', []).
 
 				ns[name].prototype.update = function(id) {
 					var resource = this;
-				 	return $http.put(DB_URL + '/' + url + '/' + id, resource).then(function(response) {
+				 	return $http.put('/' + url + '/' + id, resource).then(function(response) {
 						return resource;
 					});
 				};

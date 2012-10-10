@@ -14,12 +14,6 @@
 		name: 'mongodb',
 		max: 20,
 		create: function(callback) {
-			// var dbServer = new mongodb.Server('centos-nosql-vm.cloudapp.net', 27017, {});
-			console.log("Open DB connection");
-			console.log("MongoDB port: " + MONGODB_PORT);
-			console.log("MongoDB URL: " + MONGODB_URL);
-			console.log("MongoDB database: " + MONGODB_DB);
-
 			var dbServer = new mongodb.Server(MONGODB_URL, MONGODB_PORT, {safe:true});
 			var db = new mongodb.Db(MONGODB_DB, dbServer, {});
 			
@@ -150,4 +144,7 @@
 	var port = process.env.PORT || 4000;
 	app.listen(port, function() {
 		console.log("Listening on " + port);
+		console.log("MongoDB port: " + MONGODB_PORT);
+		console.log("MongoDB URL: " + MONGODB_URL);
+		console.log("MongoDB database: " + MONGODB_DB);
 	});
