@@ -143,4 +143,6 @@
 	var port = process.env.PORT || 4000;
 	app.listen(port, function() {
 		console.log("Listening on " + port);
+		console.log("MongoDB port: " + MONGODB_PORT);
+		console.log("MongoDB URL: " + MONGODB_URL);
 	});
