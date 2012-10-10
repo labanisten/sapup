@@ -139,9 +139,11 @@
 					});
 					
 
-					function findMatchingElement(day, statuslines) {
+					function findMatchingElement(day, system) {
 						var result = "";
 						day = day + 1;
+						
+						var statuslines = system.statuslines;
 						
 						$.each(statuslines, function(i, v_line) {
 							var start = Utils.convertToDate(v_line.start);
@@ -151,15 +153,47 @@
 							var sel = scope.selectedMonth;
 							
 							if(start.getDate() == day && start.getMonth() == scope.selectedMonth && start.getFullYear() == scope.selectedYear) {
+							
+								if(end.getMonth() > scope.selectedMonth) {
+									v_line.isEndDateInNextMonth = true;
+									var tmpDate = new String();
+									tmpDate = tmpDate.concat(start.getFullYear(), start.getMonth() + 1, scope.noOfDaysInMonth[start.getMonth()]);
+									v_line.tempEndDate = tmpDate;
+								}
+								
 								result = v_line;
 								result.index = i;
+								
+							}else if(start.getMonth() < scope.selectedMonth && end.getMonth() == scope.selectedMonth && day == 1) {
+
+								v_line.isStartDateInPrevMonth = true;
+								var tmpDate = new String();
+								tmpDate = tmpDate.concat(start.getFullYear(), end.getMonth() + 1, '01');
+								v_line.tempStartDate = tmpDate;
+
+								result = v_line;
+								result.index = i;
+								
+							}else if(start.getMonth() < scope.selectedMonth && end.getMonth() > scope.selectedMonth && day == 1) {
+								v_line.isInsideSelectedMonth = true;
+								
+								var tmpDate = new String();
+								tmpDate = tmpDate.concat(start.getFullYear(), scope.selectedMonth + 1, '01');
+								v_line.tempStartDate = tmpDate;
+								tmpDate = '';
+								tmpDate = tmpDate.concat(start.getFullYear(), scope.selectedMonth + 1, scope.noOfDaysInMonth[scope.selectedMonth]);
+								v_line.tempEndDate = tmpDate;
+
+								result = v_line;
+								result.index = i;
+								
 							}
 							
 						});
 						
 						return result;
 					}
-					
+
 					
 					function systemExist(systemName) {
 						var match = {
@@ -178,24 +212,49 @@
 						return match;
 					}
 					
+					function resetTmpAttributes(element) {
+						element.tempEndDate = '';
+						element.tempStartDate = '';
+						element.isEndDateInNextMonth = false;
+						element.isStartDateInPrevMonth = false;
+						element.isInsideSelectedMonth = false;
+						return element;
+					}
+					
 					
 					function buildTemplateForExistingSystem(systemIndex) {
 						
 						var template = '<tr><td class="system"><span class="badge badge-info">{{systemlines['+systemIndex+'].system}}</span></td>';
 						for(var day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
 							
-							var elementIndex = findMatchingElement(day, scope.systemlines[systemIndex].statuslines);
-							if(elementIndex == "") {
+							var element = findMatchingElement(day, scope.systemlines[systemIndex]);
+							
+							if(element == "") {
 								template += '<td clear-popovers-and-selections></td>';
 							}else{
-								var colspan = elementIndex.end - elementIndex.start + 1;
+							
+								var colspan;
+								
+								if(element.isEndDateInNextMonth) {
+									colspan = element.tempEndDate - element.start + 1;
+									element = resetTmpAttributes(element);
+								}else if(element.isStartDateInPrevMonth) {
+									colspan = element.end - element.tempStartDate + 1;
+									element = resetTmpAttributes(element);
+								}else if(element.isInsideSelectedMonth) {
+									colspan = element.tempEndDate - element.tempStartDate + 1;
+									element = resetTmpAttributes(element);
+								}else{
+									colspan = element.end - element.start + 1;
+								}
+								
 								template += '<td class="filledcell" colspan="'+colspan+'">'+
 								
-												'<span ng:class="getClassForElement('+systemIndex+','+elementIndex.index+')"'+ 
-													  'ng-click="selectElement($event, '+systemIndex+','+elementIndex.index+')"'+ 
+												'<span ng:class="getClassForElement('+systemIndex+','+element.index+')"'+ 
+													  'ng-click="selectElement($event, '+systemIndex+','+element.index+')"'+ 
 													  'bs-popoverhover '+ 
 													  'sysIndex="'+systemIndex+'"'+
-													  'elmIndex="'+elementIndex.index+'"'+ 
+													  'elmIndex="'+element.index+'"'+ 
 													  'rel="popover">'+ 
 												'</span>'+	
 												
