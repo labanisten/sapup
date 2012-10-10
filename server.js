@@ -4,11 +4,10 @@
 
 	var app = express.createServer();
 	var BSON = mongodb.BSONPure;
-	var MONGODB_URL = process.env.MONGODB_URL; 
-	var MONGODB_PORT = process.env.MONGODB_PORT; 
+	var MONGODB_URL = process.env.MONGODB_URL || '127.0.0.1'; 
+	var MONGODB_PORT =parseInt(process.env.MONGODB_PORT) || 27017; 
+	var MONGODB_DB = process.env.MONGODB_DB || 'test'; 
 
-	console.log("MongoDB port: " + MONGODB_PORT);
-	console.log("MongoDB URL: " + MONGODB_URL);
 
 	
 	var pool = generic_pool.Pool({
@@ -16,9 +15,13 @@
 		max: 20,
 		create: function(callback) {
 			// var dbServer = new mongodb.Server('centos-nosql-vm.cloudapp.net', 27017, {});
-			var dbServer = new mongodb.Server(MONGODB_URL, MONGODB_PORT, {});
-			//var dbServer = new mongodb.Server("10.216.209.142", 27017, {});
-			var db = new mongodb.Db('test', dbServer, {});
+			console.log("Open DB connection");
+			console.log("MongoDB port: " + MONGODB_PORT);
+			console.log("MongoDB URL: " + MONGODB_URL);
+			console.log("MongoDB database: " + MONGODB_DB);
+
+			var dbServer = new mongodb.Server(MONGODB_URL, MONGODB_PORT, {safe:true});
+			var db = new mongodb.Db(MONGODB_DB, dbServer, {});
 			
 			db.open(function(err, db) {
 				callback(err, db);
@@ -41,7 +44,7 @@
 	app.use("/bootstrap", express.static(__dirname + "/client/bootstrap"));
 	
 	var restServices = {
-		get: function(req, res){
+		get: function(req, res){		
 				pool.acquire(function(err, db) {
 					if(err) {return res.end("At connection, " + err);}
 					var resource = req.path.replace(/^\/|\/$/g, '');
