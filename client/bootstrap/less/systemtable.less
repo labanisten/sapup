@@ -16,17 +16,7 @@
   min-width: 10px;
   -webkit-border-radius: 1.65em;
   border: 1px solid @grayLight; 
-  text-align: center;
-  
-  /*
-  -moz-transition: all 1s;
-  -webkit-transition: all 1s;
-  -ms-transition: all 1s;
-  -o-transition: all 1s;
-  transition: all 1s;*/
-
-/*  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.8);*/
-	
+  text-align: center; 	
 }
 
 .element-inner.available {
@@ -64,17 +54,22 @@
   #gradient > .vertical(#FAFA11, lighten(#B1A520, 10%));
 }
 
-accordion{
+accordion {
   background-color: @grayLighter;
 }
 
-accordion-heading{
+.accordion-group {
+	.border-radius: 0px;
+}
+
+accordion-heading {
   background-color: @grayLighter;
 }
 
 .alert-container-header{
 	border: none;
-	#gradient > .vertical(darken(@grayLighter, 10%), @grayLighter);
+	//#gradient > .vertical(darken(@grayLighter, 10%), @grayLighter);
+	background-color: @grayLighter;
 	font-size: 1.6em;
 	text-align: center;
 }

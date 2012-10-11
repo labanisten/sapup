@@ -117,7 +117,8 @@
 					
 						if (stopRecursive === newVal) {return;}
 
-						if(isDataReady(scope.systemlines)){
+						// if(isDataReady(scope.systemlines)){
+						if(scope.systemlines.length > 0 && scope.systemnames.length > 0){
 							buildCalendar();
 						}
 
@@ -132,7 +133,8 @@
 					
 					scope.$watch('systemnames', function() {
 
-						if(isDataReady(scope.systemnames)){
+						// if(isDataReady(scope.systemnames)){
+						if(scope.systemnames.length > 0 ){
 							buildCalendar();
 						}
 					
