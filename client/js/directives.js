@@ -117,8 +117,7 @@
 					
 						if (stopRecursive === newVal) {return;}
 
-						// if(isDataReady(scope.systemlines)){
-						if(scope.systemlines.length > 0 && scope.systemnames.length > 0){
+						if(isDataReady(scope.systemlines)){
 							buildCalendar();
 						}
 
@@ -133,8 +132,7 @@
 					
 					scope.$watch('systemnames', function() {
 
-						// if(isDataReady(scope.systemnames)){
-						if(scope.systemnames.length > 0 ){
+						if(isDataReady(scope.systemnames)){
 							buildCalendar();
 						}
 					
@@ -155,7 +153,7 @@
 							
 								result = v_line;
 								
-								if(end.getMonth() > scope.selectedMonth) {
+								if(end.getMonth() > scope.selectedMonth || end.getFullYear() > start.getFullYear()) {
 									result.isEndDateInNextMonth = true;
 									result.tempEndDate = lastOfMonthStr(start);
 								}
