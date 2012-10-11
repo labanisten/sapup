@@ -127,6 +127,11 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	};
 	
 	$scope.gotoMonth = function(event, month) {
+	
+		$scope.hoverElement.element.popover('hide');
+		$scope.clearHoverElement();
+		$scope.unSelectElement();
+						
 		$scope.selectedMonth = month;
 		var elem = angular.element(event.srcElement);
 		elem[0].className += " selectedmonth";	
