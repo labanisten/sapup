@@ -149,48 +149,87 @@
 							var start = Utils.convertToDate(v_line.start);
 							var end = Utils.convertToDate(v_line.end);
 							
-							var sm = start.getMonth();
-							var sel = scope.selectedMonth;
+							if(isStartDateMaching(start, day)) {
 							
-							if(start.getDate() == day && start.getMonth() == scope.selectedMonth && start.getFullYear() == scope.selectedYear) {
-							
+								result = v_line;
+								
 								if(end.getMonth() > scope.selectedMonth) {
-									v_line.isEndDateInNextMonth = true;
-									var tmpDate = new String();
-									tmpDate = tmpDate.concat(start.getFullYear(), start.getMonth() + 1, scope.noOfDaysInMonth[start.getMonth()]);
-									v_line.tempEndDate = tmpDate;
+									result.isEndDateInNextMonth = true;
+									result.tempEndDate = lastOfMonthStr(start);
 								}
 								
-								result = v_line;
 								result.index = i;
 								
-							}else if(start.getMonth() < scope.selectedMonth && end.getMonth() == scope.selectedMonth && day == 1 && start.getFullYear() == scope.selectedYear) {
-
-								v_line.isStartDateInPrevMonth = true;
-								var tmpDate = new String();
-								tmpDate = tmpDate.concat(start.getFullYear(), end.getMonth() + 1, '01');
-								v_line.tempStartDate = tmpDate;
-
+							}else if(isElementIntoPrevMonth(start, end, day)) {
 								result = v_line;
+								result.isStartDateInPrevMonth = true;
+								result.tempStartDate = firstOfMonthStr(start);
 								result.index = i;
 								
-							}else if(start.getMonth() < scope.selectedMonth && end.getMonth() > scope.selectedMonth && day == 1 && start.getFullYear() == scope.selectedYear) {
-								v_line.isInsideSelectedMonth = true;
-								
-								var tmpDate = new String();
-								tmpDate = tmpDate.concat(start.getFullYear(), scope.selectedMonth + 1, '01');
-								v_line.tempStartDate = tmpDate;
-								tmpDate = '';
-								tmpDate = tmpDate.concat(start.getFullYear(), scope.selectedMonth + 1, scope.noOfDaysInMonth[scope.selectedMonth]);
-								v_line.tempEndDate = tmpDate;
-
+							}else if(isElementSpanningMonth(start, end, day)) {
 								result = v_line;
-								result.index = i;
+								result.isInsideSelectedMonth = true;
+								result.tempStartDate = firstOfMonthStr(start);
+								result.tempEndDate = lastOfMonthStr(start);
+								result.index = i;						
 								
+							}else if(isElementIntoPrevYear(start, end, day)) {
+								result = v_line;
+								result.isStartDateInPrevYear = true;
+								
+								tmpStartDate = new Date(start);
+								
+								yearDiff = end.getFullYear() - start.getFullYear();
+								tmpStartDate.setFullYear(start.getFullYear() + yearDiff);
+								
+								result.tempStartDate = firstOfMonthStr(tmpStartDate);
+								result.index = i;
 							}
+						
 							
 						});
 						
+						return result;
+					}
+					
+					
+					function firstOfMonthStr(start) {
+						var tmpDate = new String();
+						var selectedMonth = scope.selectedMonth + 1;
+						selectedMonth = Utils.padZeroFront(selectedMonth);
+						tmpDate = tmpDate.concat(start.getFullYear(), selectedMonth, '01');
+						return tmpDate;
+					}
+					
+					function lastOfMonthStr(start) {
+						var tmpDate = new String();
+						var selectedMonth = scope.selectedMonth + 1;
+						selectedMonth = Utils.padZeroFront(selectedMonth);
+						tmpDate = tmpDate.concat(start.getFullYear(), selectedMonth, scope.noOfDaysInMonth[scope.selectedMonth]);
+						return tmpDate;
+					}
+					
+					function isStartDateMaching(start, day) {
+						var result = false;
+						if(start.getDate() == day && start.getMonth() == scope.selectedMonth && start.getFullYear() == scope.selectedYear) {result = true}
+						return result;
+					}
+					
+					function isElementIntoPrevMonth(start, end, day) {
+						var result = false;
+						if(start.getMonth() < scope.selectedMonth && end.getMonth() == scope.selectedMonth && day == 1 && start.getFullYear() == scope.selectedYear) {result = true}
+						return result;
+					}
+					
+					function isElementSpanningMonth(start, end, day) {
+						var result = false;
+						if(start.getMonth() < scope.selectedMonth && end.getMonth() > scope.selectedMonth && day == 1 && start.getFullYear() == scope.selectedYear) {result = true}
+						return result;
+					}
+					
+					function isElementIntoPrevYear(start, end, day) {
+						var result = false;
+						if(start.getMonth() > scope.selectedMonth && end.getMonth() == scope.selectedMonth && day == 1 && start.getFullYear() == scope.selectedYear - 1) {result = true}
 						return result;
 					}
 
@@ -211,23 +250,14 @@
 						
 						return match;
 					}
-					
-					function resetTmpAttributes(element) {
-						element.tempEndDate = '';
-						element.tempStartDate = '';
-						element.isEndDateInNextMonth = false;
-						element.isStartDateInPrevMonth = false;
-						element.isInsideSelectedMonth = false;
-						return element;
-					}
-					
+
 					
 					function buildTemplateForExistingSystem(systemIndex) {
 						
 						var template = '<tr><td class="system"><span class="badge badge-info">{{systemlines['+systemIndex+'].system}}</span></td>';
 						for(var day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
-							
-							var element = findMatchingElement(day, scope.systemlines[systemIndex]);
+
+							var element = findMatchingElement(day, jQuery.extend(true, {}, scope.systemlines[systemIndex]));
 							
 							if(element == "") {
 								template += '<td clear-popovers-and-selections></td>';
@@ -237,13 +267,12 @@
 								
 								if(element.isEndDateInNextMonth) {
 									colspan = element.tempEndDate - element.start + 1;
-									element = resetTmpAttributes(element);
 								}else if(element.isStartDateInPrevMonth) {
 									colspan = element.end - element.tempStartDate + 1;
-									element = resetTmpAttributes(element);
 								}else if(element.isInsideSelectedMonth) {
 									colspan = element.tempEndDate - element.tempStartDate + 1;
-									element = resetTmpAttributes(element);
+								}else if(element.isStartDateInPrevYear) {
+									colspan = element.end - element.tempStartDate + 1;
 								}else{
 									colspan = element.end - element.start + 1;
 								}
