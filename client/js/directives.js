@@ -31,8 +31,8 @@
 				
 				var editButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="callModal($event);"><i class="icon-pencil icon-white"></i></a>';
 				var deleteButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="removeStatusElement();" clear-popovers-and-selections><i class="icon-trash icon-white"></i></a>';
-				var titleString = systeml.system + ' - ' + statusl.status + deleteButtonTemplate + editButtonTemplate;
-				
+				var closeButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" clear-popovers-and-selections><i class="icon-remove icon-white"></i></a>';		
+				var titleString = systeml.system + ' - ' + statusl.status + closeButtonTemplate + deleteButtonTemplate + editButtonTemplate;	
 				
 				var contentString = statusl.comment;
 				
@@ -42,10 +42,6 @@
 									  '</br>'+
 									  '<p>{{hoverElement.comment}}</p>'+
 								  '</div>';
-
-				//$http.get(attrs.bsPopover).success(function(data) {
-					//var asd = data;
-					//scope.dismiss = function(scope) { element.popover('hide'); };
 					
 				var data = titleString;
 					
@@ -389,7 +385,7 @@
 						else if(element.context.id == "alertDialogExpDate"){
 							scope.addAlertLine.expdate = dateText;
 							
-							var dbdate = Utils.viewDateToDBdate(dateText);
+							var dbdate = Utils.viewDateToDBDate(dateText);
 							var currentDate = Utils.getDateString(new Date());
 							var daysLeft = dbdate - currentDate;
 							
