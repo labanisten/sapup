@@ -127,6 +127,14 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	};
 	
 	$scope.gotoMonth = function(event, month) {
+		
+		if($scope.hoverElement.hasValue) {
+			$scope.hoverElement.element.popover('hide');
+		}
+		
+		$scope.clearHoverElement();		
+		$scope.unSelectElement();
+						
 		$scope.selectedMonth = month;
 		var elem = angular.element(event.srcElement);
 		elem[0].className += " selectedmonth";	
@@ -411,8 +419,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		$scope.selectedElement.system = sys.system;
 		$scope.selectedElement.status = elm.status;
 		$scope.selectedElement.start = Utils.convertToDate(elm.start);
-		$scope.selectedElement.end = Utils.convertToDate(elm.end);
-		//$scope.updateFormData.comment = statusLine.comment;			
+		$scope.selectedElement.end = Utils.convertToDate(elm.end);		
 	}
 	
 	function fillupdateFormData(sysIndex, elmIndex) {
@@ -421,8 +428,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		$scope.updateFormData._id = sys._id;
 		$scope.updateFormData.system = sys.system;
 		$scope.updateFormData.status = elm.status;
-		//$scope.updateFormData.start = dateObjectToViewDate(statusLine.start);
-		//$scope.updateFormData.end = dateObjectToViewDate(statusLine.end);
 		$scope.updateFormData.start = Utils.dbDateToViewDate(elm.start);
 		$scope.updateFormData.end = Utils.dbDateToViewDate(elm.end);
 		$scope.updateFormData.comment = elm.comment;
