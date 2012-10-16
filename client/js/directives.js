@@ -29,9 +29,10 @@
 				var systeml = scope.systemlines[sysIndex];
 				var statusl = scope.systemlines[sysIndex].statuslines[elmIndex];
 				
-				var editButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="callModal($event);"><i class="icon-pencil icon-white"></i></a>';
-				var deleteButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="removeStatusElement();" clear-popovers-and-selections><i class="icon-trash icon-white"></i></a>';
-				var closeButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" clear-popovers-and-selections><i class="icon-remove icon-white"></i></a>';		
+			
+				var editButtonTemplate = '<a class="pull-right" ng-click="callModal($event);"><i class="icon-pencil"></i></a>';
+				var deleteButtonTemplate = '<a class="pull-right" ng-click="removeStatusElement();" clear-popovers-and-selections><i class="icon-trash"></i></a>';
+				var closeButtonTemplate = '<a class="pull-right" clear-popovers-and-selections><i class="icon-remove"></i></a>';		
 				var titleString = systeml.system + ' - ' + statusl.status + closeButtonTemplate + deleteButtonTemplate + editButtonTemplate;	
 				
 				var contentString = statusl.comment;
