@@ -31,6 +31,7 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 				titleString = systeml.system + ' - ' + statusl.status + closeButtonTemplate + deleteButtonTemplate + editButtonTemplate,
 				contentString = statusl.comment;
 				
+				var closeButtonTemplate = '<a class="pull-right" clear-popovers-and-selections><i class="icon-remove"></i></a>';		
 			var testcontent = '<div>' +
 								  '<p>{{hoverElement.start}} - {{hoverElement.end}}</p>' +
 								  '</br>' +
