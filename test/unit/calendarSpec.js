@@ -3,9 +3,8 @@
 describe('In the calendar module', function() {
     var calendar;
 
-   beforeEach(module('calendarModule'));
+  beforeEach(module('calendarModule'));
   
-
   beforeEach(
     inject(function(Calendar) {   
       calendar = Calendar;
