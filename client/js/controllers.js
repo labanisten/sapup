@@ -4,6 +4,7 @@ var myModule = angular.module('systemAvailability', ['mongodbModule', 'calendarM
 myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 	this.Utils = Utils;
+	this.Calendar = Calendar;
 	$scope.systemlines = getSystemData(); 
 	$scope.systemnames = getSystemNames();
 	$scope.systemstatuses = getSystemStatuses();
@@ -78,6 +79,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.months = Calendar.monthLabelsShort;
 	$scope.monthLabels = Calendar.monthLabels;
 	$scope.selectedMonthLabel = Calendar.getMonthName($scope.selectedMonth);
+		
 	
 	function elementExists(sysIndex, elmIndex) {
 		var result = false;

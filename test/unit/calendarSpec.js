@@ -8,10 +8,10 @@ describe('In the calendar module', function() {
       utils;
 
 
-  beforeEach(module('systemAvailability')); 
-  beforeEach(module('calendarModule'));
-  beforeEach(module('calendarModule'));
-  beforeEach(module('directiveModule'));
+    beforeEach(module('systemAvailability')); 
+    beforeEach(module('calendarModule'));
+  // beforeEach(module('directiveModule'));
+  // beforeEach(module('mongodbModule'));
   
 
   beforeEach(
@@ -19,24 +19,16 @@ describe('In the calendar module', function() {
 
 
       $httpBackend = _$httpBackend_;
-      $httpBackend.expectGET('https://api.mongolab.com/api/1/databases/saa_testdb/collections/system/?apiKey=4fd9cdade4b05cb78ca54269').respond({});
-      $httpBackend.expectGET('https://api.mongolab.com/api/1/databases/saa_testdb/collections/systemname/?apiKey=4fd9cdade4b05cb78ca54269').respond({});
-      $httpBackend.expectGET('https://api.mongolab.com/api/1/databases/saa_testdb/collections/systemstatus/?apiKey=4fd9cdade4b05cb78ca54269').respond({});
-      $httpBackend.expectGET('https://api.mongolab.com/api/1/databases/saa_testdb/collections/alert/?apiKey=4fd9cdade4b05cb78ca54269').respond({});
-      $httpBackend.expectGET('https://api.mongolab.com/api/1/databases/saa_testdb/collections/alerttype/?apiKey=4fd9cdade4b05cb78ca54269').respond({});
+      $httpBackend.expectGET(/systems*/).respond({});
+      $httpBackend.expectGET(/systemnames*/).respond({});
+      $httpBackend.expectGET(/systemstatuses*/).respond({});
+      $httpBackend.expectGET(/alerts*/).respond({});
+      $httpBackend.expectGET(/alerttypes*/).respond({});
      
       scope = $rootScope.$new();
       ctrl = $controller('TimelineCtrl', {$scope: scope});
     })
   );
-
-  describe('get first day in month', function(){
-    it('should return the value 1', function() {
-      var d = new Date();             
-      var u = ctrl;
-      expect(ctrl.Calendar.getFirstDayInMonth(d.getMonth()).getDate()).toBe(1);
-    });  
-  });
 
   describe('get month name', function(){
     it('should return the value January', function() {
@@ -49,7 +41,7 @@ describe('In the calendar module', function() {
     });  
   });
 
-  describe('get number of days bwtween two dates', function(){
+  describe('get number of days between two dates', function(){
     it('should return the value 5', function() {
       var d1 = new Date();
       d1.setDate(5);

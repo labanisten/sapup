@@ -4,6 +4,15 @@ angular.module('mongodbModule', []).
 		var db = db || {};
 		
 		(function(ns) {
+
+
+			ns.noCache = function() {
+				return '?_=' + Math.random();
+			}
+
+
+
+
 			addResource = function(name, url) {
 				ns[name] = function(data) {
 					angular.extend(this, data);
@@ -16,14 +25,15 @@ angular.module('mongodbModule', []).
 						});					
 					} else {
 						var seconds = new Date().getTime() / 1000;
-						return $http.get('/' + url + '/' + '?' + seconds).then(function(repsonse){
+						// return $http.get('/' + url + '/' + '?' + seconds).then(function(repsonse){
+						return $http.get('/' + url + ns.noCache()).then(function(repsonse){
 							return repsonse.data;
 						});
 					}
 				};
 
 				ns[name].remove = function(id) {
-				 	return $http.delete('/' + url + '/' + id).then(function(response) {					 	
+					return $http.delete('/' + url + '/' + id).then(function(response) {					 	
 						return response;
 					});					
 				}
