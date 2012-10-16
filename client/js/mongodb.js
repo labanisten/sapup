@@ -8,7 +8,7 @@ angular.module('mongodbModule', []).
 
 			ns.noCache = function() {
 				return '?_=' + Math.random();
-			}
+			};
 
 
 
@@ -22,7 +22,7 @@ angular.module('mongodbModule', []).
 					if (query) {
 						return $http.get('/' + url + '/' + '?query=' + JSON.stringify(query)).then(function(repsonse){
 							return repsonse.data;
-						});					
+						});
 					} else {
 						var seconds = new Date().getTime() / 1000;
 						// return $http.get('/' + url + '/' + '?' + seconds).then(function(repsonse){
@@ -33,15 +33,15 @@ angular.module('mongodbModule', []).
 				};
 
 				ns[name].remove = function(id) {
-					return $http.del('/' + url + '/' + id).then(function(response) {					 	
+					return $http.del('/' + url + '/' + id).then(function(response) {
 						return response;
-					});					
-				}
+					});
+				};
 
 				//TODO returnera berre ok
 				ns[name].prototype.create = function() {
 					var resource = this;
-				 	return $http.post('/' + url + '/', resource).then(function(response) {
+					return $http.post('/' + url + '/', resource).then(function(response) {
 						if(!response.data.ok){
 							resource.id = response.data[0]._id;
 						}
@@ -51,7 +51,7 @@ angular.module('mongodbModule', []).
 
 				ns[name].prototype.update = function(id) {
 					var resource = this;
-				 	return $http.put('/' + url + '/' + id, resource).then(function(response) {
+					return $http.put('/' + url + '/' + id, resource).then(function(response) {
 						return resource;
 					});
 				};

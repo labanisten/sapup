@@ -10,13 +10,13 @@ angular.module('utilsModule', []).
 		
 	}).
 	
-	factory('Utils', function() {	
+	factory('Utils', function() {
 	
 		var utils = utils || {};
 
 		(function(ns) {
 		
-		 ns.convertToDate = function(dateString) {
+		ns.convertToDate = function(dateString) {
 			var datestring = dateString,
 				y = datestring.substr(0, 4),
 				m = datestring.substr(4, 2),
@@ -43,24 +43,25 @@ angular.module('utilsModule', []).
 		
 		ns.clearModalLog = function()
 		{
-			$("#elementModalLog ul").empty();	
+			$("#elementModalLog ul").empty();
 		};
 		
 		ns.addLineToElementModalLog = function(text)
 		{
-			$("#elementModalLog ul").append("<li>"+text+".</li>");	
+			$("#elementModalLog ul").append("<li>"+text+".</li>");
 		};
 		
 		
 		ns.dateObjectToViewDate = function(date)
 		{
-			var y = new String(date.getFullYear());
-			m = padZeroFront(date.getMonth() + 1);
-			d = padZeroFront(date.getDate());
+			// var y = new String(date.getFullYear());
+			var y = date.getFullYear().toString();
+			m = ns.padZeroFront(date.getMonth() + 1);
+			d = ns.padZeroFront(date.getDate());
 			
-			var date = d + '.' + m + '.' + y;
+			var viewDate = d + '.' + m + '.' + y;
 			
-			return date;
+			return viewDate;
 			
 		};
 
