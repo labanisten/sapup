@@ -33,7 +33,7 @@ angular.module('mongodbModule', []).
 				};
 
 				ns[name].remove = function(id) {
-					return $http.delete('/' + url + '/' + id).then(function(response) {					 	
+					return $http.del('/' + url + '/' + id).then(function(response) {					 	
 						return response;
 					});					
 				}

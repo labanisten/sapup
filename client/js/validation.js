@@ -65,7 +65,7 @@
 			 
 						title: "required",
 						alerttype: "required",
-						alertDialogExpDate: "required",
+						alertDialogExpDate: "required"
 
 					},
 
