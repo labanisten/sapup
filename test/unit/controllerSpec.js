@@ -1,71 +1,44 @@
 'use strict';
 
-describe('In the calendar module', function() {
+describe('The main controller', function() {
   var scope, 
       ctrl, 
-      $httpBackend,
-      cal;
+      $httpBackend;
 
 
-    // beforeEach(module('systemAvailability')); 
-    beforeEach(module('calendarModule'));
-  // beforeEach(module('directiveModule'));
-  // beforeEach(module('mongodbModule'));
+  beforeEach(module('systemAvailability')); 
   
-
   beforeEach(
-    inject(function(_$httpBackend_, $rootScope, $controller, Calendar) {   
+    inject(function(_$httpBackend_, $rootScope, $controller) {   
 
+      var systems = [{system:"D03"}]; 
+      var systemnames = {name:"D03"}; 
+      var systemstatuses = [{status:"freeze"}, {status:"upgrade"}]; 
+      var alerts = {title:"Downtime", comment:"System will be down"}; 
+      var alerttypes = [{type:"warning"}, {type:"error"}]; 
 
-      // $httpBackend = _$httpBackend_;
-      // $httpBackend.expectGET(/systems*/).respond({});
-      // $httpBackend.expectGET(/systemnames*/).respond({});
-      // $httpBackend.expectGET(/systemstatuses*/).respond({});
-      // $httpBackend.expectGET(/alerts*/).respond({});
-      // $httpBackend.expectGET(/alerttypes*/).respond({});
-     
+      var sysJSON = JSON.stringify(systems); 
+
+      $httpBackend = _$httpBackend_;
+      $httpBackend.expectGET(/systems*/).respond(JSON.stringify(systems));
+      $httpBackend.expectGET(/systemnames*/).respond(JSON.stringify(systemnames));
+      $httpBackend.expectGET(/systemstatuses*/).respond(JSON.stringify(systemstatuses));
+      $httpBackend.expectGET(/alerts*/).respond(JSON.stringify(alerts));
+      $httpBackend.expectGET(/alerttypes*/).respond(JSON.stringify(alerttypes));
+
       scope = $rootScope.$new();
-      cal = Calendar;
-      // ctrl = $controller('TimelineCtrl', {$scope: scope});
+      ctrl = $controller('TimelineCtrl', {$scope: scope});
+
+     
     })
   );
 
-  describe('get month name', function(){
-
-    it('should return the value January', function() {
-      var d = new Date();             
-      expect(cal.getMonthName()[0]).toBe('January');
-    });  
-
-    // it('should return the value January', function() {
-    //   var d = new Date();             
-    //   expect(ctrl.Calendar.getMonthName()[0]).toBe('January');
-    // });  
+  it('should fetch all systems', function() {
     
-    // it('should return the value December', function() {
-    //   var d = new Date();             
-    //   expect(ctrl.Calendar.getMonthName()[11]).toBe('December');
-    // });  
-  });
-
-  // describe('get number of days between two dates', function(){
-  //   it('should return the value 5', function() {
-  //     var d1 = new Date();
-  //     d1.setDate(5);
-  //     var d2 = new Date()             ;
-  //     d2.setDate(10);
-  //     expect(ctrl.Calendar.numberOfDaysBetweenDates(d1, d2)).toBe(5);
-  //   });  
-  //   it('should return the value 5', function() {
-  //     var d1 = new Date();
-  //     d1.setDate(5);
-  //     d1.setMonth(2);
-  //     var d2 = new Date();
-  //     d2.setDate(10);
-  //     d2.setMonth(3);
-  //     expect(ctrl.Calendar.numberOfDaysBetweenDates(d1, d2)).toBe(35);
-  //   });  
-  // });
-
+    //$httpBackend.expectGET(/systems*/).respond();
+    //expect(ctrl.systemlines.system).toBe("D03");
+    // var controller = scope.$new(TimelineCtrl);
+    expect(true).toBe(true);
+  });  
 
 });
