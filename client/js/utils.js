@@ -3,9 +3,7 @@ angular.module('utilsModule', []).
 	run(function(Utils) {
 	
 		$(".dismisslegend").click(function() {
-			console.log("qwerty");
 			$(".legend").hide();
-			
 			$(".accordion").css('float', 'none');
 			$(".accordion").css('width', 'auto');
 		});
@@ -192,7 +190,8 @@ angular.module('utilsModule', []).
 		ns.rangeWithinMonthYear = function(fromDate, toDate, month, year) {
 			return ( dateFromString(fromDate).getMonth() == month && dateFromString(fromDate).getYear() == year ) || ( dateFromString(toDate).getMonth() == month && dateFromString(toDate).getYear() == year );
 		};
-		
+
+	
 		})(utils);
 
 		return utils; 
