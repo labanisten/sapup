@@ -3,8 +3,6 @@ var myModule = angular.module('systemAvailability', ['mongodbModule', 'calendarM
 
 myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
-	this.Utils = Utils;
-	this.Calendar = Calendar;
 	$scope.systemlines = getSystemData(); 
 	$scope.systemnames = getSystemNames();
 	$scope.systemstatuses = getSystemStatuses();
