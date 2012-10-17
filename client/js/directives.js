@@ -25,9 +25,9 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 				elmIndex = element.attr("elmIndex"),
 				systeml = scope.systemlines[sysIndex],
 				statusl = scope.systemlines[sysIndex].statuslines[elmIndex],
-			    editButtonTemplate = '<a class="pull-right" ng-click="callModal($event);"><i class="icon-pencil"></i></a>',
-			    deleteButtonTemplate = '<a class="pull-right" ng-click="removeStatusElement();" clear-popovers-and-selections><i class="icon-trash"></i></a>',
-			    closeButtonTemplate = '<a class="pull-right" clear-popovers-and-selections><i class="icon-remove"></i></a>',
+				editButtonTemplate = '<a class="pull-right" ng-click="callModal($event);"><i class="icon-pencil"></i></a>',
+				deleteButtonTemplate = '<a class="pull-right" ng-click="removeStatusElement();" clear-popovers-and-selections><i class="icon-trash"></i></a>',
+				closeButtonTemplate = '<a class="pull-right" clear-popovers-and-selections><i class="icon-remove"></i></a>',
 				titleString = systeml.system + ' - ' + statusl.status + closeButtonTemplate + deleteButtonTemplate + editButtonTemplate,
 				contentString = statusl.comment;
 				
