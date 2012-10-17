@@ -355,6 +355,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 					}
 				});
 				
+				var systemElement = { 
 					"system": $scope.addFormData.system,
 					"text": systemText,
 					"statuslines": []
