@@ -8,6 +8,9 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 	$scope.alertlog = getAlertLog();
 	
 	$scope.systemNameInput = "";
+	$scope.systemTypeInput = "";
+	$scope.systemTextInput = "";
+	
 	$scope.statusTypeInput = "";
 	$scope.alertTypeInput = "";
 	
@@ -60,6 +63,8 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 		if ($scope.systemNameInput) {			
 			var systemname = new db.Systemname(); 
 			systemname.name = $scope.systemNameInput.toUpperCase();
+			systemname.type = $scope.systemTypeInput.toUpperCase();
+			systemname.text = $scope.systemTextInput.toUpperCase();
 			systemname.create().then(function(newSystemname) {
 			   admin.addLineToSystemNamesTable(newSystemname);
 			});
@@ -99,7 +104,7 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 		if (selectedItem.hasValue)
 		{
 			db.Systemname.remove(selectedItem.id).then(function(response) {
-					if (response.data.delete) {
+					if (response.data) {
 						admin.removeSelectedSystemNamesRow();					
 					} else {
 						//Unable to delete
@@ -115,11 +120,11 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 
 		if (selectedItem.hasValue) {
 			db.Systemstatus.remove(selectedItem.id).then(function(response) {
-					if (response.data.delete) {
+					/*if (response.data.delete) {
 						admin.removeSelectedStatusTypesRow();					
 					} else {
 						//Unable to delete
-					}
+					}*/
 			});
 		}
 	};
@@ -131,11 +136,11 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 
 		if (selectedItem.hasValue) {
 			db.Alerttype.remove(selectedItem.id).then(function(response) {
-					if (response.data.delete) {
+					/*if (response.data.delete) {
 						admin.removeSelectedAlertTypesRow();
 					} else {
 						//Unable to delete
-					}
+					}*/
 			});
 		}
 	};
@@ -147,11 +152,11 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 
 		if (selectedItem.hasValue) {
 			db.Alert.remove(selectedItem.id).then(function(response) {
-					if (response.data.delete) {
+					/*if (response.data.delete) {
 						admin.removeSelectedAlertLogRow();
 					} else {
 						//Unable to delete
-					}
+					}*/
 			});
 		}
 	};
