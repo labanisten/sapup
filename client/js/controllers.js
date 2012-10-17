@@ -350,8 +350,17 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				
 			} else {
 				//Post new system 
+				var systemText;
+				$.each($scope.systemnames, function(i, v_system) {
+					if(v_system.name == $scope.addFormData.system) {
+						systemText = v_system.text;
+						return false;
+					}
+				});
+
 				var systemElement = { 
 					"system": $scope.addFormData.system,
+					"text": systemText,
 					"statuslines": []
 				};
 				

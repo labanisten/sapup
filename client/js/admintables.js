@@ -8,7 +8,7 @@ angular.module('adminModule', ['utilsModule']).
 			"iDisplayLength": 20,
 	
 			"aoColumnDefs": [ 
-                        { "bSearchable": false, "bVisible": false, "aTargets": [ 2 ] }
+                        { "bSearchable": false, "bVisible": false, "aTargets": [ 1, 4 ] }
                     ]
 		});
 		
@@ -226,14 +226,19 @@ angular.module('adminModule', ['utilsModule']).
 			
 			ns.updateSystemNamesTable = function(data)
 			{
-			
 				$('#systemNamesTable').dataTable().fnClearTable();
 			
 				$.each(data, function(index, value){
-						$('#systemNamesTable').dataTable().fnAddData([index + 1, value.name, value._id]);// + '<button id="delbut" jq-test type="button" class="close" ng-click="rowButtonClicked('+ index +');">x</button>'] );
+					if(value.type == undefined) {
+						value.type = "";
+					}
+					
+					if(value.text == undefined) {
+						value.text = "";
+					}
+					
+					$('#systemNamesTable').dataTable().fnAddData([index + 1, value.type, value.name, value.text, value._id]);// + '<button id="delbut" jq-test type="button" class="close" ng-click="rowButtonClicked('+ index +');">x</button>'] );
 				});	
-				
-
 			}
 			
 			
@@ -339,7 +344,7 @@ angular.module('adminModule', ['utilsModule']).
 
 					admin.setSystemNameSelected($('#systemNamesTable').dataTable().fnGetData(this, 0), 
 													  $('#systemNamesTable').dataTable().fnGetPosition(this),
-													  $('#systemNamesTable').dataTable().fnGetData(this, 2));
+													  $('#systemNamesTable').dataTable().fnGetData(this, 4));
 				}else{
 					previousSystemNameRowData.referance = 0;
 					previousSystemNameRowData.classObject = 0;

@@ -214,7 +214,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 
 				function buildTemplateForExistingSystem(systemIndex) {
 					
-					var template = '<tr><td class="system"><span class="badge badge-info">{{systemlines['+systemIndex+'].system}}</span></td>';
+					var template = '<tr><td class="system"><span class="badge badge-info">{{systemlines['+systemIndex+'].system}} {{systemlines['+systemIndex+'].text}}</span></td>';
 					var day;
 					for(day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
 
@@ -258,9 +258,9 @@ directiveModule.directive('systemTable', function($compile, Utils){
 				}
 				
 				
-				function buildTemplateForNoneExistingSystem(systemName) {
+				function buildTemplateForNoneExistingSystem(system) {
 				
-					var template = '<tr><td class="system"><span class="badge badge-info">'+systemName+'</span></td>';
+					var template = '<tr><td class="system"><span class="badge badge-info">' + system.name + ' ' + system.text + '</span></td>';
 					var day;
 					for(day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
 						template += '<td clear-popovers-and-selections></td>';
@@ -316,7 +316,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 												if(systemMatch.result) {
 													template += buildTemplateForExistingSystem(systemMatch.index);
 												}else {
-													template += buildTemplateForNoneExistingSystem(scope.systemnames[i].name);
+													template += buildTemplateForNoneExistingSystem(scope.systemnames[i]);
 												}
 											}
 											

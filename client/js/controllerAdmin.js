@@ -8,6 +8,10 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 	$scope.alertlog = getAlertLog();
 	
 	$scope.systemNameInput = "";
+	$scope.systemTypeInput = "";
+	$scope.systemTextInput = "";
+	
+	$scope.systemNameInput = "";
 	$scope.statusTypeInput = "";
 	$scope.alertTypeInput = "";
 	
@@ -60,6 +64,8 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 		if ($scope.systemNameInput) {			
 			var systemname = new db.Systemname(); 
 			systemname.name = $scope.systemNameInput.toUpperCase();
+			systemname.type = $scope.systemTypeInput.toUpperCase();
+			systemname.text = $scope.systemTextInput.toUpperCase();
 			systemname.create().then(function(newSystemname) {
 			   admin.addLineToSystemNamesTable(newSystemname);
 			});
