@@ -1,6 +1,7 @@
 
 angular.module('adminModule', ['utilsModule']).
 	run(function(admin) {
+	
 		var dom = $('#systemNamesTable'); 
 		$('#systemNamesTable').dataTable({
 			"bFilter": false,
@@ -8,7 +9,7 @@ angular.module('adminModule', ['utilsModule']).
 			"iDisplayLength": 20,
 	
 			"aoColumnDefs": [ 
-                        { "bSearchable": false, "bVisible": false, "aTargets": [ 2 ] }
+                        { "bSearchable": false, "bVisible": false, "aTargets": [ 1, 4 ] }
                     ]
 		});
 		
@@ -226,11 +227,18 @@ angular.module('adminModule', ['utilsModule']).
 			
 			ns.updateSystemNamesTable = function(data)
 			{
-			
 				$('#systemNamesTable').dataTable().fnClearTable();
 			
 				$.each(data, function(index, value){
-						$('#systemNamesTable').dataTable().fnAddData([index + 1, value.name, value._id]);// + '<button id="delbut" jq-test type="button" class="close" ng-click="rowButtonClicked('+ index +');">x</button>'] );
+					if(value.type == undefined) {
+						value.type = "";
+					}
+					
+					if(value.text == undefined) {
+						value.text = "";
+					}
+					
+					$('#systemNamesTable').dataTable().fnAddData([index + 1, value.type, value.name, value.text, value._id]);// + '<button id="delbut" jq-test type="button" class="close" ng-click="rowButtonClicked('+ index +');">x</button>'] );
 				});	
 				
 
@@ -283,7 +291,10 @@ angular.module('adminModule', ['utilsModule']).
 			
 			ns.addLineToSystemNamesTable = function(systemname)
 			{
-				addLineToTable('#systemNamesTable', systemname.name, systemname.id);
+				//addLineToTable('#systemNamesTable', systemname.name, systemname.id);
+				var tableLength = $('#systemNamesTable').dataTable().fnGetData().length;
+				$('#systemNamesTable').dataTable().fnAddData( [tableLength + 1, systemname.type, systemname.name, systemname.text, systemname.id]);// + '<button jq-test type="button" class="close" onClick="deleteTableRow('+tableLength+');">x</button>'] );
+				$('#systemNamesTable').dataTable().fnPageChange('last');
 			}
 			
 			
@@ -339,7 +350,7 @@ angular.module('adminModule', ['utilsModule']).
 
 					admin.setSystemNameSelected($('#systemNamesTable').dataTable().fnGetData(this, 0), 
 													  $('#systemNamesTable').dataTable().fnGetPosition(this),
-													  $('#systemNamesTable').dataTable().fnGetData(this, 2));
+													  $('#systemNamesTable').dataTable().fnGetData(this, 4));
 				}else{
 					previousSystemNameRowData.referance = 0;
 					previousSystemNameRowData.classObject = 0;

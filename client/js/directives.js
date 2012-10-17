@@ -25,13 +25,12 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 				elmIndex = element.attr("elmIndex"),
 				systeml = scope.systemlines[sysIndex],
 				statusl = scope.systemlines[sysIndex].statuslines[elmIndex],
-				editButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="callModal($event);"><i class="icon-pencil icon-white"></i></a>',
-				deleteButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" ng-click="removeStatusElement();" clear-popovers-and-selections><i class="icon-trash icon-white"></i></a>',
-				closeButtonTemplate = '<a class="btn btn-mini btn-inverse pull-right" clear-popovers-and-selections><i class="icon-remove icon-white"></i></a>',
+			    editButtonTemplate = '<a class="pull-right" ng-click="callModal($event);"><i class="icon-pencil"></i></a>',
+			    deleteButtonTemplate = '<a class="pull-right" ng-click="removeStatusElement();" clear-popovers-and-selections><i class="icon-trash"></i></a>',
+			    closeButtonTemplate = '<a class="pull-right" clear-popovers-and-selections><i class="icon-remove"></i></a>',
 				titleString = systeml.system + ' - ' + statusl.status + closeButtonTemplate + deleteButtonTemplate + editButtonTemplate,
 				contentString = statusl.comment;
 				
-				var closeButtonTemplate = '<a class="pull-right" clear-popovers-and-selections><i class="icon-remove"></i></a>';		
 			var testcontent = '<div>' +
 								  '<p>{{hoverElement.start}} - {{hoverElement.end}}</p>' +
 								  '</br>' +
@@ -84,9 +83,7 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 
 directiveModule.directive('systemTable', function($compile, Utils){
 	return {
-			restrict: 'E',
-			//replace: true,
-			//transclude: true,	
+			restrict: 'A',
 			link: function(scope, element, attrs) {
 			
 				var stopRecursive;
@@ -214,7 +211,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 
 				function buildTemplateForExistingSystem(systemIndex) {
 					
-					var template = '<tr><td class="system"><span class="badge badge-info">{{systemlines['+systemIndex+'].system}}</span></td>';
+					var template = '<tr><td class="system"><span class="badge badge-info">{{systemlines['+systemIndex+'].system}} {{systemlines['+systemIndex+'].text}}</span></td>';
 					var day;
 					for(day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
 
@@ -258,9 +255,9 @@ directiveModule.directive('systemTable', function($compile, Utils){
 				}
 				
 				
-				function buildTemplateForNoneExistingSystem(systemName) {
+				function buildTemplateForNoneExistingSystem(system) {
 				
-					var template = '<tr><td class="system"><span class="badge badge-info">'+systemName+'</span></td>';
+					var template = '<tr><td class="system"><span class="badge badge-info">' + system.name + ' ' + system.text + '</span></td>';
 					var day;
 					for(day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
 						template += '<td clear-popovers-and-selections></td>';
@@ -316,7 +313,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 												if(systemMatch.result) {
 													template += buildTemplateForExistingSystem(systemMatch.index);
 												}else {
-													template += buildTemplateForNoneExistingSystem(scope.systemnames[i].name);
+													template += buildTemplateForNoneExistingSystem(scope.systemnames[i]);
 												}
 											}
 											
@@ -424,6 +421,6 @@ directiveModule.directive('ngEnterkey', function () {
 						}
 					});
 				}
-	}
+	};
 });
 	
