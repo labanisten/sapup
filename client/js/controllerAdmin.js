@@ -18,10 +18,10 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 	
 	function getSystemNames(){
 
-		var promise = db.Systemname.get(); 
+		var promise = db.Systemname.get();
 		promise.then(function(data) {
 			admin.updateSystemNamesTable(data);
-  		});
+		});
 
 		return [];
 	}
@@ -29,73 +29,73 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 	
 	function getSystemStatuses(){
 
-		var promise = db.Systemstatus.get(); 
+		var promise = db.Systemstatus.get();
 		promise.then(function(data) {
 			admin.updateStatusTypesTable(data);
-  		});
+		});
 
-		return []; 
+		return [];
 	}
 	
 	
 	function getAlertTypes(){
 	
-		var promise = db.Alerttype.get(); 
+		var promise = db.Alerttype.get();
 		promise.then(function(data) {
 			admin.updateAlertTypesTable(data);
-  		});
+		});
 
-		return []; 
+		return [];
 	}
 	
 	
 	function getAlertLog(){
 	
-		var promise = db.Alert.get(); 
+		var promise = db.Alert.get();
 		promise.then(function(data) {
-			admin.updateAlertLogTable(data)
-  		});
+			admin.updateAlertLogTable(data);
+		});
 
-		return []; 
+		return [];
 	}
 	
 	$scope.saveSystemName = function() {
 
-		if ($scope.systemNameInput) {			
-			var systemname = new db.Systemname(); 
+		if ($scope.systemNameInput) {
+			var systemname = new db.Systemname();
 			systemname.name = $scope.systemNameInput.toUpperCase();
 			systemname.type = $scope.systemTypeInput.toUpperCase();
 			systemname.text = $scope.systemTextInput.toUpperCase();
 			systemname.create().then(function(newSystemname) {
-			   admin.addLineToSystemNamesTable(newSystemname);
+				admin.addLineToSystemNamesTable(newSystemname);
 			});
 		}
-	}
+	};
 	
 	
 	$scope.saveStatusType = function() {
 
-		if ($scope.statusTypeInput) {			
-			var systemstatus = new db.Systemstatus(); 
+		if ($scope.statusTypeInput) {
+			var systemstatus = new db.Systemstatus();
 			systemstatus.status = $scope.statusTypeInput;
 			systemstatus.create().then(function(newSystemstatus) {
-			   admin.addLineToStatusTypesTable(newSystemstatus);
+				admin.addLineToStatusTypesTable(newSystemstatus);
 			});
 		}
-	}
+	};
 	
 	
 	$scope.saveAlertType = function() {
 
-		if ($scope.alertTypeInput) {			
-			var alerttype = new db.Alerttype(); 
+		if ($scope.alertTypeInput) {
+			var alerttype = new db.Alerttype();
 			alerttype.type = $scope.alertTypeInput;
 			alerttype.create().then(function(newAlerttype) {
-			   admin.addLineToAlertTypesTable(newAlerttype);
+				admin.addLineToAlertTypesTable(newAlerttype);
 			});
 		}
 
-	}
+	};
 	
 	
 	$scope.deleteSystemName = function() {
@@ -106,7 +106,7 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 		{
 			db.Systemname.remove(selectedItem.id).then(function(response) {
 					if (response.data.delete) {
-						admin.removeSelectedSystemNamesRow();					
+						admin.removeSelectedSystemNamesRow();
 					} else {
 						//Unable to delete
 					}
@@ -122,7 +122,7 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 		if (selectedItem.hasValue) {
 			db.Systemstatus.remove(selectedItem.id).then(function(response) {
 					if (response.data.delete) {
-						admin.removeSelectedStatusTypesRow();					
+						admin.removeSelectedStatusTypesRow();
 					} else {
 						//Unable to delete
 					}

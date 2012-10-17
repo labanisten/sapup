@@ -3,9 +3,7 @@ var myModule = angular.module('systemAvailability', ['mongodbModule', 'calendarM
 
 myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
-	this.Utils = Utils;
-	this.Calendar = Calendar;
-	$scope.systemlines = getSystemData(); 
+	$scope.systemlines = getSystemData();
 	$scope.systemnames = getSystemNames();
 	$scope.systemstatuses = getSystemStatuses();
 	$scope.alertlines = getAlertData();
@@ -79,7 +77,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.months = Calendar.monthLabelsShort;
 	$scope.monthLabels = Calendar.monthLabels;
 	$scope.selectedMonthLabel = Calendar.getMonthName($scope.selectedMonth);
-		
 	
 	function elementExists(sysIndex, elmIndex) {
 		var result = false;
@@ -115,7 +112,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.selectElement = function(event, sysIndex, elmIndex) {
 		if(isAlreadySelected(sysIndex, elmIndex)) {
 			$scope.unSelectElement();
-		}else{	
+		}else{
 			$scope.setSelectedElement(sysIndex, elmIndex);
 		}
 	};
@@ -134,12 +131,12 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			$scope.hoverElement.element.popover('hide');
 		}
 		
-		$scope.clearHoverElement();		
+		$scope.clearHoverElement();
 		$scope.unSelectElement();
 						
 		$scope.selectedMonth = month;
 		var elem = angular.element(event.srcElement);
-		elem[0].className += " selectedmonth";	
+		elem[0].className += " selectedmonth";
 	};
 	
 	$scope.gotoPreviousYear = function() {
@@ -154,9 +151,9 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 	function getSystemData() {
 
-		var promise = db.System.get(); 
+		var promise = db.System.get();
 		promise.then(function(data) {
-			$scope.systemlines = data; 
+			$scope.systemlines = data;
 		});
 
 		return [];
@@ -165,19 +162,19 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	
 	function getSystemStatuses(){
 
-		var promise = db.Systemstatus.get(); 
+		var promise = db.Systemstatus.get();
 		promise.then(function(data) {
-			$scope.systemstatuses = data; 
+			$scope.systemstatuses = data;
 		});
 
-		return []; 
+		return [];
 	}
 	
 	function getSystemNames(){
 
-		var promise = db.Systemname.get(); 
+		var promise = db.Systemname.get();
 		promise.then(function(data) {
-			$scope.systemnames = data; 
+			$scope.systemnames = data;
 		});
 
 		return [];
@@ -187,7 +184,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		var alerts = [];
 		var currentDate = Utils.getDateString(new Date());
 
-		var promise = db.Alert.get(); 
+		var promise = db.Alert.get();
 		promise.then(function(data) {
 			$.each(data, function(i, v_alert) {
 		
@@ -204,20 +201,20 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	
 	function getAlertTypes(){
 
-		var promise = db.Alerttype.get(); 
+		var promise = db.Alerttype.get();
 		promise.then(function(data) {
-			$scope.alerttypes = data; 
+			$scope.alerttypes = data;
 		});
-		return []; 
+		return [];
 	}
 	
 	$scope.addAlert = function() {
 		if($("#alertForm").valid()){
-			$('#addalertdialog').modal('hide');			
-			var alert = new db.Alert($scope.addAlertLine); 
+			$('#addalertdialog').modal('hide');
+			var alert = new db.Alert($scope.addAlertLine);
 			alert.expdate = Utils.viewDateToDBDate(alert.expdate);
 			alert.create().then(function(newAlert) {
-			   $scope.alertlines.push(newAlert);
+			$scope.alertlines.push(newAlert);
 			});
 			Utils.resetNewAlertForm();
 		}
@@ -248,10 +245,10 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	}
 
 	$scope.removeStatusElement = function() {
-		$.each($scope.systemlines, function(i, v_system) {				
+		$.each($scope.systemlines, function(i, v_system) {
 			if (v_system.system == $scope.selectedElement.system) {
 
-				var systemElement = { 
+				var systemElement = {
 						"system": v_system.system,
 						"statuslines": $scope.systemlines[i].statuslines
 					};
@@ -270,20 +267,17 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	
 	$scope.updateStatusElement = function() {
 
-		//if($("#elementForm").valid()){	
-		//}*/
-		
 		var existingSystem;
 		var i;
 		for (i = 1; i < $scope.systemlines.length; i++) {
-			if ( $scope.systemlines[i].system == $scope.updateFormData.system) { 
+			if ( $scope.systemlines[i].system == $scope.updateFormData.system) {
 				existingSystem = $scope.systemlines[i];
-				break; 
+				break;
 			}
 		}
 
 		if (existingSystem) {
-			var systemElement = { 
+			var systemElement = {
 				"system": existingSystem.system,
 				"statuslines": existingSystem.statuslines
 			};
@@ -292,7 +286,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				"start": Utils.viewDateToDBDate($scope.updateFormData.start),
 				"end": Utils.viewDateToDBDate($scope.updateFormData.end),
 				"status": $scope.updateFormData.status,
-				"comment": $scope.updateFormData.comment 
+				"comment": $scope.updateFormData.comment
 			};
 			
 			spliceCalendarElement(systemElement, $scope.selectedElement);
@@ -311,34 +305,37 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 		if ($("#elementForm").valid()) {
 
-			var existingSystem;
-			var i;
-			for (i = 1; i < $scope.systemlines.length; i++) {
-				if ( $scope.systemlines[i].system == $scope.addFormData.system) { 
+			var existingSystem,
+				systemElement,
+				statusElement,
+				system;
+
+			for (var i = 1; i < $scope.systemlines.length; i++) {
+				if ( $scope.systemlines[i].system == $scope.addFormData.system) {
 					existingSystem = $scope.systemlines[i];
-					break; 
+					break;
 				}
 			}
 
 
 			if (existingSystem) {
-				//Update existing system 
-				var systemElement = { 
+				//Update existing system
+				systemElement = {
 					"system": existingSystem.system,
 					"statuslines": existingSystem.statuslines
 				};
 				
-				var statusElement = {
+				statusElement = {
 					"start": Utils.viewDateToDBDate($scope.addFormData.start),
 					"end": Utils.viewDateToDBDate($scope.addFormData.end),
 					"status": $scope.addFormData.status,
-					"comment": $scope.addFormData.comment 
+					"comment": $scope.addFormData.comment
 				};
 				
 				
 				systemElement.statuslines.push(statusElement);
 
-				var system = new db.System(systemElement);
+				system = new db.System(systemElement);
 
 				system.update(existingSystem._id).then(function(newSystemElement) {
 					Utils.addLineToElementModalLog("Element added to " + existingSystem.system);
@@ -349,7 +346,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				
 				
 			} else {
-				//Post new system 
+				//Post new system
 				var systemText;
 				$.each($scope.systemnames, function(i, v_system) {
 					if(v_system.name == $scope.addFormData.system) {
@@ -357,23 +354,22 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 						return false;
 					}
 				});
-
 				var systemElement = { 
 					"system": $scope.addFormData.system,
 					"text": systemText,
 					"statuslines": []
 				};
 				
-				var statusElement = {
+				statusElement = {
 					"start": Utils.viewDateToDBDate($scope.addFormData.start),
 					"end": Utils.viewDateToDBDate($scope.addFormData.end),
 					"status": $scope.addFormData.status,
-					"comment": $scope.addFormData.comment 
+					"comment": $scope.addFormData.comment
 				};
 								
 				systemElement.statuslines.push(statusElement);
 				
-				var system = new db.System(systemElement);
+				system = new db.System(systemElement);
 				
 				system.create().then(function(newSystemElement) {
 					Utils.addLineToElementModalLog("Element added to " + newSystemElement.system);
@@ -382,7 +378,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				});
 
 			}
-		}	
+		}
 	};
 	
 	function fillSelectedElement(sysIndex, elmIndex) {
@@ -392,7 +388,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		$scope.selectedElement.system = sys.system;
 		$scope.selectedElement.status = elm.status;
 		$scope.selectedElement.start = Utils.convertToDate(elm.start);
-		$scope.selectedElement.end = Utils.convertToDate(elm.end);		
+		$scope.selectedElement.end = Utils.convertToDate(elm.end);
 	}
 	
 	function fillupdateFormData(sysIndex, elmIndex) {
@@ -417,7 +413,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		$scope.selectedElement.elmIndex = -1;
 		$scope.selectedElement.sysIndex = -1;
 		clearSelectedElement();
-		clearupdateFormData();	
+		clearupdateFormData();
 	};
 	
 	$scope.setHoverElement = function(sysIndex, elmIndex, element) {
@@ -428,7 +424,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		$scope.hoverElement.status = elm.status;
 		$scope.hoverElement.start = Utils.dbDateToViewDate(elm.start);
 		$scope.hoverElement.end = Utils.dbDateToViewDate(elm.end);
-		$scope.hoverElement.comment = elm.comment;	
+		$scope.hoverElement.comment = elm.comment;
 		$scope.hoverElement.element = element;
 		$scope.hoverElement.hasValue = true;
 	};

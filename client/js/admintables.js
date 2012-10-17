@@ -1,13 +1,14 @@
 
 angular.module('adminModule', ['utilsModule']).
 	run(function(admin) {
-		var dom = $('#systemNamesTable'); 
+	
+		var dom = $('#systemNamesTable');
 		$('#systemNamesTable').dataTable({
 			"bFilter": false,
 			"bLengthChange": false,
 			"iDisplayLength": 20,
 	
-			"aoColumnDefs": [ 
+			"aoColumnDefs": [
                         { "bSearchable": false, "bVisible": false, "aTargets": [ 1, 4 ] }
                     ]
 		});
@@ -18,7 +19,7 @@ angular.module('adminModule', ['utilsModule']).
 			"bLengthChange": false,
 			"iDisplayLength": 30,
 				
-			"aoColumnDefs": [ 
+			"aoColumnDefs": [
                         { "bSearchable": false, "bVisible": false, "aTargets": [ 2 ] }
                     ]
 		});
@@ -28,7 +29,7 @@ angular.module('adminModule', ['utilsModule']).
 			"bLengthChange": false,
 			"iDisplayLength": 30,
 				
-			"aoColumnDefs": [ 
+			"aoColumnDefs": [
                         { "bSearchable": false, "bVisible": false, "aTargets": [ 2 ] }
                     ]
 		});
@@ -39,7 +40,7 @@ angular.module('adminModule', ['utilsModule']).
 			"bLengthChange": false,
 			"iDisplayLength": 30,
 				
-			"aoColumnDefs": [ 
+			"aoColumnDefs": [
                         { "bSearchable": false, "bVisible": false, "aTargets": [ 4 ] }
                     ]
 		});
@@ -47,7 +48,7 @@ angular.module('adminModule', ['utilsModule']).
 	factory('admin', function(Utils) {
 
 
-		var admin = admin || {}; 
+		var admin = admin || {};
 
 		(function(ns) {
 
@@ -80,34 +81,34 @@ angular.module('adminModule', ['utilsModule']).
 			var selectedRowSystemName = {
 				index:"",
 				tabPosition:"",
-				name:"", 
+				name:"",
 				id:"",
 				hasValue:false
 			};
 			
 			
 			var selectedRowStatusType = {
-				index:"", 
+				index:"",
 				tabPosition:"",
-				type:"", 
+				type:"",
 				id:"",
 				hasValue:false
 			};
 			
 			
 			var selectedRowAlertType = {
-				index:"", 
+				index:"",
 				tabPosition:"",
-				name:"", 
+				name:"",
 				id:"",
 				hasValue:false
 			};
 			
 			
 			var selectedRowAlertLog = {
-				index:"", 
+				index:"",
 				tabPosition:"",
-				title:"", 
+				title:"",
 				id:"",
 				hasValue:false
 			};
@@ -127,7 +128,7 @@ angular.module('adminModule', ['utilsModule']).
 				//selectedRowSystemName.name = name;
 				selectedRowSystemName.id = id;
 				selectedRowSystemName.hasValue = true;
-			}
+			};
 			
 			
 			ns.setStatusTypeSelected = function(index, tabPosition, id)
@@ -137,7 +138,7 @@ angular.module('adminModule', ['utilsModule']).
 				//selectedRowStatusType.type = type;
 				selectedRowStatusType.id = id;
 				selectedRowStatusType.hasValue = true;
-			}
+			};
 					
 			
 			ns.setAlertTypeSelected = function(index, tabPosition, id)
@@ -147,7 +148,7 @@ angular.module('adminModule', ['utilsModule']).
 				//selectedRowAlertType.name = name;
 				selectedRowAlertType.id = id;
 				selectedRowAlertType.hasValue = true;
-			}
+			};
 			
 			
 			ns.setAlertLogSelected = function(index, tabPosition, id)
@@ -157,7 +158,7 @@ angular.module('adminModule', ['utilsModule']).
 				//selectedRowAlertLog.title = title;
 				selectedRowAlertLog.id = id;
 				selectedRowAlertLog.hasValue = true;
-			}
+			};
 			
 			
 			ns.clearSystemNameSelected = function()
@@ -167,7 +168,7 @@ angular.module('adminModule', ['utilsModule']).
 				selectedRowSystemName.name = "";
 				selectedRowSystemName.id = "";
 				selectedRowSystemName.hasValue = false;
-			}
+			};
 			
 			
 			ns.clearStatusTypeSelected = function()
@@ -177,7 +178,7 @@ angular.module('adminModule', ['utilsModule']).
 				selectedRowStatusType.type = "";
 				selectedRowStatusType.id = "";
 				selectedRowStatusType.hasValue = false;
-			}
+			};
 			
 			
 			ns.clearAlertTypeSelected = function()
@@ -187,7 +188,7 @@ angular.module('adminModule', ['utilsModule']).
 				selectedRowAlertType.name = "";
 				selectedRowAlertType.id = "";
 				selectedRowAlertType.hasValue = false;
-			}
+			};
 			
 			
 			ns.clearAlertLogSelected = function()
@@ -197,31 +198,31 @@ angular.module('adminModule', ['utilsModule']).
 				selectedRowAlertLog.title = "";
 				selectedRowAlertLog.id = "";
 				selectedRowAlertLog.hasValue = false;
-			}
+			};
 			
 			
 			ns.getSystemNameSelected = function()
 			{
 				return selectedRowSystemName;
-			}
+			};
 			
 			
 			ns.getStatusTypeSelected = function()
 			{
 				return selectedRowStatusType;
-			}
+			};
 			
 			
 			ns.getAlertTypeSelected = function()
 			{
 				return selectedRowAlertType;
-			}
+			};
 			
 			
 			ns.getAlertLogSelected = function()
 			{
 				return selectedRowAlertLog;
-			}
+			};
 			
 			
 			ns.updateSystemNamesTable = function(data)
@@ -238,8 +239,8 @@ angular.module('adminModule', ['utilsModule']).
 					}
 					
 					$('#systemNamesTable').dataTable().fnAddData([index + 1, value.type, value.name, value.text, value._id]);// + '<button id="delbut" jq-test type="button" class="close" ng-click="rowButtonClicked('+ index +');">x</button>'] );
+
 				});	
-			}
 			
 			
 			ns.updateStatusTypesTable = function(data)
@@ -248,8 +249,8 @@ angular.module('adminModule', ['utilsModule']).
 				
 				$.each(data, function(index, value){
 						$('#statusTypesTable').dataTable().fnAddData([index + 1, value.status, value._id]);
-				});	
-			}
+				});
+			};
 			
 			
 			ns.updateAlertTypesTable = function(data)
@@ -259,9 +260,9 @@ angular.module('adminModule', ['utilsModule']).
 				
 				$.each(data, function(index, value){
 						$('#alertTypesTable').dataTable().fnAddData( [index + 1, value.type, value._id]);
-				});	
+				});
 				
-			}
+			};
 			
 			
 			ns.updateAlertLogTable = function(data)
@@ -283,25 +284,27 @@ angular.module('adminModule', ['utilsModule']).
 						}
 							
 				});
-			}
+			};
 			
 			
 			ns.addLineToSystemNamesTable = function(systemname)
 			{
-				addLineToTable('#systemNamesTable', systemname.name, systemname.id);
-			}
+				//addLineToTable('#systemNamesTable', systemname.name, systemname.id);
+				var tableLength = $('#systemNamesTable').dataTable().fnGetData().length;
+				$('#systemNamesTable').dataTable().fnAddData( [tableLength + 1, systemname.type, systemname.name, systemname.text, systemname.id]);// + '<button jq-test type="button" class="close" onClick="deleteTableRow('+tableLength+');">x</button>'] );
+				$('#systemNamesTable').dataTable().fnPageChange('last');
 			
 			
 			ns.addLineToStatusTypesTable = function(systemstatus)
 			{
 				addLineToTable('#statusTypesTable', systemstatus.status, systemstatus.id);
-			}
+			};
 			
 			
 			ns.addLineToAlertTypesTable = function(alerttype)
 			{
 				addLineToTable('#alertTypesTable', alerttype.type, alerttype.id);
-			}
+			};
 			
 			
 			
@@ -309,28 +312,28 @@ angular.module('adminModule', ['utilsModule']).
 			ns.removeSelectedSystemNamesRow = function()
 			{
 				$('#systemNamesTable').dataTable().fnDeleteRow(selectedRowSystemName.tabPosition);
-			}
+			};
 			
 			
 			ns.removeSelectedStatusTypesRow = function()
 			{
 				$('#statusTypesTable').dataTable().fnDeleteRow(selectedRowStatusType.tabPosition);
-			}
+			};
 			
 			
 			ns.removeSelectedAlertTypesRow = function()
 			{
 				$('#alertTypesTable').dataTable().fnDeleteRow(selectedRowAlertType.tabPosition);
-			}
+			};
 			
 			
 			ns.removeSelectedAlertLogRow = function()
 			{
 				$('#alertLogTable').dataTable().fnDeleteRow(selectedRowAlertLog.tabPosition);
-			}
+			};
 			
 		
-			$('#systemNamesTable tbody tr').live('click', function (event) {        
+			$('#systemNamesTable tbody tr').live('click', function (event) {
 				
 				
 				unColorPreviousRow(previousSystemNameRowData);
@@ -342,19 +345,19 @@ angular.module('adminModule', ['utilsModule']).
 					
 					colorRowAsSelected(this, previousSystemNameRowData.classObject);
 
-					admin.setSystemNameSelected($('#systemNamesTable').dataTable().fnGetData(this, 0), 
-													  $('#systemNamesTable').dataTable().fnGetPosition(this),
+					admin.setSystemNameSelected($('#systemNamesTable').dataTable().fnGetData(this, 0),
+												$('#systemNamesTable').dataTable().fnGetPosition(this),
 													  $('#systemNamesTable').dataTable().fnGetData(this, 4));
-				}else{
+				} else {
 					previousSystemNameRowData.referance = 0;
 					previousSystemNameRowData.classObject = 0;
 					admin.clearSystemNameSelected();
-				};
+				}
 				
 			});
 			
 			
-			$('#statusTypesTable tbody tr').live('click', function (event) {        
+			$('#statusTypesTable tbody tr').live('click', function (event) {
 				unColorPreviousRow(previousStatusTypeRowData);
 				
 				if(previousStatusTypeRowData.referance != this){
@@ -364,18 +367,18 @@ angular.module('adminModule', ['utilsModule']).
 					
 					colorRowAsSelected(this, previousStatusTypeRowData.classObject);
 
-					admin.setStatusTypeSelected($('#statusTypesTable').dataTable().fnGetData(this, 0), 
-													  $('#statusTypesTable').dataTable().fnGetPosition(this),
-													  $('#statusTypesTable').dataTable().fnGetData(this, 2));
-				}else{
+					admin.setStatusTypeSelected($('#statusTypesTable').dataTable().fnGetData(this, 0),
+												$('#statusTypesTable').dataTable().fnGetPosition(this),
+												$('#statusTypesTable').dataTable().fnGetData(this, 2));
+				} else {
 					previousStatusTypeRowData.referance = 0;
 					previousStatusTypeRowData.classObject = 0;
 					admin.clearStatusTypeSelected();
-				};
+				}
 			});
 			
 			
-			$('#alertTypesTable tbody tr').live('click', function (event) {        
+			$('#alertTypesTable tbody tr').live('click', function (event) {
 
 				unColorPreviousRow(previousAlertTypeRowData);
 				
@@ -386,33 +389,33 @@ angular.module('adminModule', ['utilsModule']).
 					
 					colorRowAsSelected(this, previousAlertTypeRowData.classObject);
 
-					admin.setAlertTypeSelected($('#alertTypesTable').dataTable().fnGetData(this, 0), 
-													 $('#alertTypesTable').dataTable().fnGetPosition(this),
-													 $('#alertTypesTable').dataTable().fnGetData(this, 2));
-				}else{
+					admin.setAlertTypeSelected($('#alertTypesTable').dataTable().fnGetData(this, 0),
+												$('#alertTypesTable').dataTable().fnGetPosition(this),
+												$('#alertTypesTable').dataTable().fnGetData(this, 2));
+				} else {
 					previousAlertTypeRowData.referance = 0;
 					previousAlertTypeRowData.classObject = 0;
 					admin.clearAlertTypeSelected();
-				};
+				}
 			});
 			
 			
-			$('#alertLogTable tbody tr').live('click', function (event) {        
+			$('#alertLogTable tbody tr').live('click', function (event) {
 
 				unColorPreviousRow(previousAlertLogRowData);
 						
 				if(previousAlertLogRowData.referance != this){
 				
-					previousAlertLogRowData.referance = this;		
+					previousAlertLogRowData.referance = this;
 					previousAlertLogRowData.classObject = getRowClassAttributes(this);
 					
 					colorRowAsSelected(this, previousAlertLogRowData.classObject);
 
-					admin.setAlertLogSelected($('#alertLogTable').dataTable().fnGetData(this, 0), 
-													$('#alertLogTable').dataTable().fnGetPosition(this),
-													$('#alertLogTable').dataTable().fnGetData(this, 4));
+					admin.setAlertLogSelected($('#alertLogTable').dataTable().fnGetData(this, 0),
+												$('#alertLogTable').dataTable().fnGetPosition(this),
+												$('#alertLogTable').dataTable().fnGetData(this, 4));
 				
-				}else{
+				} else {
 					previousAlertLogRowData.referance = 0;
 					previousAlertLogRowData.classObject = 0;
 					admin.clearAlertLogSelected();
@@ -450,6 +453,6 @@ angular.module('adminModule', ['utilsModule']).
 		
 		})(admin);
 
-		return admin; 
+		return admin;
 
 	});

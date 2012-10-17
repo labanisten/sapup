@@ -55,12 +55,12 @@
 	  <div class="tab-content">
 		<div class="tab-pane active" id="tab1">
 		
-			<div class="span3">		
+			<div class="span5">		
 				<h2>SystemName</h2>
 				<br/>
 				<div class="input form-vertical">
 					<fieldset>
-						
+
 						<div class="control-group">
 							<label for="systemInput">Name</label>
 							<!--placeholder="SystemName"-->
@@ -82,9 +82,10 @@
 							<!--placeholder="SystemText"-->
 							<input class="span2" name="textInput" id="textInput" ng-model="systemTextInput" type="text" ng-enterkey="saveSystemName();">
 						</div>
-							</fieldset>
-							<button id="systemNameAddButton" class="btn" type="button" ng-click="saveSystemName();">Add</button>
-						</div>
+						
+					</fieldset>
+					<button id="systemNameAddButton" class="btn" type="button" ng-click="saveSystemName();">Add</button>
+				</div>
 				<br/>
 				
 				<a class="pull-right" ng-click="deleteSystemName();">delete</a>
@@ -93,7 +94,9 @@
 				  <thead>
 					<tr>
 					  <th>#</th>
+					  <th>System type</th>
 					  <th>System name</th>
+					  <th>System text</th>
 					  <th>id</th>
 					</tr>
 				  </thead>
@@ -181,131 +184,6 @@
 	  </div>
 	</div>
 
-	<!--fluid
-	<div class="container">
-		<br/>
-		<br/>
-
-		<div class="row">
-		
-			<div class="span6">
-
-				<div class="row">
-				
-					<div class="span3">
-						
-						<h2>SystemName</h2>
-						<br/>
-						<div class="input-append controls controls-row">
-							<input class="span2" id="systemInput" ng-model="systemNameInput" type="text" placeholder="SystemName" ng-enterkey="saveSystemName();">
-							<button id="systemNameAddButton" class="btn" type="button" ng-click="saveSystemName();">Add</button>
-						</div>
-						<br/>
-						
-						<a class="pull-right" ng-click="deleteSystemName();">delete</a>
-						
-						<table class="table" id="systemNamesTable">
-						  <thead>
-							<tr>
-							  <th>#</th>
-							  <th>System name</th>
-							  <th>id</th>
-							</tr>
-						  </thead>
-						  <tbody>
-						  </tbody>
-						</table>
-					</div>
-
-					<div class="span3">
-							
-						<h2>StatusType</h2>
-						<br/>
-						<div class="input-append">
-							<input class="span2" id="StatusTypeInput" ng-model="statusTypeInput" type="text" placeholder="StatusType" ng-enterkey="saveStatusType();">
-							<button id="statusTypeAddButton" class="btn" type="button" ng-click="saveStatusType();">Add</button>
-						</div>
-						<br/>
-
-						<a class="pull-right" ng-click="deleteStatusType();">delete</a>
-						
-						<table class="table" id="statusTypesTable">
-						  <thead>
-							<tr>
-							  <th>#</th>
-							  <th>Status name</th>
-							  <th>id</th>
-							</tr>
-						  </thead>
-						  <tbody>
-						  </tbody>
-						</table>
-						
-					</div>
-					
-					
-					<div class="span3">
-							
-						<h2>AlertType</h2>
-						<br/>
-						<div class="input-append">
-							<input class="span2" id="AlertTypeInput" ng-model="alertTypeInput" type="text" placeholder="AlertType" ng-enterkey="saveAlertType();">
-							<button id="alertTypeAddButton" class="btn" type="button" ng-click="saveAlertType();">Add</button>
-						</div>
-						<br/>
-						
-						<a class="pull-right" ng-click="deleteAlertType();">delete</a>
-						
-						<table class="table" id="alertTypesTable">
-						  <thead>
-							<tr>
-							  <th>#</th>
-							  <th>Alert name</th>
-							  <th>id</th>
-							</tr>
-						  </thead>
-						  <tbody>
-						  </tbody>
-						</table>
-						
-					</div>
-				</div>				
-			</div>	
-
-
-			<div class="span6">
-			
-				<div class="row">
-				
-					<div class="span4 offset1">
-							
-						<h2>AlertLog</h2>
-						<br/>
-						
-						<a class="pull-right" ng-click="deleteAlertLogItem();">delete</a>
-						
-						<table class="table" id="alertLogTable">
-						  <thead>
-							<tr>
-							  <th>#</th>
-							  <th>Alert heading</th>
-							  <th>id</th>
-							</tr>
-						  </thead>
-						  <tbody>
-						  </tbody>
-						</table>
-						
-					</div>
-					
-				</div>
-			
-			</div>
-			
-		</div>
-		
-	</div>
-	-->
 	
 	<!-- Le javascript
     ================================================== -->
