@@ -8,11 +8,11 @@ angular.module('calendarModule', ['utilsModule']).
 		
 		ns.getCurrentMonth = function() {
 			return ns.currentMonth;
-		}
+		};
 		
 		ns.getCurrentYear = function() {
 			return ns.currentYear;
-		}
+		};
 
 		ns.currentDate = new Date();
 		
@@ -31,19 +31,19 @@ angular.module('calendarModule', ['utilsModule']).
 	
 		ns.getNoOfDaysInMonth = function() {
 			return ns.daysInMonth;
-		}
+		};
 
 	
 		ns.getMonthDayList = function() {
 			
 			var daysInMonths = [];
 			
-			for(var j = 0; j < 12; j++) {	
+			for(var j = 0; j < 12; j++) {
 				var dayArray = [];
 				for (i = 0; i < ns.daysInMonth[j]; i++) {
 					dayArray.push(i + 1);
 				}
-				daysInMonths.push(dayArray);		
+				daysInMonths.push(dayArray);
 			}
 
 			return daysInMonths;
@@ -127,10 +127,10 @@ angular.module('calendarModule', ['utilsModule']).
 		ns.numberOfDaysBetweenDates = function(fromDate, toDate) {
 			var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
 			return Math.floor((toDate.getTime() - fromDate.getTime())/(oneDay)) ;
-		}
+		};
 
 
 	})(calendar);
 
-	return calendar; 
+	return calendar;
 });
