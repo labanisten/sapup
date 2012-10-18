@@ -240,12 +240,6 @@ angular.module('adminModule', ['utilsModule']).
 					}
 					
 					$('#systemNamesTable').dataTable().fnAddData([index + 1, value.type, value.name, value.text, value._id]);// + '<button id="delbut" jq-test type="button" class="close" ng-click="rowButtonClicked('+ index +');">x</button>'] );
-					
-					if(value.text == undefined) {
-						value.text = "";
-					}
-					
-					$('#systemNamesTable').dataTable().fnAddData([index + 1, value.type, value.name, value.text, value._id]);// + '<button id="delbut" jq-test type="button" class="close" ng-click="rowButtonClicked('+ index +');">x</button>'] );
 
 				});	
 
