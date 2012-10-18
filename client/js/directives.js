@@ -317,7 +317,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 											var i;
 											for(i = 0; i < scope.systemnames.length; i++){
 
-												template += '<tr><td class="system"><span class="badge badge-info">{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}</span></td>';
+												template += '<tr><td class="system"><span class="badge">{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}</span></td>';
 												var systemMatch = systemExist(scope.systemnames[i].name);
 												if(systemMatch.result) {
 													template += buildTemplateForExistingSystem(systemMatch.index);
