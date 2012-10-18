@@ -129,6 +129,7 @@ angular.module('adminModule', ['utilsModule']).
 				selectedRowSystemName.id = id;
 				selectedRowSystemName.hasValue = true;
 			};
+
 			
 			
 			ns.setStatusTypeSelected = function(index, tabPosition, id)
@@ -247,6 +248,9 @@ angular.module('adminModule', ['utilsModule']).
 					$('#systemNamesTable').dataTable().fnAddData([index + 1, value.type, value.name, value.text, value._id]);// + '<button id="delbut" jq-test type="button" class="close" ng-click="rowButtonClicked('+ index +');">x</button>'] );
 
 				});	
+
+				
+			};
 			
 			
 			ns.updateStatusTypesTable = function(data)
@@ -299,6 +303,7 @@ angular.module('adminModule', ['utilsModule']).
 				var tableLength = $('#systemNamesTable').dataTable().fnGetData().length;
 				$('#systemNamesTable').dataTable().fnAddData( [tableLength + 1, systemname.type, systemname.name, systemname.text, systemname.id]);// + '<button jq-test type="button" class="close" onClick="deleteTableRow('+tableLength+');">x</button>'] );
 				$('#systemNamesTable').dataTable().fnPageChange('last');
+			};
 			
 			
 			ns.addLineToStatusTypesTable = function(systemstatus)

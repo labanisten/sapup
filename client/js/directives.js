@@ -256,8 +256,15 @@ directiveModule.directive('systemTable', function($compile, Utils){
 				
 				
 				function buildTemplateForNoneExistingSystem(system) {
-				
-					var template = '<tr><td class="system"><span class="badge badge-info">' + system.name + ' ' + system.text + '</span></td>';
+					var bagdeText;
+					
+					if(system.text) {
+						badgeText = system.name + ' ' + system.text;
+					}else {
+						badgeText = system.name;
+					}
+					
+					var template = '<tr><td class="system"><span class="badge badge-info">' + badgeText + '</span></td>';
 					var day;
 					for(day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
 						template += '<td clear-popovers-and-selections></td>';
