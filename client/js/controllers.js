@@ -77,12 +77,13 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.months = Calendar.monthLabelsShort;
 	$scope.monthLabels = Calendar.monthLabels;
 	$scope.selectedMonthLabel = Calendar.getMonthName($scope.selectedMonth);
-	
-	$scope.messagesVisible = function() {
-		if ($scope.alertlines) {
-			return "invisible hide";
-		} else {
+	//$scope.messageAreaClass = "invisible hide";
+
+	$scope.messageAreaClass = function() {
+		if ($scope.alertlines.length > 0) {
 			return "accordion span12";
+		} else {
+			return "invisible hide";
 		};
 	}
 
@@ -202,6 +203,10 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				
 			});
 			$scope.alertlines = alerts;
+			// if (alerts.length > 0) {
+			// 	$scope.messageAreaClass = "span12 accordion"; 
+			// };
+
 
 		});
 		return [];
