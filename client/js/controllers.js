@@ -77,7 +77,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.months = Calendar.monthLabelsShort;
 	$scope.monthLabels = Calendar.monthLabels;
 	$scope.selectedMonthLabel = Calendar.getMonthName($scope.selectedMonth);
-		
 	
 	function elementExists(sysIndex, elmIndex) {
 		var result = false;
@@ -348,8 +347,17 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				
 			} else {
 				//Post new system
-				systemElement = {
+				var systemText;
+				$.each($scope.systemnames, function(i, v_system) {
+					if(v_system.name == $scope.addFormData.system) {
+						systemText = v_system.text;
+						return false;
+					}
+				});
+				
+				var systemElement = { 
 					"system": $scope.addFormData.system,
+					"text": systemText,
 					"statuslines": []
 				};
 				

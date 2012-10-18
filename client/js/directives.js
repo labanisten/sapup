@@ -31,7 +31,6 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 				titleString = systeml.system + ' - ' + statusl.status + closeButtonTemplate + deleteButtonTemplate + editButtonTemplate,
 				contentString = statusl.comment;
 				
-				var closeButtonTemplate = '<a class="pull-right" clear-popovers-and-selections><i class="icon-remove"></i></a>';		
 			var testcontent = '<div>' +
 								  '<p>{{hoverElement.start}} - {{hoverElement.end}}</p>' +
 								  '</br>' +
@@ -84,9 +83,7 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 
 directiveModule.directive('systemTable', function($compile, Utils){
 	return {
-			restrict: 'E',
-			//replace: true,
-			//transclude: true,	
+			restrict: 'A',
 			link: function(scope, element, attrs) {
 			
 				var stopRecursive;
@@ -214,7 +211,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 
 				function buildTemplateForExistingSystem(systemIndex) {
 					
-					var template = '<tr><td class="system"><span class="badge badge-info">{{systemlines['+systemIndex+'].system}}</span></td>';
+					var template = '<tr><td class="system"><span class="badge badge-info">{{systemlines['+systemIndex+'].system}} {{systemlines['+systemIndex+'].text}}</span></td>';
 					var day;
 					for(day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
 
@@ -258,9 +255,16 @@ directiveModule.directive('systemTable', function($compile, Utils){
 				}
 				
 				
-				function buildTemplateForNoneExistingSystem(systemName) {
-				
-					var template = '<tr><td class="system"><span class="badge badge-info">'+systemName+'</span></td>';
+				function buildTemplateForNoneExistingSystem(system) {
+					var bagdeText;
+					
+					if(system.text) {
+						badgeText = system.name + ' ' + system.text;
+					}else {
+						badgeText = system.name;
+					}
+					
+					var template = '<tr><td class="system"><span class="badge badge-info">' + badgeText + '</span></td>';
 					var day;
 					for(day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
 						template += '<td clear-popovers-and-selections></td>';
@@ -316,7 +320,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 												if(systemMatch.result) {
 													template += buildTemplateForExistingSystem(systemMatch.index);
 												}else {
-													template += buildTemplateForNoneExistingSystem(scope.systemnames[i].name);
+													template += buildTemplateForNoneExistingSystem(scope.systemnames[i]);
 												}
 											}
 											
@@ -424,6 +428,6 @@ directiveModule.directive('ngEnterkey', function () {
 						}
 					});
 				}
-	}
+	};
 });
 	
