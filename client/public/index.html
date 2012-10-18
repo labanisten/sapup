@@ -34,15 +34,16 @@
 		<div class="navbar-inner">
 			<div class="container">
 
-				<a class="brand" href="#">System availability</a>
-				<a class="btn btn-primary pull-right" href="../admin.html">
-					<i class="icon-pencil icon-white"></i>
+				<a class="brand" href="#"><img src="../images/logo.png"></a>
+				<!-- <a class="brand" href="#">System availability</a>				 -->
+				<a class="btn btn-primary btn-small pull-right" href="../admin.html">
+					<i class="icon-briefcase icon-white"></i>
 					Administration
 				</a>
-				<a class="btn btn-primary pull-right" data-toggle="modal" href="#addalertdialog"> <i class="icon-plus icon-white"></i>
-					Add alert
+				<a class="btn btn-primary btn-small pull-right" data-toggle="modal" href="#addalertdialog"> <i class=" icon-warning-sign icon-white"></i>
+					Add message
 				</a>
-				<a class="btn btn-primary pull-right" data-toggle="modal" href="#addelementdialog"><i class="icon-th icon-white"></i> 
+				<a class="btn btn-primary btn-small pull-right" data-toggle="modal" href="#addelementdialog"><i class="icon-calendar icon-white"></i> 
 					Add status
 				</a>
 			</div>
@@ -55,10 +56,8 @@
 		
 			<div class="row-fluid">
 			
-				<div class="accordion span12" id="accordionContainer">
-				
-					<div class="accordion-group">
-					
+				<div ng-class="messagesVisible()" id="accordionContainer">				
+					<div class="accordion-group">					
 						<div class="alert-container-header accordion-heading">
 							<h4 class="accordion-toggle" data-toggle="collapse" data-parent="#accordionContainer" href="#collapseOne">
 								Messages
@@ -96,7 +95,7 @@
 
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal">x</button>
-			<h3>Add Alert</h3>
+			<h3>Add Message</h3>
 		</div>
 
 		<div class="modal-body">
@@ -111,7 +110,7 @@
 								<input id="alertTitle" name="title" ng-model="addAlertLine.title"></div>
 
 							<div class="control-group">
-								<label for="alerttype">Alert Type</label>
+								<label for="alerttype">Message ype</label>
 								<select id="alertType" name="alerttype" ng-model="addAlertLine.alerttype">
 									<option value=""></option>
 									<option ng-repeat="alerttype in alerttypes">{{alerttype.type}}</option>
@@ -132,7 +131,7 @@
 				</div>
 
 				<div class="span6">
-					<p>Alert preview:</p>
+					<p>Message preview:</p>
 					<div class="alert alert-{{addAlertLine.alerttype}} fade in " >
 						<button type="button" class="close">x</button>
 						<h5 class="alert-heading">{{addAlertLine.title}}</h5>

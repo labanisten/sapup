@@ -78,6 +78,14 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.monthLabels = Calendar.monthLabels;
 	$scope.selectedMonthLabel = Calendar.getMonthName($scope.selectedMonth);
 	
+	$scope.messagesVisible = function() {
+		if ($scope.alertlines) {
+			return "invisible hide";
+		} else {
+			return "accordion span12";
+		};
+	}
+
 	function elementExists(sysIndex, elmIndex) {
 		var result = false;
 		if($scope.systemlines[sysIndex].statuslines[elmIndex]) {

@@ -213,7 +213,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 					
 					var template = "",
 						day;
-						
+
 					for(day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
 
 						var element = findMatchingElement(day, jQuery.extend(true, {}, scope.systemlines[systemIndex]));
@@ -393,7 +393,7 @@ directiveModule.directive('jqDatepicker', function (Utils) {
 							dayText = "day";
 						}
 						
-						$("#expireMessage").text("Alertmessage will expire in " + daysLeft + " " + dayText);
+						$("#expireMessage").text("Message will expire in " + daysLeft + " " + dayText);
 					}
 					scope.$apply();
 				}	
