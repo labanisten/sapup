@@ -211,8 +211,9 @@ directiveModule.directive('systemTable', function($compile, Utils){
 
 				function buildTemplateForExistingSystem(systemIndex) {
 					
-					var template = '<tr><td class="system"><span class="badge badge-info">{{systemlines['+systemIndex+'].system}} {{systemlines['+systemIndex+'].text}}</span></td>';
-					var day;
+					var template = "",
+						day;
+						
 					for(day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
 
 						var element = findMatchingElement(day, jQuery.extend(true, {}, scope.systemlines[systemIndex]));
@@ -264,8 +265,8 @@ directiveModule.directive('systemTable', function($compile, Utils){
 						badgeText = system.name;
 					}
 					
-					var template = '<tr><td class="system"><span class="badge badge-info">' + badgeText + '</span></td>';
-					var day;
+					var day,
+						template = "";
 					for(day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
 						template += '<td clear-popovers-and-selections></td>';
 					}
@@ -316,6 +317,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 											var i;
 											for(i = 0; i < scope.systemnames.length; i++){
 
+												template += '<tr><td class="system"><span class="badge badge-info">{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}</span></td>';
 												var systemMatch = systemExist(scope.systemnames[i].name);
 												if(systemMatch.result) {
 													template += buildTemplateForExistingSystem(systemMatch.index);
