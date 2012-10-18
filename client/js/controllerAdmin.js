@@ -121,11 +121,11 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 
 		if (selectedItem.hasValue) {
 			db.Systemstatus.remove(selectedItem.id).then(function(response) {
-					/*if (response.data.delete) {
+					if (response.data.delete) {
 						admin.removeSelectedStatusTypesRow();
 					} else {
 						//Unable to delete
-					}*/
+					}
 			});
 		}
 	};
@@ -137,11 +137,11 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 
 		if (selectedItem.hasValue) {
 			db.Alerttype.remove(selectedItem.id).then(function(response) {
-					/*if (response.data.delete) {
+					if (response.data.delete) {
 						admin.removeSelectedAlertTypesRow();
 					} else {
 						//Unable to delete
-					}*/
+					}
 			});
 		}
 	};
@@ -153,11 +153,11 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 
 		if (selectedItem.hasValue) {
 			db.Alert.remove(selectedItem.id).then(function(response) {
-					/*if (response.data.delete) {
+					if (response.data.delete) {
 						admin.removeSelectedAlertLogRow();
 					} else {
 						//Unable to delete
-					}*/
+					}
 			});
 		}
 	};
