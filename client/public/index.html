@@ -61,15 +61,14 @@
 					
 						<div class="alert-container-header accordion-heading">
 							<h4 class="accordion-toggle" data-toggle="collapse" data-parent="#accordionContainer" href="#collapseOne">
-								<i class="icon-warning-sign icon-large"></i>
-								Alerts
+								Messages
 							</h4>
 						</div>
 						
 						<div id="collapseOne" class="alert-container-body accordion-body in collapse" style="height: auto; ">
 							<div class="accordion-inner">
 
-								<div id="pop" class="span2" bs-popover ng-repeat="alertline in alertlines" rel="popover" data-content="{{alertline.comment}}" data-original-title="{{alertline.title}}" data-placement="bottom">
+								<div id="pop" class="span4" bs-popover ng-repeat="alertline in alertlines" rel="popover" data-content="{{alertline.comment}}" data-original-title="{{alertline.title}}" data-placement="bottom">
 									<div class="alert alert-block alert-{{alertline.alerttype}} fade in ">
 										<h5 class="alert-heading">{{alertline.title}}</h5>
 										<p>{{alertline.comment}}</p>
