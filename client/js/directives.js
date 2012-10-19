@@ -282,19 +282,26 @@ directiveModule.directive('systemTable', function($compile, Utils){
 										
 											'<tr>'+
 												'<th class="year" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
-													'<i class="yeararrow icon-chevron-left" ng-click="gotoPreviousYear()" clear-popovers-and-selections></i>'+
+													'<i class="yeararrow" ng-click="gotoPreviousYear()" clear-popovers-and-selections><</i>'+
 													'<span class="yeartext">{{selectedYear}}</span>'+
-													'<i class="yeararrow icon-chevron-right"  ng-click="gotoNextYear()" clear-popovers-and-selections></i>'+
+													'<i class="yeararrow"  ng-click="gotoNextYear()" clear-popovers-and-selections>></i>'+
 												'</th>'+
 											'</tr>'+
 											
 											'<tr>'+
 												'<th class="months" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
-													'<div ng:class="getClassForMonth(month)" ng-click="gotoMonth($event, month)" ng-repeat="month in [0,1,2,3,4,5,6,7,8,9,10,11]">'+
-														'{{months[month]}}' +
-													'</div>'+
+													 // '<div class="container-fluid">' +
+														'<div class="row-fluid">'+
+
+															'<div ng:class="getClassForMonth(month)" ng-click="gotoMonth($event, month)" ng-repeat="month in [0,1,2,3,4,5,6,7,8,9,10,11]">'+
+																'{{months[month]}}' +
+															'</div>'+
+
+														'</div>'+
+													 // '</div>'+
 												'</th>'+
 											'</tr>'+
+
 											'<tr>'+
 												'<th class="firstcol week" rowspan="4"></th>'+
 												'<th class="week" ng-repeat="week in monthWeekList['+scope.selectedMonth+']" colspan="{{week.colSpan}}">{{week.week}}</th>'+

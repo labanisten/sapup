@@ -101,8 +101,19 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 			if(elementExists(sysIndex, elmIndex)){
 				var systemString = $scope.systemlines[sysIndex].statuslines[elmIndex].status;
-				
-				classString = "element-inner element-click " + systemString;
+				var statusClass; 
+				switch (systemString) {
+					case 'Downtime' : 
+						statusClass = 'downtime'; 
+						break; 
+					case "Maybe down":
+						statusClass = 'maybedown'; 
+						break; 
+					case "Ready for test":
+						statusClass = 'readyfortest'; 
+						break; 
+				};
+				classString = "element-inner element-click " + statusClass; 
 				if (sysIndex == $scope.selectedElement.sysIndex && elmIndex == $scope.selectedElement.elmIndex) {
 					classString += " selected";
 				}

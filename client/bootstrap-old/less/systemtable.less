@@ -26,29 +26,21 @@
 
 }
 
-.element-inner.freeze {
-  #gradient > .vertical(@statoilBlue, lighten(@statoilBlue, 10%) );
+
+.element-inner.maybedown {
+  #gradient > .vertical(@yellow, lighten(@yellow, 10%));
 }
-
-
-.element-inner.upgrade {
-  #gradient > .vertical(#C04040, lighten(#C04040, 10%));
-}
-
-
-.element-inner.update {
-  #gradient > .vertical(#C04040, lighten(#C04040, 10%));
-}
-
 
 .element-inner.downtime {
   #gradient > .vertical(#C04040, lighten(#C04040, 10%));
 }
 
-
-.element-inner.test {
-   #gradient > .vertical(@statoilBlueDarker, lighten(@statoilBlueDarker, 10%));
+.element-inner.readyfortest {
+  #gradient > .vertical(@grayLight, lighten(@grayLight, 10%));
 }
+
+
+
 
 .element-inner.selected {
   #gradient > .vertical(#FAFA11, lighten(#B1A520, 10%));
@@ -59,10 +51,10 @@ accordion {
 }
 
 .accordion-group {
-	.border-radius: 0px;
+	.border-radius(0px);
 }
 
-accordion-heading {
+.accordion-heading {
   background-color: @grayLighter;
 }
 
@@ -130,7 +122,8 @@ accordion-heading {
 .system {
   background-color: @grayLighter; 
   font-weight: 800;
-  text-align: center;
+  text-align: left;
+//  float: left
 }
 
 table {
@@ -154,11 +147,6 @@ td {
   min-width: 5px;
 }
 
-/*
-.freeze:hover { 
- color:red;
-}
-*/
 
 .shortdaynames{
 	display:none;
