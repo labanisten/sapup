@@ -4917,13 +4917,14 @@ a.badge:hover {
 accordion {
   background-color: #eeeeee;
 }
+.accordion-heading {
+  background-color: #eeeeee;
+}
 .accordion-group {
+  background-color: #eeeeee;
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
   border-radius: 0px;
-}
-.accordion-heading {
-  background-color: #eeeeee;
 }
 .alert-container-header {
   border: none;
