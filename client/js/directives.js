@@ -290,15 +290,11 @@ directiveModule.directive('systemTable', function($compile, Utils){
 											
 											'<tr>'+
 												'<th class="months" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
-													 // '<div class="container-fluid">' +
 														'<div class="row-fluid">'+
-
 															'<div ng:class="getClassForMonth(month)" ng-click="gotoMonth($event, month)" ng-repeat="month in [0,1,2,3,4,5,6,7,8,9,10,11]">'+
 																'{{months[month]}}' +
 															'</div>'+
-
 														'</div>'+
-													 // '</div>'+
 												'</th>'+
 											'</tr>'+
 
@@ -323,8 +319,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 										'<tbody>';
 											var i;
 											for(i = 0; i < scope.systemnames.length; i++){
-
-												template += '<tr><td class="system"><span class="badge">{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}</span></td>';
+												template += '<tr><td class="system"><span>{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}</span></td>';
 												var systemMatch = systemExist(scope.systemnames[i].name);
 												if(systemMatch.result) {
 													template += buildTemplateForExistingSystem(systemMatch.index);
