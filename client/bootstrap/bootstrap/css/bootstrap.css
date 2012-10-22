@@ -3092,7 +3092,7 @@ input[type="submit"].btn.btn-mini {
   border-radius: 0 0 6px 6px;
 }
 .alert {
-  padding: 8px 35px 8px 14px;
+  padding: 2px 35px 2px 14px;
   margin-bottom: 20px;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   background-color: #fcf8e3;
@@ -3128,8 +3128,8 @@ input[type="submit"].btn.btn-mini {
   color: #3a87ad;
 }
 .alert-block {
-  padding-top: 14px;
-  padding-bottom: 14px;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 .alert-block > p,
 .alert-block > ul {
