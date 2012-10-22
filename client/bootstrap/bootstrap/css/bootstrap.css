@@ -4987,6 +4987,7 @@ accordion {
   background-color: #eeeeee;
   font-weight: 800;
   width: 1%;
+  white-space: nowrap;
 }
 table {
   width: 100%;
