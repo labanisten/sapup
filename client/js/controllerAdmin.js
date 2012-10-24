@@ -15,6 +15,14 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 
 	$scope.editMode = false;
 
+	$scope.reorderSystems = function() {
+		for (var i = 0; i < $scope.systemnames.length; i++) {
+			setSelectedSystemByIndex(i); 
+			$scope.systemnameToUpdate.order = i + 1; 
+			$scope.updateSystemName();
+		};
+	}
+
 	$scope.toggleEditMode = function() {
 		$scope.editMode = !$scope.editMode;
 	}
