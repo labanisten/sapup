@@ -1,8 +1,62 @@
-{"start": "2012-04-23", "end": "2012-04-24", "content": "<div class='Available'/>", "group": "P03" }
-{"start": "2012-04-20", "end": "2012-04-22", "content": "<div class='Available'/>", "group": "P04" }
-{"start": "2012-04-16", "end": "2012-04-19", "content": "<div class='Available'/>", "group": "P07" }
-{"start": "2012-04-01", "end": "2012-04-26", "content": "<div class='Available'/>", "group": "P03" }
-{"start": "2012-04-23", "end": "2012-04-26", "content": "<div class='Available'/>", "group": "P04" }
-{"start": "2012-04-15", "end": "2012-04-24", "content": "<div class='Available'/>", "group": "P07" }
-{"start": "2012-04-18", "end": "2012-04-23", "content": "<div class='Available'/>", "group": "D03" }
-{"start": "2012-04-23", "end": "2012-04-22", "content": "<div class='Available'/>", "group": "D07" }
+[
+{
+"name": "P03",
+"type": "",
+"text": "IS-OIL"
+},
+{
+"name": "Q93",
+"type": "",
+"text": "IS-OIL"
+},
+{
+"name": "D03",
+"type": "",
+"text": "IS-OIL"
+},
+{
+"name": "S03",
+"type": "",
+"text": "IS-OIL"
+},
+{
+"name": "D83",
+"type": "",
+"text": "IS-OIL VERSION LINE"
+},
+{
+"name": "Q83",
+"type": "",
+"text": "IS-OIL VERSION LINE"
+},
+{
+"name": "P07",
+"type": "",
+"text": "HR/CFM/LSO/E-REC"
+},
+{
+"name": "Q97",
+"type": "",
+"text": "HR/CFM/LSO/E-REC"
+},
+{
+"name": "D07",
+"type": "",
+"text": "HR/CFM/LSO/E-REC"
+},
+{
+"name": "S07",
+"type": "",
+"text": "HR/CFM/LSO/E-REC"
+},
+{
+"name": "D87",
+"type": "",
+"text": "HR/CFM/LSO/E-REC VERSION LINE"
+},
+{
+"name": "Q87",
+"type": "",
+"text": "HR/CFM/LSO/E-REC VERSION LINE"
+}
+]
