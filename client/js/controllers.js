@@ -195,6 +195,8 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		var promise = db.Systemname.get();
 		promise.then(function(data) {
 			$scope.systemnames = data;
+			$scope.systemnames.sort(function(a,b){return a.order - b.order}); //Sort by prder property
+
 		});
 
 		return [];

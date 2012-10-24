@@ -26,8 +26,8 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 				systeml = scope.systemlines[sysIndex],
 				statusl = scope.systemlines[sysIndex].statuslines[elmIndex],
 				editButtonTemplate = '<a class="pull-right" ng-click="callModal($event);"><i class="icon-pencil"></i></a>',
-				deleteButtonTemplate = '<a class="pull-right" ng-click="removeStatusElement();" clear-popovers-and-selections><i class="icon-trash"></i></a>',
-				closeButtonTemplate = '<a class="pull-right" clear-popovers-and-selections><i class="icon-remove"></i></a>',
+				deleteButtonTemplate = '<a style="padding-left:8px" class="pull-right" ng-click="removeStatusElement();" clear-popovers-and-selections><i class="icon-trash"></i> </a>' ,
+				closeButtonTemplate = '<a style="padding-left:8px" class="pull-right" clear-popovers-and-selections><i class="icon-remove"></i></a>',
 				titleString = systeml.system + ' - ' + statusl.status + closeButtonTemplate + deleteButtonTemplate + editButtonTemplate,
 				contentString = statusl.comment;
 				
@@ -277,7 +277,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 				
 
 				function buildCalendar() {
-					var template = 	'<table id="maintable">' +
+					var template = 	'<table class="system-table" id="maintable">' +
 										'<thead>'+
 										
 											'<tr>'+
@@ -299,7 +299,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 											'</tr>'+
 
 											'<tr>'+
-												'<th class="firstcol week" rowspan="4"></th>'+
+												'<th class="week" rowspan="4"></th>'+
 												'<th class="week" ng-repeat="week in monthWeekList['+scope.selectedMonth+']" colspan="{{week.colSpan}}">{{week.week}}</th>'+
 											'</tr>'+
 											

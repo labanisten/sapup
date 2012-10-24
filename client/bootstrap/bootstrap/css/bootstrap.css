@@ -2420,9 +2420,9 @@ table {
   margin-bottom: 20px;
   background-color: #f5f5f5;
   border: 1px solid #e3e3e3;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
@@ -3626,8 +3626,8 @@ input[type="submit"].btn.btn-mini {
 }
 .navbar-fixed-top .navbar-inner,
 .navbar-fixed-bottom .navbar-inner {
-  padding-left: 0;
-  padding-right: 0;
+  padding-left: 5px;
+  padding-right: 5px;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
@@ -4860,7 +4860,7 @@ a.badge:hover {
   padding: 0;
 }
 .element-inner {
-  height: 10px;
+  height: 8px;
   cursor: pointer;
   width: 100%;
   display: block;
@@ -4914,7 +4914,7 @@ a.badge:hover {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffafa11', endColorstr='#ffd9ca2b', GradientType=0);
 }
-accordion {
+.accordion {
   background-color: #eeeeee;
 }
 .accordion-heading {
@@ -4931,40 +4931,42 @@ accordion {
   background-color: #eeeeee;
   font-size: 1.6em;
   text-align: center;
+  font: 1.6em "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
 }
 .alert-container-body {
   background-color: #eeeeee;
 }
-.firstcol {
-  min-width: 50px;
-  background-color: #8cb1da;
-  text-align: center;
+table.system-table {
+  width: 100%;
+  font: 100% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
+  border-collapse: collapse;
 }
-.year {
-  height: 40px;
-  font-size: 2em;
-  line-height: 50px;
-  pointer-events: auto;
-  /*color: #345970;*/
-
+table.system-table th {
+  border: 1px solid #E0E0E0;
+  pointer-events: none;
+  background-color: #eeeeee;
+  font-weight: normal;
+  font-size: 0.9em;
 }
-.yeararrow {
-  margin: 7px;
-  cursor: pointer;
+table.system-table td {
+  border: 1px solid #E0E0E0;
+  background-color: #eeeeee;
+  padding: 2px;
+  min-width: 5px;
 }
-.yeartext {
-  margin: 0px 10px;
-  color: #cd007a;
+table.system-table .week {
+  background-color: #eeeeee;
 }
-.months {
-  height: 40px;
-  font-size: 1.6em;
-  line-height: 50px;
-  cursor: pointer;
-  pointer-events: auto;
-  color: #345970;
+table.system-table .system {
+  background-color: #eeeeee;
+  font-weight: 1000;
+  font-size: 0.9em;
+  width: 1%;
+  white-space: nowrap;
+  padding-left: 5px;
+  padding-right: 5px;
 }
-.month:hover:not(.selectedmonth) {
+table.system-table .month:hover:not(.selectedmonth) {
   color: #3a1558;
   font-size: 1.6em;
   -webkit-transition: font-size;
@@ -4977,39 +4979,33 @@ accordion {
   -o-transition: 0.2s;
   transition: 0.2s;
 }
-.selectedmonth {
+table.system-table .selectedmonth {
   color: #cd007a;
   font-size: 1.8em;
 }
-.week {
-  background-color: #eeeeee;
+table.system-table .year {
+  height: 40px;
+  font-size: 2em;
+  line-height: 50px;
+  pointer-events: auto;
+  /*color: #345970;*/
+
 }
-.system {
-  background-color: #eeeeee;
-  font-weight: 800;
-  width: 1%;
-  white-space: nowrap;
+table.system-table .yeararrow {
+  margin: 7px;
+  cursor: pointer;
 }
-table {
-  width: 100%;
-  font: 100% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
-  border-collapse: collapse;
+table.system-table .yeartext {
+  margin: 0px 10px;
+  color: #cd007a;
 }
-th {
-  border: 1px solid #E0E0E0;
-  pointer-events: none;
-  background-color: #eeeeee;
-  font-weight: normal;
-  font-size: 0.9em;
-}
-td {
-  border: 1px solid #E0E0E0;
-  background-color: #eeeeee;
-  padding: 2px;
-  min-width: 5px;
-}
-.badge {
-  font-size: 10px;
+table.system-table .months {
+  height: 40px;
+  font-size: 1.6em;
+  line-height: 50px;
+  cursor: pointer;
+  pointer-events: auto;
+  color: #345970;
 }
 .shortdaynames {
   display: none;
@@ -5048,6 +5044,14 @@ td {
 }
 .nopointer {
   pointer-events: none;
+}
+.icon-modal {
+  vertical-align: middle;
+  font-size: 3em;
+  float: left;
+  margin-right: .25em;
+  padding-top: 5px;
+  padding-bottom: : 5px;
 }
 @media (max-width: 950px) {
   .daynames {

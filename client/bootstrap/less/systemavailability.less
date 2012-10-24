@@ -9,7 +9,7 @@
 	
 .element-inner
 {
-  height: 10px;
+  height: 8px;
   cursor: pointer;
   width: 100%;
   display: block;
@@ -46,7 +46,7 @@
   #gradient > .vertical(#FAFA11, lighten(#B1A520, 10%));
 }
 
-accordion {
+.accordion {
   background-color: @grayLighter;
 }
 
@@ -65,99 +65,101 @@ accordion {
 	background-color: @grayLighter;
 	font-size: 1.6em;
 	text-align: center;
+	font: 1.6em "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
 }
 
 .alert-container-body{
 	background-color: @grayLighter;
 }
 
-.firstcol {
-  min-width: 50px;
-  background-color: #8cb1da;
-  text-align: center;
-}
 
-.year {  
-  height: 40px;
-  font-size: 2em;
-  line-height:50px;
-  pointer-events: auto;
-  /*color: #345970;*/
-}
 
-.yeararrow {  
- margin: 7px;
- cursor: pointer;
-}
 
-.yeartext {
-  margin: 0px 10px;
-  color:#cd007a; 
-}
-
-.months {
-  height: 40px;
-  font-size: 1.6em;
-  line-height:50px;
-  cursor: pointer;
-  pointer-events: auto;
-  color: #345970;
-}
-
-.month:hover:not(.selectedmonth)  {
-  color:#3a1558;
-  font-size:1.6em;
-  .transition(font-size);
-  .transition-duration(0.2s);  
-}
-
-.selectedmonth { 
-	color:#cd007a; 
-	font-size:1.8em;
-}
-
-.week {
-  background-color: @grayLighter;
-}
-
-.system {
-  background-color: @grayLighter; 
-  font-weight: 800;
-  width: 1%;
-  white-space: nowrap;
-}
-
-table {
+table.system-table {
   width: 100%;
   font: 100% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
   border-collapse: collapse; 
+	
+	th {
+	  border: 1px solid #E0E0E0;
+	  pointer-events: none;
+	  background-color: @grayLighter ;
+	  font-weight: normal;
+	  font-size: 0.9em;
+	}
+
+
+	td {
+	  border: 1px solid #E0E0E0;
+	  background-color: @grayLighter;
+	  padding: 2px;
+	  min-width: 5px;
+	}
+	
+	.week {
+	  background-color: @grayLighter;
+	}
+
+	.system {
+	  background-color: @grayLighter; 
+	  font-weight: 1000;
+	  font-size: 0.9em;
+	  width: 1%;
+	  white-space: nowrap;
+	  padding-left: 5px;
+	  padding-right: 5px;
+	}
+	
+	.month:hover:not(.selectedmonth)  {
+	  color:#3a1558;
+	  font-size:1.6em;
+	  .transition(font-size);
+	  .transition-duration(0.2s);  
+	}
+
+	.selectedmonth { 
+		color:#cd007a; 
+		font-size:1.8em;
+	}
+	
+
+	.year {  
+	  height: 40px;
+	  font-size: 2em;
+	  line-height:50px;
+	  pointer-events: auto;
+	  /*color: #345970;*/
+	}
+
+	.yeararrow {  
+	 margin: 7px;
+	 cursor: pointer;
+	}
+
+	.yeartext {
+	  margin: 0px 10px;
+	  color:#cd007a; 
+	}
+
+	.months {
+	  height: 40px;
+	  font-size: 1.6em;
+	  line-height:50px;
+	  cursor: pointer;
+	  pointer-events: auto;
+	  color: #345970;
+	}
+
+
 }
 
-
-th {
-  border: 1px solid #E0E0E0;
-  pointer-events: none;
-  background-color: @grayLighter ;
-  font-weight: normal;
-  font-size: 0.9em;
-}
-
-
-td {
-  border: 1px solid #E0E0E0;
-  background-color: @grayLighter;
-  padding: 2px;
-  min-width: 5px;
-}
-
-
-.badge {
-	font-size: 10px;
-}
 
 .shortdaynames{
 	display:none;
 }
+
+
+
 
 .legend {
 	margin-bottom: 20px; 
@@ -198,6 +200,14 @@ td {
 	pointer-events: none;
 }
 
+.icon-modal {
+	vertical-align: middle;
+	font-size: 3em;
+	float: left;
+	margin-right: .25em;
+	padding-top: 5px;
+	padding-bottom: : 5px;
+}
 
 @media (max-width: 950px) {
 
@@ -232,6 +242,7 @@ td {
 	#accordionContainer {
 		display:none;
 	}
+
 }
 
 

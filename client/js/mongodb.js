@@ -38,7 +38,14 @@ angular.module('mongodbModule', []).
 					});					
 				}
 
-				//TODO returnera berre ok
+				ns[name].prototype.update = function(id) {
+					var resource = this;
+					delete resource._id;
+				 	return $http.put('/' + url + '/' + id, resource).then(function(response) {
+						return resource;
+					});
+				};
+
 				ns[name].prototype.create = function() {
 					var resource = this;
 				 	return $http.post('/' + url + '/', resource).then(function(response) {
@@ -49,12 +56,6 @@ angular.module('mongodbModule', []).
 					});
 				};
 
-				ns[name].prototype.update = function(id) {
-					var resource = this;
-				 	return $http.put('/' + url + '/' + id, resource).then(function(response) {
-						return resource;
-					});
-				};
 			};
 		
 			addResource("System", "systems");

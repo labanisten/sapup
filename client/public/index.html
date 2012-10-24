@@ -28,9 +28,9 @@
 
 </head>
 
-<body ng-controller="TimelineCtrl">
+<body style="padding-top:55px" ng-controller="TimelineCtrl"> <!-- Padding is needed for the static navbar -->
 
-	<div class="navbar">
+	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
 			<a class="brand" href="#">SAP System availability</a>				
 			<ul class="nav">
@@ -290,10 +290,10 @@
 	
 
 	<!-- Placed at the end of the document so the pages load faster -->
+	<link href="../bootstrap/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 	<script src="../bootstrap/bootstrap/js/bootstrap.js"></script>
 	<script src="../js/jquery.validate.js"></script>
 	<script src="../js/validation.js"></script>	
-
 	
 	<!-- User voice Widget -->
 	<script type="text/javascript">

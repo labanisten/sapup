@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html ng-app="systemAvailability" lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>System availability</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
-  <meta name="author" content="">
+	<meta charset="utf-8">
+	<title>System availability</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
 
-  <script src="../js/jquery-1.7.2.min.js"></script>
-  <script src="../js/jquery-ui-1.8.21.custom.min.js"></script>
-  
-  <script src="../js/angular.js"></script>
-  <script src="../js/angular-resource.js"></script>
-  
-  <script src="../js/controllerAdmin.js"></script>
-  <script src="../js/mongodb.js"></script>
-  <script src="../js/directives.js"></script>
-  
-  <script src="../js/jquery.dataTables.js"></script>
-  <script src="../js/admintables.js"></script>
-	
-  <link href="../bootstrap/bootstrap/css/bootstrap.css" rel="stylesheet">
-  <link href="../css/jquery-ui-1.8.21.custom.css" rel="stylesheet">
-  <link href="../css/jquery.dataTables.css" rel="stylesheet">
-  <!--<link href="../css/angular-ui.min.css" rel="stylesheet">-->
-  
-  <style>
+	<script src="../js/jquery-1.7.2.min.js"></script>
+	<script src="../js/jquery-ui-1.8.21.custom.min.js"></script>
+
+	<script src="../js/angular.js"></script>
+	<script src="../js/angular-resource.js"></script>
+
+	<script src="../js/controllerAdmin.js"></script>
+	<script src="../js/mongodb.js"></script>
+	<script src="../js/directives.js"></script>
+
+	<script src="../js/jquery.dataTables.js"></script>
+	<script src="../js/admintables.js"></script>
+
+	<link href="../bootstrap/bootstrap/css/bootstrap.css" rel="stylesheet">
+	<link href="../css/jquery-ui-1.8.21.custom.css" rel="stylesheet">
+	<link href="../css/jquery.dataTables.css" rel="stylesheet">
+	<!--<link href="../css/angular-ui.min.css" rel="stylesheet">
+	-->
+	<style>
 	.clickedrow { background-color:#08C !important; color:white;}
 	.alertrow_expired { background-color:#FF8080 !important; }
 	.alertrow_active { background-color:#B8FF94 !important; }
 	.alertrow_lastday { background-color:#FFFF80 !important; }
   </style>
-  
+
 </head>
 
 <body ng-controller="adminViewCtrl">
@@ -42,157 +42,310 @@
 
 				<a class="brand" href="#">SAP System availability</a>
 				<ul class="nav">
-			 		<li><a href="index.html">Home</a></li>
-			  		<li class="active"><a href="admin.html">Administration</a></li>
+					<li>
+						<a href="index.html">Home</a>
+					</li>
+					<li class="active">
+						<a href="admin.html">Administration</a>
+					</li>
 				</ul>
-	        </div>
-		</div>
-    </div>
-	
-	<div class="tabbable" style="margin-bottom: 18px"> <!-- Only required for left/right tabs -->
-	  <ul class="nav nav-tabs">
-		<li class="active"><a href="#tab1" data-toggle="tab">Element</a></li>
-		<li><a href="#tab2" data-toggle="tab">Alerts</a></li>
-	  </ul>
-	  <div class="tab-content">
-		<div class="tab-pane active" id="tab1">
-		
-			<div class="span5">		
-				<h2>SystemName</h2>
-				<br/>
-				<div class="input form-vertical">
-					<fieldset>
-				
-						<div class="control-group">
-							<label for="systemInput">Name</label>
-							<!--placeholder="SystemName"-->
-							<input class="span2" name="systemInput" id="systemInput" ng-model="systemNameInput" type="text" ng-enterkey="saveSystemName();">
-						</div>
-						
-						<div style="display:none" class="control-group">
-							<label style="display:none" for="typeInput">Type</label>
-							<!--placeholder="SystemType"-->
-							<select style="display:none" class="span2" name="typeInput" id="typeInput" ng-model="systemTypeInput">
-								<option value="Productionline">Productionline</option>
-								<option value="Versionline">Versionline</option>
-								<option value="Other">Other</option>
-							</select>
-						</div>
-						
-						<div class="control-group">
-							<label for="textInput">Text</label>
-							<!--placeholder="SystemText"-->
-							<input class="span2" name="textInput" id="textInput" ng-model="systemTextInput" type="text" ng-enterkey="saveSystemName();">
-						</div>
-						
-					</fieldset>
-					<button id="systemNameAddButton" class="btn" type="button" ng-click="saveSystemName();">Add</button>
-				</div>
-				<br/>
-				
-				<a class="pull-right" ng-click="deleteSystemName();">delete</a>
-				
-				<table class="table" id="systemNamesTable">
-				  <thead>
-					<tr>
-					  <th>#</th>
-					  <th>System type</th>
-					  <th>System name</th>
-					  <th>System text</th>
-					  <th>id</th>
-					</tr>
-				  </thead>
-				  <tbody>
-				  </tbody>
-				</table>
 			</div>
-			
-			
-			<div class="span3 offset1">
-				<h2>StatusType</h2>
-				<br/>
-				<div class="input-append">
-					<input class="span2" id="StatusTypeInput" ng-model="statusTypeInput" type="text" placeholder="StatusType" ng-enterkey="saveStatusType();">
-					<button id="statusTypeAddButton" class="btn" type="button" ng-click="saveStatusType();">Add</button>
-				</div>
-				<br/>
-
-				<a class="pull-right" ng-click="deleteStatusType();">delete</a>
-				
-				<table class="table" id="statusTypesTable">
-				  <thead>
-					<tr>
-					  <th>#</th>
-					  <th>Status name</th>
-					  <th>id</th>
-					</tr>
-				  </thead>
-				  <tbody>
-				  </tbody>
-				</table>	
-			</div>
-			
 		</div>
-		<div class="tab-pane" id="tab2">
-		
-			<div class="span3">						
-				<h2>AlertType</h2>
-				<br/>
-				<div class="input-append">
-					<input class="span2" id="AlertTypeInput" ng-model="alertTypeInput" type="text" placeholder="AlertType" ng-enterkey="saveAlertType();">
-					<button id="alertTypeAddButton" class="btn" type="button" ng-click="saveAlertType();">Add</button>
-				</div>
-				<br/>
-				
-				<a class="pull-right" ng-click="deleteAlertType();">delete</a>
-				
-				<table class="table" id="alertTypesTable">
-				  <thead>
-					<tr>
-					  <th>#</th>
-					  <th>Alert name</th>
-					  <th>id</th>
-					</tr>
-				  </thead>
-				  <tbody>
-				  </tbody>
-				</table>			
-			</div>
-		
-		
-			<div class="span4 offset1">						
-				<h2>AlertLog</h2>
-				<br/>
-				
-				<a class="pull-right" ng-click="deleteAlertLog();">delete</a>
-				
-				<table class="table" id="alertLogTable">
-				  <thead>
-					<tr>
-					  <th>#</th>
-					  <th>Alert heading</th>
-					  <th>Exp. date</th>
-					  <th>type</th>
-					  <th>id</th>
-					</tr>
-				  </thead>
-				  <tbody>
-				  </tbody>
-				</table>						
-			</div>					
-
-			
-		</div>
-	  </div>
 	</div>
 
-	
-	<!-- Le javascript
+	<div class="tabbable" style="margin-bottom: 18px">
+		<!-- Only required for left/right tabs -->
+		<ul class="nav nav-tabs">
+<!-- 			<li >
+				<a href="#tab1" data-toggle="tab">Element</a>
+			</li>
+			<li>
+				<a href="#tab2" data-toggle="tab">Alerts</a>
+			</li>
+ -->			<li class="active">
+				<a href="#tab3" data-toggle="tab">Systems</a>
+			</li>
+			<li>
+				<a href="#tab4" data-toggle="tab">Alerts</a>
+			</li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane" id="tab1">
+				<div class="span5">
+					<h2>SystemName</h2>
+					<br/>
+					<div class="input form-vertical">
+						<fieldset>
+
+							<div class="control-group">
+								<label for="systemInput">Name</label>
+								<!--placeholder="SystemName"-->
+								<input class="span2" name="systemInput" id="systemInput" ng-model="systemNameInput" type="text" ng-enterkey="saveSystemName();"></div>
+
+							<div style="display:none" class="control-group">
+								<label style="display:none" for="typeInput">Type</label>
+								<!--placeholder="SystemType"-->
+								<select style="display:none" class="span2" name="typeInput" id="typeInput" ng-model="systemTypeInput">
+									<option value="Productionline">Productionline</option>
+									<option value="Versionline">Versionline</option>
+									<option value="Other">Other</option>
+								</select>
+							</div>
+
+							<div class="control-group">
+								<label for="textInput">Text</label>
+								<!--placeholder="SystemText"-->
+								<input class="span2" name="textInput" id="textInput" ng-model="systemTextInput" type="text" ng-enterkey="saveSystemName();"></div>
+
+						</fieldset>
+						<button id="systemNameAddButton" class="btn" type="button" ng-click="saveSystemName();">Add</button>
+					</div>
+					<br/>
+
+					<a class="pull-right" ng-click="deleteSystemName();">delete</a>
+
+					<table class="table" id="systemNamesTable">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>System type</th>
+								<th>System name</th>
+								<th>System text</th>
+								<th>id</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+
+				<div class="span3 offset1">
+					<h2>StatusType</h2>
+					<br/>
+					<div class="input-append">
+						<input class="span2" id="StatusTypeInput" ng-model="statusTypeInput" type="text" placeholder="StatusType" ng-enterkey="saveStatusType();">
+						<button id="statusTypeAddButton" class="btn" type="button" ng-click="saveStatusType();">Add</button>
+					</div>
+					<br/>
+
+					<a class="pull-right" ng-click="deleteStatusType();">delete</a>
+
+					<table class="table" id="statusTypesTable">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Status name</th>
+								<th>id</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+
+			</div>
+			<div class="tab-pane" id="tab2">
+
+				<div class="span3">
+					<h2>AlertType</h2>
+					<br/>
+					<div class="input-append">
+						<input class="span2" id="AlertTypeInput" ng-model="alertTypeInput" type="text" placeholder="AlertType" ng-enterkey="saveAlertType();">
+						<button id="alertTypeAddButton" class="btn" type="button" ng-click="saveAlertType();">Add</button>
+					</div>
+					<br/>
+
+					<a class="pull-right" ng-click="deleteAlertType();">delete</a>
+
+					<table class="table" id="alertTypesTable">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Alert name</th>
+								<th>id</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+
+				<div class="span4 offset1">
+					<h2>AlertLog</h2>
+					<br/>
+
+					<a class="pull-right" ng-click="deleteAlertLog();">delete</a>
+
+					<table class="table" id="alertLogTable">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Alert heading</th>
+								<th>Exp. date</th>
+								<th>type</th>
+								<th>id</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+			</div>
+			<div class="tab-pane active" id="tab3">
+				<div class="container">
+					<div class="row">
+						<div class="span12">
+							<button class="btn btn-primary" data-toggle="modal" href="#addNewSystem"> <i class="icon-plus-sign icon-white"></i>
+								Add system
+							</button>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="span12">
+							<table class="table table-condense table-hover">
+								<thead>
+									<tr>
+										<th>Order</th>
+										<th>System ID</th>
+										<th>System name</th>
+										<th style="width:10%"></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="system in systemnames | orderBy:'order':false">
+										<td>{{system.order}}</td>
+										<td>{{system.name}}</td>
+										<td>{{system.text}}</td>
+										<td>
+											<a ng-class="isItemWithLowestOrder(system.order)" ng-click="moveItemUp(system)" class=""> <i class="icon-chevron-up"></i>
+											</a>
+											<a ng-click="moveItemDown(system)">
+												<i ng-class= "isItemWithHighestOrder(system.order)" class="icon-chevron-down"></i>
+											</a>
+											<a data-toggle="modal" href="#editSystemname" ng-click="setSelectedSystemByID(system._id)">
+												<i class="icon-pencil"></i>
+											</a>
+											<a data-toggle="modal" href="#removeSystemname" ng-click="setSelectedSystemByID(system._id)">
+												<i class="icon-trash"></i>
+											</a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="tab-pane" id="tab4">
+				<div class="container">
+					<div class="row">
+						<div class="span12">
+							<table class="table table-condense table-hover">
+								<thead>
+									<tr>
+										<th>Title</th>
+										<th>Text</th>
+										<th>Expiry date</th>
+										<th style="width:10%"></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="alert in alertlog">
+										<td>{{alert.title}}</td>
+										<td>{{alert.comment}}</td>
+										<td>{{alert.expdate}}</td>
+										<td>
+											<a ng-click="deleteAlertLog($index)">
+												<i class="icon-trash"></i>
+											</a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal Add new system  -->
+	<div class="modal hide fade" id="addNewSystem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">Add new system</h3>
+		</div>
+		<div class="modal-body">
+			<div class="input form-vertical">
+				<fieldset>
+					<div class="control-group">
+						<label for="systemInput">System ID</label>
+						<input class="input-small" name="systemInput" id="systemInput" ng-model="systemnameToUpdate.name" type="text"</div>
+
+						<div class="control-group">
+							<label for="textInput">System name</label>
+							<input class="input-xlarge" name="textInput" id="textInput" ng-model="systemnameToUpdate.text" type="text"></div>
+
+					</fieldset>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+				<button data-dismiss="modal" ng-click="saveSystemName()" class="btn btn-primary">Save</button>
+			</div>
+		</div>
+
+		<!-- Modal Edit system name  -->
+		<div class="modal hide fade" id="editSystemname" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h3 id="myModalLabel">Edit system details</h3>
+			</div>
+			<div class="modal-body">
+				<div class="input form-vertical">
+					<fieldset>
+
+						<div class="control-group">
+							<label for="systemInput">System ID</label>
+							<!--placeholder="SystemName"-->
+							<input class="input-small" name="systemInput" id="systemInput" ng-model="systemnameToUpdate.name" type="text" disabled></div>
+
+						<div class="control-group">
+							<label for="textInput">System name</label>
+							<!--placeholder="SystemText"-->
+							<input class="input-xlarge" name="textInput" id="textInput" ng-model="systemnameToUpdate.text" type="text"></div>
+
+					</fieldset>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+				<button data-dismiss="modal" ng-click="updateSystemName()" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+
+		<!-- Modal Remove system name  -->
+		<div class="modal hide fade" id="removeSystemname" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h3 id="myModalLabel">Delete system {{systemnameToUpdate.name}}</h3>
+			</div>
+			<div class="modal-body">
+				<p>
+					<i class="icon-warning-sign icon-modal"></i>
+					Are you sure you want to delete the system?
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+				<button data-dismiss="modal" ng-click="deleteSystemName(systemToUpdate._id)" class="btn btn-danger">Delete system</button>
+			</div>
+		</div>
+
+		<!-- Le javascript
     ================================================== -->
-	<!-- Placed at the end of the document so the pages load faster -->
-	<script src="../bootstrap/bootstrap/js/bootstrap.js"></script>
-	<script src="../js/utils.js"></script>
-	
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="../bootstrap/bootstrap/js/bootstrap.js"></script>
+		<script src="../js/utils.js"></script>
+
 </body>
 
-</html>
+	</html>

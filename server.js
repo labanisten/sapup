@@ -69,8 +69,8 @@
 					if (err) {return res.end("At connection, " + err);}
 					var resource = req.path.replace(/^\/|\/$/g, '');
 					resource = splitOnSlash(resource);
-					var itemId = {'_id': new BSON.ObjectID(req.params.id)};
-					
+					var itemId = {'_id': new BSON.ObjectID(req.params.id.toString())};
+					console.log("Put " + itemId._id);
 					db.collection(resource, function(err, collection) {
 						collection.update(itemId, req.body, true, function(err, result) {
 							var reponse = getResponse(err, '{"put":"ok"}');
@@ -86,7 +86,7 @@
 					if (err) {return res.end("At connection, " + err);}
 					var resource = req.path.replace(/^\/|\/$/g, '');
 					resource = splitOnSlash(resource);				
-					var itemId = {'_id': new BSON.ObjectID(req.params.id)};
+					var itemId = {'_id': new BSON.ObjectID(req.params.id.toString())};
 					
 					db.collection(resource, function(err, collection) {
 						collection.remove(itemId, function(err, result) {

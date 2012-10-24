@@ -68,6 +68,7 @@
 					
 					db.collection(resource, function(err, collection) {
 						collection.update(itemId, req.body, true, function(err, result) {
+							console.log('PUT');
 							var reponse = getResponse(err, '{"put":"ok"}');
 							res.header('Content-Type', 'application/json');
 							res.send(reponse);
