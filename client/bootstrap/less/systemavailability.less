@@ -1,5 +1,8 @@
 // Stuff for the systems table 
 
+body {
+	padding-top:55px;
+}
 
 .element
 {
@@ -96,6 +99,7 @@ table.system-table {
 	  min-width: 5px;
 	}
 	
+
 	.week {
 	  background-color: @grayLighter;
 	}
@@ -109,7 +113,7 @@ table.system-table {
 	  padding-left: 5px;
 	  padding-right: 5px;
 	}
-	
+
 	.month:hover:not(.selectedmonth)  {
 	  color:#3a1558;
 	  font-size:1.6em;
@@ -117,11 +121,7 @@ table.system-table {
 	  .transition-duration(0.2s);  
 	}
 
-	.selectedmonth { 
-		color:#cd007a; 
-		font-size:1.8em;
-	}
-	
+
 
 	.year {  
 	  height: 40px;
@@ -150,14 +150,16 @@ table.system-table {
 	  color: #345970;
 	}
 
+	.selectedmonth { 
+		color:#cd007a; 
+		font-size:2em;
+	}
 
 }
-
 
 .shortdaynames{
 	display:none;
 }
-
 
 
 
@@ -218,22 +220,38 @@ table.system-table {
 	thead .shortdaynames{ 
 		display: table-row;
 	}
-		
+
+	table.system-table {
+		.selectedmonth { 
+			font-size:1.5em;
+		}
+	}
+
 }
 
 @media (max-width: 550px) {
+	body {
+		padding-top: 5px;
+	}
+
 	#maintable {
 	  font: 80% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
 	}
 	
-	// .navbar {
-	// 	display:none;
-	// }
+	.navbar {
+		display:none;
+	}
 	
 	#accordionContainer {
 		display:none;
 	}
 
+	table.system-table {
+		.selectedmonth { 
+			font-size:1.5em;
+		}
+	}
+		
 }
 
 

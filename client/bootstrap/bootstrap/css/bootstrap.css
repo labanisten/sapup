@@ -4856,6 +4856,9 @@ a.badge:hover {
   line-height: 30px;
   color: inherit;
 }
+body {
+  padding-top: 55px;
+}
 .element {
   padding: 0;
 }
@@ -4979,10 +4982,6 @@ table.system-table .month:hover:not(.selectedmonth) {
   -o-transition: 0.2s;
   transition: 0.2s;
 }
-table.system-table .selectedmonth {
-  color: #cd007a;
-  font-size: 1.8em;
-}
 table.system-table .year {
   height: 40px;
   font-size: 2em;
@@ -5006,6 +5005,10 @@ table.system-table .months {
   cursor: pointer;
   pointer-events: auto;
   color: #345970;
+}
+table.system-table .selectedmonth {
+  color: #cd007a;
+  font-size: 2em;
 }
 .shortdaynames {
   display: none;
@@ -5060,13 +5063,25 @@ table.system-table .months {
   thead .shortdaynames {
     display: table-row;
   }
+  table.system-table .selectedmonth {
+    font-size: 1.5em;
+  }
 }
 @media (max-width: 550px) {
+  body {
+    padding-top: 5px;
+  }
   #maintable {
     font: 80% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
   }
+  .navbar {
+    display: none;
+  }
   #accordionContainer {
     display: none;
+  }
+  table.system-table .selectedmonth {
+    font-size: 1.5em;
   }
 }
 /*!
