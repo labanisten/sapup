@@ -5060,21 +5060,10 @@ table.system-table .months {
   thead .shortdaynames {
     display: table-row;
   }
-  .months {
-    height: 40px;
-    font-size: 1em;
-    line-height: 50px;
-    cursor: pointer;
-    pointer-events: auto;
-    color: #345970;
-  }
 }
 @media (max-width: 550px) {
   #maintable {
     font: 80% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
-  }
-  .navbar {
-    display: none;
   }
   #accordionContainer {
     display: none;
