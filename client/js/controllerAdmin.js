@@ -70,15 +70,15 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 		for (var i = 0; i < $scope.systemnames.length; i++) {
 			if ($scope.systemnames[i].order == order && order > 1) {
 				$scope.systemnames[i].order--;
+				setSelectedSystemByIndex(i); 
+				$scope.updateSystemName();
 			} else if (order - 1 == $scope.systemnames[i].order) {
 				$scope.systemnames[i].order++;
+				setSelectedSystemByIndex(i); 
+				$scope.updateSystemName();
 			};
 		};
 
-		for (var i = 0; i < $scope.systemnames.length; i++) {
-			setSelectedSystemByIndex(i); 
-			$scope.updateSystemName();
-		};
 
 	}
 
@@ -96,14 +96,13 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 		for (var i = 0; i < $scope.systemnames.length; i++) {
 			if ($scope.systemnames[i].order == order && order < $scope.systemnames.length) {
 				$scope.systemnames[i].order++;
+				setSelectedSystemByIndex(i); 
+				$scope.updateSystemName();
 			} else if (order + 1 == $scope.systemnames[i].order) {
 				$scope.systemnames[i].order--;
+				setSelectedSystemByIndex(i); 
+				$scope.updateSystemName();
 			};
-		};
-	
-		for (var i = 0; i < $scope.systemnames.length; i++) {
-			setSelectedSystemByIndex(i); 
-			$scope.updateSystemName();
 		};
 
 	}
