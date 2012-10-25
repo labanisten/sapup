@@ -20,14 +20,14 @@ angular.module('mongodbModule', []).
 
 				ns[name].get = function(query) {
 					if (query) {
-						return $http.get('/' + url + '/' + '?query=' + JSON.stringify(query)).then(function(repsonse){
-							return repsonse.data;
+						return $http.get('/' + url + '/' + '?query=' + JSON.stringify(query)).then(function(response){
+							return response.data;
 						});					
 					} else {
 						var seconds = new Date().getTime() / 1000;
-						// return $http.get('/' + url + '/' + '?' + seconds).then(function(repsonse){
-						return $http.get('/' + url + ns.noCache()).then(function(repsonse){
-							return repsonse.data;
+						// return $http.get('/' + url + '/' + '?' + seconds).then(function(response){
+						return $http.get('/' + url + ns.noCache()).then(function(response){
+							return response.data;
 						});
 					}
 				};
@@ -49,10 +49,7 @@ angular.module('mongodbModule', []).
 				ns[name].prototype.create = function() {
 					var resource = this;
 				 	return $http.post('/' + url + '/', resource).then(function(response) {
-						if(!response.data.ok){
-							resource.id = response.data[0]._id;
-						}
-						return resource;
+						return response.data[0];
 					});
 				};
 

@@ -144,6 +144,16 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 
 		return [];
 	}
+
+	function updateOrderForItemsAfterDeletion(fromOrder) {
+		for (var i = 0; i < $scope.systemnames.length; i++) {
+			if ($scope.systemnames[i].order > fromOrder) {
+				$scope.systemnames[i].order--; 
+				setSelectedSystemByIndex(i); 
+				$scope.updateSystemName();
+			}	
+		};
+	}
 	
 	
 	function getAlertLog(){
@@ -164,6 +174,7 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 		newSystem.create().then(function(createdSystem) {
 			$scope.systemnames.push(createdSystem);
 		});
+		$scope.systemnameToUpdate = {};
 
 	};
 	
@@ -200,6 +211,7 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 					for (var i = 0; i < $scope.systemnames.length; i++) {
 						if ($scope.systemnames[i]._id == $scope.systemnameToUpdate._id) {
 							$scope.systemnames.splice(i, 1);
+							updateOrderForItemsAfterDeletion($scope.systemnameToUpdate.order);
 						}
 					};			
 				} else {
@@ -211,14 +223,14 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
 	$scope.updateSystemName = function() {
 	
 		var systemname = new db.Systemname($scope.systemnameToUpdate); 
-		delete systemname._id;
 		systemname.update($scope.systemnameToUpdate._id).then(function(response) {
 				if (response.data) {
-					var updatedSystemname;
+					//Success - update model here?
 				} else {
 					//Unable to update
 				}
 		});
+		$scope.systemnameToUpdate = {};
 	};
 	
 	
