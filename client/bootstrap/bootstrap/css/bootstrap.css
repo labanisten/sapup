@@ -838,9 +838,9 @@ table.system-table .month:hover:not(.selectedmonth){color:#3a1558;font-size:1.6e
 table.system-table .year{height:40px;font-size:2em;line-height:50px;pointer-events:auto;}
 table.system-table .yeararrow{margin:7px;cursor:pointer;}
 table.system-table .yeartext{margin:0px 10px;color:#cd007a;}
-table.system-table .currentday{color:#cd007a;}
 table.system-table .months{height:40px;font-size:1.6em;line-height:50px;cursor:pointer;pointer-events:auto;color:#345970;}
 table.system-table .selectedmonth{color:#cd007a;font-size:2em;}
+table.system-table .currentday{color:#cd007a;}
 .shortdaynames{display:none;}
 .legend{margin-bottom:20px;border:1px solid #e5e5e5;min-width:100px;}
 .legend .legendheader{width:auto;height:18px;padding:8px;font-weight:800;text-align:center;background-color:#eeeeee;border-bottom:1px solid #e5e5e5;background-image:-moz-linear-gradient(top, #d5d5d5, #eeeeee);background-image:-ms-linear-gradient(top, #d5d5d5, #eeeeee);background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#d5d5d5), to(#eeeeee));background-image:-webkit-linear-gradient(top, #d5d5d5, #eeeeee);background-image:-o-linear-gradient(top, #d5d5d5, #eeeeee);background-image:linear-gradient(top, #d5d5d5, #eeeeee);background-repeat:repeat-x;}
