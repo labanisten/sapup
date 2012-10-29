@@ -312,7 +312,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 											'</tr>'+
 											
 											'<tr>'+
-												'<th ng-repeat="day in monthDayList['+scope.selectedMonth+']">{{day}}</th>'+
+												'<th ng:class="getClassForDayColumn(day)" ng-repeat="day in monthDayList['+scope.selectedMonth+']">{{day}}</th>'+
 											'</tr>'+
 											
 										'</thead>'+
