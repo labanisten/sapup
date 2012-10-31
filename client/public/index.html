@@ -55,8 +55,7 @@
 		<div class="row-fluid">
 			<div ng-class="messageAreaClass()" id="accordionContainer">
 				<div class="accordion-group">
-					<h4  class="accordion-toggle alert-container-header accordion-heading" data-toggle="collapse" data-parent="#accordionContainer" href="#collapseOne">Messages</h4>
-
+					<div  class="accordion-toggle alert-container-header accordion-heading" data-toggle="collapse" data-parent="#accordionContainer" href="#collapseOne">Messages</div>
 					<div id="collapseOne" class="alert-container-body accordion-body in collapse" style="height: auto; ">
 						<div class="accordion-inner">
 							<div id="pop" class="span4" bs-popover ng-repeat="alertline in alertlines" rel="popover" data-content="{{alertline.comment}}" data-original-title="{{alertline.title}}" data-placement="bottom">
