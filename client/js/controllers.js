@@ -501,4 +501,16 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		$scope.elementUpdateMessage = ""; 
 		$scope.elementUpdateClass = "hide";
 	};
+	
+	$scope.getClassForDayColumn = function(day) {
+		var classText = '';
+		var currentDate = new Date();
+		
+		if(day == currentDate.getDate()){
+			classText = 'currentday'
+		}
+
+		return classText;
+	};
+	
 });
