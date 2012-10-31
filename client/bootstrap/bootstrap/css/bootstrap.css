@@ -4878,14 +4878,14 @@ body {
   border-radius: 0;
 }
 .element-inner.maybedown {
-  background-color: #ffc921;
-  background-image: -moz-linear-gradient(top, #ffc40d, #ffd040);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffc40d), to(#ffd040));
-  background-image: -webkit-linear-gradient(top, #ffc40d, #ffd040);
-  background-image: -o-linear-gradient(top, #ffc40d, #ffd040);
-  background-image: linear-gradient(to bottom, #ffc40d, #ffd040);
+  background-color: #c5a162;
+  background-image: -moz-linear-gradient(top, #c09853, #ceae78);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#c09853), to(#ceae78));
+  background-image: -webkit-linear-gradient(top, #c09853, #ceae78);
+  background-image: -o-linear-gradient(top, #c09853, #ceae78);
+  background-image: linear-gradient(to bottom, #c09853, #ceae78);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffc40d', endColorstr='#ffffd040', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffc09853', endColorstr='#ffceae78', GradientType=0);
 }
 .element-inner.downtime {
   background-color: #c54f4f;

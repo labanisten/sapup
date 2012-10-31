@@ -77,7 +77,8 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.months = Calendar.monthLabelsShort;
 	$scope.monthLabels = Calendar.monthLabels;
 	$scope.selectedMonthLabel = Calendar.getMonthName($scope.selectedMonth);
-	//$scope.messageAreaClass = "invisible hide";
+	$scope.elementUpdateClass = "hide";
+	$scope.elementUpdateMessage = "";
 
 	$scope.messageAreaClass = function() {
 		if ($scope.alertlines.length > 0) {
@@ -233,6 +234,11 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		});
 		return [];
 	}
+
+	function issueElementUpdateMessage(system) {
+		$scope.elementUpdateMessage = "Status was updated for system " + system;
+		$scope.elementUpdateClass = "display";
+	};
 	
 	$scope.addAlert = function() {
 		if($("#alertForm").valid()){
@@ -320,7 +326,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 			var system = new db.System(systemElement);
 			system.update(existingSystem._id).then(function(newSystemElement) {
-				Utils.addLineToElementModalLog("Element updated");
+				issueElementUpdateMessage(systemElement.system); 
 				$scope.unSelectElement();
 				getSystemData();
 			});
@@ -364,7 +370,8 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				system = new db.System(systemElement);
 
 				system.update(existingSystem._id).then(function(newSystemElement) {
-					Utils.addLineToElementModalLog("Element added to " + existingSystem.system);
+
+					issueElementUpdateMessage(systemElement.system); 
 					$scope.unSelectElement();
 					getSystemData();
 				});
@@ -399,7 +406,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				system = new db.System(systemElement);
 				
 				system.create().then(function(newSystemElement) {
-					Utils.addLineToElementModalLog("Element added to " + newSystemElement.system);
+					issueElementUpdateMessage(systemElement.system); 
 					$scope.unSelectElement();
 					getSystemData();
 				});
@@ -490,6 +497,8 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	};
 	
 	$scope.clearModalLog = function(event) {
-		Utils.clearModalLog();
+		// Utils.clearModalLog();
+		$scope.elementUpdateMessage = ""; 
+		$scope.elementUpdateClass = "hide";
 	};
 });
