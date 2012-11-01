@@ -4,9 +4,22 @@
 
 	var app = express.createServer();
 	var BSON = mongodb.BSONPure;
+	var RSS = require('rss');
+	
+
+	//Constants
 	var MONGODB_URL = process.env.MONGODB_URL || '127.0.0.1'; 
 	var MONGODB_PORT =parseInt(process.env.MONGODB_PORT) || 27017; 
 	var MONGODB_DB = process.env.MONGODB_DB || 'test'; 
+
+
+
+
+
+
+
+
+
 
 
 	
@@ -124,6 +137,32 @@
 	app.delete('/alerttypes/:id', function(req, res) {restServices.delete(req, res);});
 	app.delete('/systemstatuses/:id', function(req, res) {restServices.delete(req, res);});
 	app.delete('/alerts/:id', function(req, res) {restServices.delete(req, res);});
+
+	app.get('/rss', function(req, res) {
+  
+      // Create rss prototype object and set some base values
+      var feed = new RSS({
+          title: 'SAP systemavailability',
+          description: 'about me and my foo and my bar',
+          feed_url: 'http://' + req.headers.host + req.url,
+          site_url: 'http://' + req.headers.host,
+          author: 'John Doe'
+      });
+
+      feed.item({
+                title: "System update 1",
+                description: "Some info on the system update",
+                url: 'http://' + req.headers.host,
+                author: "System availability",
+                date: "May 27, 2012"
+            });      
+      
+
+      // res.type('rss');
+	  res.send(feed.xml());
+
+  });
+
 	
 	function getResponse(error, result) {
 		var resStr;
