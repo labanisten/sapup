@@ -179,7 +179,7 @@
 	app.get('/alerttypes', function(req, res) {restServices.get(req, res);});
 	app.get('/systemstatuses', function(req, res) {restServices.get(req, res);});
 	app.get('/alerts', function(req, res) {restServices.get(req, res);});
-	app.get('/rss', function(req, res) {rssServices.get(req, res);});
+	app.get('/rss.xml', function(req, res) {rssServices.get(req, res);});
 	
 	app.post('/systems', function(req, res) {restServices.post(req, res);});
 	app.post('/systemnames', function(req, res) {restServices.post(req, res);});
