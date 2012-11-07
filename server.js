@@ -13,12 +13,13 @@
 	var MONGODB_DB = process.env.MONGODB_DB || 'test'; 
 
 
-
-
-
-
-
-
+	var feed = new RSS({
+        title: 'SAP system availability',
+        description: 'SAP system uptime overview',
+        feed_url: 'http://systemavailability.azurewebsites.net/rss.xml',
+        site_url: 'http://systemavailability.azurewebsites.net',
+        author: ''
+    });
 
 
 
