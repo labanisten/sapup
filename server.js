@@ -114,11 +114,71 @@
 			 }
 	}
 
+	var rssServices = {
+
+		get: function(req, res){
+			var alerts;
+
+			pool.acquire(function(err, db) {
+				if(err) {return res.end("At connection, " + err);}
+
+				db.collection('alerts', function(err, collection) {
+					collection.find().toArray(function(err, items) {
+						alerts = items;
+						pool.release(db);
+
+						for(var i = 0; i < items.length; i++) {
+							
+							//console.log("hCode: " + Math.abs(hashCode(items[i].title + items[i].comment)));
+
+							var feedItem = {
+							    title:  items[i].title,
+							    description: items[i].comment,
+							    url: 'http://systemavailability.azurewebsites.net/', // link to the item
+							    guid: Math.abs(hashCode(items[i].title + items[i].comment)), 
+							    author: 'System availability messages',
+							    date: dbDateToViewDate(items[i].expdate) // any format that js Date can parse.
+							};
+
+							feed.item(feedItem);
+						}
+
+						var xml = feed.xml();
+						res.send(xml);
+					});
+				});
+			});			
+		}
+	}
+
+	function hashCode(str){
+	    var hash = 0, i, char;
+	    if (str.length == 0) return hash;
+	    for (i = 0; i < str.length; i++) {
+	        char = str.charCodeAt(i);
+	        hash = ((hash<<5)-hash)+char;
+	        hash = hash & hash; // Convert to 32bit integer
+	    }
+	    return hash;
+	};
+
+	function dbDateToViewDate(dateString) {
+		var datestring = dateString,
+			y = datestring.substr(0, 4),
+			m = datestring.substr(4, 2),
+			d = datestring.substr(6, 2);
+
+		var date = d + '.' + m + '.' + y;
+
+		return date;
+	};
+
 	app.get('/systems', function(req, res) {restServices.get(req, res);});
 	app.get('/systemnames', function(req, res) {restServices.get(req, res);});
 	app.get('/alerttypes', function(req, res) {restServices.get(req, res);});
 	app.get('/systemstatuses', function(req, res) {restServices.get(req, res);});
 	app.get('/alerts', function(req, res) {restServices.get(req, res);});
+	app.get('/rss', function(req, res) {rssServices.get(req, res);});
 	
 	app.post('/systems', function(req, res) {restServices.post(req, res);});
 	app.post('/systemnames', function(req, res) {restServices.post(req, res);});
@@ -137,7 +197,7 @@
 	app.delete('/alerttypes/:id', function(req, res) {restServices.delete(req, res);});
 	app.delete('/systemstatuses/:id', function(req, res) {restServices.delete(req, res);});
 	app.delete('/alerts/:id', function(req, res) {restServices.delete(req, res);});
-
+/*
 	app.get('/rss', function(req, res) {
   
       // Create rss prototype object and set some base values
@@ -162,7 +222,7 @@
 	  res.send(feed.xml());
 
   });
-
+*/
 	
 	function getResponse(error, result) {
 		var resStr;
