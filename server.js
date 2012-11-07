@@ -9,21 +9,10 @@
 
 	//Constants
 	var MONGODB_URL = process.env.MONGODB_URL || '127.0.0.1'; 
-	var MONGODB_PORT =parseInt(process.env.MONGODB_PORT) || 27017; 
+	var MONGODB_PORT = parseInt(process.env.MONGODB_PORT) || 27017; 
 	var MONGODB_DB = process.env.MONGODB_DB || 'test'; 
 
 
-	var feed = new RSS({
-        title: 'SAP system availability',
-        description: 'SAP system uptime overview',
-        feed_url: 'http://systemavailability.azurewebsites.net/rss.xml',
-        site_url: 'http://systemavailability.azurewebsites.net',
-        author: 'author'
-    });
-
-
-
-	
 	var pool = generic_pool.Pool({
 		name: 'mongodb',
 		max: 20,
@@ -121,6 +110,15 @@
 			var alerts;
 			var i;
 
+			var feed = new RSS({
+		        title: 'SAP system availability',
+		        description: 'SAP system uptime overview',
+		        //feed_url: 'http://systemavailability.azurewebsites.net/rss.xml',
+		        feed_url: 'http://systemavailability.azurewebsites.net',
+		        site_url: 'http://systemavailability.azurewebsites.net',
+		        author: 'author'
+		    });
+
 			pool.acquire(function(err, db) {
 				if(err) {return res.end("At connection, " + err);}
 
@@ -166,7 +164,7 @@
 			m = datestring.substr(4, 2),
 			d = datestring.substr(6, 2);
 
-		var date = d + '.' + m + '.' + y;
+		var date = y + '-' + m + '-' + d;
 
 		return date;
 	};
