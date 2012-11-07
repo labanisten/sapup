@@ -134,7 +134,7 @@
 							    url: 'http://systemavailability.azurewebsites.net/', // link to the item
 							    guid: Math.abs(hashCode(items[i].title + items[i].comment)), 
 							    author: 'System availability messages',
-							    date: item[i].timestamp // any format that js Date can parse.
+							    date: items[i].timestamp // any format that js Date can parse.
 							};
 
 							feed.item(feedItem);
