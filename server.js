@@ -134,7 +134,7 @@
 							    url: 'http://systemavailability.azurewebsites.net/', // link to the item
 							    guid: Math.abs(hashCode(items[i].title + items[i].comment)), 
 							    author: 'System availability messages',
-							    date: dbDateToViewDate(items[i].expdate) // any format that js Date can parse.
+							    date: item[i].timestamp // any format that js Date can parse.
 							};
 
 							feed.item(feedItem);
@@ -158,6 +158,7 @@
 	    return hash;
 	};
 
+	/*
 	function dbDateToViewDate(dateString) {
 		var datestring = dateString,
 			y = datestring.substr(0, 4),
@@ -168,6 +169,7 @@
 
 		return date;
 	};
+	*/
 
 	app.get('/systems', function(req, res) {restServices.get(req, res);});
 	app.get('/systemnames', function(req, res) {restServices.get(req, res);});

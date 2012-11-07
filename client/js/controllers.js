@@ -245,8 +245,9 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			$('#addalertdialog').modal('hide');
 			var alert = new db.Alert($scope.addAlertLine);
 			alert.expdate = Utils.viewDateToDBDate(alert.expdate);
+			alert.timestamp = new Date().getTime();
 			alert.create().then(function(newAlert) {
-			$scope.alertlines.push(newAlert);
+				$scope.alertlines.push(newAlert);
 			});
 			Utils.resetNewAlertForm();
 		}
