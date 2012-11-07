@@ -18,7 +18,7 @@
         description: 'SAP system uptime overview',
         feed_url: 'http://systemavailability.azurewebsites.net/rss.xml',
         site_url: 'http://systemavailability.azurewebsites.net',
-        author: ''
+        author: 'author'
     });
 
 
@@ -119,6 +119,7 @@
 
 		get: function(req, res){
 			var alerts;
+			var i;
 
 			pool.acquire(function(err, db) {
 				if(err) {return res.end("At connection, " + err);}
@@ -128,10 +129,7 @@
 						alerts = items;
 						pool.release(db);
 
-						for(var i = 0; i < items.length; i++) {
-							
-							//console.log("hCode: " + Math.abs(hashCode(items[i].title + items[i].comment)));
-
+						for(i = 0; i < items.length; i++) {
 							var feedItem = {
 							    title:  items[i].title,
 							    description: items[i].comment,
@@ -144,8 +142,7 @@
 							feed.item(feedItem);
 						}
 
-						var xml = feed.xml();
-						res.send(xml);
+						res.send(feed.xml());
 					});
 				});
 			});			
