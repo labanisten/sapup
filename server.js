@@ -113,10 +113,9 @@
 			var feed = new RSS({
 		        title: 'SAP system availability',
 		        description: 'SAP system uptime overview',
-		        //feed_url: 'http://systemavailability.azurewebsites.net/rss.xml',
-		        feed_url: 'http://systemavailability.azurewebsites.net',
+		        feed_url: 'http://systemavailability.azurewebsites.net/alerts.rss',
 		        site_url: 'http://systemavailability.azurewebsites.net',
-		        author: 'author'
+		        author: 'Statoil ASA'
 		    });
 
 			pool.acquire(function(err, db) {
@@ -139,7 +138,7 @@
 
 							feed.item(feedItem);
 						}
-
+						res.contentType('rss');
 						res.send(feed.xml());
 					});
 				});
@@ -158,25 +157,12 @@
 	    return hash;
 	};
 
-	/*
-	function dbDateToViewDate(dateString) {
-		var datestring = dateString,
-			y = datestring.substr(0, 4),
-			m = datestring.substr(4, 2),
-			d = datestring.substr(6, 2);
-
-		var date = y + '-' + m + '-' + d;
-
-		return date;
-	};
-	*/
-
 	app.get('/systems', function(req, res) {restServices.get(req, res);});
 	app.get('/systemnames', function(req, res) {restServices.get(req, res);});
 	app.get('/alerttypes', function(req, res) {restServices.get(req, res);});
 	app.get('/systemstatuses', function(req, res) {restServices.get(req, res);});
 	app.get('/alerts', function(req, res) {restServices.get(req, res);});
-	app.get('/rss.xml', function(req, res) {rssServices.get(req, res);});
+	app.get('/alerts.rss', function(req, res) {rssServices.get(req, res);});
 	
 	app.post('/systems', function(req, res) {restServices.post(req, res);});
 	app.post('/systemnames', function(req, res) {restServices.post(req, res);});
@@ -195,32 +181,7 @@
 	app.delete('/alerttypes/:id', function(req, res) {restServices.delete(req, res);});
 	app.delete('/systemstatuses/:id', function(req, res) {restServices.delete(req, res);});
 	app.delete('/alerts/:id', function(req, res) {restServices.delete(req, res);});
-/*
-	app.get('/rss', function(req, res) {
-  
-      // Create rss prototype object and set some base values
-      var feed = new RSS({
-          title: 'SAP systemavailability',
-          description: 'about me and my foo and my bar',
-          feed_url: 'http://' + req.headers.host + req.url,
-          site_url: 'http://' + req.headers.host,
-          author: 'John Doe'
-      });
 
-      feed.item({
-                title: "System update 1",
-                description: "Some info on the system update",
-                url: 'http://' + req.headers.host,
-                author: "System availability",
-                date: "May 27, 2012"
-            });      
-      
-
-      // res.type('rss');
-	  res.send(feed.xml());
-
-  });
-*/
 	
 	function getResponse(error, result) {
 		var resStr;
