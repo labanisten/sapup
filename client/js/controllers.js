@@ -246,7 +246,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			var alert = new db.Alert($scope.addAlertLine);
 			alert.expdate = Utils.viewDateToDBDate(alert.expdate);
 			var timestamp = new Date().getTime();
-			timestamp = timestamp.toString();
+			//timestamp = timestamp.toString();
 			alert.timestamp = timestamp;
 			alert.create().then(function(newAlert) {
 				$scope.alertlines.push(newAlert);
