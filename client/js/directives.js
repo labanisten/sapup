@@ -43,12 +43,12 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 				function buildList() {
 					template = '<ul class="nav mobnav nav-list">';
 					var i;
-
+					var j;
 					for(i = 0; i < scope.systemlines.length; i++){
 						template += '<li><a ng:click="displayCompressedListElement('+i+')" ng:class="getClassForCompactList()">'+
 										'<i class="icon-chevron-right"></i>{{systemlines['+i+'].system}}';
 
-										for(j = 0; i < scope.systemnames.length; j++){
+										for(j = 0; j < scope.systemnames.length; j++){
 											if(scope.systemnames[j].name == scope.systemlines[i].system) {
 												template += ' - {{systemnames['+j+'].text}}';
 											}
