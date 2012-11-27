@@ -46,8 +46,15 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 
 					for(i = 0; i < scope.systemlines.length; i++){
 						template += '<li><a ng:click="displayCompressedListElement('+i+')" ng:class="getClassForCompactList()">'+
-										'<i class="icon-chevron-right"></i>{{systemlines['+i+'].system}}'+
-									'</a></li>';
+										'<i class="icon-chevron-right"></i>{{systemlines['+i+'].system}}';
+
+										for(j = 0; i < scope.systemnames.length; j++){
+											if(scope.systemnames[j].name == scope.systemlines[i].system) {
+												template += ' - {{systemnames['+j+'].text}}';
+											}
+										}
+
+									template += '</a></li>';
 					}
 
 					template += '</ul>';
