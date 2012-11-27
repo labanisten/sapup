@@ -1,5 +1,141 @@
 var directiveModule = angular.module('directiveModule', ['utilsModule']);
 
+
+directiveModule.directive('systemCompactList', function($compile, Utils){
+	return {
+			restrict: 'A',
+			link: function(scope, element, attrs) {
+				var template;
+
+				var stopRecursive;
+				var dataComplete = false; 
+				
+				function isDataReady(dataTab) {
+					var result = false;
+					if (dataTab.length > 0 && dataComplete) {
+						result = true;
+					} else if (dataTab.length > 0) {
+						dataComplete = true; 
+					}
+					return result;
+				}
+				
+				scope.$watch('systemlines', function(newVal, oldVal) {
+				
+				    if (stopRecursive === newVal) {return;}
+
+					if(isDataReady(scope.systemlines)){
+						buildList();
+					}
+
+					stopRecursive = angular.copy(newVal);
+				});
+				
+				scope.$watch('systemnames', function() {
+
+					if(isDataReady(scope.systemnames)){
+						buildList();
+					}
+				
+				});
+				
+
+				function buildList() {
+					template = '<ul class="nav mobnav nav-list">';
+					var i;
+
+					for(i = 0; i < scope.systemnames.length; i++){
+						template += '<li><a ng:click="displayCompressedListElement('+i+')" ng:class="getClassForCompactList()">'+
+										'<i class="icon-chevron-right"></i>{{systemnames['+i+'].name}} - {{systemnames['+i+'].text}}'+
+									'</a></li>';
+					}
+
+					template += '</ul>';
+
+					element.html(template);				
+					$compile(element.contents())(scope);
+
+				}
+			}
+	};
+});
+
+directiveModule.directive('systemCompactView', function($compile, Utils){
+	return {
+			restrict: 'A',
+			link: function(scope, element, attrs) {
+				var template;
+
+				var stopRecursive;
+				var dataComplete = false; 
+				
+				function isDataReady(dataTab) {
+					var result = false;
+					if (dataTab.length > 0 && dataComplete) {
+						result = true;
+					} else if (dataTab.length > 0) {
+						dataComplete = true; 
+					}
+					return result;
+				}
+				
+				scope.$watch('systemlines', function(newVal, oldVal) {
+				
+				    if (stopRecursive === newVal) {return;}
+
+					if(isDataReady(scope.systemlines)){
+						buildView();
+					}
+
+					stopRecursive = angular.copy(newVal);
+				});
+				
+				scope.$watch('systemnames', function() {
+
+					if(isDataReady(scope.systemnames)){
+						buildView();
+					}
+				
+				});
+				
+
+				function buildView() {
+
+					var systemIndex = scope.selectedCompressedSystem.sysIndex;
+					
+					template = '<ul class="nav mobnav nav-list">';
+
+					template += '<li ng:class="getClassForCompressedListElement(line)" ng:repeat="line in systemlines[selectedCompressedSystem.sysIndex].statuslines">'+
+									'<a>'+
+										'{{line.start}} - {{line.end}}'+
+									'</a>'+
+								'</li>';
+
+					template += '</ul>';
+
+					/*
+					template = '<ul class="nav mobnav nav-list">';
+					var i;
+
+					for(i = 0; i < scope.systemlines[1].statuslines.length; i++){
+						template += '<li>'+
+										'<a ng:class="getClassForCompressedListElement(i)" ng-click="displayCompressedListElement('+i+')">'+
+											'<i class="icon-chevron-left"></i>{{systemlines['+systemIndex+'].statuslines['+i+'].start}} - {{systemlines['+systemIndex+'].statuslines['+i+'].end}}'+
+										'</a>'+
+									'</li>';
+					}
+
+					template += '</ul>';
+*/
+					element.html(template);
+					$compile(element.contents())(scope);
+
+				}
+			}
+	};
+});
+
+
 directiveModule.directive('clearPopoversAndSelections', function() {
 	return {
 		restrict: 'A',
@@ -81,25 +217,22 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 });
 
 
+directiveModule.directive('CompressedListElementView', function($compile, Utils){
+	return {
+			restrict: 'A',
+			link: function(scope, element, attrs) {
+
+			}
+	};
+});
+
 directiveModule.directive('systemTable', function($compile, Utils){
 	return {
 			restrict: 'A',
 			link: function(scope, element, attrs) {
 			
-				var stopRecursive;
-				var dataComplete = false; 
 				
-				function isDataReady(dataTab) {
-					var result = false;
-					if (dataTab.length > 0 && dataComplete) {
-						result = true;
-					} else if (dataTab.length > 0) {
-						dataComplete = true; 
-					}
-					return result;
-				}
-				
-								function firstOfMonthStr(start) {
+				function firstOfMonthStr(start) {
 					var tmpDate = new String();
 					var selectedMonth = scope.selectedMonth + 1;
 					selectedMonth = Utils.padZeroFront(selectedMonth);
@@ -334,6 +467,19 @@ directiveModule.directive('systemTable', function($compile, Utils){
 					element.html(template);				
 					$compile(element.contents())(scope);
 					
+				}
+
+				var stopRecursive;
+				var dataComplete = false; 
+				
+				function isDataReady(dataTab) {
+					var result = false;
+					if (dataTab.length > 0 && dataComplete) {
+						result = true;
+					} else if (dataTab.length > 0) {
+						dataComplete = true; 
+					}
+					return result;
 				}
 				
 				scope.$watch('systemlines', function(newVal, oldVal) {

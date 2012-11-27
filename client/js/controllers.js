@@ -20,6 +20,12 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		elmIndex: -1
 		//hasValue: false
 	};
+
+	$scope.selectedCompressedSystem = {
+		_id: "",
+		system: "",
+		sysIndex: -1
+	};
 	
 	$scope.hoverElement = {
 		_id: "",
@@ -137,6 +143,36 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			$scope.setSelectedElement(sysIndex, elmIndex);
 		}
 	};
+
+	$scope.compactlistReset = function() {
+		$scope.selectedCompressedSystem._id = "";
+		$scope.selectedCompressedSystem.system = ""; 
+		$scope.selectedCompressedSystem.sysIndex = -1;
+	}
+
+	$scope.displayCompressedListElement = function(index) {
+
+		$scope.selectedCompressedSystem._id = "";
+		$scope.selectedCompressedSystem.system = ""; 
+		$scope.selectedCompressedSystem.sysIndex = index;
+	}
+
+	$scope.getClassForCompactList = function() {
+		var classString = '';
+		if($scope.selectedCompressedSystem.sysIndex >= 0){
+			classString = 'hidden';
+		}
+		
+		return classString;
+	}
+
+	$scope.getClassForCompressedListElement = function(element) {
+		if(element == 'dfasdfa'){
+			return 'sdafasdf';
+		}
+
+		return 'asdfg';
+	}
 	
 	$scope.getClassForMonth = function(month) {
 		if (month == $scope.selectedMonth) {

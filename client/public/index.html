@@ -33,25 +33,33 @@
 			<a class="brand" href="#">
 				SAP System availability <sup style="font-size:10px; color:red">BETA</sup>
 			</a>
-			<ul class="nav">
-				<li class="active">
-					<a href="index.html">Home</a>
-				</li>
-				<li>
-					<a href="admin.html">Administration</a>
-				</li>
-			</ul>
-
-			
+			<div class="linknav">
+				<ul class="nav">
+					<li class="active">
+						<a href="index.html">Home</a>
+					</li>
+					<li>
+						<a href="admin.html">Administration</a>
+					</li>
+				</ul>
+			</div>
 
 			<div class="btn-group pull-right">
-				<button class="btn btn-small" data-toggle="modal" href="#addalertdialog"> <i class=" icon-warning-sign "></i>
+				<button class="btn btn-small navbtn-compact" ng:click="compactlistReset()"> <i class="icon-home"></i></button>
+				<button class="btn btn-small navbtn-compact"> <i class="icon-chevron-left"></i></button>
+				<a href="http://systemavailability.azurewebsites.net/messages.rss" class="btn btn-link navbtn-compact">
+				  <img src="../images/feed-icon-28x28.png" class="pull-left"/>
+				</a>
+			</div>
+
+			<div class="btn-group pull-right">
+				<button class="btn btn-small navbtn-edit" data-toggle="modal" href="#addalertdialog"> <i class="icon-warning-sign"></i>
 					Add message
 				</button>
-				<button class="btn btn-small" data-toggle="modal" href="#addelementdialog"> <i class="icon-calendar "></i>
+				<button class="btn btn-small navbtn-edit" data-toggle="modal" href="#addelementdialog"> <i class="icon-calendar"></i>
 					Add status
 				</button>
-				<a href="http://systemavailability.azurewebsites.net/messages.rss" class="btn btn-link">
+				<a href="http://systemavailability.azurewebsites.net/messages.rss" class="btn btn-link navbtn-edit">
 				  <img src="../images/feed-icon-28x28.png" class="pull-left"/>
 				</a>
 			</div>
@@ -82,6 +90,26 @@
 			<div id="sysdiv span12">
 				<div system-table></div>
 			</div>
+		</div>
+
+	</div>
+
+	<!--div class="compactnavbar">asdfgag</div-->
+	<!--div class="compactnavbar navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<a class="brand" href="#">
+				SAP System availability <sup style="font-size:10px; color:red">BETA</sup>
+			</a>
+		</div>
+	</div-->
+
+	<div class="container-fluid">
+		<div class="systemcompactlist">
+			<div class="systemcompactlist" system-compact-list></div>
+		</div>
+
+		<div class="systemcompactview">
+			<div system-compact-view></div>
 		</div>
 	</div>
 
