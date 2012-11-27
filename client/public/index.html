@@ -30,10 +30,17 @@
 <body ng-controller="TimelineCtrl">
 	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
-			<a class="brand" href="#">
-				SAP System availability <sup style="font-size:10px; color:red">BETA</sup>
-			</a>
-			<div class="linknav">
+
+				<a class="brand" href="#">
+					<div class="headingtext-normal">SAP System availability
+						<sup style="font-size:10px; color:red">BETA</sup>
+					</div>
+					<div class="headingtext-compact">Statoil SAA
+						<sup style="font-size:10px; color:red">BETA</sup>
+					</div>
+				</a>
+
+			<div class="linknav-normal">
 				<ul class="nav">
 					<li class="active">
 						<a href="index.html">Home</a>
@@ -54,10 +61,10 @@
 
 			<div class="btn-group pull-right">
 				<button class="btn btn-small navbtn-edit" data-toggle="modal" href="#addalertdialog"> <i class="icon-warning-sign"></i>
-					Add message
+					<span class="new-message-btn-txt">Add message</span>
 				</button>
 				<button class="btn btn-small navbtn-edit" data-toggle="modal" href="#addelementdialog"> <i class="icon-calendar"></i>
-					Add status
+					<span class="new-status-btn-txt">Add status</span>
 				</button>
 				<a href="http://systemavailability.azurewebsites.net/messages.rss" class="btn btn-link navbtn-edit">
 				  <img src="../images/feed-icon-28x28.png" class="pull-left"/>
