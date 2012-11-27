@@ -44,9 +44,9 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 					template = '<ul class="nav mobnav nav-list">';
 					var i;
 
-					for(i = 0; i < scope.systemnames.length; i++){
+					for(i = 0; i < scope.systemlines.length; i++){
 						template += '<li><a ng:click="displayCompressedListElement('+i+')" ng:class="getClassForCompactList()">'+
-										'<i class="icon-chevron-right"></i>{{systemnames['+i+'].name}} - {{systemnames['+i+'].text}}'+
+										'<i class="icon-chevron-right"></i>{{systemlines['+i+'].system}}'+
 									'</a></li>';
 					}
 
