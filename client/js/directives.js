@@ -114,7 +114,7 @@ directiveModule.directive('systemCompactView', function($compile, Utils){
 
 					template += '<li ng:class="getClassForCompressedListElement(line)" ng:repeat="line in systemlines[selectedCompressedSystem.sysIndex].statuslines">'+
 									'<a>'+
-										'{{line.start}} - {{line.end}}'+
+										'{{line.start}} - {{line.end}} - Status: {{line.status}}' +
 									'</a>'+
 								'</li>';
 
