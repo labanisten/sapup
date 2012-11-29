@@ -75,6 +75,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.monthDayList = Calendar.getMonthDayList();
 	$scope.monthWeekList = Calendar.getMonthWeekList();
 	$scope.monthName = Calendar.getMonthName();
+	$scope.monthListCompact = Utils.buildCompactMonthList(Calendar.getCurrentMonth());
 	$scope.selectedYear = Calendar.getCurrentYear();
 	$scope.selectedMonth = Calendar.getCurrentMonth();
 	$scope.noOfDaysInMonth =  Calendar.getNoOfDaysInMonth();
@@ -150,6 +151,22 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		$scope.selectedCompressedSystem.sysIndex = -1;
 	}
 
+	$scope.getClassForCompactMonth = function(month) {
+		var classString = '';
+
+		if (month == $scope.selectedMonth) {
+			classString += "btn btn-success btn-small month selectedmonth";
+		} else {
+			classString += "btn btn-primary btn-small month";
+		}
+		
+		if($scope.selectedCompressedSystem.sysIndex < 0){
+			classString += ' hidden';
+		}
+		
+		return classString;
+	};
+
 	$scope.displayCompressedListElement = function(index) {
 
 		$scope.selectedCompressedSystem._id = "";
@@ -187,11 +204,14 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		if($scope.hoverElement.hasValue) {
 			$scope.hoverElement.element.popover('hide');
 		}
-		
+
 		$scope.clearHoverElement();
 		$scope.unSelectElement();
 						
 		$scope.selectedMonth = month;
+
+		$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonth);
+
 		var elem = angular.element(event.srcElement);
 		elem[0].className += " selectedmonth";
 	};

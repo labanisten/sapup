@@ -1,42 +1,65 @@
 var directiveModule = angular.module('directiveModule', ['utilsModule']);
 
 
+function build(scope) {
+	console.log("build!; " + scope.systemlines.length);
+}
+
+
+directiveModule.directive('systemCompactMonth', function($compile, Utils){
+	return {
+			restrict: 'A',
+			link: function(scope, element, attrs) {
+
+				scope.$watch('selectedMonth', function() {
+					if(scope.selectedMonth > 0) {
+						buildCompactMonthHeader();
+					}
+				});
+				
+
+				function buildCompactMonthHeader() {
+					var template;
+
+					template = '<div class="months" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
+									'<div class="btn-group-wrap">'+
+										'<div class="btn-group">'+
+											'<button ng:class="getClassForCompactMonth(month)" ng-click="gotoMonth($event, month)" ng-repeat="month in monthListCompact">'+
+												'{{months[month]}}' +
+											'</button>'+
+										'</div>'+
+									'</div>'+
+								'</div>';
+
+					element.html(template);				
+					$compile(element.contents())(scope);
+
+				}
+		    }
+	};
+});
+
+
+
+
+
+
 directiveModule.directive('systemCompactList', function($compile, Utils){
 	return {
 			restrict: 'A',
 			link: function(scope, element, attrs) {
 				var template;
 
-				var stopRecursive;
-				var dataComplete = false; 
-				
-				function isDataReady(dataTab) {
-					var result = false;
-					if (dataTab.length > 0 && dataComplete) {
-						result = true;
-					} else if (dataTab.length > 0) {
-						dataComplete = true; 
-					}
-					return result;
-				}
-				
 				scope.$watch('systemlines', function(newVal, oldVal) {
-				
-				    if (stopRecursive === newVal) {return;}
-
-					if(isDataReady(scope.systemlines)){
+					if(Utils.isDataReady(scope.systemlines)){
 						buildList();
 					}
-
-					stopRecursive = angular.copy(newVal);
 				});
 				
 				scope.$watch('systemnames', function() {
-
-					if(isDataReady(scope.systemnames)){
+					if(Utils.isDataReady(scope.systemnames)){
 						buildList();
 					}
-				
 				});
 				
 
@@ -72,7 +95,7 @@ directiveModule.directive('systemCompactView', function($compile, Utils){
 			restrict: 'A',
 			link: function(scope, element, attrs) {
 				var template;
-
+/*
 				var stopRecursive;
 				var dataComplete = false; 
 				
@@ -107,7 +130,7 @@ directiveModule.directive('systemCompactView', function($compile, Utils){
 				
 
 				function buildView() {
-
+*/
 					var systemIndex = scope.selectedCompressedSystem.sysIndex;
 					
 					template = '<ul class="nav mobnav nav-list">';
@@ -137,7 +160,7 @@ directiveModule.directive('systemCompactView', function($compile, Utils){
 					element.html(template);
 					$compile(element.contents())(scope);
 
-				}
+				//}
 			}
 	};
 });
