@@ -334,7 +334,6 @@
 	          box-shadow: 0 1px 4px rgba(0,0,0,.065);
 	}
 
-
 	.mobnav > li > a {
 	  display: block;
 	  width: 230px \9;
@@ -342,16 +341,19 @@
 	  padding: 8px 14px;
 	  border: 1px solid #e5e5e5;
 	}
+
 	.mobnav > li:first-child > a {
 	  -webkit-border-radius: 6px 6px 0 0;
 	     -moz-border-radius: 6px 6px 0 0;
 	          border-radius: 6px 6px 0 0;
 	}
+
 	.mobnav > li:last-child > a {
 	  -webkit-border-radius: 0 0 6px 6px;
 	     -moz-border-radius: 0 0 6px 6px;
 	          border-radius: 0 0 6px 6px;
 	}
+
 	.mobnav > .active > a {
 	  position: relative;
 	  z-index: 2;
@@ -440,6 +442,46 @@
 	    width: inherit;
 	    display: inline-block;
 	}
+
+
+	.statusview {
+	  width: 100%;
+	  /*margin: 60px 0 0;*/
+	  padding: 0;
+	  background-color: #fff;
+	  -webkit-border-radius: 6px;
+	     -moz-border-radius: 6px;
+	          border-radius: 6px;
+	  -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+	     -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+	          box-shadow: 0 1px 4px rgba(0,0,0,.065);
+	}
+
+	.statusview > li > .status{
+	  display: block;
+	  width: 230px \9;
+	  margin: 0 0 -1px;
+	  padding: 8px 14px;
+	  border: 1px solid #e5e5e5;
+
+	  -webkit-border-radius: 6px 6px 6px 6px;
+	  -moz-border-radius: 6px 6px 6px 6px;
+	  border-radius: 6px 6px 6px 6px;
+	}
+
+	.statusview > li > .filler{
+	  display: block;
+	  width: 230px \9;
+	}
+
+	.statusview > li > a:hover {
+	  background-color: #f5f5f5;
+	}
+
+	.statusheader-compact {
+		text-align: center;
+	}
+
 
 
 }

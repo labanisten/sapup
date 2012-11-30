@@ -75,9 +75,9 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.monthDayList = Calendar.getMonthDayList();
 	$scope.monthWeekList = Calendar.getMonthWeekList();
 	$scope.monthName = Calendar.getMonthName();
-	$scope.monthListCompact = Utils.buildCompactMonthList(Calendar.getCurrentMonth());
 	$scope.selectedYear = Calendar.getCurrentYear();
 	$scope.selectedMonth = Calendar.getCurrentMonth();
+
 	$scope.noOfDaysInMonth =  Calendar.getNoOfDaysInMonth();
 	$scope.dayNamesInMonth = Calendar.getDayNamesInMonth;
 	$scope.shortDayNamesInMonth = Calendar.getShortDayNamesInMonth;
@@ -86,6 +86,11 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.selectedMonthLabel = Calendar.getMonthName($scope.selectedMonth);
 	$scope.elementUpdateClass = "hide";
 	$scope.elementUpdateMessage = "";
+
+	$scope.monthListCompact = Utils.buildCompactMonthList(Calendar.getCurrentMonth());
+	$scope.selectedYearCompact = Calendar.getCurrentYear();
+	$scope.selectedMonthCompact = Calendar.getCurrentMonth();
+	$scope.systemCompactViewList = [];
 
 	$scope.messageAreaClass = function() {
 		if ($scope.alertlines.length > 0) {
@@ -155,11 +160,11 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		var classString = '';
 
 		if (month == $scope.selectedMonth) {
-			classString += "btn btn-success btn-small month selectedmonth";
+			classString += "btn btn-success month selectedmonth";
 		} else {
-			classString += "btn btn-primary btn-small month";
+			classString += "btn btn-primary month";
 		}
-		
+
 		if($scope.selectedCompressedSystem.sysIndex < 0){
 			classString += ' hidden';
 		}
@@ -167,11 +172,61 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		return classString;
 	};
 
-	$scope.displayCompressedListElement = function(index) {
-
+	$scope.fillSystemCompactViewList = function(index) {
+		$scope.systemCompactViewList = [];
+		
 		$scope.selectedCompressedSystem._id = "";
 		$scope.selectedCompressedSystem.system = ""; 
 		$scope.selectedCompressedSystem.sysIndex = index;
+
+		//var fadfa = $scope.dayNamesInMonth[5];
+
+		var i;
+		for(i = 0; i < $scope.systemlines[index].statuslines.length; i++){
+			var line = $scope.systemlines[index].statuslines[i];
+			var start = Utils.convertToDate(line.start);
+			var end = Utils.convertToDate(line.end);
+
+			if(start.getMonth() == $scope.selectedMonth && start.getFullYear() == $scope.selectedYear) {
+				//console.log('match');
+				var elm = {
+					status: line.status,
+					start: start.getDate() + ' ' + $scope.monthLabels[start.getMonth()],
+					end: end.getDate() + ' ' + $scope.monthLabels[end.getMonth()],
+					comment: line.comment
+				}
+
+				$scope.systemCompactViewList.push(elm);
+			}
+		}
+/*
+		var i;
+		for(i = 0; i < $scope.noOfDaysInMonth[$scope.selectedMonth]; i++){
+
+			for(var j = 0; j < $scope.systemlines[index].statuslines.length; j++){
+
+			}
+
+			var elm = {
+				type: 'filler',
+				index: i
+			}
+
+			$scope.systemCompactViewList.push(elm);
+		}
+		*/
+	}
+
+	$scope.getClassForSystemCompactView = function(element) {
+		var classString = '';
+
+		if(element.type == 'status'){
+			classString += 'status';
+		}else{
+			classString += 'filler';
+		}
+
+		return 'status';
 	}
 
 	$scope.getClassForCompactList = function() {
@@ -181,14 +236,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		}
 		
 		return classString;
-	}
-
-	$scope.getClassForCompressedListElement = function(element) {
-		if(element == 'dfasdfa'){
-			return 'sdafasdf';
-		}
-
-		return 'asdfg';
 	}
 	
 	$scope.getClassForMonth = function(month) {
@@ -211,6 +258,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		$scope.selectedMonth = month;
 
 		$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonth);
+		$scope.fillSystemCompactViewList($scope.selectedCompressedSystem.sysIndex);
 
 		var elem = angular.element(event.srcElement);
 		elem[0].className += " selectedmonth";

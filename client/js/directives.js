@@ -68,7 +68,7 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 					var i;
 					var j;
 					for(i = 0; i < scope.systemlines.length; i++){
-						template += '<li><a ng:click="displayCompressedListElement('+i+')" ng:class="getClassForCompactList()">'+
+						template += '<li><a ng:click="fillSystemCompactViewList('+i+')" ng:class="getClassForCompactList()">'+
 										'<i class="icon-chevron-right"></i>{{systemlines['+i+'].system}}';
 
 										for(j = 0; j < scope.systemnames.length; j++){
@@ -90,60 +90,70 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 	};
 });
 
+
 directiveModule.directive('systemCompactView', function($compile, Utils){
 	return {
 			restrict: 'A',
 			link: function(scope, element, attrs) {
 				var template;
-/*
-				var stopRecursive;
-				var dataComplete = false; 
-				
-				function isDataReady(dataTab) {
-					var result = false;
-					if (dataTab.length > 0 && dataComplete) {
-						result = true;
-					} else if (dataTab.length > 0) {
-						dataComplete = true; 
-					}
-					return result;
-				}
-				
-				scope.$watch('systemlines', function(newVal, oldVal) {
-				
-				    if (stopRecursive === newVal) {return;}
 
-					if(isDataReady(scope.systemlines)){
-						buildView();
-					}
 
-					stopRecursive = angular.copy(newVal);
-				});
-				
-				scope.$watch('systemnames', function() {
-
-					if(isDataReady(scope.systemnames)){
-						buildView();
-					}
-				
-				});
-				
-
-				function buildView() {
-*/
+					//systemlines[selectedCompressedSystem.sysIndex].statuslines"
 					var systemIndex = scope.selectedCompressedSystem.sysIndex;
 					
-					template = '<ul class="nav mobnav nav-list">';
+					template = '<ul class="nav statusview nav-list">';
 
-					template += '<li ng:class="getClassForCompressedListElement(line)" ng:repeat="line in systemlines[selectedCompressedSystem.sysIndex].statuslines">'+
-									'<a>'+
-										'{{line.start}} - {{line.end}} - Status: {{line.status}}' +
+					
+					template += '<li ng:repeat="line in systemCompactViewList">'+
+									'<a ng:class="getClassForSystemCompactView(line)" >'+
+										'<h5 class="statusheader-compact">{{line.start}} - {{line.end}}</h5>' +
+										'<p>Status: {{line.status}}</p>' +
+										'<p>Comment: {{line.comment}}</p>' +
 									'</a>'+
 								'</li>';
 
 					template += '</ul>';
+					
+
 
 					/*
+					template += '<li ng:repeat="line in systemCompactViewList">'+
+						'<a ng:class="getClassForSystemCompactView(line)" >'+
+							'{{line.index}}' +
+						'</a>'+
+					'</li>';
+					*/
+
+					element.html(template);
+					$compile(element.contents())(scope);
+			}
+	};
+});
+
+
+
+/*
+directiveModule.directive('systemCompactView', function($compile, Utils){
+	return {
+			restrict: 'A',
+			link: function(scope, element, attrs) {
+				var template;
+
+				scope.$watch('systemlines', function(newVal, oldVal) {
+					if(Utils.isDataReady(scope.systemlines)){
+						buildView();
+					}
+				});
+				
+				scope.$watch('systemnames', function() {
+					if(Utils.isDataReady(scope.systemnames)){
+						buildView();
+					}
+				});
+				
+
+				function buildView() {
+					
 					template = '<ul class="nav mobnav nav-list">';
 					var i;
 
@@ -156,15 +166,16 @@ directiveModule.directive('systemCompactView', function($compile, Utils){
 					}
 
 					template += '</ul>';
-*/
+
+
 					element.html(template);
 					$compile(element.contents())(scope);
 
-				//}
+				}
 			}
 	};
 });
-
+*/
 
 directiveModule.directive('clearPopoversAndSelections', function() {
 	return {
