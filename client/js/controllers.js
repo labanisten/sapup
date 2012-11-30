@@ -154,6 +154,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		$scope.selectedCompressedSystem._id = "";
 		$scope.selectedCompressedSystem.system = ""; 
 		$scope.selectedCompressedSystem.sysIndex = -1;
+		$scope.systemCompactViewList = [];
 	}
 
 	$scope.getClassForCompactMonth = function(month) {
@@ -174,7 +175,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 	$scope.fillSystemCompactViewList = function(index) {
 		$scope.systemCompactViewList = [];
-		
+
 		$scope.selectedCompressedSystem._id = "";
 		$scope.selectedCompressedSystem.system = ""; 
 		$scope.selectedCompressedSystem.sysIndex = index;
@@ -218,15 +219,21 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	}
 
 	$scope.getClassForSystemCompactView = function(element) {
-		var classString = '';
+		var classString = 'status';
 
+		/*
 		if(element.type == 'status'){
 			classString += 'status';
 		}else{
 			classString += 'filler';
 		}
+		*/
 
-		return 'status';
+		if($scope.selectedCompressedSystem.sysIndex < 0){
+			classString += ' hidden';
+		}
+
+		return classString;
 	}
 
 	$scope.getClassForCompactList = function() {
