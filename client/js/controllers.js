@@ -196,6 +196,15 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		return classString;
 	};
 
+	$scope.getClassForCompactMessageButton = function(month) {
+		var classString = 'btn btn-primary messagebtn-compact';
+
+		if($scope.selectedCompressedSystem.sysIndex > -1){
+			classString += ' hidden';
+		}
+		
+		return classString;
+	};
 	
 	$scope.getClassForCompactSystemViewLabel = function(month) {
 		var classString = 'systemview-heading-compact';

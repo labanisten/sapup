@@ -53,7 +53,8 @@
 
 			<div class="navbar-buttons-compact pull-right">
 				<button ng:class="getClassForCompactHomeButton()" ng:click="compactListReset()"> <i class="icon-home icon-white"></i></button>
-				<button ng:class="getClassForCompactSearchButton()" ng:click=""> <i class="icon-search icon-white"></i></button>
+				<!--button ng:class="getClassForCompactSearchButton()" ng:click=""> <i class="icon-search icon-white"></i></button-->
+				<button ng:class="getClassForCompactMessageButton()" ng:click="">({{alertlines.length}}) <i class="icon-envelope icon-white"></i></button>
 				<button ng:class="getClassForCompactYearButton()" ng-click="">{{selectedYearCompact}}</button>
 
 				<!--button class="btn btn-small navbtn-compact"> <i class="icon-arrow-left"></i></button-->
@@ -114,7 +115,7 @@
 	</div-->
 
 	<div class="systemtable-compact container-fluid">
-		<div class="message-view-compact" message-view-compact></div>
+		<!--div class="message-view-compact" message-view-compact></div-->
 		<h5 ng:class="getClassForCompactSystemViewLabel()">{{selectedCompressedSystem.system}}</h5>
 		<div class="system-monthlist-compact" system-compact-month></div>
 		<div class="systemlist-compact" system-compact-list></div>

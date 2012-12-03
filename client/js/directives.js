@@ -6,35 +6,42 @@ function build(scope) {
 }
 
 /*
-directiveModule.directive('systemCompactYear', function($compile, Utils){
+directiveModule.directive('messageViewCompact', function($compile, Utils){
 	return {
 			restrict: 'A',
 			link: function(scope, element, attrs) {
 
+				scope.$watch('alertlines', function() {
+					if(scope.selectedMonth > 0) {
+						buildCompactMessageContainer();
+					}
+				});
 
-				//function buildCompactYearSelect() {
+				function buildCompactMessageContainer() {
 					var template;
-					template = '<div class="year-compact">'+
-									'<button ng:class="getClassForCompactYear()" ng-click="">'+
-								    	'{{selectedYearCompact}}' +
-									'</button>'+
+					template = '<div class="message-container-compact">'+
+									'<span class="messageinfo">'+
+										'8 Messages'+
+										'<i class="icon-chevron-right"></i>'+
+									'</span>'+
 								'</div>';
 
 					element.html(template);				
 					$compile(element.contents())(scope);
 
-				//}
+				}
 		    }
 	};
 });
 */
+
 
 directiveModule.directive('systemCompactMonth', function($compile, Utils){
 	return {
 			restrict: 'A',
 			link: function(scope, element, attrs) {
 
-				scope.$watch('selectedMonth', function() {
+				scope.$watch('selectedMonthCompact', function() {
 					if(scope.selectedMonth > 0) {
 						buildCompactMonthHeader();
 					}
