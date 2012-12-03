@@ -5,6 +5,29 @@ function build(scope) {
 	console.log("build!; " + scope.systemlines.length);
 }
 
+/*
+directiveModule.directive('systemCompactYear', function($compile, Utils){
+	return {
+			restrict: 'A',
+			link: function(scope, element, attrs) {
+
+
+				//function buildCompactYearSelect() {
+					var template;
+					template = '<div class="year-compact">'+
+									'<button ng:class="getClassForCompactYear()" ng-click="">'+
+								    	'{{selectedYearCompact}}' +
+									'</button>'+
+								'</div>';
+
+					element.html(template);				
+					$compile(element.contents())(scope);
+
+				//}
+		    }
+	};
+});
+*/
 
 directiveModule.directive('systemCompactMonth', function($compile, Utils){
 	return {
@@ -24,7 +47,7 @@ directiveModule.directive('systemCompactMonth', function($compile, Utils){
 					template = '<div class="months" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
 									'<div class="btn-group-wrap">'+
 										'<div class="btn-group">'+
-											'<button ng:class="getClassForCompactMonth(month)" ng-click="gotoMonth($event, month)" ng-repeat="month in monthListCompact">'+
+											'<button ng:class="getClassForCompactMonth(month)" ng-click="gotoMonthCompact($event, month)" ng-repeat="month in monthListCompact">'+
 												'{{months[month]}}' +
 											'</button>'+
 										'</div>'+
@@ -38,10 +61,6 @@ directiveModule.directive('systemCompactMonth', function($compile, Utils){
 		    }
 	};
 });
-
-
-
-
 
 
 directiveModule.directive('systemCompactList', function($compile, Utils){
@@ -129,52 +148,6 @@ directiveModule.directive('systemCompactView', function($compile, Utils){
 	};
 });
 
-
-
-/*
-directiveModule.directive('systemCompactView', function($compile, Utils){
-	return {
-			restrict: 'A',
-			link: function(scope, element, attrs) {
-				var template;
-
-				scope.$watch('systemlines', function(newVal, oldVal) {
-					if(Utils.isDataReady(scope.systemlines)){
-						buildView();
-					}
-				});
-				
-				scope.$watch('systemnames', function() {
-					if(Utils.isDataReady(scope.systemnames)){
-						buildView();
-					}
-				});
-				
-
-				function buildView() {
-					
-					template = '<ul class="nav mobnav nav-list">';
-					var i;
-
-					for(i = 0; i < scope.systemlines[1].statuslines.length; i++){
-						template += '<li>'+
-										'<a ng:class="getClassForCompressedListElement(i)" ng-click="displayCompressedListElement('+i+')">'+
-											'<i class="icon-chevron-left"></i>{{systemlines['+systemIndex+'].statuslines['+i+'].start}} - {{systemlines['+systemIndex+'].statuslines['+i+'].end}}'+
-										'</a>'+
-									'</li>';
-					}
-
-					template += '</ul>';
-
-
-					element.html(template);
-					$compile(element.contents())(scope);
-
-				}
-			}
-	};
-});
-*/
 
 directiveModule.directive('clearPopoversAndSelections', function() {
 	return {

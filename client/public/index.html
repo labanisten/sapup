@@ -32,10 +32,10 @@
 		<div class="navbar-inner">
 
 				<a class="brand" href="#">
-					<div class="headingtext-normal">SAP System availability
+					<div class="navbar-headingtext-normal">SAP System availability
 						<sup style="font-size:10px; color:red">BETA</sup>
 					</div>
-					<div class="headingtext-compact">Statoil SAA
+					<div class="navbar-headingtext-compact">Statoil SAA
 						<sup style="font-size:10px; color:red">BETA</sup>
 					</div>
 				</a>
@@ -51,8 +51,11 @@
 				</ul>
 			</div>
 
-			<div class="btn-group pull-right">
-				<button class="btn btn-primary btn-small navbtn-compact" ng:click="compactlistReset()"> <i class="icon-home icon-white"></i></button>
+			<div class="navbar-buttons-compact pull-right">
+				<button ng:class="getClassForCompactHomeButton()" ng:click="compactListReset()"> <i class="icon-home icon-white"></i></button>
+				<button ng:class="getClassForCompactSearchButton()" ng:click=""> <i class="icon-search icon-white"></i></button>
+				<button ng:class="getClassForCompactYearButton()" ng-click="">{{selectedYearCompact}}</button>
+
 				<!--button class="btn btn-small navbtn-compact"> <i class="icon-arrow-left"></i></button-->
 				<!--a href="http://systemavailability.azurewebsites.net/messages.rss" class="btn btn-link navbtn-compact pull-right">
 				  <img src="../images/feed-icon-28x28.png" class="pull-left"/>
@@ -110,7 +113,9 @@
 		</div>
 	</div-->
 
-	<div class="container-fluid">
+	<div class="systemtable-compact container-fluid">
+		<div class="message-view-compact" message-view-compact></div>
+		<p ng:class="getClassForCompactSystemViewLabel()">{{selectedCompressedSystem.system}}</p>
 		<div class="system-monthlist-compact" system-compact-month></div>
 		<div class="systemlist-compact" system-compact-list></div>
 		<div class="systemview-compact" system-compact-view></div>

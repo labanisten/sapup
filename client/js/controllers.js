@@ -150,17 +150,10 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		}
 	};
 
-	$scope.compactlistReset = function() {
-		$scope.selectedCompressedSystem._id = "";
-		$scope.selectedCompressedSystem.system = ""; 
-		$scope.selectedCompressedSystem.sysIndex = -1;
-		$scope.systemCompactViewList = [];
-	}
-
 	$scope.getClassForCompactMonth = function(month) {
 		var classString = '';
 
-		if (month == $scope.selectedMonth) {
+		if (month == $scope.selectedMonthCompact) {
 			classString += "btn btn-success month selectedmonth";
 		} else {
 			classString += "btn btn-primary month";
@@ -173,11 +166,60 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		return classString;
 	};
 
+	$scope.getClassForCompactYearButton = function(month) {
+		var classString = 'btn btn-primary yearbtn-compact';
+
+		if($scope.selectedCompressedSystem.sysIndex < 0){
+			classString += ' hidden';
+		}
+
+		return classString;
+	};
+
+	$scope.getClassForCompactHomeButton = function(month) {
+		var classString = 'btn btn-primary homebtn-compact';
+
+		if($scope.selectedCompressedSystem.sysIndex < 0){
+			classString += ' hidden';
+		}
+		
+		return classString;
+	};
+
+	$scope.getClassForCompactSearchButton = function(month) {
+		var classString = 'btn btn-primary searchbtn-compact';
+
+		if($scope.selectedCompressedSystem.sysIndex > -1){
+			classString += ' hidden';
+		}
+		
+		return classString;
+	};
+
+	
+	$scope.getClassForCompactSystemViewLabel = function(month) {
+		var classString = 'systemview-heading-compact';
+
+		if($scope.selectedCompressedSystem.sysIndex > -1){
+			classString += ' hidden';
+		}
+		
+		return classString;
+	};
+
 	$scope.fillSystemCompactViewList = function(index) {
 		$scope.systemCompactViewList = [];
 
+		var systemtext;
+		var j;
+		for(j = 0; j < $scope.systemnames.length; j++){
+			if($scope.systemnames[j].name == $scope.systemlines[index].system) {
+				systemtext = $scope.systemlines[index].system + ' - ' + $scope.systemnames[j].text;
+			}
+		}
+
 		$scope.selectedCompressedSystem._id = "";
-		$scope.selectedCompressedSystem.system = ""; 
+		$scope.selectedCompressedSystem.system = systemtext; 
 		$scope.selectedCompressedSystem.sysIndex = index;
 
 		var i;
@@ -186,7 +228,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			var start = Utils.convertToDate(line.start);
 			var end = Utils.convertToDate(line.end);
 
-			if(start.getMonth() == $scope.selectedMonth && start.getFullYear() == $scope.selectedYear) {
+			if(start.getMonth() == $scope.selectedMonthCompact && start.getFullYear() == $scope.selectedYearCompact) {
 
 				var elm = {
 					status: line.status,
@@ -228,6 +270,18 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		return classString;
 	}
 
+	$scope.compactListReset = function() {
+		$scope.selectedCompressedSystem._id = "";
+		$scope.selectedCompressedSystem.system = ""; 
+		$scope.selectedCompressedSystem.sysIndex = -1;
+
+		$scope.selectedYearCompact = Calendar.getCurrentYear();
+		$scope.selectedMonthCompact = Calendar.getCurrentMonth();
+		$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonthCompact);
+
+		$scope.systemCompactViewList = [];
+	}
+
 	$scope.getClassForCompactList = function() {
 		var classString = '';
 		if($scope.selectedCompressedSystem.sysIndex >= 0){
@@ -236,6 +290,12 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		
 		return classString;
 	}
+
+	$scope.gotoMonthCompact = function(event, month) {
+		$scope.selectedMonthCompact = month;
+		$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonthCompact);
+		$scope.fillSystemCompactViewList($scope.selectedCompressedSystem.sysIndex);
+	}	
 	
 	$scope.getClassForMonth = function(month) {
 		if (month == $scope.selectedMonth) {
@@ -244,6 +304,8 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			return "span1 month";
 		}
 	};
+
+
 	
 	$scope.gotoMonth = function(event, month) {
 		
@@ -256,8 +318,8 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 						
 		$scope.selectedMonth = month;
 
-		$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonth);
-		$scope.fillSystemCompactViewList($scope.selectedCompressedSystem.sysIndex);
+		//$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonth);
+		//$scope.fillSystemCompactViewList($scope.selectedCompressedSystem.sysIndex);
 
 		var elem = angular.element(event.srcElement);
 		elem[0].className += " selectedmonth";
@@ -602,7 +664,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	};
 	
 	$scope.clearModalLog = function(event) {
-		// Utils.clearModalLog();
 		$scope.elementUpdateMessage = ""; 
 		$scope.elementUpdateClass = "hide";
 	};
@@ -611,7 +672,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		var classText = '';
 		var currentDate = new Date();
 		
-		if(day == currentDate.getDate()){
+		if(day == currentDate.getDate() && $scope.selectedMonth == currentDate.getMonth() && $scope.selectedYear == currentDate.getFullYear()){
 			classText = 'currentday'
 		}
 
