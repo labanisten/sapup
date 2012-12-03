@@ -457,6 +457,7 @@
 	          box-shadow: 0 1px 4px rgba(0,0,0,.065);
 	}
 
+
 	.statusview > li > .status{
 	  display: block;
 	  width: 230px \9;
@@ -467,21 +468,46 @@
 	  -webkit-border-radius: 6px 6px 6px 6px;
 	  -moz-border-radius: 6px 6px 6px 6px;
 	  border-radius: 6px 6px 6px 6px;
+
+	  .statuserror-compact{
+	  	display:none;
+	  }
+
+	  .statusheader-compact {
+		text-align: center;
+	  }
 	}
 
-	.statusview > li > .filler{
+	.statusview > li > .error{
 	  display: block;
 	  width: 230px \9;
+	  margin: 0 0 -1px;
+	  padding: 8px 14px;
+	  border: 1px solid #e5e5e5;
+
+	  -webkit-border-radius: 6px 6px 6px 6px;
+	  -moz-border-radius: 6px 6px 6px 6px;
+	  border-radius: 6px 6px 6px 6px;
+
+	  text-align: center;
+
+	  .statusheader-compact{
+	  	display:none;
+	  }
+
+	  .statustext-compact{
+	  	display:none;
+	  }
+
+	  .statuscomment-compact{
+	  	display:none;
+	  }
+
 	}
 
 	.statusview > li > a:hover {
 	  background-color: #f5f5f5;
 	}
-
-	.statusheader-compact {
-		text-align: center;
-	}
-
 
 
 }

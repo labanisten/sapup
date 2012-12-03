@@ -180,8 +180,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		$scope.selectedCompressedSystem.system = ""; 
 		$scope.selectedCompressedSystem.sysIndex = index;
 
-		//var fadfa = $scope.dayNamesInMonth[5];
-
 		var i;
 		for(i = 0; i < $scope.systemlines[index].statuslines.length; i++){
 			var line = $scope.systemlines[index].statuslines[i];
@@ -189,7 +187,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			var end = Utils.convertToDate(line.end);
 
 			if(start.getMonth() == $scope.selectedMonth && start.getFullYear() == $scope.selectedYear) {
-				//console.log('match');
+
 				var elm = {
 					status: line.status,
 					start: start.getDate() + ' ' + $scope.monthLabels[start.getMonth()],
@@ -200,34 +198,28 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				$scope.systemCompactViewList.push(elm);
 			}
 		}
-/*
-		var i;
-		for(i = 0; i < $scope.noOfDaysInMonth[$scope.selectedMonth]; i++){
 
-			for(var j = 0; j < $scope.systemlines[index].statuslines.length; j++){
-
-			}
-
+		if($scope.systemCompactViewList <= 0){
 			var elm = {
-				type: 'filler',
-				index: i
+				status: '',
+				start: '',
+				end: '',
+				comment: '',
+				error: 'No data',
+				type: 'error'
 			}
 
 			$scope.systemCompactViewList.push(elm);
 		}
-		*/
+
 	}
 
 	$scope.getClassForSystemCompactView = function(element) {
 		var classString = 'status';
 
-		/*
-		if(element.type == 'status'){
-			classString += 'status';
-		}else{
-			classString += 'filler';
+		if(element.type == 'error'){
+			classString = ' error';
 		}
-		*/
 
 		if($scope.selectedCompressedSystem.sysIndex < 0){
 			classString += ' hidden';

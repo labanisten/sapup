@@ -107,15 +107,14 @@ directiveModule.directive('systemCompactView', function($compile, Utils){
 					template += '<li ng:repeat="line in systemCompactViewList">'+
 									'<a ng:class="getClassForSystemCompactView(line)" >'+
 										'<h5 class="statusheader-compact">{{line.start}} - {{line.end}}</h5>' +
-										'<p>Status: {{line.status}}</p>' +
-										'<p>Comment: {{line.comment}}</p>' +
+										'<p class="statustext-compact">Status: {{line.status}}</p>' +
+										'<p class="statuscomment-compact">{{line.comment}}</p>' +
+										'<h4 class="statuserror-compact">{{line.error}}</h4>' +
 									'</a>'+
 								'</li>';
 
 					template += '</ul>';
 					
-
-
 					/*
 					template += '<li ng:repeat="line in systemCompactViewList">'+
 						'<a ng:class="getClassForSystemCompactView(line)" >'+
