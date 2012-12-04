@@ -21,7 +21,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		//hasValue: false
 	};
 
-	$scope.selectedCompressedSystem = {
+	$scope.selectedCompactSystem = {
 		_id: "",
 		system: "",
 		sysIndex: -1
@@ -91,6 +91,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.selectedYearCompact = Calendar.getCurrentYear();
 	$scope.selectedMonthCompact = Calendar.getCurrentMonth();
 	$scope.systemCompactViewList = [];
+	$scope.displayCompactMessageView = false;
 
 	$scope.messageAreaClass = function() {
 		if ($scope.alertlines.length > 0) {
@@ -150,6 +151,21 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		}
 	};
 
+	$scope.compactMessageViewClick = function() {
+		$scope.displayCompactMessageView = true;
+	};
+
+	$scope.getClassForCompactMessageContainer = function() {
+		var classString = 'message-container-compact row-fluid';
+
+		if(!$scope.displayCompactMessageView){
+			classString += ' hidden';
+		}
+		
+		return classString;
+	}
+	
+
 	$scope.getClassForCompactMonth = function(month) {
 		var classString = '';
 
@@ -159,7 +175,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			classString += "btn btn-primary month";
 		}
 
-		if($scope.selectedCompressedSystem.sysIndex < 0){
+		if($scope.selectedCompactSystem.sysIndex < 0){
 			classString += ' hidden';
 		}
 		
@@ -169,7 +185,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.getClassForCompactYearButton = function(month) {
 		var classString = 'btn btn-primary yearbtn-compact';
 
-		if($scope.selectedCompressedSystem.sysIndex < 0){
+		if($scope.selectedCompactSystem.sysIndex < 0){
 			classString += ' hidden';
 		}
 
@@ -179,7 +195,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.getClassForCompactHomeButton = function(month) {
 		var classString = 'btn btn-primary homebtn-compact';
 
-		if($scope.selectedCompressedSystem.sysIndex < 0){
+		if($scope.selectedCompactSystem.sysIndex < 0 && $scope.displayCompactMessageView == false){
 			classString += ' hidden';
 		}
 		
@@ -189,7 +205,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.getClassForCompactSearchButton = function(month) {
 		var classString = 'btn btn-primary searchbtn-compact';
 
-		if($scope.selectedCompressedSystem.sysIndex > -1){
+		if($scope.selectedCompactSystem.sysIndex > -1){
 			classString += ' hidden';
 		}
 		
@@ -199,7 +215,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.getClassForCompactMessageButton = function(month) {
 		var classString = 'btn btn-primary messagebtn-compact';
 
-		if($scope.selectedCompressedSystem.sysIndex > -1){
+		if($scope.selectedCompactSystem.sysIndex > -1 || $scope.displayCompactMessageView == true){
 			classString += ' hidden';
 		}
 		
@@ -209,7 +225,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.getClassForCompactSystemViewLabel = function(month) {
 		var classString = 'systemview-heading-compact';
 
-		if($scope.selectedCompressedSystem.sysIndex > -1){
+		if($scope.selectedCompactSystem.sysIndex > -1){
 			classString += ' hidden';
 		}
 		
@@ -227,9 +243,9 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			}
 		}
 
-		$scope.selectedCompressedSystem._id = "";
-		$scope.selectedCompressedSystem.system = systemtext; 
-		$scope.selectedCompressedSystem.sysIndex = index;
+		$scope.selectedCompactSystem._id = "";
+		$scope.selectedCompactSystem.system = systemtext; 
+		$scope.selectedCompactSystem.sysIndex = index;
 
 		var i;
 		for(i = 0; i < $scope.systemlines[index].statuslines.length; i++){
@@ -272,7 +288,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			classString = ' error';
 		}
 
-		if($scope.selectedCompressedSystem.sysIndex < 0){
+		if($scope.selectedCompactSystem.sysIndex < 0){
 			classString += ' hidden';
 		}
 
@@ -280,9 +296,11 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	}
 
 	$scope.compactListReset = function() {
-		$scope.selectedCompressedSystem._id = "";
-		$scope.selectedCompressedSystem.system = ""; 
-		$scope.selectedCompressedSystem.sysIndex = -1;
+		$scope.selectedCompactSystem._id = "";
+		$scope.selectedCompactSystem.system = ""; 
+		$scope.selectedCompactSystem.sysIndex = -1;
+
+		$scope.displayCompactMessageView = false;
 
 		$scope.selectedYearCompact = Calendar.getCurrentYear();
 		$scope.selectedMonthCompact = Calendar.getCurrentMonth();
@@ -293,7 +311,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 	$scope.getClassForCompactList = function() {
 		var classString = '';
-		if($scope.selectedCompressedSystem.sysIndex >= 0){
+		if($scope.selectedCompactSystem.sysIndex >= 0 || $scope.displayCompactMessageView == true){
 			classString = 'hidden';
 		}
 		
@@ -303,7 +321,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.gotoMonthCompact = function(event, month) {
 		$scope.selectedMonthCompact = month;
 		$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonthCompact);
-		$scope.fillSystemCompactViewList($scope.selectedCompressedSystem.sysIndex);
+		$scope.fillSystemCompactViewList($scope.selectedCompactSystem.sysIndex);
 	}	
 	
 	$scope.getClassForMonth = function(month) {
@@ -328,7 +346,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		$scope.selectedMonth = month;
 
 		//$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonth);
-		//$scope.fillSystemCompactViewList($scope.selectedCompressedSystem.sysIndex);
+		//$scope.fillSystemCompactViewList($scope.selectedCompactSystem.sysIndex);
 
 		var elem = angular.element(event.srcElement);
 		elem[0].className += " selectedmonth";

@@ -5,7 +5,7 @@ function build(scope) {
 	console.log("build!; " + scope.systemlines.length);
 }
 
-/*
+
 directiveModule.directive('messageViewCompact', function($compile, Utils){
 	return {
 			restrict: 'A',
@@ -19,12 +19,17 @@ directiveModule.directive('messageViewCompact', function($compile, Utils){
 
 				function buildCompactMessageContainer() {
 					var template;
-					template = '<div class="message-container-compact">'+
-									'<span class="messageinfo">'+
-										'8 Messages'+
-										'<i class="icon-chevron-right"></i>'+
-									'</span>'+
-								'</div>';
+					template = '<div ng:class="getClassForCompactMessageContainer()">'+
+									
+									'<div ng-repeat="alertline in alertlines">'+
+										'<div class="alert alert-{{alertline.alerttype}}">'+
+											'<h5>{{alertline.title}}</h5>'+
+											'<p>{{alertline.comment}}</p>'+
+										'</div>'+
+									'</div>'+
+
+
+							   '</div>';
 
 					element.html(template);				
 					$compile(element.contents())(scope);
@@ -33,7 +38,7 @@ directiveModule.directive('messageViewCompact', function($compile, Utils){
 		    }
 	};
 });
-*/
+
 
 
 directiveModule.directive('systemCompactMonth', function($compile, Utils){
@@ -124,8 +129,8 @@ directiveModule.directive('systemCompactView', function($compile, Utils){
 				var template;
 
 
-					//systemlines[selectedCompressedSystem.sysIndex].statuslines"
-					var systemIndex = scope.selectedCompressedSystem.sysIndex;
+					//systemlines[selectedCompactSystem.sysIndex].statuslines"
+					var systemIndex = scope.selectedCompactSystem.sysIndex;
 					
 					template = '<ul class="nav statusview nav-list">';
 
