@@ -96,6 +96,21 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 
 				function buildList() {
 					template = '<ul class="nav mobnav nav-list">';
+
+
+					var i;
+					var j;
+					for(i = 0; i < scope.systemnames.length; i++){
+						template += '<li><a ng:click="fillSystemCompactViewList('+i+')" ng:class="getClassForCompactList()">'+
+										'<i class="icon-chevron-right"></i>{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}';
+
+						template += '</a></li>';
+					}
+
+
+
+
+/*
 					var i;
 					var j;
 					for(i = 0; i < scope.systemlines.length; i++){
@@ -110,6 +125,10 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 
 									template += '</a></li>';
 					}
+*/
+
+
+
 
 					template += '</ul>';
 
@@ -489,7 +508,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 							template += '</tbody>'+
 									'</table>';
 								  
-					element.html(template);				
+					element.html(template);
 					$compile(element.contents())(scope);
 					
 				}
