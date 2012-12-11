@@ -232,15 +232,11 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		return classString;
 	};
 
-	$scope.fillSystemCompactViewList = function(index) {
+	function fillExistingCompactData(index) {
 		$scope.systemCompactViewList = [];
-
 		var systemtext;
 		var j;
-
-		if($scope.systemlines[index] !== undefined) {
-
-			for(j = 0; j < $scope.systemnames.length; j++){
+		for(j = 0; j < $scope.systemnames.length; j++){
 				if($scope.systemnames[j].name == $scope.systemlines[index].system) {
 					systemtext = $scope.systemlines[index].system + ' - ' + $scope.systemnames[j].text;
 					break;
@@ -271,7 +267,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			}
 
 			if($scope.systemCompactViewList <= 0){
-				var elm = {
+				/*var elm = {
 					status: '',
 					start: '',
 					end: '',
@@ -281,8 +277,33 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				}
 
 				$scope.systemCompactViewList.push(elm);
+				*/
+				fillEmptyCompactListElement();
 			}
+	}
 
+	function fillEmptyCompactListElement() {
+		$scope.systemCompactViewList = [];
+
+		var elm = {
+			status: '',
+			start: '',
+			end: '',
+			comment: '',
+			error: 'No data',
+			type: 'error'
+		}
+
+		$scope.systemCompactViewList.push(elm);
+
+	}
+
+	$scope.fillSystemCompactViewList = function(index) {
+		
+		if($scope.systemlines[index] !== undefined) {
+			fillExistingCompactData(index);
+		}else{
+			fillEmptyCompactListElement();
 		}
 
 	}
