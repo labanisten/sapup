@@ -237,46 +237,52 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 		var systemtext;
 		var j;
-		for(j = 0; j < $scope.systemnames.length; j++){
-			if($scope.systemnames[j].name == $scope.systemlines[index].system) {
-				systemtext = $scope.systemlines[index].system + ' - ' + $scope.systemnames[j].text;
+
+		if($scope.systemlines.length >= index) {
+
+			for(j = 0; j < $scope.systemnames.length; j++){
+				if($scope.systemnames[j].name == $scope.systemlines[index].system) {
+					systemtext = $scope.systemlines[index].system + ' - ' + $scope.systemnames[j].text;
+					break;
+				}
 			}
-		}
 
-		$scope.selectedCompactSystem._id = "";
-		$scope.selectedCompactSystem.system = systemtext; 
-		$scope.selectedCompactSystem.sysIndex = index;
+			$scope.selectedCompactSystem._id = "";
+			$scope.selectedCompactSystem.system = systemtext; 
+			$scope.selectedCompactSystem.sysIndex = index;
 
-		var i;
-		for(i = 0; i < $scope.systemlines[index].statuslines.length; i++){
-			var line = $scope.systemlines[index].statuslines[i];
-			var start = Utils.convertToDate(line.start);
-			var end = Utils.convertToDate(line.end);
+			var i;
+			for(i = 0; i < $scope.systemlines[index].statuslines.length; i++){
+				var line = $scope.systemlines[index].statuslines[i];
+				var start = Utils.convertToDate(line.start);
+				var end = Utils.convertToDate(line.end);
 
-			if(start.getMonth() == $scope.selectedMonthCompact && start.getFullYear() == $scope.selectedYearCompact) {
+				if(start.getMonth() == $scope.selectedMonthCompact && start.getFullYear() == $scope.selectedYearCompact) {
 
+					var elm = {
+						status: line.status,
+						start: start.getDate() + ' ' + $scope.monthLabels[start.getMonth()],
+						end: end.getDate() + ' ' + $scope.monthLabels[end.getMonth()],
+						comment: line.comment
+					}
+
+					$scope.systemCompactViewList.push(elm);
+				}
+			}
+
+			if($scope.systemCompactViewList <= 0){
 				var elm = {
-					status: line.status,
-					start: start.getDate() + ' ' + $scope.monthLabels[start.getMonth()],
-					end: end.getDate() + ' ' + $scope.monthLabels[end.getMonth()],
-					comment: line.comment
+					status: '',
+					start: '',
+					end: '',
+					comment: '',
+					error: 'No data',
+					type: 'error'
 				}
 
 				$scope.systemCompactViewList.push(elm);
 			}
-		}
 
-		if($scope.systemCompactViewList <= 0){
-			var elm = {
-				status: '',
-				start: '',
-				end: '',
-				comment: '',
-				error: 'No data',
-				type: 'error'
-			}
-
-			$scope.systemCompactViewList.push(elm);
 		}
 
 	}
