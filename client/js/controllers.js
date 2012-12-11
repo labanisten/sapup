@@ -238,7 +238,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		var systemtext;
 		var j;
 
-		if($scope.systemlines.length >= index) {
+		if($scope.systemlines[index] !== undefined) {
 
 			for(j = 0; j < $scope.systemnames.length; j++){
 				if($scope.systemnames[j].name == $scope.systemlines[index].system) {
