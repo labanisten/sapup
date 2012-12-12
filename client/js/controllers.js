@@ -271,7 +271,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		}
 	}
 
-	function fillEmptyCompactListElement(index) {
+	function fillEmptyCompactListElement() {
 		$scope.systemCompactViewList = [];
 
 		var elm = {
@@ -284,11 +284,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		}
 
 		$scope.systemCompactViewList.push(elm);
-
-		$scope.selectedCompactSystem._id = "";
-		$scope.selectedCompactSystem.system = ""; 
-		$scope.selectedCompactSystem.sysIndex = index;
-
 	}
 
 	$scope.fillSystemCompactViewList = function(index) {
@@ -298,7 +293,10 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		if(systemMatch.result) {
 			fillExistingCompactData(systemMatch.index);
 		}else{
-			fillEmptyCompactListElement(index);
+			$scope.selectedCompactSystem._id = "";
+			$scope.selectedCompactSystem.system = ""; 
+			$scope.selectedCompactSystem.sysIndex = index;
+			fillEmptyCompactListElement();
 		}
 
 	}
