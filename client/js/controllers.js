@@ -303,7 +303,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		var systemMatch = Utils.findSystem($scope.systemlines, $scope.systemnames[index].name);
 		
 		if(systemMatch.result) {
-			fillExistingCompacøtData(index);
+			fillExistingCompactData(index);
 		}else{
 			fillEmptyCompactListElement();
 		}
