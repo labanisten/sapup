@@ -303,7 +303,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		var systemMatch = Utils.findSystem($scope.systemlines, $scope.systemnames[index].name);
 		
 		if(systemMatch.result) {
-			fillExistingCompactData(index);
+			fillExistingCompactData(systemMatch.index);
 		}else{
 			fillEmptyCompactListElement();
 		}
@@ -571,7 +571,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				systemElement,
 				statusElement,
 				system;
-				
+
 			var i;
 			for (i = 1; i < $scope.systemlines.length; i++) {
 				if ( $scope.systemlines[i].system == $scope.addFormData.system) {
