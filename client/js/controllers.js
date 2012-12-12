@@ -237,52 +237,41 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		var systemtext;
 		var j;
 		for(j = 0; j < $scope.systemnames.length; j++){
-				if($scope.systemnames[j].name == $scope.systemlines[index].system) {
-					systemtext = $scope.systemlines[index].system + ' - ' + $scope.systemnames[j].text;
-					break;
-				}
+			if($scope.systemnames[j].name == $scope.systemlines[index].system) {
+				systemtext = $scope.systemlines[index].system + ' - ' + $scope.systemnames[j].text;
+				break;
 			}
+		}
 
-			$scope.selectedCompactSystem._id = "";
-			$scope.selectedCompactSystem.system = systemtext; 
-			$scope.selectedCompactSystem.sysIndex = index;
+		$scope.selectedCompactSystem._id = "";
+		$scope.selectedCompactSystem.system = systemtext; 
+		$scope.selectedCompactSystem.sysIndex = index;
 
-			var i;
-			for(i = 0; i < $scope.systemlines[index].statuslines.length; i++){
-				var line = $scope.systemlines[index].statuslines[i];
-				var start = Utils.convertToDate(line.start);
-				var end = Utils.convertToDate(line.end);
+		var i;
+		for(i = 0; i < $scope.systemlines[index].statuslines.length; i++){
+			var line = $scope.systemlines[index].statuslines[i];
+			var start = Utils.convertToDate(line.start);
+			var end = Utils.convertToDate(line.end);
 
-				if(start.getMonth() == $scope.selectedMonthCompact && start.getFullYear() == $scope.selectedYearCompact) {
+			if(start.getMonth() == $scope.selectedMonthCompact && start.getFullYear() == $scope.selectedYearCompact) {
 
-					var elm = {
-						status: line.status,
-						start: start.getDate() + ' ' + $scope.monthLabels[start.getMonth()],
-						end: end.getDate() + ' ' + $scope.monthLabels[end.getMonth()],
-						comment: line.comment
-					}
-
-					$scope.systemCompactViewList.push(elm);
-				}
-			}
-
-			if($scope.systemCompactViewList <= 0){
-				/*var elm = {
-					status: '',
-					start: '',
-					end: '',
-					comment: '',
-					error: 'No data',
-					type: 'error'
+				var elm = {
+					status: line.status,
+					start: start.getDate() + ' ' + $scope.monthLabels[start.getMonth()],
+					end: end.getDate() + ' ' + $scope.monthLabels[end.getMonth()],
+					comment: line.comment
 				}
 
 				$scope.systemCompactViewList.push(elm);
-				*/
-				fillEmptyCompactListElement();
 			}
+		}
+
+		if($scope.systemCompactViewList <= 0){
+			fillEmptyCompactListElement();
+		}
 	}
 
-	function fillEmptyCompactListElement() {
+	function fillEmptyCompactListElement(index) {
 		$scope.systemCompactViewList = [];
 
 		var elm = {
@@ -296,6 +285,10 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 		$scope.systemCompactViewList.push(elm);
 
+		$scope.selectedCompactSystem._id = "";
+		$scope.selectedCompactSystem.system = ""; 
+		$scope.selectedCompactSystem.sysIndex = index;
+
 	}
 
 	$scope.fillSystemCompactViewList = function(index) {
@@ -305,16 +298,9 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		if(systemMatch.result) {
 			fillExistingCompactData(systemMatch.index);
 		}else{
-			fillEmptyCompactListElement();
+			fillEmptyCompactListElement(index);
 		}
 
-/*
-		if($scope.systemlines[index] !== undefined) {
-			fillExistingCompacøtData(index);
-		}else{
-			fillEmptyCompactListElement();
-		}
-*/
 	}
 
 	$scope.getClassForSystemCompactView = function(element) {
