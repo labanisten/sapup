@@ -301,7 +301,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.fillSystemCompactViewList = function(index) {
 		
 		if($scope.systemlines[index] !== undefined) {
-			fillExistingCompactData(index);
+			fillExistingCompacøtData(index);
 		}else{
 			fillEmptyCompactListElement();
 		}
