@@ -300,12 +300,21 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 	$scope.fillSystemCompactViewList = function(index) {
 		
-		if($scope.systemlines[index] !== undefined) {
+		var systemMatch = Utils.findSystem($scope.systemlines, $scope.systemnames[i].name);
+		
+		if(systemMatch.result) {
 			fillExistingCompacøtData(index);
 		}else{
 			fillEmptyCompactListElement();
 		}
 
+/*
+		if($scope.systemlines[index] !== undefined) {
+			fillExistingCompacøtData(index);
+		}else{
+			fillEmptyCompactListElement();
+		}
+*/
 	}
 
 	$scope.getClassForSystemCompactView = function(element) {
