@@ -341,7 +341,11 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.gotoMonthCompact = function(event, month) {
 		$scope.selectedMonthCompact = month;
 		$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonthCompact);
-		$scope.fillSystemCompactViewList($scope.selectedCompactSystem.sysIndex);
+		if($scope.selectedCompactSystem.sysIndex > -1){
+			fillExistingCompactData($scope.selectedCompactSystem.sysIndex);
+		}
+		
+		//$scope.fillSystemCompactViewList($scope.selectedCompactSystem.sysIndex);
 	}	
 	
 	$scope.getClassForMonth = function(month) {
