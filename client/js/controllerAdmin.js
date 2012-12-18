@@ -1,280 +1,225 @@
-var myModule = angular.module('systemAvailability', ['mongodbModule', 'utilsModule', 'adminModule', 'directiveModule']);
+var myModule = angular.module('systemAvailability', ['mongodbModule', 'utilsModule', 'directiveModule']);
 
-myModule.controller("adminViewCtrl", function($scope, db, Utils, admin) {
-	
-	$scope.systemnames = getSystemNames();
-	$scope.systemstatuses = getSystemStatuses();
-	$scope.alerttypes = getAlertTypes();
-	$scope.alertlog = getAlertLog();
-	
+myModule.controller("adminViewCtrl", function($scope, db, Utils) {
 
-	$scope.systemnameToUpdate = {};
-	
-	$scope.statusTypeInput = "";
-	$scope.alertTypeInput = "";
+// Collection object for editable lists 
+	var collection = function(data, db) {
 
-	$scope.editMode = false;
+		var that = {};
+		var items = data; 
 
-	$scope.reorderSystems = function() {
-		for (var i = 0; i < $scope.systemnames.length; i++) {
-			setSelectedSystemByIndex(i); 
-			$scope.systemnameToUpdate.order = i + 1; 
-			$scope.updateSystemName();
+		var itemToUpdate = {};
+
+
+		var getItems = function() {
+			return items; 
 		};
-	}
 
-	$scope.toggleEditMode = function() {
-		$scope.editMode = !$scope.editMode;
-	}
-	
-	$scope.setSelectedSystemByID = function(id) {
-		var i; 
-		for (i = 0; $scope.systemnames.length; i++) {
-			if ($scope.systemnames[i]._id == id) {
-				$scope.systemnameToUpdate = $scope.systemnames[i];
-				break;
-			}
-		};		
-	}
-
-
-	$scope.isItemWithLowestOrder = function(order) {
-		if (order == 1) {
-			return "invisible";
-		} 
-	} 
-
-	$scope.isItemWithHighestOrder = function(thisOrder) {
-		var highestOrder = 0; 
-		for (var i = 0; i < $scope.systemnames.length; i++) {
-			if ($scope.systemnames[i].order >= highestOrder) {
-				highestOrder = $scope.systemnames[i].order;		
-			}
-		};		
-		if (thisOrder == highestOrder) {
-			return "invisible";
+		var getItemToUpdate = function() {
+			return itemToUpdate;
 		}; 
-	}
 
-	$scope.moveItemUp = function(system) {
-		
-		var order; 
 
-		for (var i = 0; i < $scope.systemnames.length; i++) {
-			if ($scope.systemnames[i]._id == system._id) {
-				order = $scope.systemnames[i].order;		
-				break;
-			}			
+		var isItemWithLowestOrder = function(order) {
+			if (order == 1) {
+				return true;
+			};	
 		};
 
-		for (var i = 0; i < $scope.systemnames.length; i++) {
-			if ($scope.systemnames[i].order == order && order > 1) {
-				$scope.systemnames[i].order--;
-				setSelectedSystemByIndex(i); 
-				$scope.updateSystemName();
-			} else if (order - 1 == $scope.systemnames[i].order) {
-				$scope.systemnames[i].order++;
-				setSelectedSystemByIndex(i); 
-				$scope.updateSystemName();
+	    var isItemWithHighestOrder = function(order) {
+			var highestOrder = 0; 
+			for (var i = 0; i < items.length; i++) {
+				if (items[i].order > highestOrder) {
+					highestOrder = items[i].order;
+				}
 			};
+			if (order == highestOrder) {
+				return true;
+			}; 		
 		};
 
+		var setSelectedItemByID = function(id) {
+			var i; 
+			for (i = 0; items.length; i++) {
+				if (items[i]._id == id) {
+					itemToUpdate = items[i];
+					break;
+				}
+			};		
+		};
 
-	}
-
-	$scope.moveItemDown = function(system) {
-		
-		var order; 
-
-		for (var i = 0; i < $scope.systemnames.length; i++) {
-			if ($scope.systemnames[i]._id == system._id) {
-				order = $scope.systemnames[i].order;		
-				break;
+		var getClassForUpArrow = function(order) {
+			if (isItemWithLowestOrder(order)) {
+				return "invisible";
 			}
 		};
 
-		for (var i = 0; i < $scope.systemnames.length; i++) {
-			if ($scope.systemnames[i].order == order && order < $scope.systemnames.length) {
-				$scope.systemnames[i].order++;
-				setSelectedSystemByIndex(i); 
-				$scope.updateSystemName();
-			} else if (order + 1 == $scope.systemnames[i].order) {
-				$scope.systemnames[i].order--;
-				setSelectedSystemByIndex(i); 
-				$scope.updateSystemName();
+		var getClassForDownArrow = function(order) {
+			if (isItemWithHighestOrder(order)) {
+				return "invisible";
+			}
+		};
+
+		function setSelectedItemByIndex(index) {
+			itemToUpdate = items[index];
+		};
+
+		var updateItemInDB = function() {
+	
+			var item = new db(itemToUpdate); 
+			item.update(item._id).then(function(response) {
+					if (response.data) {
+						//Success - update model here?
+					} else {
+						//Unable to update
+					}
+			});
+			itemToUpdate = {};
+		};
+
+	    var moveItemUp = function(system) {
+			var order; 
+
+			for (var i = 0; i < items.length; i++) {
+				if (items[i]._id == system._id) {
+					order = items[i].order;		
+					break;
+				}			
 			};
-		};
 
-	}
-	
-	function setSelectedSystemByIndex(index) {
-		$scope.systemnameToUpdate = $scope.systemnames[index];
-	}
-
-	function getSystemNames(){
-
-		var promise = db.Systemname.get();
-		promise.then(function(data) {
-			admin.updateSystemNamesTable(data);
-			$scope.systemnames = data;
-		});
-
-		return [];
-	}
-	
-
-	function getSystemStatuses(){
-
-		var promise = db.Systemstatus.get();
-		promise.then(function(data) {
-			admin.updateStatusTypesTable(data);
-		});
-
-		return [];
-	}
-	
-	
-	function getAlertTypes(){
-	
-		var promise = db.Alerttype.get();
-		promise.then(function(data) {
-			admin.updateAlertTypesTable(data);
-		});
-
-		return [];
-	}
-
-	function updateOrderForItemsAfterDeletion(fromOrder) {
-		for (var i = 0; i < $scope.systemnames.length; i++) {
-			if ($scope.systemnames[i].order > fromOrder) {
-				$scope.systemnames[i].order--; 
-				setSelectedSystemByIndex(i); 
-				$scope.updateSystemName();
-			}	
-		};
-	}
-	
-	
-	function getAlertLog(){
-	
-		var promise = db.Alert.get();
-		promise.then(function(data) {
-			$scope.alertlog = data;
-		});
-
-		return [];
-	}
-	
-	$scope.saveSystemName = function() {
-
-		$scope.systemnameToUpdate.name.toUpperCase();
-		$scope.systemnameToUpdate.order = $scope.systemnames.length + 1;
-		var newSystem = new db.Systemname($scope.systemnameToUpdate);
-		newSystem.create().then(function(createdSystem) {
-			$scope.systemnames.push(createdSystem);
-		});
-		$scope.systemnameToUpdate = {};
-
-	};
-	
-	
-	$scope.saveStatusType = function() {
-
-		if ($scope.statusTypeInput) {
-			var systemstatus = new db.Systemstatus();
-			systemstatus.status = $scope.statusTypeInput;
-			systemstatus.create().then(function(newSystemstatus) {
-				admin.addLineToStatusTypesTable(newSystemstatus);
-			});
+			for (var i = 0; i < items.length; i++) {
+				if (items[i].order == order && order > 1) {
+					items[i].order--;
+					setSelectedItemByIndex(i); 
+					updateItemInDB();
+				} else if (order - 1 == items[i].order) {
+					items[i].order++;
+					setSelectedItemByIndex(i); 
+					updateItemInDB();
+				};
+			};
 		}
-	};
-	
-	
-	$scope.saveAlertType = function() {
+		var moveItemDown = function(item) {
+			var order; 
 
-		if ($scope.alertTypeInput) {
-			var alerttype = new db.Alerttype();
-			alerttype.type = $scope.alertTypeInput;
-			alerttype.create().then(function(newAlerttype) {
-				admin.addLineToAlertTypesTable(newAlerttype);
-			});
+			for (var i = 0; i < items.length; i++) {
+				if (items[i]._id == item._id) {
+					order = items[i].order;		
+					break;
+				}
+			};
+
+			for (var i = 0; i < items.length; i++) {
+				if (items[i].order == order && order < items.length) {
+					items[i].order++;
+					setSelectedItemByIndex(i); 
+					updateItemInDB();
+				} else if (order + 1 == items[i].order) {
+					items[i].order--;
+					setSelectedItemByIndex(i); 
+					updateItemInDB();
+				};
+			};
 		}
 
-	};
-	
-	
-	$scope.deleteSystemName = function() {
 
-		db.Systemname.remove($scope.systemnameToUpdate._id).then(function(response) {
-				if (response.data) {
-					for (var i = 0; i < $scope.systemnames.length; i++) {
-						if ($scope.systemnames[i]._id == $scope.systemnameToUpdate._id) {
-							$scope.systemnames.splice(i, 1);
-							updateOrderForItemsAfterDeletion($scope.systemnameToUpdate.order);
-						}
-					};			
-				} else {
-					//Unable to delete
-				}
-		});
-	};
-	
-	$scope.updateSystemName = function() {
-	
-		var systemname = new db.Systemname($scope.systemnameToUpdate); 
-		systemname.update($scope.systemnameToUpdate._id).then(function(response) {
-				if (response.data) {
-					//Success - update model here?
-				} else {
-					//Unable to update
-				}
-		});
-		$scope.systemnameToUpdate = {};
-	};
-	
-	
-	$scope.deleteStatusType = function() {
-	
-		var selectedItem = admin.getStatusTypeSelected();
+		var updateOrderForItemsAfterDeletion = function(fromOrder) {
+			for (var i = 0; i < items.length; i++) {
+				if (items[i].order > fromOrder) {
+					items[i].order--; 
+					setSelectedSystemByIndex(i); 
+					updateItemInDB();
+				}	
+			};
+		}
 
-		if (selectedItem.hasValue) {
-			db.Systemstatus.remove(selectedItem.id).then(function(response) {
-					if (response.data.delete) {
-						admin.removeSelectedStatusTypesRow();
+		var deleteItem = function() {
+
+			db.remove(itemToUpdate._id).then(function(response) {
+					if (response.data) {
+						for (var i = 0; i < items.length; i++) {
+							if (items[i]._id == itemToUpdate._id) {
+								items.splice(i, 1);
+								updateOrderForItemsAfterDeletion(itemToUpdate.order);
+							}
+						};			
 					} else {
 						//Unable to delete
 					}
 			});
-		}
-	};
-	
-	
-	$scope.deleteAlertType = function() {
-	
-		var selectedItem = admin.getAlertTypeSelected();
+		};
 
-		if (selectedItem.hasValue) {
-			db.Alerttype.remove(selectedItem.id).then(function(response) {
-					if (response.data.delete) {
-						admin.removeSelectedAlertTypesRow();
+		var saveItem = function() {
+
+			itemToUpdate.order = items.length + 1;
+			var newItem = new db(itemToUpdate);
+			newItem.create().then(function(createdItem) {
+				items.push(createdItem);
+			});
+
+			itemToUpdate = {};
+
+		};
+
+		var updateItem = function() {
+		
+			var system = new db(itemToUpdate); 
+			system.update(itemToUpdate._id).then(function(response) {
+					if (response.data) {
+						//Success - update model here?
 					} else {
-						//Unable to delete
+						//Unable to update
 					}
 			});
-		}
-	};
+			itemToUpdate = {};
+		};
+
+
+		// Public methods
+		that.isItemWithLowestOrder = isItemWithLowestOrder;
+		that.isItemWithHighestOrder = isItemWithHighestOrder;
+		that.setSelectedItemByID = setSelectedItemByID; 
+		that.getClassForDownArrow = getClassForDownArrow; 		
+		that.getClassForUpArrow  =getClassForUpArrow;
+		that.moveItemDown = moveItemDown; 
+		that.moveItemUp = moveItemUp; 
+		that.setSelectedItemByIndex = setSelectedItemByIndex;
+		that.getItems = getItems;
+		that.getItemToUpdate = getItemToUpdate;
+		that.deleteItem = deleteItem;
+		that.saveItem = saveItem; 
+		that.updateItem = updateItem; 
+		that.items = items; 
+
+		return that;
+
+	}; 
+
+	// Filter for systems
+	$scope.filterSystems = ''; 
+
+	// Get systemgroups from database and create collection
+	var promise = db.Systemgroup.get();
+	promise.then(function(data) {
+		$scope.systemgroups = data;
+		$scope.systemgroupsCollection = collection($scope.systemgroups, db.Systemgroup);				
+	});
+
+	// Get systems from DB and create collection 
+	var promise = db.Systemname.get();
+	promise.then(function(data) {
+		$scope.systems = data;				
+		$scope.systemsCollection = collection($scope.systems, db.Systemname);				
+	});
 	
-	
-	$scope.deleteAlertLog = function(index) {
-	
-		db.Alert.remove($scope.alertlog[index]._id).then(function(response) {
-				if (response.data.delete) {
-					$scope.alertlog.splice(index, 1);
-				} else {
-					//Unable to delete
-				}
-		});
-	};
-	
+
+	// Get alert from database and create collection
+	var promise = db.Alert.get();
+	promise.then(function(data) {
+		$scope.alerts = data;
+		$scope.alertsCollection = collection($scope.alerts, db.Alert);				
+	});
+
+
 	
 });

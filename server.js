@@ -157,6 +157,7 @@
 	    return hash;
 	};
 
+	app.get('/systemgroups', function(req, res) {restServices.get(req, res);});
 	app.get('/systems', function(req, res) {restServices.get(req, res);});
 	app.get('/systemnames', function(req, res) {restServices.get(req, res);});
 	app.get('/alerttypes', function(req, res) {restServices.get(req, res);});
@@ -164,18 +165,21 @@
 	app.get('/alerts', function(req, res) {restServices.get(req, res);});
 	app.get('/messages.rss', function(req, res) {rssServices.get(req, res);});
 	
+	app.post('/systemgroups', function(req, res) {restServices.post(req, res);});
 	app.post('/systems', function(req, res) {restServices.post(req, res);});
 	app.post('/systemnames', function(req, res) {restServices.post(req, res);});
 	app.post('/alerttypes', function(req, res) {restServices.post(req, res);});
 	app.post('/systemstatuses', function(req, res) {restServices.post(req, res);});
 	app.post('/alerts', function(req, res) {restServices.post(req, res);});
 	
+	app.put('/systemgroups/:id', function(req, res) {restServices.put(req, res);});
 	app.put('/systems/:id', function(req, res) {restServices.put(req, res);});
 	app.put('/systemnames/:id', function(req, res) {restServices.put(req, res);});
 	app.put('/alerttypes/:id', function(req, res) {restServices.put(req, res);});
 	app.put('/systemstatuses/:id', function(req, res) {restServices.put(req, res);});
 	app.put('/alerts/:id', function(req, res) {restServices.put(req, res);});
 	
+	app.delete('/systemgroups/:id', function(req, res) {restServices.delete(req, res);});
 	app.delete('/systems/:id', function(req, res) {restServices.delete(req, res);});
 	app.delete('/systemnames/:id', function(req, res) {restServices.delete(req, res);});
 	app.delete('/alerttypes/:id', function(req, res) {restServices.delete(req, res);});

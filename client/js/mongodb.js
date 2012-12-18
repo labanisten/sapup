@@ -55,6 +55,7 @@ angular.module('mongodbModule', []).
 
 			};
 		
+			addResource("Systemgroup", "systemgroups");
 			addResource("System", "systems");
 			addResource("Systemname", "systemnames");
 			addResource("Alerttype", "alerttypes");
