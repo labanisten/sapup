@@ -20,6 +20,12 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		elmIndex: -1
 		//hasValue: false
 	};
+
+	$scope.selectedCompactSystem = {
+		_id: "",
+		system: "",
+		sysIndex: -1
+	};
 	
 	$scope.hoverElement = {
 		_id: "",
@@ -71,6 +77,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.monthName = Calendar.getMonthName();
 	$scope.selectedYear = Calendar.getCurrentYear();
 	$scope.selectedMonth = Calendar.getCurrentMonth();
+
 	$scope.noOfDaysInMonth =  Calendar.getNoOfDaysInMonth();
 	$scope.dayNamesInMonth = Calendar.getDayNamesInMonth;
 	$scope.shortDayNamesInMonth = Calendar.getShortDayNamesInMonth;
@@ -79,6 +86,12 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.selectedMonthLabel = Calendar.getMonthName($scope.selectedMonth);
 	$scope.elementUpdateClass = "hide";
 	$scope.elementUpdateMessage = "";
+
+	$scope.monthListCompact = Utils.buildCompactMonthList(Calendar.getCurrentMonth());
+	$scope.selectedYearCompact = Calendar.getCurrentYear();
+	$scope.selectedMonthCompact = Calendar.getCurrentMonth();
+	$scope.systemCompactViewList = [];
+	$scope.displayCompactMessageView = false;
 
 	$scope.messageAreaClass = function() {
 		if ($scope.alertlines.length > 0) {
@@ -137,6 +150,203 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			$scope.setSelectedElement(sysIndex, elmIndex);
 		}
 	};
+
+	$scope.compactMessageViewClick = function() {
+		$scope.displayCompactMessageView = true;
+	};
+
+	$scope.getClassForCompactMessageContainer = function() {
+		var classString = 'message-container-compact row-fluid';
+
+		if(!$scope.displayCompactMessageView){
+			classString += ' hidden';
+		}
+		
+		return classString;
+	}
+	
+
+	$scope.getClassForCompactMonth = function(month) {
+		var classString = '';
+
+		if (month == $scope.selectedMonthCompact) {
+			classString += "btn btn-success month selectedmonth";
+		} else {
+			classString += "btn btn-primary month";
+		}
+
+		if($scope.selectedCompactSystem.sysIndex < 0){
+			classString += ' hidden';
+		}
+		
+		return classString;
+	};
+
+	$scope.getClassForCompactYearButton = function(month) {
+		var classString = 'btn btn-primary yearbtn-compact';
+
+		if($scope.selectedCompactSystem.sysIndex < 0){
+			classString += ' hidden';
+		}
+
+		return classString;
+	};
+
+	$scope.getClassForCompactHomeButton = function(month) {
+		var classString = 'btn btn-primary homebtn-compact';
+
+		if($scope.selectedCompactSystem.sysIndex < 0 && $scope.displayCompactMessageView == false){
+			classString += ' hidden';
+		}
+		
+		return classString;
+	};
+
+	$scope.getClassForCompactSearchButton = function(month) {
+		var classString = 'btn btn-primary searchbtn-compact';
+
+		if($scope.selectedCompactSystem.sysIndex > -1){
+			classString += ' hidden';
+		}
+		
+		return classString;
+	};
+
+	$scope.getClassForCompactMessageButton = function(month) {
+		var classString = 'btn btn-primary messagebtn-compact';
+
+		if($scope.selectedCompactSystem.sysIndex > -1 || $scope.displayCompactMessageView == true){
+			classString += ' hidden';
+		}
+		
+		return classString;
+	};
+	
+	$scope.getClassForCompactSystemViewLabel = function(month) {
+		var classString = 'systemview-heading-compact';
+
+		if($scope.selectedCompactSystem.sysIndex > -1){
+			classString += ' hidden';
+		}
+		
+		return classString;
+	};
+
+	function fillExistingCompactData(index) {
+		$scope.systemCompactViewList = [];
+		var systemtext;
+		var j;
+		for(j = 0; j < $scope.systemnames.length; j++){
+			if($scope.systemnames[j].name == $scope.systemlines[index].system) {
+				systemtext = $scope.systemlines[index].system + ' - ' + $scope.systemnames[j].text;
+				break;
+			}
+		}
+
+		$scope.selectedCompactSystem._id = "";
+		$scope.selectedCompactSystem.system = systemtext; 
+		$scope.selectedCompactSystem.sysIndex = index;
+
+		var i;
+		for(i = 0; i < $scope.systemlines[index].statuslines.length; i++){
+			var line = $scope.systemlines[index].statuslines[i];
+			var start = Utils.convertToDate(line.start);
+			var end = Utils.convertToDate(line.end);
+
+			if(start.getMonth() == $scope.selectedMonthCompact && start.getFullYear() == $scope.selectedYearCompact) {
+
+				var elm = {
+					status: line.status,
+					start: start.getDate() + ' ' + $scope.monthLabels[start.getMonth()],
+					end: end.getDate() + ' ' + $scope.monthLabels[end.getMonth()],
+					comment: line.comment
+				}
+
+				$scope.systemCompactViewList.push(elm);
+			}
+		}
+
+		if($scope.systemCompactViewList <= 0){
+			fillEmptyCompactListElement();
+		}
+	}
+
+	function fillEmptyCompactListElement() {
+		$scope.systemCompactViewList = [];
+
+		var elm = {
+			status: '',
+			start: '',
+			end: '',
+			comment: '',
+			error: 'No data',
+			type: 'error'
+		}
+
+		$scope.systemCompactViewList.push(elm);
+	}
+
+	$scope.fillSystemCompactViewList = function(index) {
+		
+		var systemMatch = Utils.findSystem($scope.systemlines, $scope.systemnames[index].name);
+		
+		if(systemMatch.result) {
+			fillExistingCompactData(systemMatch.index);
+		}else{
+			$scope.selectedCompactSystem._id = "";
+			$scope.selectedCompactSystem.system = ""; 
+			$scope.selectedCompactSystem.sysIndex = index;
+			fillEmptyCompactListElement();
+		}
+
+	}
+
+	$scope.getClassForSystemCompactView = function(element) {
+		var classString = 'status';
+
+		if(element.type == 'error'){
+			classString = ' error';
+		}
+
+		if($scope.selectedCompactSystem.sysIndex < 0){
+			classString += ' hidden';
+		}
+
+		return classString;
+	}
+
+	$scope.compactListReset = function() {
+		$scope.selectedCompactSystem._id = "";
+		$scope.selectedCompactSystem.system = ""; 
+		$scope.selectedCompactSystem.sysIndex = -1;
+
+		$scope.displayCompactMessageView = false;
+
+		$scope.selectedYearCompact = Calendar.getCurrentYear();
+		$scope.selectedMonthCompact = Calendar.getCurrentMonth();
+		$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonthCompact);
+
+		$scope.systemCompactViewList = [];
+	}
+
+	$scope.getClassForCompactList = function() {
+		var classString = '';
+		if($scope.selectedCompactSystem.sysIndex >= 0 || $scope.displayCompactMessageView == true){
+			classString = 'hidden';
+		}
+		
+		return classString;
+	}
+
+	$scope.gotoMonthCompact = function(event, month) {
+		$scope.selectedMonthCompact = month;
+		$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonthCompact);
+		if($scope.selectedCompactSystem.sysIndex > -1){
+			fillExistingCompactData($scope.selectedCompactSystem.sysIndex);
+		}
+		
+		//$scope.fillSystemCompactViewList($scope.selectedCompactSystem.sysIndex);
+	}	
 	
 	$scope.getClassForMonth = function(month) {
 		if (month == $scope.selectedMonth) {
@@ -145,17 +355,23 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			return "span1 month";
 		}
 	};
+
+
 	
 	$scope.gotoMonth = function(event, month) {
 		
 		if($scope.hoverElement.hasValue) {
 			$scope.hoverElement.element.popover('hide');
 		}
-		
+
 		$scope.clearHoverElement();
 		$scope.unSelectElement();
 						
 		$scope.selectedMonth = month;
+
+		//$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonth);
+		//$scope.fillSystemCompactViewList($scope.selectedCompactSystem.sysIndex);
+
 		var elem = angular.element(event.srcElement);
 		elem[0].className += " selectedmonth";
 	};
@@ -344,7 +560,8 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				statusElement,
 				system;
 
-			for (var i = 1; i < $scope.systemlines.length; i++) {
+			var i;
+			for (i = 1; i < $scope.systemlines.length; i++) {
 				if ( $scope.systemlines[i].system == $scope.addFormData.system) {
 					existingSystem = $scope.systemlines[i];
 					break;
@@ -499,7 +716,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	};
 	
 	$scope.clearModalLog = function(event) {
-		// Utils.clearModalLog();
 		$scope.elementUpdateMessage = ""; 
 		$scope.elementUpdateClass = "hide";
 	};
@@ -508,7 +724,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		var classText = '';
 		var currentDate = new Date();
 		
-		if(day == currentDate.getDate()){
+		if(day == currentDate.getDate() && $scope.selectedMonth == currentDate.getMonth() && $scope.selectedYear == currentDate.getFullYear()){
 			classText = 'currentday'
 		}
 

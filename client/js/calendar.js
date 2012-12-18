@@ -40,6 +40,7 @@ angular.module('calendarModule', ['utilsModule']).
 			
 			for(var j = 0; j < 12; j++) {
 				var dayArray = [];
+				var i;
 				for (i = 0; i < ns.daysInMonth[j]; i++) {
 					dayArray.push(i + 1);
 				}
@@ -71,8 +72,8 @@ angular.module('calendarModule', ['utilsModule']).
 				$.each(dayArray, function(i, v_day) {
 					weekArray.push(ns.getWeek(new Date(m.getFullYear(), month, i)));
 				});
-
-				for (var i = 0; i < weekArray.length; i++) {
+				var i;
+				for (i = 0; i < weekArray.length; i++) {
 					colSpan++;
 					if (weekArray[i] !== weekArray[i + 1]) {
 						weekAndDays.push({
@@ -109,6 +110,7 @@ angular.module('calendarModule', ['utilsModule']).
 			var firstDayInMonth = new Date(date.getFullYear(), month, 1);
 
 			var day_it = firstDayInMonth.getDay();
+			var i;
 			for (i = 0; i < dayCount; i++) {
 
 				dayArray.push(lableTable[day_it]);

@@ -16,6 +16,8 @@ angular.module('utilsModule', []).
 
 		(function(ns) {
 		
+		ns.dataComplete = false;
+
 		ns.convertToDate = function(dateString) {
 			var datestring = dateString,
 				y = datestring.substr(0, 4),
@@ -191,6 +193,66 @@ angular.module('utilsModule', []).
 		ns.rangeWithinMonthYear = function(fromDate, toDate, month, year) {
 			return ( dateFromString(fromDate).getMonth() == month && dateFromString(fromDate).getYear() == year ) || ( dateFromString(toDate).getMonth() == month && dateFromString(toDate).getYear() == year );
 		};
+
+
+		ns.isDataReady = function(dataTab) {
+			var result = false;
+			if (dataTab.length > 0 && ns.dataComplete) {
+				result = true;
+			} else if (dataTab.length > 0) {
+				ns.dataComplete = true; 
+			}
+			return result;
+		}
+
+		function decMonth(month) {
+			var num = month - 1;
+			if(num < 0) {num = 11;}
+			return num;
+		}
+		
+		function incMonth(month) {
+			var num = month + 1;
+			if(num > 11) {num = 0;}
+			return num;
+		}
+
+		ns.buildCompactMonthList = function(selectedMonth) {
+			var monthList = [];
+
+			var num2 = decMonth(selectedMonth);
+			var num1 = decMonth(num2);
+
+			monthList.push(num1);
+			monthList.push(num2);
+			monthList.push(selectedMonth);
+
+			var num4 = incMonth(selectedMonth);
+			var num5 = incMonth(num4);
+
+			monthList.push(num4);
+			monthList.push(num5);
+
+			return monthList;
+		}
+
+		ns.findSystem = function(systemlines, systemName) {
+			var match = {
+				result: false,
+				index: -1
+			};
+		
+			var j;
+			for(j = 0; j < systemlines.length; j++){
+				if (systemName == systemlines[j].system) {
+					match.result = true;
+					match.index = j;
+					break;
+				}	
+			}
+			
+			return match;
+		}
 
 	
 		})(utils);

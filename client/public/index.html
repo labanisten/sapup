@@ -30,28 +30,47 @@
 <body ng-controller="TimelineCtrl">
 	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
-			<a class="brand" href="#">
-				SAP System availability <sup style="font-size:10px; color:red">BETA</sup>
-			</a>
-			<ul class="nav">
-				<li class="active">
-					<a href="index.html">Home</a>
-				</li>
-				<li>
-					<a href="admin.html">Administration</a>
-				</li>
-			</ul>
 
-			
+				<a class="brand" href="#">
+					<div class="navbar-headingtext-normal">SAP System availability
+						<sup style="font-size:10px; color:red">BETA</sup>
+					</div>
+					<div class="navbar-headingtext-compact">Statoil SAA
+						<sup style="font-size:10px; color:red">BETA</sup>
+					</div>
+				</a>
+
+			<div class="linknav-normal">
+				<ul class="nav">
+					<li class="active">
+						<a href="index.html">Home</a>
+					</li>
+					<li>
+						<a href="admin.html">Administration</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="navbar-buttons-compact pull-right">
+				<button ng:class="getClassForCompactHomeButton()" ng:click="compactListReset()"> <i class="icon-home icon-white"></i></button>
+				<!--button ng:class="getClassForCompactSearchButton()" ng:click=""> <i class="icon-search icon-white"></i></button-->
+				<button ng:class="getClassForCompactMessageButton()" ng:click="compactMessageViewClick()">({{alertlines.length}}) <i class="icon-envelope icon-white"></i></button>
+				<button ng:class="getClassForCompactYearButton()" ng-click="">{{selectedYearCompact}}</button>
+
+				<!--button class="btn btn-small navbtn-compact"> <i class="icon-arrow-left"></i></button-->
+				<!--a href="http://systemavailability.azurewebsites.net/messages.rss" class="btn btn-link navbtn-compact pull-right">
+				  <img src="../images/feed-icon-28x28.png" class="pull-left"/>
+				</a-->
+			</div>
 
 			<div class="btn-group pull-right">
-				<button class="btn btn-small" data-toggle="modal" href="#addalertdialog"> <i class=" icon-warning-sign "></i>
-					Add message
+				<button class="btn btn-small navbtn-edit" data-toggle="modal" href="#addalertdialog"> <i class="icon-warning-sign"></i>
+					<span class="new-message-btn-txt">Add message</span>
 				</button>
-				<button class="btn btn-small" data-toggle="modal" href="#addelementdialog"> <i class="icon-calendar "></i>
-					Add status
+				<button class="btn btn-small navbtn-edit" data-toggle="modal" href="#addelementdialog"> <i class="icon-calendar"></i>
+					<span class="new-status-btn-txt">Add status</span>
 				</button>
-				<a href="http://systemavailability.azurewebsites.net/messages.rss" class="btn btn-link">
+				<a href="http://systemavailability.azurewebsites.net/messages.rss" class="btn btn-link navbtn-edit">
 				  <img style="width:20px" src="../images/feed-icon-28x28.png" class="pull-left"/>
 				</a>
 			</div>
@@ -83,6 +102,24 @@
 				<div system-table></div>
 			</div>
 		</div>
+
+	</div>
+
+	<!--div class="compactnavbar">asdfgag</div-->
+	<!--div class="compactnavbar navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<a class="brand" href="#">
+				SAP System availability <sup style="font-size:10px; color:red">BETA</sup>
+			</a>
+		</div>
+	</div-->
+
+	<div class="systemtable-compact container-fluid">
+		<h5 ng:class="getClassForCompactSystemViewLabel()">{{selectedCompactSystem.system}}</h5>
+		<div class="message-view-compact" message-view-compact></div>
+		<div class="system-monthlist-compact" system-compact-month></div>
+		<div class="systemlist-compact" system-compact-list></div>
+		<div class="systemview-compact" system-compact-view></div>
 	</div>
 
 	<div class="modal hide fade" id="addalertdialog">

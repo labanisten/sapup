@@ -1,5 +1,185 @@
 var directiveModule = angular.module('directiveModule', ['utilsModule']);
 
+
+function build(scope) {
+	console.log("build!; " + scope.systemlines.length);
+}
+
+
+directiveModule.directive('messageViewCompact', function($compile, Utils){
+	return {
+			restrict: 'A',
+			link: function(scope, element, attrs) {
+
+				scope.$watch('alertlines', function() {
+					if(scope.selectedMonth > 0) {
+						buildCompactMessageContainer();
+					}
+				});
+
+				function buildCompactMessageContainer() {
+					var template;
+					template = '<div ng:class="getClassForCompactMessageContainer()">'+
+									
+									'<div ng-repeat="alertline in alertlines">'+
+										'<div class="alert alert-{{alertline.alerttype}}">'+
+											'<h5>{{alertline.title}}</h5>'+
+											'<p>{{alertline.comment}}</p>'+
+										'</div>'+
+									'</div>'+
+
+
+							   '</div>';
+
+					element.html(template);				
+					$compile(element.contents())(scope);
+
+				}
+		    }
+	};
+});
+
+
+
+directiveModule.directive('systemCompactMonth', function($compile, Utils){
+	return {
+			restrict: 'A',
+			link: function(scope, element, attrs) {
+
+				scope.$watch('selectedMonthCompact', function() {
+					if(scope.selectedMonth > 0) {
+						buildCompactMonthHeader();
+					}
+				});
+				
+
+				function buildCompactMonthHeader() {
+					var template;
+
+					template = '<div class="months" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
+									'<div class="btn-group-wrap">'+
+										'<div class="btn-group">'+
+											'<button ng:class="getClassForCompactMonth(month)" ng-click="gotoMonthCompact($event, month)" ng-repeat="month in monthListCompact">'+
+												'{{months[month]}}' +
+											'</button>'+
+										'</div>'+
+									'</div>'+
+								'</div>';
+
+					element.html(template);				
+					$compile(element.contents())(scope);
+
+				}
+		    }
+	};
+});
+
+
+directiveModule.directive('systemCompactList', function($compile, Utils){
+	return {
+			restrict: 'A',
+			link: function(scope, element, attrs) {
+				var template;
+
+				scope.$watch('systemlines', function(newVal, oldVal) {
+					if(Utils.isDataReady(scope.systemlines)){
+						buildList();
+					}
+				});
+				
+				scope.$watch('systemnames', function() {
+					if(Utils.isDataReady(scope.systemnames)){
+						buildList();
+					}
+				});
+				
+
+				function buildList() {
+					template = '<ul class="nav mobnav nav-list">';
+
+
+					var i;
+					var j;
+					for(i = 0; i < scope.systemnames.length; i++){
+						template += '<li><a ng:click="fillSystemCompactViewList('+i+')" ng:class="getClassForCompactList()">'+
+										'<i class="icon-chevron-right"></i>{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}';
+
+						template += '</a></li>';
+					}
+
+
+
+
+/*
+					var i;
+					var j;
+					for(i = 0; i < scope.systemlines.length; i++){
+						template += '<li><a ng:click="fillSystemCompactViewList('+i+')" ng:class="getClassForCompactList()">'+
+										'<i class="icon-chevron-right"></i>{{systemlines['+i+'].system}}';
+
+										for(j = 0; j < scope.systemnames.length; j++){
+											if(scope.systemnames[j].name == scope.systemlines[i].system) {
+												template += ' - {{systemnames['+j+'].text}}';
+											}
+										}
+
+									template += '</a></li>';
+					}
+*/
+
+
+
+
+					template += '</ul>';
+
+					element.html(template);				
+					$compile(element.contents())(scope);
+
+				}
+			}
+	};
+});
+
+
+directiveModule.directive('systemCompactView', function($compile, Utils){
+	return {
+			restrict: 'A',
+			link: function(scope, element, attrs) {
+				var template;
+
+
+					//systemlines[selectedCompactSystem.sysIndex].statuslines"
+					var systemIndex = scope.selectedCompactSystem.sysIndex;
+					
+					template = '<ul class="nav statusview nav-list">';
+
+					
+					template += '<li ng:repeat="line in systemCompactViewList">'+
+									'<a ng:class="getClassForSystemCompactView(line)" >'+
+										'<h5 class="statusheader-compact">{{line.start}} - {{line.end}}</h5>' +
+										'<p class="statustext-compact">Status: {{line.status}}</p>' +
+										'<p class="statuscomment-compact">{{line.comment}}</p>' +
+										'<h4 class="statuserror-compact">{{line.error}}</h4>' +
+									'</a>'+
+								'</li>';
+
+					template += '</ul>';
+					
+					/*
+					template += '<li ng:repeat="line in systemCompactViewList">'+
+						'<a ng:class="getClassForSystemCompactView(line)" >'+
+							'{{line.index}}' +
+						'</a>'+
+					'</li>';
+					*/
+
+					element.html(template);
+					$compile(element.contents())(scope);
+			}
+	};
+});
+
+
 directiveModule.directive('clearPopoversAndSelections', function() {
 	return {
 		restrict: 'A',
@@ -81,25 +261,22 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 });
 
 
+directiveModule.directive('CompressedListElementView', function($compile, Utils){
+	return {
+			restrict: 'A',
+			link: function(scope, element, attrs) {
+
+			}
+	};
+});
+
 directiveModule.directive('systemTable', function($compile, Utils){
 	return {
 			restrict: 'A',
 			link: function(scope, element, attrs) {
 			
-				var stopRecursive;
-				var dataComplete = false; 
 				
-				function isDataReady(dataTab) {
-					var result = false;
-					if (dataTab.length > 0 && dataComplete) {
-						result = true;
-					} else if (dataTab.length > 0) {
-						dataComplete = true; 
-					}
-					return result;
-				}
-				
-								function firstOfMonthStr(start) {
+				function firstOfMonthStr(start) {
 					var tmpDate = new String();
 					var selectedMonth = scope.selectedMonth + 1;
 					selectedMonth = Utils.padZeroFront(selectedMonth);
@@ -190,7 +367,8 @@ directiveModule.directive('systemTable', function($compile, Utils){
 					
 					return result;
 				}
-								
+				
+				/*				
 				function systemExist(systemName) {
 					var match = {
 						result: false,
@@ -208,6 +386,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 					
 					return match;
 				}
+				*/
 
 				function buildTemplateForExistingSystem(systemIndex) {
 					
@@ -320,7 +499,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 											var i;
 											for(i = 0; i < scope.systemnames.length; i++){
 												template += '<tr><td class="system"><span>{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}</span></td>';
-												var systemMatch = systemExist(scope.systemnames[i].name);
+												var systemMatch = Utils.findSystem(scope.systemlines, scope.systemnames[i].name);
 												if(systemMatch.result) {
 													template += buildTemplateForExistingSystem(systemMatch.index);
 												}else {
@@ -331,9 +510,22 @@ directiveModule.directive('systemTable', function($compile, Utils){
 							template += '</tbody>'+
 									'</table>';
 								  
-					element.html(template);				
+					element.html(template);
 					$compile(element.contents())(scope);
 					
+				}
+
+				var stopRecursive;
+				var dataComplete = false; 
+				
+				function isDataReady(dataTab) {
+					var result = false;
+					if (dataTab.length > 0 && dataComplete) {
+						result = true;
+					} else if (dataTab.length > 0) {
+						dataComplete = true; 
+					}
+					return result;
 				}
 				
 				scope.$watch('systemlines', function(newVal, oldVal) {
