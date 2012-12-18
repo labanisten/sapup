@@ -197,6 +197,9 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils) {
 
 	// Filter for systems
 	$scope.filterSystems = ''; 
+	$scope.setSystemgroupForFilter = function(group) {
+		$scope.filterSystems = group.name; 
+	}
 
 	// Get systemgroups from database and create collection
 	var promise = db.Systemgroup.get();

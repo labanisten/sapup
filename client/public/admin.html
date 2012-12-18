@@ -112,9 +112,51 @@
 									<div class="accordion" id="systemgroups-accordion">
 										<div class="accordion-group" ng-repeat="group in systemgroups">
 											<div class="accordion-heading">
-												<a class="accordion-toggle" data-toggle="collapse" data-parent="systemgroups-accordion" href="#{{group.name}}">{{group.name}}</a>
+												<a ng-click="setSystemgroupForFilter(group)" class="accordion-toggle" data-toggle="collapse" data-parent="systemgroups-accordion" href="#{{group.name}}">{{group.name}}</a>
 											</div>
 											<div id="{{group.name}}" class="accordion-body collapse">
+												<div class="accordion-inner">
+													<table class="table table-condense table-hover">
+														<thead>
+															<tr>
+																<th>Order</th>
+																<th>Group</th>
+																<th>System ID</th>
+																<th>System name</th>
+																<th style="width:10%"></th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr ng-repeat="system in systems | orderBy:'order':false | filter:filterSystems">
+																<td>{{system.order}}</td>
+																<td>{{system.systemgroup}}</td>
+																<td>{{system.name}}</td>
+																<td>{{system.text}}</td>
+																<td>
+																	<a  ng-click="systemsCollection.moveItemUp(system)" class="">
+																		<i ng-class="systemsCollection.getClassForUpArrow(system.order)" class="icon-chevron-up"></i>
+																	</a>
+																	<a ng-click="systemsCollection.moveItemDown(system)">
+																		<i ng-class= "systemsCollection.getClassForDownArrow(system.order)" class="icon-chevron-down"></i>
+																	</a>
+																	<a data-toggle="modal" href="#editSystemname" ng-click="systemsCollection.setSelectedItemByID(system._id)">
+																		<i class="icon-pencil"></i>
+																	</a>
+																	<a data-toggle="modal" href="#removeSystemname" ng-click="systemsCollection.setSelectedItemByID(system._id)">
+																		<i class="icon-trash"></i>
+																	</a>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+										<div class="accordion-group">
+											<div class="accordion-heading">
+												<a class="accordion-toggle" data-toggle="collapse" data-parent="systemgroups-accordion" href="#allsystems">All systems</a>
+											</div>
+											<div id="allsystems" class="accordion-body collapse">
 												<div class="accordion-inner">
 													<table class="table table-condense table-hover">
 														<thead>
