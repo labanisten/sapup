@@ -42,7 +42,7 @@
 				<div class="tabbable" style="margin-bottom: 18px">
 					<ul class="nav nav-pills">
 						<li class="active">
-							<a href="#tab-systemgroups" data-toggle="tab">Systemsgroups</a>
+							<a href="#tab-systemgroups" data-toggle="tab">Systemlines</a>
 						</li>
 						<li>
 							<a href="#tab-systems" data-toggle="tab">Systems</a>
@@ -52,12 +52,12 @@
 						</li>
 					</ul>
 					<div class="tab-content">
-						<!-- Systemsgroups tab -->
+						<!-- Systemlines tab -->
 						<div class="tab-pane active" id="tab-systemgroups">
 							<div class="row">
 								<div class="span12">
 									<button class="btn btn-primary" data-toggle="modal" href="#addNewSystemgroup"> <i class="icon-plus-sign icon-white"></i>
-										Add new group
+										Add new systemline
 									</button>
 								</div>
 							</div>
@@ -67,27 +67,24 @@
 										<thead>
 											<tr>
 												<th>Order</th>
-												<th>Systemgroup ID</th>
-												<th>Systemgroup name</th>
+												<th>Systemline ID</th>
+												<th>Systemline name</th>
 												<th style="width:10%"></th>
 											</tr>
 										</thead>
 										<tbody>
-											<tr ng-repeat="systemgroup in systemgroups | orderBy:'order':false">
+											<tr ng-repeat="systemgroup in systemgroups | orderBy:'order'">
 												<td>{{systemgroup.order}}</td>
 												<td>{{systemgroup.name}}</td>
 												<td>{{systemgroup.text}}</td>
 												<td>
-													<a  ng-click="systemsgroupsCollection.moveItemUp(systemgroup)" class=""> <i ng-class="systemgroupsCollection.getClassForUpArrow(systemgroup.order)" class="icon-chevron-up"></i>
+													<a  ng-click="systemgroupsCollection.moveItemUp(systemgroup)" class=""> <i ng-class="systemgroupsCollection.getClassForUpArrow(systemgroup)" class="icon-chevron-up"></i>
 													</a>
 													<a ng-click="systemgroupsCollection.moveItemDown(systemgroup)">
-														<i ng-class= "systemgroupsCollection.getClassForDownArrow(systemgroup.order)" class="icon-chevron-down"></i>
+														<i ng-class= "systemgroupsCollection.getClassForDownArrow(systemgroup)" class="icon-chevron-down"></i>
 													</a>
-													<a data-toggle="modal" href="#removeSystemgroup" ng-click="systemgroupsCollection.setSelectedItemByID(systemgroup._id)">
+													<a data-toggle="modal" href="#removeSystemgroup" ng-click="systemgroupsCollection.setSelectedItemByID(systemgroup._id); setSelectedGroup(group)">
 														<i class="icon-trash"></i>
-													</a>
-													<a href="systems.html">
-														<i class="icon-chevron-right"></i>
 													</a>
 												</td>
 											</tr>
@@ -110,9 +107,11 @@
 							<div class="row">
 								<div class="span12">
 									<div class="accordion" id="systemgroups-accordion">
-										<div class="accordion-group" ng-repeat="group in systemgroups">
+										<div class="accordion-group" ng-repeat="group in systemgroups | orderBy:'order'">
 											<div class="accordion-heading">
-												<a ng-click="setSystemgroupForFilter(group)" class="accordion-toggle" data-toggle="collapse" data-parent="systemgroups-accordion" href="#{{group.name}}">{{group.name}}</a>
+												<a  class="accordion-toggle" data-toggle="collapse" data-parent="systemgroups-accordion" href="#{{group.name}}">
+													{{group.name}}
+												</a>
 											</div>
 											<div id="{{group.name}}" class="accordion-body collapse">
 												<div class="accordion-inner">
@@ -120,24 +119,24 @@
 														<thead>
 															<tr>
 																<th>Order</th>
-																<th>Group</th>
+																<th>Systemline</th>
 																<th>System ID</th>
 																<th>System name</th>
 																<th style="width:10%"></th>
 															</tr>
 														</thead>
 														<tbody>
-															<tr ng-repeat="system in systems | orderBy:'order':false | filter:filterSystems">
+															<tr ng-repeat="system in systems | orderBy:'order' | filter:{systemgroup:group.name}">
 																<td>{{system.order}}</td>
 																<td>{{system.systemgroup}}</td>
 																<td>{{system.name}}</td>
 																<td>{{system.text}}</td>
 																<td>
 																	<a  ng-click="systemsCollection.moveItemUp(system)" class="">
-																		<i ng-class="systemsCollection.getClassForUpArrow(system.order)" class="icon-chevron-up"></i>
+																		<i ng-class="systemsCollection.getClassForUpArrow(system)" class="icon-chevron-up"></i>
 																	</a>
 																	<a ng-click="systemsCollection.moveItemDown(system)">
-																		<i ng-class= "systemsCollection.getClassForDownArrow(system.order)" class="icon-chevron-down"></i>
+																		<i ng-class= "systemsCollection.getClassForDownArrow(system)" class="icon-chevron-down"></i>
 																	</a>
 																	<a data-toggle="modal" href="#editSystemname" ng-click="systemsCollection.setSelectedItemByID(system._id)">
 																		<i class="icon-pencil"></i>
@@ -154,33 +153,27 @@
 										</div>
 										<div class="accordion-group">
 											<div class="accordion-heading">
-												<a class="accordion-toggle" data-toggle="collapse" data-parent="systemgroups-accordion" href="#allsystems">All systems</a>
+												<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="systemgroups-accordion" href="#allsystems">All systems</a>
 											</div>
 											<div id="allsystems" class="accordion-body collapse">
 												<div class="accordion-inner">
 													<table class="table table-condense table-hover">
 														<thead>
 															<tr>
+																<th>Systemline</th>
 																<th>Order</th>
-																<th>Group</th>
 																<th>System ID</th>
 																<th>System name</th>
 																<th style="width:10%"></th>
 															</tr>
 														</thead>
 														<tbody>
-															<tr ng-repeat="system in systems | orderBy:'order':false">
-																<td>{{system.order}}</td>
+															<tr ng-repeat="system in systems | orderBy:['systemgroup', 'order']">
 																<td>{{system.systemgroup}}</td>
+																<td>{{system.order}}</td>
 																<td>{{system.name}}</td>
 																<td>{{system.text}}</td>
 																<td>
-																	<a  ng-click="systemsCollection.moveItemUp(system)" class="">
-																		<i ng-class="systemsCollection.getClassForUpArrow(system.order)" class="icon-chevron-up"></i>
-																	</a>
-																	<a ng-click="systemsCollection.moveItemDown(system)">
-																		<i ng-class= "systemsCollection.getClassForDownArrow(system.order)" class="icon-chevron-down"></i>
-																	</a>
 																	<a data-toggle="modal" href="#editSystemname" ng-click="systemsCollection.setSelectedItemByID(system._id)">
 																		<i class="icon-pencil"></i>
 																	</a>

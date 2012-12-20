@@ -3,12 +3,45 @@ var myModule = angular.module('systemAvailability', ['mongodbModule', 'utilsModu
 myModule.controller("adminViewCtrl", function($scope, db, Utils) {
 
 // Collection object for editable lists 
-	var collection = function(data, db) {
+	var collection = function(data, db, groupBy) {
 
-		var that = {};
-		var items = data; 
+		var that = {},
+			items = data,
+			itemToUpdate = {};
 
-		var itemToUpdate = {};
+		var sortOnGroupAndOrder = function(a, b) {
+			if (a[groupBy] < b[groupBy]) {
+				return - 1; 
+			}; 
+
+			if (a[groupBy] > b[groupBy]) {
+				return 1;
+			};
+
+			if (a[groupBy] == b[groupBy]) {
+				if (a.order < b.order) {
+					return - 1; 
+				} else {
+					return 1; 
+				};
+			}; 
+		};
+
+		var getSortedItemArray = function() {
+			sortedItems = items; 
+			return sortedItems.sort(sortOnGroupAndOrder); 
+		};
+
+		var getHighestOrderInGroup = function(groupName) {
+			var highestOrder = 0;  
+			
+			for (var i = 0; i < items.length; i++) {
+				if (items[i].order > highestOrder && items[i][groupBy] == groupName) {
+					highestOrder = items[i].order;
+				};
+			};
+			return highestOrder;
+		};
 
 
 		var getItems = function() {
@@ -20,22 +53,14 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils) {
 		}; 
 
 
-		var isItemWithLowestOrder = function(order) {
-			if (order == 1) {
+		var isItemWithLowestOrderInGroup = function(item) {
+			if (item.order == 1) {
 				return true;
 			};	
 		};
 
-	    var isItemWithHighestOrder = function(order) {
-			var highestOrder = 0; 
-			for (var i = 0; i < items.length; i++) {
-				if (items[i].order > highestOrder) {
-					highestOrder = items[i].order;
-				}
-			};
-			if (order == highestOrder) {
-				return true;
-			}; 		
+	    var isItemWithHighestOrderInGroup = function(item) {
+	    	return item.order == getHighestOrderInGroup(item[groupBy]);
 		};
 
 		var setSelectedItemByID = function(id) {
@@ -44,61 +69,56 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils) {
 				if (items[i]._id == id) {
 					itemToUpdate = items[i];
 					break;
-				}
+				};
 			};		
 		};
 
-		var getClassForUpArrow = function(order) {
-			if (isItemWithLowestOrder(order)) {
+		var getClassForUpArrow = function(item) {
+			if (isItemWithLowestOrderInGroup(item)) {
 				return "invisible";
-			}
+			};
 		};
 
-		var getClassForDownArrow = function(order) {
-			if (isItemWithHighestOrder(order)) {
+		var getClassForDownArrow = function(item) {
+			if (isItemWithHighestOrderInGroup(item)) {
 				return "invisible";
-			}
+			};
 		};
 
-		function setSelectedItemByIndex(index) {
-			itemToUpdate = items[index];
-		};
-
-		var updateItemInDB = function() {
+		var updateItemInDB = function(item) {
 	
-			var item = new db(itemToUpdate); 
-			item.update(item._id).then(function(response) {
+			var updateItem = new db(item); 
+			updateItem.update(updateItem._id).then(function(response) {
 					if (response.data) {
 						//Success - update model here?
 					} else {
 						//Unable to update
-					}
+					};
 			});
 			itemToUpdate = {};
 		};
 
-	    var moveItemUp = function(system) {
-			var order; 
+	    var moveItemUp = function(item) {			
+	    	var order; 
 
 			for (var i = 0; i < items.length; i++) {
-				if (items[i]._id == system._id) {
+				if (items[i]._id == item._id) {
 					order = items[i].order;		
 					break;
-				}			
+				};
 			};
 
 			for (var i = 0; i < items.length; i++) {
-				if (items[i].order == order && order > 1) {
+				if (items[i].order == order && order > 1 && items[i][groupBy] == item[groupBy]) {
 					items[i].order--;
-					setSelectedItemByIndex(i); 
-					updateItemInDB();
-				} else if (order - 1 == items[i].order) {
+					updateItemInDB(items[i]);
+				} else if (order - 1 == items[i].order && items[i][groupBy] == item[groupBy]) {
 					items[i].order++;
-					setSelectedItemByIndex(i); 
-					updateItemInDB();
+					updateItemInDB(items[i]);
 				};
 			};
-		}
+		};
+
 		var moveItemDown = function(item) {
 			var order; 
 
@@ -106,32 +126,29 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils) {
 				if (items[i]._id == item._id) {
 					order = items[i].order;		
 					break;
-				}
+				};
 			};
 
 			for (var i = 0; i < items.length; i++) {
-				if (items[i].order == order && order < items.length) {
+				if (items[i].order == order && order < items.length && items[i][groupBy] == item[groupBy]) {
 					items[i].order++;
-					setSelectedItemByIndex(i); 
-					updateItemInDB();
-				} else if (order + 1 == items[i].order) {
+					updateItemInDB(items[i]);
+				} else if (order + 1 == items[i].order && items[i][groupBy] == item[groupBy]) {
 					items[i].order--;
-					setSelectedItemByIndex(i); 
-					updateItemInDB();
+					updateItemInDB(items[i]);
 				};
 			};
-		}
+		};
 
 
 		var updateOrderForItemsAfterDeletion = function(fromOrder) {
 			for (var i = 0; i < items.length; i++) {
 				if (items[i].order > fromOrder) {
 					items[i].order--; 
-					setSelectedSystemByIndex(i); 
-					updateItemInDB();
-				}	
+					updateItemInDB(items[i]);
+				};
 			};
-		}
+		};
 
 		var deleteItem = function() {
 
@@ -141,17 +158,18 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils) {
 							if (items[i]._id == itemToUpdate._id) {
 								items.splice(i, 1);
 								updateOrderForItemsAfterDeletion(itemToUpdate.order);
-							}
+							};
 						};			
 					} else {
 						//Unable to delete
-					}
+					};
 			});
 		};
 
 		var saveItem = function() {
 
-			itemToUpdate.order = items.length + 1;
+			itemToUpdate.order = getHighestOrderInGroup(itemToUpdate[groupBy]) + 1;
+
 			var newItem = new db(itemToUpdate);
 			newItem.create().then(function(createdItem) {
 				items.push(createdItem);
@@ -176,45 +194,38 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils) {
 
 
 		// Public methods
-		that.isItemWithLowestOrder = isItemWithLowestOrder;
-		that.isItemWithHighestOrder = isItemWithHighestOrder;
+		that.isItemWithLowestOrderInGroup = isItemWithLowestOrderInGroup;
+		that.isItemWithHighestOrderInGroup = isItemWithHighestOrderInGroup;
 		that.setSelectedItemByID = setSelectedItemByID; 
 		that.getClassForDownArrow = getClassForDownArrow; 		
 		that.getClassForUpArrow  =getClassForUpArrow;
 		that.moveItemDown = moveItemDown; 
 		that.moveItemUp = moveItemUp; 
-		that.setSelectedItemByIndex = setSelectedItemByIndex;
 		that.getItems = getItems;
 		that.getItemToUpdate = getItemToUpdate;
 		that.deleteItem = deleteItem;
 		that.saveItem = saveItem; 
 		that.updateItem = updateItem; 
-		that.items = items; 
+		that.getItems = getItems; 
 
 		return that;
 
 	}; 
 
-	// Filter for systems
-	$scope.filterSystems = ''; 
-	$scope.setSystemgroupForFilter = function(group) {
-		$scope.filterSystems = group.name; 
-	}
-
-	// Get systemgroups from database and create collection
-	var promise = db.Systemgroup.get();
-	promise.then(function(data) {
-		$scope.systemgroups = data;
-		$scope.systemgroupsCollection = collection($scope.systemgroups, db.Systemgroup);				
-	});
 
 	// Get systems from DB and create collection 
 	var promise = db.Systemname.get();
 	promise.then(function(data) {
 		$scope.systems = data;				
-		$scope.systemsCollection = collection($scope.systems, db.Systemname);				
+		$scope.systemsCollection = collection($scope.systems, db.Systemname, 'systemgroup');
 	});
-	
+
+	// Get systemgroups from database and create collection
+	var promise = db.Systemgroup.get();
+	promise.then(function(data) {
+		$scope.systemgroups = data;
+		$scope.systemgroupsCollection = collection($scope.systemgroups, db.Systemgroup);
+	});
 
 	// Get alert from database and create collection
 	var promise = db.Alert.get();
