@@ -1,4 +1,4 @@
-var myModule = angular.module('systemAvailability', ['mongodbModule', 'utilsModule', 'directiveModule']);
+ var myModule = angular.module('systemAvailabilityAdmin', ['mongodbModule', 'utilsModule', 'directiveModule']);
 
 myModule.controller("adminViewCtrl", function($scope, db, Utils) {
 
@@ -7,7 +7,8 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils) {
 
 		var that = {},
 			items = data,
-			itemToUpdate = {};
+			itemToUpdate = {nom:"test", systemgroup:"blank"};
+
 
 		var sortOnGroupAndOrder = function(a, b) {
 			if (a[groupBy] < b[groupBy]) {
@@ -141,9 +142,9 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils) {
 		};
 
 
-		var updateOrderForItemsAfterDeletion = function(fromOrder) {
+		var updateOrderForItemsAfterDeletion = function(fromItem) {
 			for (var i = 0; i < items.length; i++) {
-				if (items[i].order > fromOrder) {
+				if (items[i].order > fromItem.order && items[i][groupBy] == fromItem[groupBy]) {
 					items[i].order--; 
 					updateItemInDB(items[i]);
 				};
@@ -157,7 +158,7 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils) {
 						for (var i = 0; i < items.length; i++) {
 							if (items[i]._id == itemToUpdate._id) {
 								items.splice(i, 1);
-								updateOrderForItemsAfterDeletion(itemToUpdate.order);
+								updateOrderForItemsAfterDeletion(itemToUpdate);
 							};
 						};			
 					} else {
@@ -180,7 +181,9 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils) {
 		};
 
 		var updateItem = function() {
-		
+			
+			
+
 			var system = new db(itemToUpdate); 
 			system.update(itemToUpdate._id).then(function(response) {
 					if (response.data) {
@@ -192,7 +195,7 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils) {
 			itemToUpdate = {};
 		};
 
-
+	
 		// Public methods
 		that.isItemWithLowestOrderInGroup = isItemWithLowestOrderInGroup;
 		that.isItemWithHighestOrderInGroup = isItemWithHighestOrderInGroup;
@@ -207,17 +210,18 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils) {
 		that.saveItem = saveItem; 
 		that.updateItem = updateItem; 
 		that.getItems = getItems; 
-
+		that.getHighestOrderInGroup = getHighestOrderInGroup;
+		that.itemToUpdate = itemToUpdate;
 		return that;
 
 	}; 
-
 
 	// Get systems from DB and create collection 
 	var promise = db.Systemname.get();
 	promise.then(function(data) {
 		$scope.systems = data;				
 		$scope.systemsCollection = collection($scope.systems, db.Systemname, 'systemgroup');
+		$scope.systemToUpdate = $scope.systemsCollection.itemToUpdate;
 	});
 
 	// Get systemgroups from database and create collection
@@ -234,6 +238,13 @@ myModule.controller("adminViewCtrl", function($scope, db, Utils) {
 		$scope.alertsCollection = collection($scope.alerts, db.Alert);				
 	});
 
+
+	$scope.$watch('systemToUpdate.systemgroup', function(newVal, oldVal) {
+		if (oldVal != newVal) {
+			$scope.systemToUpdate.order = $scope.systemsCollection.getHighestOrderInGroup(newVal) + 1;
+			$scope.systemsCollection.itemToUpdate.systemgroup = newVal;
+		};	
+	});
 
 	
 });
