@@ -1,4 +1,4 @@
-var myModule = angular.module('systemAvailabilityAdmin', ['mongodbModule', 'utilsModule', 'directiveModule']);
+var myModule = angular.module('systemAvailabilityAdmin', ['mongodbModule', 'directiveModule']);
 
 myModule.factory('systemListService', function(db) {
 	var service,
