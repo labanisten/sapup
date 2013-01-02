@@ -502,7 +502,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 												template += '<tr><td class="systemgroup"><span>{{systemgroups['+j+'].name}}</span></td><td colspan="{{noOfDaysInMonth[selectedMonth]}}"></td>';
 												for (i = 0; i < scope.systemnames.length; i++){
 													if (scope.systemnames[i].systemgroup == scope.systemgroups[j].name) {
-														template += '<tr><td class="system"><span>{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}</span></td>';
+														template += '<tr class="systemrow"><td class="system"><span>{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}</span></td>';
 														var systemMatch = Utils.findSystem(scope.systemlines, scope.systemnames[i].name);
 														if (systemMatch.result) {
 															template += buildTemplateForExistingSystem(systemMatch.index);
