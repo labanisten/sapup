@@ -6,6 +6,7 @@ myModule.factory('systemListService', function(db) {
 		oldGroup = "",
 		itemToUpdate = {},
 		db = db.Systemname,
+		promise,
 		groupBy = "systemgroup";
 
 	var	sortOnGroupAndOrder = function(a, b) {
@@ -74,8 +75,8 @@ myModule.factory('systemListService', function(db) {
 		getItems: function() {
 			if (items) {
 				return items;
-			} else {
-				var promise = db.get();
+			} else if (!promise) {
+				promise = db.get();
 				promise.then(function(data) {
 					items = data;
 					return items;
@@ -204,6 +205,7 @@ myModule.factory('systemgroupListService', function(db) {
 	var service,
 		items,	
 		itemToUpdate = {},
+		promise,
 		db = db.Systemgroup;
 
 	var	getHighestOrder = function() {
@@ -255,8 +257,8 @@ myModule.factory('systemgroupListService', function(db) {
 		getItems: function() {
 			if (items) {
 				return items;
-			} else {
-				var promise = db.get();
+			} else if (!promise) {
+				promise = db.get();
 				promise.then(function(data) {
 					items = data;
 					return items;
@@ -368,6 +370,7 @@ myModule.factory('alertListService', function(db) {
 	var service,
 		items,
 		itemToUpdate = {},
+		promise, 
 		db = db.Alert;
 
 	var	isFirstItem = function(item) {
@@ -420,8 +423,8 @@ myModule.factory('alertListService', function(db) {
 		getItems: function() {
 			if (items) {
 				return items;
-			} else {
-				var promise = db.get();
+			} else if (!promise) {
+				promise = db.get();
 				promise.then(function(data) {
 					items = data;
 					return items;
