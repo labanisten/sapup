@@ -61,7 +61,7 @@
 	{
 	  height: 8px;
 	  cursor: pointer;
-	  width: 100%;
+	  /*width: 100%;*/
 	  display: block;
 	  min-width: 10px;
 	  -webkit-border-radius: 1.65em;
@@ -96,16 +96,16 @@
 	  #gradient > .vertical(#FAFA11, lighten(#B1A520, 10%));
 	}
 
-	.accordion {
+.alert-accordion {
 	  background-color: @grayLighter;
 	}
 
-	.accordion-heading {
+.alert-accordion-heading {
 	  background-color: @grayLighter;
 	  line-height: 30px;
 	}
 
-	.accordion-group {
+.alert-accordion-group {
 	  background-color: @grayLighter;
 	  .border-radius(0px);
 	}
@@ -143,6 +143,13 @@
 		  padding: 2px;
 		  min-width: 12px;
 		}
+
+		tbody {
+			tr:hover td,
+		    tr:hover th {
+		      background-color: @tableBackgroundHover;
+		    }
+		  }
 		
 		.week {
 		  background-color: @grayLighter;
@@ -152,6 +159,16 @@
 		  background-color: @grayLighter; 
 		  font-weight: 1000;
 		  font-size: 0.9em;
+		  width: 1%;
+		  white-space: nowrap;
+		  padding-left: 5px;
+		  padding-right: 5px;
+		}
+
+		.systemgroup {
+		  background-color: @grayLighter; 
+		  font-weight: bold;
+		  font-size: 1em;
 		  width: 1%;
 		  white-space: nowrap;
 		  padding-left: 5px;

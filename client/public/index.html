@@ -25,7 +25,8 @@
 	<script src="../js/utils.js"></script>
 
 	<link href="../bootstrap/bootstrap/css/bootstrap.css" rel="stylesheet">
-	<link href="../css/jquery-ui-1.8.21.custom.css" rel="stylesheet"></head>
+	<link href="../css/jquery-ui-1.8.21.custom.css" rel="stylesheet">
+</head>
 
 <body ng-controller="TimelineCtrl">
 	<div class="navbar navbar-fixed-top">
@@ -71,7 +72,7 @@
 					<span class="new-status-btn-txt">Add status</span>
 				</button>
 				<a href="http://systemavailability.azurewebsites.net/messages.rss" class="btn btn-link navbtn-edit">
-				  <img src="../images/feed-icon-28x28.png" class="pull-left"/>
+				  <img style="width:20px" src="../images/feed-icon-28x28.png" class="pull-left"/>
 				</a>
 			</div>
 		</div>
@@ -81,8 +82,8 @@
 
 		<div class="row-fluid">
 			<div ng-class="messageAreaClass()" id="accordionContainer">
-				<div class="accordion-group">
-					<div  class="accordion-toggle alert-container-header accordion-heading" data-toggle="collapse" data-parent="#accordionContainer" href="#collapseOne">Messages</div>
+				<div class="alert-accordion-group">
+					<div  class="accordion-toggle alert-container-header alert-accordion-heading" data-toggle="collapse" data-parent="#accordionContainer" href="#collapseOne">Messages</div>
 					<div id="collapseOne" class="alert-container-body accordion-body in collapse" style="height: auto; ">
 						<div class="accordion-inner">
 							<div id="pop" class="span4" bs-popover ng-repeat="alertline in alertlines" rel="popover" data-content="{{alertline.comment}}" data-original-title="{{alertline.title}}" data-placement="bottom">

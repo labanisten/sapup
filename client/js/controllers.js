@@ -6,6 +6,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.systemlines = getSystemData();
 	$scope.systemnames = getSystemNames();
 	$scope.systemstatuses = getSystemStatuses();
+	$scope.systemgroups = getSystemgroups();
 	$scope.alertlines = getAlertData();
 	$scope.alerttypes = getAlertTypes();
 
@@ -432,7 +433,17 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		promise.then(function(data) {
 			$scope.systemnames = data;
 			$scope.systemnames.sort(function(a,b){return a.order - b.order}); //Sort by prder property
+		});
 
+		return [];
+	}
+
+	function getSystemgroups(){
+
+		var promise = db.Systemgroup.get();
+		promise.then(function(data) {
+			$scope.systemgroups = data;
+			$scope.systemgroups.sort(function(a,b){return a.order - b.order}); //Sort by prder property
 		});
 
 		return [];
