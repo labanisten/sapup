@@ -2,7 +2,7 @@ var myModule = angular.module('systemAvailabilityAdmin', ['mongodbModule', 'dire
 
 myModule.factory('systemListService', function(db) {
 	var service,
-		items = [],
+		items,
 		oldGroup = "",
 		itemToUpdate = {},
 		db = db.Systemname,
@@ -72,7 +72,7 @@ myModule.factory('systemListService', function(db) {
 
 	service = {
 		getItems: function() {
-			if (items.length > 0) {
+			if (items) {
 				return items;
 			} else {
 				var promise = db.get();
@@ -202,7 +202,7 @@ myModule.factory('systemListService', function(db) {
 myModule.factory('systemgroupListService', function(db) {
 	
 	var service,
-		items = [],	
+		items,	
 		itemToUpdate = {},
 		db = db.Systemgroup;
 
@@ -253,7 +253,7 @@ myModule.factory('systemgroupListService', function(db) {
 		},
 
 		getItems: function() {
-			if (items.length > 0) {
+			if (items) {
 				return items;
 			} else {
 				var promise = db.get();
