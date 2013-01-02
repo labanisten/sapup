@@ -496,16 +496,22 @@ directiveModule.directive('systemTable', function($compile, Utils){
 											
 										'</thead>'+
 										'<tbody>';
-											var i;
-											for(i = 0; i < scope.systemnames.length; i++){
-												template += '<tr><td class="system"><span>{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}</span></td>';
-												var systemMatch = Utils.findSystem(scope.systemlines, scope.systemnames[i].name);
-												if(systemMatch.result) {
-													template += buildTemplateForExistingSystem(systemMatch.index);
-												}else {
-													template += buildTemplateForNoneExistingSystem(scope.systemnames[i]);
-												}
-											}
+											var i,
+												j;
+											for (j = 0; j < scope.systemgroups.length; j++){
+												template += '<tr><td class="systemgroup"><span>{{systemgroups['+j+'].name}}</span></td><td colspan="{{noOfDaysInMonth[selectedMonth]}}"></td>';
+												for (i = 0; i < scope.systemnames.length; i++){
+													if (scope.systemnames[i].systemgroup == scope.systemgroups[j].name) {
+														template += '<tr><td class="system"><span>{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}</span></td>';
+														var systemMatch = Utils.findSystem(scope.systemlines, scope.systemnames[i].name);
+														if (systemMatch.result) {
+															template += buildTemplateForExistingSystem(systemMatch.index);
+														} else {
+															template += buildTemplateForNoneExistingSystem(scope.systemnames[i]);
+														};
+													};
+												};
+											};
 											
 							template += '</tbody>'+
 									'</table>';
@@ -546,6 +552,14 @@ directiveModule.directive('systemTable', function($compile, Utils){
 
 				
 				scope.$watch('systemnames', function() {
+
+					if(isDataReady(scope.systemnames)){
+						buildCalendar();
+					}
+				
+				});
+
+				scope.$watch('systemgroups', function() {
 
 					if(isDataReady(scope.systemnames)){
 						buildCalendar();

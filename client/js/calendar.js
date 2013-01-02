@@ -1,5 +1,5 @@
 
-angular.module('calendarModule', ['utilsModule']).
+angular.module('calendarModule', []).
 	factory('Calendar', function() {
 
 	var calendar = calendar || {};
