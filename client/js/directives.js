@@ -47,9 +47,9 @@ directiveModule.directive('systemCompactMonth', function($compile, Utils){
 			link: function(scope, element, attrs) {
 
 				scope.$watch('selectedMonthCompact', function() {
-					if(scope.selectedMonth > 0) {
+					//if(scope.selectedMonth > 0) {
 						buildCompactMonthHeader();
-					}
+					//}
 				});
 				
 
