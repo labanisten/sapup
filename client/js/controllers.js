@@ -549,7 +549,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 		var existingSystem;
 		var i;
-		for (i = 1; i < $scope.systemlines.length; i++) {
+		for (i = 0; i < $scope.systemlines.length; i++) {
 			if ( $scope.systemlines[i].system == $scope.updateFormData.system) {
 				existingSystem = $scope.systemlines[i];
 				break;
@@ -591,7 +591,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 				system;
 
 			var i;
-			for (i = 1; i < $scope.systemlines.length; i++) {
+			for (i = 0; i < $scope.systemlines.length; i++) {
 				if ( $scope.systemlines[i].system == $scope.addFormData.system) {
 					existingSystem = $scope.systemlines[i];
 					break;
