@@ -4998,6 +4998,9 @@ a.badge:hover {
   .alert-container-body {
     background-color: #eeeeee;
   }
+  .login-form {
+    margin-left: 65px;
+  }
   table.system-table {
     width: 100%;
     border-collapse: collapse;
