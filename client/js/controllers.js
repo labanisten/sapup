@@ -244,7 +244,7 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	function fillExistingCompactData(syslinesIndex) {
 		$scope.systemCompactViewList = [];
 
-		//Find system text, might not be needed...
+		//TODO: Find system text, might not be needed... Used in view header
 		if( $scope.selectedCompactSystem.hasValue == false) {
 			var systemtext;
 			var j;
@@ -260,13 +260,16 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 			//$scope.selectedCompactSystem.sysIndex = index;
 		}
 
+
 		var i;
 		for(i = 0; i < $scope.systemlines[syslinesIndex].statuslines.length; i++){
 			var line = $scope.systemlines[syslinesIndex].statuslines[i];
 			var start = Utils.convertToDate(line.start);
 			var end = Utils.convertToDate(line.end);
 
-			if(start.getMonth() == $scope.selectedMonthCompact && start.getFullYear() == $scope.selectedYearCompact) {
+			//TODO: test for elements that spans several months
+			if((start.getMonth() == $scope.selectedMonthCompact && start.getFullYear() == $scope.selectedYearCompact) || 
+				(start.getMonth() == $scope.selectedMonthCompact && end.getFullYear() == $scope.selectedYearCompact)){
 
 				var elm = {
 					status: line.status,
@@ -281,8 +284,6 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 		if($scope.systemCompactViewList <= 0){
 			fillEmptyCompactListElement();
-		}else{
-			$scope.selectedCompactSystem.hasValue = true;
 		}
 
 		$scope.selectedCompactSystem.hasValue = true;
@@ -310,10 +311,11 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		var systemMatch = Utils.findSystem($scope.systemlines, $scope.systemnames[index].name);
 		
 		if(systemMatch.result) {
-			$scope.selectedCompactSystem.sysIndex = index;
+			$scope.selectedCompactSystem.sysIndex = systemMatch.index;
 			fillExistingCompactData(systemMatch.index);
 		}else{
 			fillEmptyCompactListElement();
+			$scope.selectedCompactSystem.hasValue = true;
 		}
 
 	}
@@ -360,9 +362,10 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.gotoMonthCompact = function(event, month) {
 		$scope.selectedMonthCompact = month;
 		$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonthCompact);
-		//if($scope.selectedCompactSystem.sysIndex > -1){
+
 		if($scope.selectedCompactSystem.hasValue == true) {
-			fillExistingCompactData($scope.selectedCompactSystem.sysIndex);
+			//fillExistingCompactData($scope.selectedCompactSystem.sysIndex);
+			$scope.fillSystemCompactViewList($scope.selectedCompactSystem.sysNameIndex);
 		}
 		
 		//$scope.fillSystemCompactViewList($scope.selectedCompactSystem.sysIndex);
