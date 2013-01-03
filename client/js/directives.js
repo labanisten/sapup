@@ -12,9 +12,7 @@ directiveModule.directive('messageViewCompact', function($compile, Utils){
 			link: function(scope, element, attrs) {
 
 				scope.$watch('alertlines', function() {
-					if(scope.selectedMonth > 0) {
-						buildCompactMessageContainer();
-					}
+					buildCompactMessageContainer();
 				});
 
 				function buildCompactMessageContainer() {
