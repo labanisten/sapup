@@ -81,20 +81,46 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 			link: function(scope, element, attrs) {
 				var template = '';
 
+				var dataStatus = {
+					systemlines: false,
+					systemnames: false,
+					systemgroups: false
+				}
+
+				function dataIsReady() {
+					var result = false;
+					if(dataStatus.systemlines == true && dataStatus.systemnames == true && dataStatus.systemgroups == true) {
+						result = true;
+					}
+					return result;
+				}
+
 				scope.$watch('systemlines', function(newVal, oldVal) {
-					if(Utils.isDataReady(scope.systemlines)){
+					/*if(Utils.isDataReady(scope.systemlines)){
+						buildList();
+					}*/
+					dataStatus.systemlines = true;
+					if(dataIsReady) {
 						buildList();
 					}
 				});
 				
 				scope.$watch('systemnames', function() {
-					if(Utils.isDataReady(scope.systemnames)){
+					/*if(Utils.isDataReady(scope.systemnames)){
+						buildList();
+					}*/
+					dataStatus.systemnames = true;
+					if(dataIsReady) {
 						buildList();
 					}
 				});
 
 				scope.$watch('systemgroups', function() {
-					if(Utils.isDataReady(scope.systemnames)){
+					/*if(Utils.isDataReady(scope.systemgroups)){
+						buildList();
+					}*/
+					dataStatus.systemgroups = true;
+					if(dataIsReady) {
 						buildList();
 					}
 				});
@@ -102,7 +128,7 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 
 				function buildList() {
 					//template = '<ul class="nav mobnav nav-list">';
-
+					template = '<span ng:class="getClassForCompactList()">'
 
 					var i;
 					var j;
@@ -114,7 +140,7 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 						for (j = 0; j < scope.systemnames.length; j++){
 							if (scope.systemnames[j].systemgroup == scope.systemgroups[i].name) {
 
-								template += '<li><a ng:click="fillSystemCompactViewList('+j+')" ng:class="getClassForCompactList()">'+
+								template += '<li><a ng:click="fillSystemCompactViewList('+j+')">'+
 								'<i class="icon-chevron-right"></i>{{systemnames['+j+'].name}} {{systemnames['+j+'].text}}';
 
 								template += '</a></li>';
@@ -166,7 +192,9 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 
 					element.html(template);				
 					$compile(element.contents())(scope);
-
+					dataStatus.systemlines = false;
+					dataStatus.systemnames = false;
+					dataStatus.systemgroups = false;
 				}
 			}
 	};
