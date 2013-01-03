@@ -409,6 +409,26 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		getSystemData();
 	};
 
+	$scope.gotoPreviousMonth = function() {
+		var prevMonth = Utils.decMonth($scope.selectedMonth);
+
+		if(prevMonth === 11) {
+			$scope.selectedYear = $scope.selectedYear - 1;
+		}
+
+		$scope.selectedMonth = prevMonth;
+	};
+	
+	$scope.gotoNextMonth = function() {
+		var nextMonth = Utils.incMonth($scope.selectedMonth);
+
+		if(nextMonth === 0) {
+			$scope.selectedYear = $scope.selectedYear + 1;
+		}
+
+		$scope.selectedMonth = nextMonth;
+	};
+
 	function getSystemData() {
 
 		var promise = db.System.get();

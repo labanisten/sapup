@@ -205,13 +205,13 @@ angular.module('utilsModule', []).
 			return result;
 		}
 
-		function decMonth(month) {
+		ns.decMonth = function(month) {
 			var num = month - 1;
 			if(num < 0) {num = 11;}
 			return num;
 		}
 		
-		function incMonth(month) {
+		ns.incMonth = function(month) {
 			var num = month + 1;
 			if(num > 11) {num = 0;}
 			return num;
@@ -220,15 +220,15 @@ angular.module('utilsModule', []).
 		ns.buildCompactMonthList = function(selectedMonth) {
 			var monthList = [];
 
-			var num2 = decMonth(selectedMonth);
-			var num1 = decMonth(num2);
+			var num2 = ns.decMonth(selectedMonth);
+			var num1 = ns.decMonth(num2);
 
 			monthList.push(num1);
 			monthList.push(num2);
 			monthList.push(selectedMonth);
 
-			var num4 = incMonth(selectedMonth);
-			var num5 = incMonth(num4);
+			var num4 = ns.incMonth(selectedMonth);
+			var num5 = ns.incMonth(num4);
 
 			monthList.push(num4);
 			monthList.push(num5);
