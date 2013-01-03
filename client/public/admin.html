@@ -111,7 +111,7 @@
 										<div class="accordion-group" ng-repeat="group in systemgroupList.getItems()| orderBy:'order'">
 											<div class="accordion-heading">
 												<a  class="accordion-toggle" data-toggle="collapse" data-parent="systemgroups-accordion" href="#{{group.name}}">
-													{{group.name}}
+													{{group.name}} ({{systemList.getNoItemsOfGroup(group.name)}})
 												</a>
 											</div>
 											<div id="{{group.name}}" class="accordion-body collapse">
@@ -154,7 +154,7 @@
 										</div>
 										<div class="accordion-group">
 											<div class="accordion-heading">
-												<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="systemgroups-accordion" href="#allsystems">All systems</a>
+												<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="systemgroups-accordion" href="#allsystems">All systems ({{systemList.getItems().length}})</a>
 											</div>
 											<div id="allsystems" class="accordion-body collapse">
 												<div class="accordion-inner">
