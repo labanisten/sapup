@@ -2,7 +2,7 @@ var myModule = angular.module('systemAvailabilityAdmin', ['mongodbModule', 'dire
 
 myModule.factory('systemListService', function(db) {
 	var service,
-		items,
+		items = [],
 		oldGroup = "",
 		itemToUpdate = {},
 		db = db.Systemname,
@@ -73,7 +73,7 @@ myModule.factory('systemListService', function(db) {
 
 	service = {
 		getItems: function() {
-			if (items) {
+			if (items.length > 0) {
 				return items;
 			} else if (!promise) {
 				promise = db.get();
@@ -82,6 +82,16 @@ myModule.factory('systemListService', function(db) {
 					return items;
 				});
 			};
+		},
+		
+		getNoItemsOfGroup: function(groupName) {
+			var count = 0;
+			for (var i = 0; i < items.length; i++) {				
+				if (items[i][groupBy] == groupName) {
+					count++;	
+				};
+			};
+			return count;
 		},
 
 		getItemToUpdate: function() {
@@ -100,8 +110,8 @@ myModule.factory('systemListService', function(db) {
 			var i; 
 			for (i = 0; items.length; i++) {
 				if (items[i]._id == id) {
-					itemToUpdate = items[i];
-					break;
+					itemToUpdate = items[i]
+;					break;
 				};
 			};		
 		},
@@ -203,7 +213,7 @@ myModule.factory('systemListService', function(db) {
 myModule.factory('systemgroupListService', function(db) {
 	
 	var service,
-		items,	
+		items = [],	
 		itemToUpdate = {},
 		promise,
 		db = db.Systemgroup;
@@ -255,7 +265,7 @@ myModule.factory('systemgroupListService', function(db) {
 		},
 
 		getItems: function() {
-			if (items) {
+			if (items.length > 0) {
 				return items;
 			} else if (!promise) {
 				promise = db.get();
@@ -368,7 +378,7 @@ myModule.factory('systemgroupListService', function(db) {
 myModule.factory('alertListService', function(db) {
 	
 	var service,
-		items,
+		items = [],
 		itemToUpdate = {},
 		promise, 
 		db = db.Alert;
@@ -421,7 +431,7 @@ myModule.factory('alertListService', function(db) {
 		
 
 		getItems: function() {
-			if (items) {
+			if (items.length > 0) {
 				return items;
 			} else if (!promise) {
 				promise = db.get();
