@@ -79,7 +79,7 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 	return {
 			restrict: 'A',
 			link: function(scope, element, attrs) {
-				var template;
+				var template = '';
 
 				scope.$watch('systemlines', function(newVal, oldVal) {
 					if(Utils.isDataReady(scope.systemlines)){
@@ -92,12 +92,44 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 						buildList();
 					}
 				});
+
+				scope.$watch('systemgroups', function() {
+					if(Utils.isDataReady(scope.systemnames)){
+						buildList();
+					}
+				});
 				
 
 				function buildList() {
-					template = '<ul class="nav mobnav nav-list">';
+					//template = '<ul class="nav mobnav nav-list">';
 
 
+					var i;
+					var j;
+					for(i = 0; i < scope.systemgroups.length; i++){
+
+						template += '<h5 class="systemgroup_compact">{{systemgroups['+i+'].name}}</h5>';
+						template += '<ul class="nav mobnav nav-list">';
+
+						for (j = 0; j < scope.systemnames.length; j++){
+							if (scope.systemnames[j].systemgroup == scope.systemgroups[i].name) {
+
+								template += '<li><a ng:click="fillSystemCompactViewList('+j+')" ng:class="getClassForCompactList()">'+
+								'<i class="icon-chevron-right"></i>{{systemnames['+j+'].name}} {{systemnames['+j+'].text}}';
+
+								template += '</a></li>';
+
+							}
+						}
+
+						template += '</ul>';
+					}
+
+
+
+
+
+					/*
 					var i;
 					var j;
 					for(i = 0; i < scope.systemnames.length; i++){
@@ -106,7 +138,7 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 
 						template += '</a></li>';
 					}
-
+					*/
 
 
 
@@ -130,7 +162,7 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 
 
 
-					template += '</ul>';
+					//template += '</ul>';
 
 					element.html(template);				
 					$compile(element.contents())(scope);
@@ -275,7 +307,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 			restrict: 'A',
 			link: function(scope, element, attrs) {
 			
-				
+				//TODO: Utils?
 				function firstOfMonthStr(start) {
 					var tmpDate = new String();
 					var selectedMonth = scope.selectedMonth + 1;
