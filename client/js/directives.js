@@ -527,11 +527,27 @@ directiveModule.directive('systemTable', function($compile, Utils){
 											
 											'<tr>'+
 												'<th class="months" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
+
 														'<div class="row-fluid">'+
+
+														'<div class="span1 montharrowcell">'+
+																'<i class="montharrow" ng-click="gotoPreviousMonth()" clear-popovers-and-selections><</i>'+
+														'</div>'+
+
+														'<div class="span10 row-fluid">'+
+
 															'<div ng:class="getClassForMonth(month)" ng-click="gotoMonth($event, month)" ng-repeat="month in [0,1,2,3,4,5,6,7,8,9,10,11]">'+
 																'{{months[month]}}' +
 															'</div>'+
+
 														'</div>'+
+
+														'<div class="span1 montharrowcell">'+
+																'<i class="montharrow"  ng-click="gotoNextMonth()" clear-popovers-and-selections>></i>'+
+														'</div>'+
+
+														'</div>'+
+
 												'</th>'+
 											'</tr>'+
 
