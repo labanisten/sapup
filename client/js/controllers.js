@@ -281,9 +281,9 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 
 		if($scope.systemCompactViewList <= 0){
 			fillEmptyCompactListElement();
-		}else{
-			$scope.selectedCompactSystem.hasValue = true;
-		}
+		}//else{
+			//$scope.selectedCompactSystem.hasValue = true;
+		//}
 
 		$scope.selectedCompactSystem.hasValue = true;
 	}
@@ -310,10 +310,11 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 		var systemMatch = Utils.findSystem($scope.systemlines, $scope.systemnames[index].name);
 		
 		if(systemMatch.result) {
-			$scope.selectedCompactSystem.sysIndex = index;
+			$scope.selectedCompactSystem.sysIndex = systemMatch.index;
 			fillExistingCompactData(systemMatch.index);
 		}else{
 			fillEmptyCompactListElement();
+			$scope.selectedCompactSystem.hasValue = true;
 		}
 
 	}
