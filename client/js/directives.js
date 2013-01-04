@@ -568,7 +568,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 										'<tbody>';
 											var i, j;
 											for (j = 0; j < scope.systemgroups.length; j++){
-												template += '<tr><td class="systemgroup"><span>{{systemgroups['+j+'].name}}</span></td><td colspan="{{noOfDaysInMonth[selectedMonth]}}"></td>';
+												template += '<tr><td class="systemgroup"><span>{{systemgroups['+j+'].text}}</span></td><td colspan="{{noOfDaysInMonth[selectedMonth]}}"></td>';
 												for (i = 0; i < scope.systemnames.length; i++){
 													if (scope.systemnames[i].systemgroup == scope.systemgroups[j].name) {
 														template += '<tr class="systemrow"><td class="system"><span>{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}</span></td>';

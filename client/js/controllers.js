@@ -1,7 +1,7 @@
 var myModule = angular.module('systemAvailability', ['mongodbModule', 'calendarModule', 'utilsModule', 'directiveModule']);
 
 
-myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
+myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils) {
 
 	$scope.systemlines = getSystemData();
 	$scope.systemnames = getSystemNames();
@@ -95,6 +95,19 @@ myModule.controller("TimelineCtrl", function($scope, db, Calendar, Utils) {
 	$scope.selectedMonthCompact = Calendar.getCurrentMonth();
 	$scope.systemCompactViewList = [];
 	$scope.displayCompactMessageView = false;
+	
+	$scope.authenticate = function() {
+		$http({method: 'GET', url: '/authenticate'}).
+			 success(function(data, status, headers, config) {
+			    // this callback will be called asynchronously
+			    // when the response is available
+			 }).
+			 error(function(data, status, headers, config) {
+			    // called asynchronously if an error occurs
+			    // or server returns response with status
+			    // code outside of the <200, 400) range
+			 });
+	};
 
 	$scope.systemTableStartColumnSize;
 

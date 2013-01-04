@@ -63,6 +63,8 @@
 				  <img src="../images/feed-icon-28x28.png" class="pull-left"/>
 				</a-->
 			</div>
+			
+			<a class="btn btn-small" href="/authenticate">Login</a>
 
 			<div class="btn-group pull-right">
 				<button class="btn btn-small navbtn-edit" data-toggle="modal" href="#addalertdialog"> <i class="icon-warning-sign"></i>
@@ -288,6 +290,42 @@
 
 		</div>
 
+	</div>
+
+ <!-- Login modal -->
+	<div class="modal hide fade login" id="logindialog">
+		<div class="modal-body">
+			<form class="form-horizontal" action='' method="POST">
+			  <fieldset>
+			    <div id="legend">
+			      <legend class="">Login</legend>
+			    </div>
+			    <div class="control-group">
+			      <!-- Username -->
+			      <label class="control-label"  for="username">Username</label>
+			      <div class="controls">
+			        <input type="text" id="username" name="username" placeholder="" class="input-xlarge">
+			      </div>
+			    </div>
+			 
+			    <div class="control-group">
+			      <!-- Password-->
+			      <label class="control-label" for="password">Password</label>
+			      <div class="controls">
+			        <input type="password" id="password" name="password" placeholder="" class="input-xlarge">
+			      </div>
+			    </div>
+			 
+			 
+			    <div class="control-group">
+			      <!-- Button -->
+			      <div class="controls">
+			        <button class="btn btn-success">Login</button>
+			      </div>
+			    </div>
+			  </fieldset>
+			</form>
+		</div>
 	</div>
 
 	<!-- Placed at the end of the document so the pages load faster -->
