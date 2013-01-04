@@ -2,15 +2,20 @@
 	var mongodb = require('mongodb');
 	var generic_pool = require('generic-pool');
 
-	var app = express.createServer();
 	var BSON = mongodb.BSONPure;
 	var RSS = require('rss');
-	
 
 	//Constants
 	var MONGODB_URL = process.env.MONGODB_URL || '127.0.0.1'; 
 	var MONGODB_PORT = parseInt(process.env.MONGODB_PORT) || 27017; 
 	var MONGODB_DB = process.env.MONGODB_DB || 'test'; 
+
+	var loginURL = "https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=%2Fprofile&redirect_uri=https://systemavailability.azurewebsites.net/oauth2callback&response_type=code&client_id=1072189313711.apps.googleusercontent.com";
+
+
+	var app = express.createServer();
+// Set up authentication using Goole API
+
 
 
 	var pool = generic_pool.Pool({
@@ -186,6 +191,15 @@
 	app.delete('/systemstatuses/:id', function(req, res) {restServices.delete(req, res);});
 	app.delete('/alerts/:id', function(req, res) {restServices.delete(req, res);});
 
+
+// Authentication via Google API
+	app.get('/authenticate', function(req, res) {
+		res.redirect(loginURL);
+	});
+	
+	app.get('/oauth2callback', function(req, res) {
+		concole.log("OAUTH callback from Google");
+	});
 	
 	function getResponse(error, result) {
 		var resStr;
