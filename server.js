@@ -198,7 +198,7 @@
 	});
 	
 	app.get('/oauth2callback', function(req, res) {
-		concole.log("OAUTH callback from Google");
+		console.log("OAUTH callback from Google");
 	});
 	
 	function getResponse(error, result) {
