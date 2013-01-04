@@ -16,7 +16,7 @@
 	    MONGODB_DB = process.env.MONGODB_DB || 'test'; 
 	    GOOGLE_CLIENT_ID = '1072189313711.apps.googleusercontent.com',
 	    GOOGLE_CLIENT_SECRET = 'Evqt9n8JS3f50GFCqoyn5ElN',
-	    GOOGLE_REDIRECT_URI = 'https://systemavailability.azurewebsites.net//oauth2callback';
+	    GOOGLE_REDIRECT_URI = 'https://systemavailability.azurewebsites.net/oauth2callback';
 	    GOOGLE_SCOPE = 'https://www.googleapis.com/auth/userinfo.profile';
 		GOOGLE_OAUTH2_URL = "https://accounts.google.com/o/oauth2/auth?scope=" + GOOGLE_SCOPE + "&redirect_uri=" + GOOGLE_REDIRECT_URI + "&response_type=code&client_id=1072189313711.apps.googleusercontent.com";
 
