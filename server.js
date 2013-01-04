@@ -4,7 +4,6 @@
 	var http = require('http');
 	var querystring = require('querystring');
 	var everyauth = require('everyauth');
-	var connect = require('connect');
 
 	var BSON = mongodb.BSONPure;
 	var RSS = require('rss');
@@ -17,7 +16,7 @@
 	    MONGODB_DB = process.env.MONGODB_DB || 'test'; 
 	    GOOGLE_CLIENT_ID = '1072189313711.apps.googleusercontent.com',
 	    GOOGLE_CLIENT_SECRET = 'Evqt9n8JS3f50GFCqoyn5ElN',
-	    GOOGLE_REDIRECT_URI = 'http://localhost:4000/oauth2callback';
+	    GOOGLE_REDIRECT_URI = 'https://systemavailability.azurewebsites.net//oauth2callback';
 	    GOOGLE_SCOPE = 'https://www.googleapis.com/auth/userinfo.profile';
 		GOOGLE_OAUTH2_URL = "https://accounts.google.com/o/oauth2/auth?scope=" + GOOGLE_SCOPE + "&redirect_uri=" + GOOGLE_REDIRECT_URI + "&response_type=code&client_id=1072189313711.apps.googleusercontent.com";
 
@@ -221,7 +220,7 @@
 		var post_options = {
 		  host: 'accounts.google.com',
 		  port: '80',
-		  path: 'o/oauth2/token',
+		  path: '/o/oauth2/token',
 		  method: 'POST',
 		  headers: {
 		    'Content-Type': 'application/x-www-form-urlencoded'
@@ -278,28 +277,28 @@
 	});
 
 	app.get('/authenticate', function(req, res) {
-		// res.redirect(GOOGLE_OAUTH2_URL);
+		res.redirect(GOOGLE_OAUTH2_URL);
 		console.log("Authenticate");
-		everyauth.google
-			.appId(GOOGLE_CLIENT_ID)
-			.appSecret(GOOGLE_CLIENT_SECRET)
-			.scope(GOOGLE_SCOPE) // What you want access to
-			.handleAuthCallbackError( function (req, res) {
-				console.log("Error");
-			// If a user denies your app, Google will redirect the user to
-			// /auth/google/callback?error=access_denied
-			// This configurable route handler defines how you want to respond to
-			// that.
-			// If you do not configure this, everyauth renders a default fallback
-			// view notifying the user that their authentication failed and why.
-			})
-		.findOrCreateUser( function (sess, accessToken, extra, googleUser) {
-			console.log("Sucess");
-			googleUser.refreshToken = extra.refresh_token;
-			googleUser.expiresIn = extra.expires_in;
-			return usersByGoogleId[googleUser.id] || (usersByGoogleId[googleUser.id] = addUser('google', googleUser));
-		})
-		.redirectPath('/');		
+		// everyauth.google
+		// 	.appId(GOOGLE_CLIENT_ID)
+		// 	.appSecret(GOOGLE_CLIENT_SECRET)
+		// 	.scope(GOOGLE_SCOPE) // What you want access to
+		// 	.handleAuthCallbackError( function (req, res) {
+		// 		console.log("Error");
+		// 	// If a user denies your app, Google will redirect the user to
+		// 	// /auth/google/callback?error=access_denied
+		// 	// This configurable route handler defines how you want to respond to
+		// 	// that.
+		// 	// If you do not configure this, everyauth renders a default fallback
+		// 	// view notifying the user that their authentication failed and why.
+		// 	})
+		// .findOrCreateUser( function (sess, accessToken, extra, googleUser) {
+		// 	console.log("Sucess");
+		// 	googleUser.refreshToken = extra.refresh_token;
+		// 	googleUser.expiresIn = extra.expires_in;
+		// 	return usersByGoogleId[googleUser.id] || (usersByGoogleId[googleUser.id] = addUser('google', googleUser));
+		// })
+		// .redirectPath('/');		
 	});
 	
 
