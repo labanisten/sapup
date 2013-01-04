@@ -1,9 +1,15 @@
 	var express = require('express');
 	var mongodb = require('mongodb');
 	var generic_pool = require('generic-pool');
+	var http = require('http');
+	var querystring = require('querystring');
+	var everyauth = require('everyauth');
+	var connect = require('connect');
 
 	var BSON = mongodb.BSONPure;
 	var RSS = require('rss');
+
+	everyauth.debug = true;
 
 	//Constants
 	var MONGODB_URL = process.env.MONGODB_URL || '127.0.0.1',
@@ -11,11 +17,17 @@
 	    MONGODB_DB = process.env.MONGODB_DB || 'test'; 
 	    GOOGLE_CLIENT_ID = '1072189313711.apps.googleusercontent.com',
 	    GOOGLE_CLIENT_SECRET = 'Evqt9n8JS3f50GFCqoyn5ElN',
-	    GOOGLE_REDIRECT_URI = 'https://systemavailability.azurewebsites.net/oauth2callback';
-		GOOGLE_OAUTH2_URL = "https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=%2Fprofile&redirect_uri=https://systemavailability.azurewebsites.net/oauth2callback&response_type=code&client_id=1072189313711.apps.googleusercontent.com";
+	    GOOGLE_REDIRECT_URI = 'http://localhost:4000/oauth2callback';
+	    GOOGLE_SCOPE = 'https://www.googleapis.com/auth/userinfo.profile';
+		GOOGLE_OAUTH2_URL = "https://accounts.google.com/o/oauth2/auth?scope=" + GOOGLE_SCOPE + "&redirect_uri=" + GOOGLE_REDIRECT_URI + "&response_type=code&client_id=1072189313711.apps.googleusercontent.com";
 
-
-	var app = express.createServer();
+	var app = express.createServer(
+	    express.bodyParser()
+	  , express.favicon()
+	  , express.cookieParser()
+	  , express.session({ secret: 'htuayreve'})
+	  , everyauth.middleware()
+	);
 
 	var pool = generic_pool.Pool({
 		name: 'mongodb',
@@ -33,8 +45,6 @@
 			db.close();
 		}
 	});
-
-	app.use(express.bodyParser({}));
 
 	app.use("/", express.static(__dirname + "/client/public"));
 	app.use("/public", express.static(__dirname + "/client/public"));
@@ -192,14 +202,107 @@
 
 
 // Authentication via Google API
-	app.get('/authenticate', function(req, res) {
-		res.redirect(GOOGLE_OAUTH2_URL);
+	function getTokenFromGoogleAPI(code) {
+
+		console.log("Code " + code);
+
+		// Build the post string from an object
+		var post_data = querystring.stringify({
+		    'code' : code,
+		    'client_id': GOOGLE_CLIENT_ID,
+		    'client_secret': GOOGLE_CLIENT_SECRET,
+		    'grant_type' : 'authorization_code',
+		    'redirect_uri' : GOOGLE_REDIRECT_URI
+		});
+
+		console.log('POST DATA: ' + JSON.stringify(post_data));
+		// An object of options to indicate where to post to
+		
+		var post_options = {
+		  host: 'accounts.google.com',
+		  port: '80',
+		  path: 'o/oauth2/token',
+		  method: 'POST',
+		  headers: {
+		    'Content-Type': 'application/x-www-form-urlencoded'
+	    	}
+		};
+
+		// Set up the request
+		var post_req = http.request(post_options, function(res) {
+				console.log('STATUS: ' + res.statusCode);
+				console.log('HEADERS: ' + JSON.stringify(res.headers));
+				res.setEncoding('utf8');
+				res.on('data', function (chunk) {
+			    console.log('Response: ' + chunk);
+		 	});
+		});
+
+		post_req.on('error', function(e) {
+			console.log('problem with request: ' + e.message);
+		});
+
+		// post the data
+		post_req.write(post_data);
+		post_req.end();
+
+	};
+
+	var usersByGoogleId = {};
+
+	app.get('/code', function(req, res) {
+		console.log("Return from CODE post");
+		console.log("Code: " + JSON.stringify(req.body));
+
 	});
-	
+
+	function addUser (source, sourceUser) {
+		var user;
+		if (arguments.length === 1) { // password-based
+		user = sourceUser = source;
+		user.id = ++nextUserId;
+		return usersById[nextUserId] = user;
+		} else { // non-password-based
+		user = usersById[++nextUserId] = {id: nextUserId};
+		user[source] = sourceUser;
+		}
+		return user;
+	};
+
 	app.get('/oauth2callback', function(req, res) {
 		console.log("OAUTH callback from Google");
-		res.redirect('/' + '?' + req.param('code'));
+		console.log("Body: " + JSON.stringify(req.body));
+		// res.redirect('/' + '?code=' + req.param('code'));
+		getTokenFromGoogleAPI(req.param('code'));
+
 	});
+
+	app.get('/authenticate', function(req, res) {
+		// res.redirect(GOOGLE_OAUTH2_URL);
+		console.log("Authenticate");
+		everyauth.google
+			.appId(GOOGLE_CLIENT_ID)
+			.appSecret(GOOGLE_CLIENT_SECRET)
+			.scope(GOOGLE_SCOPE) // What you want access to
+			.handleAuthCallbackError( function (req, res) {
+				console.log("Error");
+			// If a user denies your app, Google will redirect the user to
+			// /auth/google/callback?error=access_denied
+			// This configurable route handler defines how you want to respond to
+			// that.
+			// If you do not configure this, everyauth renders a default fallback
+			// view notifying the user that their authentication failed and why.
+			})
+		.findOrCreateUser( function (sess, accessToken, extra, googleUser) {
+			console.log("Sucess");
+			googleUser.refreshToken = extra.refresh_token;
+			googleUser.expiresIn = extra.expires_in;
+			return usersByGoogleId[googleUser.id] || (usersByGoogleId[googleUser.id] = addUser('google', googleUser));
+		})
+		.redirectPath('/');		
+	});
+	
+
 	
 	function getResponse(error, result) {
 		var resStr;
