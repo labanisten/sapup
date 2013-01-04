@@ -76,6 +76,15 @@
 				</a>
 			</div>
 		</div>
+
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span12">
+					<div fixed-month-header></div>
+				</div>
+			</div>
+		</div>
+
 	</div>
 
 	<div class="container-fluid">
@@ -97,6 +106,7 @@
 				</div>
 			</div>
 		</div>
+
 
 		<div class="row-fluid">
 			<div id="sysdiv span12">
@@ -293,6 +303,27 @@
 		    uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/EcgrjArON8DuOEsrfdUTQ.js';
 		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
   		})();
+
+
+  		window.onload = function () { 
+		    window.onscroll = function () { 
+
+			    var doc = document.body, 
+			    scrollPosition = doc.scrollTop,
+			    pageSize = (doc.scrollHeight - doc.clientHeight),
+			    percentageScrolled = Math.floor((scrollPosition / pageSize) * 100); 
+
+			    if(scrollPosition > 318) {
+			    	$('.month-header-table').removeClass('hidden');
+			    }else{
+			    	if(!$('.month-header-table').hasClass('hidden')) {
+			    		$('.month-header-table').addClass('hidden');
+			    	}
+			    }
+
+		    }; 
+		};
+
 	</script>
 </body>
 </html>

@@ -150,44 +150,6 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 					}
 
 
-
-
-
-					/*
-					var i;
-					var j;
-					for(i = 0; i < scope.systemnames.length; i++){
-						template += '<li><a ng:click="fillSystemCompactViewList('+i+')" ng:class="getClassForCompactList()">'+
-										'<i class="icon-chevron-right"></i>{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}';
-
-						template += '</a></li>';
-					}
-					*/
-
-
-
-/*
-					var i;
-					var j;
-					for(i = 0; i < scope.systemlines.length; i++){
-						template += '<li><a ng:click="fillSystemCompactViewList('+i+')" ng:class="getClassForCompactList()">'+
-										'<i class="icon-chevron-right"></i>{{systemlines['+i+'].system}}';
-
-										for(j = 0; j < scope.systemnames.length; j++){
-											if(scope.systemnames[j].name == scope.systemlines[i].system) {
-												template += ' - {{systemnames['+j+'].text}}';
-											}
-										}
-
-									template += '</a></li>';
-					}
-*/
-
-
-
-
-					//template += '</ul>';
-
 					element.html(template);				
 					$compile(element.contents())(scope);
 					dataStatus.systemlines = false;
@@ -328,6 +290,60 @@ directiveModule.directive('CompressedListElementView', function($compile, Utils)
 	};
 });
 
+
+directiveModule.directive('fixedMonthHeader', function($compile, Utils){
+	return {
+			restrict: 'A',
+			link: function(scope, element, attrs) {
+
+				var template = 	'<table class="system-table month-header-table hidden">' +
+
+									'<thead>'+
+
+
+											'<tr class="daynames">'+
+												'<th rowspan="3" style="width:{{systemTableStartColumnSize}}px"></th>'+
+												'<th ng-repeat="dayName in dayNamesInMonth('+scope.selectedMonth+')">{{dayName}}</th>'+
+											'</tr>'+
+											
+											'<tr class="shortdaynames">'+
+												'<th ng-repeat="shortDayName in shortDayNamesInMonth('+scope.selectedMonth+')">{{shortDayName}}</th>'+
+											'</tr>'+
+											
+											'<tr>'+
+												'<th ng:class="getClassForDayColumn(day)" ng-repeat="day in monthDayList['+scope.selectedMonth+']">{{day}}</th>'+
+											'</tr>'+
+											
+
+
+									'</thead>'+
+
+									/*'<tbody>';
+
+
+									var i,j;
+											for (j = 0; j < scope.systemgroups.length; j++){
+												template += '<tr><td class="systemgroup"><span>{{systemgroups['+j+'].name}}</span></td><td colspan="{{noOfDaysInMonth[selectedMonth]}}"></td>';
+												for (i = 0; i < scope.systemnames.length; i++){
+													if (scope.systemnames[i].systemgroup == scope.systemgroups[j].name) {
+														template += '<tr class="systemrow"><td class="system"><span>{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}</span></td>';
+														
+													};
+												};
+											};
+
+									template += '</tbody>'+*/
+
+								'</table>';
+
+					element.html(template);
+					$compile(element.contents())(scope);
+
+		   }		
+	};
+});
+
+
 directiveModule.directive('systemTable', function($compile, Utils){
 	return {
 			restrict: 'A',
@@ -425,26 +441,6 @@ directiveModule.directive('systemTable', function($compile, Utils){
 					
 					return result;
 				}
-				
-				/*				
-				function systemExist(systemName) {
-					var match = {
-						result: false,
-						index: -1
-					};
-				
-					var j;
-					for(j = 0; j < scope.systemlines.length; j++){
-						if (systemName == scope.systemlines[j].system) {
-							match.result = true;
-							match.index = j;
-							break;
-						}	
-					}
-					
-					return match;
-				}
-				*/
 
 				function buildTemplateForExistingSystem(systemIndex) {
 					
@@ -552,7 +548,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 											'</tr>'+
 
 											'<tr>'+
-												'<th class="week" rowspan="4"></th>'+
+												'<th rowspan="4" ng:class="getClassForSystemTableSpacer()"></th>'+
 												'<th class="week" ng-repeat="week in monthWeekList['+scope.selectedMonth+']" colspan="{{week.colSpan}}">{{week.week}}</th>'+
 											'</tr>'+
 											
@@ -570,8 +566,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 											
 										'</thead>'+
 										'<tbody>';
-											var i,
-												j;
+											var i, j;
 											for (j = 0; j < scope.systemgroups.length; j++){
 												template += '<tr><td class="systemgroup"><span>{{systemgroups['+j+'].name}}</span></td><td colspan="{{noOfDaysInMonth[selectedMonth]}}"></td>';
 												for (i = 0; i < scope.systemnames.length; i++){
@@ -590,9 +585,15 @@ directiveModule.directive('systemTable', function($compile, Utils){
 							template += '</tbody>'+
 									'</table>';
 								  
+					
+
 					element.html(template);
 					$compile(element.contents())(scope);
 					
+					//var wid = $('.systemtablespacer');
+					//console.log("w: " + $('.systemtablespacer').css('width'));
+					//console.log("w: " + $('.systemtablespacer').width());
+					//scope.systemTableStartColumnSize = 200;
 				}
 
 				var stopRecursive;
