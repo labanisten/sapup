@@ -109,6 +109,8 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils)
 			 });
 	};
 
+	$scope.systemTableStartColumnSize;
+
 	$scope.messageAreaClass = function() {
 		if ($scope.alertlines.length > 0) {
 			return "accordion span12";
@@ -166,6 +168,12 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils)
 			$scope.setSelectedElement(sysIndex, elmIndex);
 		}
 	};
+
+	$scope.getClassForSystemTableSpacer = function($event) {
+		var classString = 'systemtablespacer week';
+		$scope.systemTableStartColumnSize = $('.systemtablespacer').width() + 1;
+		return classString;
+	}
 
 	$scope.compactMessageViewClick = function() {
 		$scope.displayCompactMessageView = true;
