@@ -1,9 +1,12 @@
 angular.module('mongodbModule', []).
 	factory('db', function($http) {
 	
-		var db = db || {};
+		var DB_URL = "/mongodbloc";
 		
-		(function(ns) {
+		var db = db || {};
+
+
+				(function(ns) {
 
 
 			ns.noCache = function() {
@@ -20,20 +23,20 @@ angular.module('mongodbModule', []).
 
 				ns[name].get = function(query) {
 					if (query) {
-						return $http.get('/' + url + '/' + '?query=' + JSON.stringify(query)).then(function(response){
+						return $http.get(DB_URL + '/' + url + '/' + '?query=' + JSON.stringify(query)).then(function(response){
 							return response.data;
 						});					
 					} else {
 						var seconds = new Date().getTime() / 1000;
 						// return $http.get('/' + url + '/' + '?' + seconds).then(function(response){
-						return $http.get('/' + url + ns.noCache()).then(function(response){
+						return $http.get(DB_URL + '/' + url + ns.noCache()).then(function(response){
 							return response.data;
 						});
 					}
 				};
 
 				ns[name].remove = function(id) {
-					return $http.delete('/' + url + '/' + id).then(function(response) {					 	
+					return $http.delete(DB_URL + '/' + url + '/' + id).then(function(response) {					 	
 						return response;
 					});					
 				}
@@ -41,14 +44,14 @@ angular.module('mongodbModule', []).
 				ns[name].prototype.update = function(id) {
 					var resource = this;
 					delete resource._id;
-				 	return $http.put('/' + url + '/' + id, resource).then(function(response) {
+				 	return $http.put(DB_URL + '/' + url + '/' + id, resource).then(function(response) {
 						return resource;
 					});
 				};
 
 				ns[name].prototype.create = function() {
 					var resource = this;
-				 	return $http.post('/' + url + '/', resource).then(function(response) {
+				 	return $http.post(DB_URL + '/' + url + '/', resource).then(function(response) {
 						return response.data[0];
 					});
 				};

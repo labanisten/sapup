@@ -39,7 +39,7 @@ directiveModule.directive('messageViewCompact', function($compile, Utils){
 
 
 
-directiveModule.directive('systemCompactMonth', function($compile, Utils){
+directiveModule.directive('monthSelectionbarCompact', function($compile, Utils){
 	return {
 			restrict: 'A',
 			link: function(scope, element, attrs) {
@@ -73,12 +73,69 @@ directiveModule.directive('systemCompactMonth', function($compile, Utils){
 });
 
 
-directiveModule.directive('systemCompactList', function($compile, Utils){
+directiveModule.directive('systemgroupsViewCompact', function($compile, Utils){
 	return {
 			restrict: 'A',
 			link: function(scope, element, attrs) {
 				var template = '';
 
+				var dataStatus = {
+					systemlines: false,
+					systemnames: false,
+					systemgroups: false
+				}
+
+				function dataIsReady() {
+					var result = false;
+					if(dataStatus.systemgroups == true) {
+						result = true;
+					}
+					return result;
+				}
+
+				scope.$watch('systemgroups', function() {
+					/*if(Utils.isDataReady(scope.systemgroups)){
+						buildList();
+					}*/
+					dataStatus.systemgroups = true;
+					if(dataIsReady) {
+						buildList();
+					}
+				});
+				
+
+				function buildList() {
+					template = '<ul ng:class="getClassForSystemgroupListCompact()" class="nav elementlist-compact listelement-button nav-list">';
+
+					var i;
+					for(i = 0; i < scope.systemgroups.length; i++){
+
+						//template += '<h5 class="systemgroup_compact">{{systemgroups['+i+'].name}}</h5>';
+
+						template += '<li><a ng:click="fillSystemgroupViewList('+i+')">'+
+								    '<i class="icon-chevron-right"></i><h4>{{systemgroups['+i+'].name}}</h4>';
+						template += '</a></li>';
+					}
+
+
+					template += '</ul>';
+
+
+					element.html(template);
+					$compile(element.contents())(scope);
+					dataStatus.systemgroups = false;
+				}
+			}
+	};
+});
+
+
+directiveModule.directive('systemViewCompact', function($compile, Utils){
+	return {
+			restrict: 'A',
+			link: function(scope, element, attrs) {
+				var template = '';
+				/*
 				var dataStatus = {
 					systemlines: false,
 					systemnames: false,
@@ -94,9 +151,6 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 				}
 
 				scope.$watch('systemlines', function(newVal, oldVal) {
-					/*if(Utils.isDataReady(scope.systemlines)){
-						buildList();
-					}*/
 					dataStatus.systemlines = true;
 					if(dataIsReady) {
 						buildList();
@@ -104,9 +158,6 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 				});
 				
 				scope.$watch('systemnames', function() {
-					/*if(Utils.isDataReady(scope.systemnames)){
-						buildList();
-					}*/
 					dataStatus.systemnames = true;
 					if(dataIsReady) {
 						buildList();
@@ -114,9 +165,6 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 				});
 
 				scope.$watch('systemgroups', function() {
-					/*if(Utils.isDataReady(scope.systemgroups)){
-						buildList();
-					}*/
 					dataStatus.systemgroups = true;
 					if(dataIsReady) {
 						buildList();
@@ -126,14 +174,14 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 
 				function buildList() {
 					//template = '<ul class="nav mobnav nav-list">';
-					template = '<span ng:class="getClassForCompactList()">'
+					template = '<span ng:class="getClassForSystemViewCompact()">'
 
 					var i;
 					var j;
 					for(i = 0; i < scope.systemgroups.length; i++){
 
 						template += '<h5 class="systemgroup_compact">{{systemgroups['+i+'].name}}</h5>';
-						template += '<ul class="nav mobnav nav-list">';
+						template += '<ul class="nav elementlist-compact listelement-button nav-list">';
 
 						for (j = 0; j < scope.systemnames.length; j++){
 							if (scope.systemnames[j].systemgroup == scope.systemgroups[i].name) {
@@ -155,13 +203,38 @@ directiveModule.directive('systemCompactList', function($compile, Utils){
 					dataStatus.systemlines = false;
 					dataStatus.systemnames = false;
 					dataStatus.systemgroups = false;
+					}
+					*/
+
+
+
+					/*
+					template = '<ul class="nav .elementlist-compact listelement-button nav-list" ng:class="getClassForSystemViewCompact()>';
+
+					
+					template += '<li ng:repeat="line in systemgroupCompactViewList"  ng:click="fillSystemCompactViewList({{line.index}})>'+
+									'<a>'+
+										'<p>{{line.name}} - {{line.text}}</p>' +
+									'</a>'+
+								'</li>';
+
+					template += '</ul>';
+					*/
+
+					template = '<ul class="nav .elementlist-compact listelement-button nav-list">'+
+								'<li> <a ng:click="fillSystemCompactViewList('+2+')"><i class="icon-chevron-right"></i>test</a> </li>'+
+								'</ul>';
+
+
+					element.html(template);
+					$compile(element.contents())(scope);
 				}
-			}
+			
 	};
 });
 
 
-directiveModule.directive('systemCompactView', function($compile, Utils){
+directiveModule.directive('statusViewCompact', function($compile, Utils){
 	return {
 			restrict: 'A',
 			link: function(scope, element, attrs) {
@@ -171,7 +244,7 @@ directiveModule.directive('systemCompactView', function($compile, Utils){
 					//systemlines[selectedCompactSystem.sysIndex].statuslines"
 					var systemIndex = scope.selectedCompactSystem.sysIndex;
 					
-					template = '<ul class="nav statusview nav-list">';
+					template = '<ul class="nav .elementlist-compact listelement-datacontainer nav-list">';
 
 					
 					template += '<li ng:repeat="line in systemCompactViewList">'+
@@ -548,7 +621,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 											'</tr>'+
 
 											'<tr>'+
-												'<th rowspan="4" ng:class="getClassForSystemTableSpacer()"></th>'+
+												'<th id="tablespacer" rowspan="4" ng:class="getClassForSystemTableSpacer()"></th>'+
 												'<th class="week" ng-repeat="week in monthWeekList['+scope.selectedMonth+']" colspan="{{week.colSpan}}">{{week.week}}</th>'+
 											'</tr>'+
 											
@@ -592,9 +665,10 @@ directiveModule.directive('systemTable', function($compile, Utils){
 					
 					//var wid = $('.systemtablespacer');
 					//console.log("w: " + $('.systemtablespacer').css('width'));
-					//console.log("w: " + $('.systemtablespacer').width());
+					
 					//scope.systemTableStartColumnSize = 200;
 				}
+
 
 				var stopRecursive;
 				var dataComplete = false; 
@@ -609,6 +683,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 					return result;
 				}
 				
+				//TODO: change to method in compactlayout
 				scope.$watch('systemlines', function(newVal, oldVal) {
 				
 				    if (stopRecursive === newVal) {return;}

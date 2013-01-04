@@ -130,9 +130,10 @@
 	<div class="systemtable-compact container-fluid">
 		<h5 ng:class="getClassForCompactSystemViewLabel()">{{selectedCompactSystem.system}}</h5>
 		<div class="message-view-compact" message-view-compact></div>
-		<div class="system-monthlist-compact" system-compact-month></div>
-		<div class="systemlist-compact" system-compact-list></div>
-		<div class="systemview-compact" system-compact-view></div>
+		<div class="system-monthlist-compact" month-selectionbar-compact></div>
+		<div class="systemgroup-compact" systemgroups-view-compact></div>
+		<div class="systemlist-compact" system-view-compact></div>
+		<div class="systemview-compact" status-view-compact></div>
 	</div>
 
 	<div class="modal hide fade" id="addalertdialog">
@@ -361,6 +362,7 @@
 
 		    }; 
 		};
+		
 
 	</script>
 </body>

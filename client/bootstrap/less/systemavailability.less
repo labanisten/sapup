@@ -376,85 +376,6 @@
 		}
 	}
 
-	.mobnav {
-	  width: 100%;
-	  /*margin: 60px 0 0;*/
-	  padding: 0;
-	  background-color: #fff;
-	  -webkit-border-radius: 6px;
-	     -moz-border-radius: 6px;
-	          border-radius: 6px;
-	  -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
-	     -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
-	          box-shadow: 0 1px 4px rgba(0,0,0,.065);
-	}
-
-	.mobnav > li > a {
-	  display: block;
-	  width: 230px \9;
-	  /*width: 100%;*/
-	  margin: 0 0 -1px;
-	  padding: 8px 14px;
-	  border: 1px solid #e5e5e5;
-	}
-
-	.mobnav > li:first-child > a {
-	  -webkit-border-radius: 6px 6px 0 0;
-	     -moz-border-radius: 6px 6px 0 0;
-	          border-radius: 6px 6px 0 0;
-	}
-
-	.mobnav > li:last-child > a {
-	  -webkit-border-radius: 0 0 6px 6px;
-	     -moz-border-radius: 0 0 6px 6px;
-	          border-radius: 0 0 6px 6px;
-	}
-
-	.mobnav > .active > a {
-	  position: relative;
-	  z-index: 2;
-	  padding: 9px 15px;
-	  border: 0;
-	  text-shadow: 0 1px 0 rgba(0,0,0,.15);
-	  -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
-	     -moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
-	          box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
-	}
-
-
-	/* Chevrons */
-	.mobnav .icon-chevron-right {
-	  float: right;
-	  margin-top: 2px;
-	  margin-right: -6px;
-	  opacity: .25;
-	}
-	.mobnav > li > a:hover {
-	  background-color: #f5f5f5;
-	}
-	.mobnav a:hover .icon-chevron-right {
-	  opacity: .5;
-	}
-	.mobnav .active .icon-chevron-right,
-	.mobnav .active a:hover .icon-chevron-right {
-	  background-image: url(../img/glyphicons-halflings-white.png);
-	  opacity: 1;
-	}
-	.mobnav.affix {
-	  top: 40px;
-	}
-	.mobnav.affix-bottom {
-	  position: absolute;
-	  top: auto;
-	  bottom: 270px;
-	}
-
-	/*
-	.systemview {
-		visibility:hidden;
-	}
-	*/
-
 	.compactnavbar {
 		margin:0 auto;
 		padding:0;
@@ -487,6 +408,15 @@
 	}
 
 	.systemview-compact .hidden {
+		display:none;
+	}
+
+
+	.systemgroup-compact {
+		margin-top: 10px;
+	}
+
+	.systemgroup-compact .hidden {
 		display:none;
 	}
 
@@ -525,10 +455,18 @@
 	    display: inline-block;
 	}
 
+	/* Mainpage for messages */
+	.message-container-compact {
+		margin-top: 50px;
+	}
 
-	/* Table for viewing spesific system status elements */
-	.statusview {
+	.message-view-compact .hidden{
+		display:none;
+	}
+
+	.elementlist-compact {
 	  width: 100%;
+	  /*margin: 60px 0 0;*/
 	  padding: 0;
 	  background-color: #fff;
 	  -webkit-border-radius: 6px;
@@ -539,8 +477,70 @@
 	          box-shadow: 0 1px 4px rgba(0,0,0,.065);
 	}
 
+	.elementlist-compact > li > a {
+	  display: block;
+	  width: 230px \9;
+	  /*width: 100%;*/
+	  margin: 0 0 -1px;
+	  padding: 8px 14px;
+	  border: 1px solid #e5e5e5;
+	}
 
-	.statusview > li > .status{
+	.elementlist-compact > li:first-child > a {
+	  -webkit-border-radius: 6px 6px 0 0;
+	     -moz-border-radius: 6px 6px 0 0;
+	          border-radius: 6px 6px 0 0;
+	}
+
+	.elementlist-compact > li:last-child > a {
+	  -webkit-border-radius: 0 0 6px 6px;
+	     -moz-border-radius: 0 0 6px 6px;
+	          border-radius: 0 0 6px 6px;
+	}
+
+	.elementlist-compact > .active > a {
+	  position: relative;
+	  z-index: 2;
+	  padding: 9px 15px;
+	  border: 0;
+	  text-shadow: 0 1px 0 rgba(0,0,0,.15);
+	  -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+	     -moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+	          box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+	}
+
+
+
+	/* Chevrons */
+	.listelement-button .icon-chevron-right {
+	  float: right;
+	  margin-top: 2px;
+	  margin-right: -6px;
+	  opacity: .25;
+	}
+	.listelement-button > li > a:hover {
+	  background-color: #f5f5f5;
+	}
+	.listelement-button a:hover .icon-chevron-right {
+	  opacity: .5;
+	}
+	.listelement-button .active .icon-chevron-right,
+	.listelement-button .active a:hover .icon-chevron-right {
+	  background-image: url(../img/glyphicons-halflings-white.png);
+	  opacity: 1;
+	}
+	.listelement-button .affix {
+	  top: 40px;
+	}
+	.listelement-button .affix-bottom {
+	  position: absolute;
+	  top: auto;
+	  bottom: 270px;
+	}
+
+
+	/* Table for viewing spesific system status elements */
+	.listelement-datacontainer > li > .status{
 	  display: block;
 	  /*width: 230px \9;*/
 	  margin: 0 0 -1px;
@@ -560,7 +560,7 @@
 	  }
 	}
 
-	.statusview > li > .error{
+	.listelement-datacontainer > li > .error{
 	  display: block;
 	  /*width: 230px \9;*/
 	  margin: 0 0 -1px;
@@ -587,19 +587,8 @@
 
 	}
 
-	.statusview > li > a:hover {
+	.listelement-datacontainer > li > a:hover {
 	  background-color: #f5f5f5;
-	}
-
-
-
-	/* Mainpage for messages */
-	.message-container-compact {
-		margin-top: 50px;
-	}
-
-	.message-view-compact .hidden{
-		display:none;
 	}
 
 }

@@ -22,6 +22,13 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils)
 		//hasValue: false
 	};
 
+	$scope.selectedCompactSystemgroup = {
+		_id: "",
+		system: "",
+		systemGroupIndex: -1,
+		hasValue: false
+	};
+
 	$scope.selectedCompactSystem = {
 		_id: "",
 		system: "",
@@ -94,6 +101,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils)
 	$scope.selectedYearCompact = Calendar.getCurrentYear();
 	$scope.selectedMonthCompact = Calendar.getCurrentMonth();
 	$scope.systemCompactViewList = [];
+	$scope.systemgroupCompactViewList = [];
 	$scope.displayCompactMessageView = false;
 	
 	$scope.authenticate = function() {
@@ -172,8 +180,13 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils)
 	$scope.getClassForSystemTableSpacer = function($event) {
 		var classString = 'systemtablespacer week';
 		$scope.systemTableStartColumnSize = $('.systemtablespacer').width() + 1;
+
+		//Utils.setScroll(Utils.findElementWindowPosition(document.getElementById('tablespacer')));
+		//console.log("fp: " + Utils.findElementWindowPosition(document.getElementById('tablespacer')));
+
 		return classString;
 	}
+
 
 	$scope.compactMessageViewClick = function() {
 		$scope.displayCompactMessageView = true;
@@ -341,6 +354,40 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils)
 
 	}
 
+	$scope.fillSystemgroupViewList = function(groupIndex) {
+	
+		$scope.selectedCompactSystemgroup.systemGroupIndex = groupIndex;
+
+		var i;
+		for (i = 0; i < $scope.systemnames.length; i++){
+			if ($scope.systemnames[i].systemgroup === $scope.systemgroups[groupIndex].name) {
+
+				var elm = {
+					index: i,
+					name: $scope.systemnames[i].name,
+					text: $scope.systemnames[i].text,
+					systemgroup: $scope.systemnames[i].systemgroup
+				}
+
+				$scope.systemgroupCompactViewList.push(elm);
+			}
+		}
+
+		if($scope.systemgroupCompactViewList <= 0){
+
+			var elm = {
+				name: '',
+				text: '',
+				systemgroup: ''
+			}
+
+			$scope.systemgroupCompactViewList.push(elm);
+		}
+
+		$scope.selectedCompactSystemgroup.hasValue = true;
+
+	}
+
 	$scope.getClassForSystemCompactView = function(element) {
 		var classString = 'status';
 
@@ -370,10 +417,20 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils)
 		$scope.systemCompactViewList = [];
 	}
 
-	$scope.getClassForCompactList = function() {
+	$scope.getClassForSystemgroupListCompact = function() {
 		var classString = '';
 		//if($scope.selectedCompactSystem.sysIndex >= 0 || $scope.displayCompactMessageView == true){
-		if($scope.selectedCompactSystem.hasValue == true || $scope.displayCompactMessageView == true) {
+		if($scope.selectedCompactSystem.hasValue == true || $scope.displayCompactMessageView == true ) {
+			classString = 'hidden';
+		}
+		
+		return classString;
+	}
+
+	$scope.getClassForSystemViewCompact = function() {
+		var classString = '';
+		//if($scope.selectedCompactSystem.sysIndex >= 0 || $scope.displayCompactMessageView == true){
+		if($scope.selectedCompactSystem.hasValue == true || $scope.selectedCompactSystemgroup.hasValue == false || $scope.displayCompactMessageView == true ) {
 			classString = 'hidden';
 		}
 		
