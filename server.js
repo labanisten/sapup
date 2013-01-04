@@ -6,17 +6,16 @@
 	var RSS = require('rss');
 
 	//Constants
-	var MONGODB_URL = process.env.MONGODB_URL || '127.0.0.1'; 
-	var MONGODB_PORT = parseInt(process.env.MONGODB_PORT) || 27017; 
-	var MONGODB_DB = process.env.MONGODB_DB || 'test'; 
-
-	var loginURL = "https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=%2Fprofile&redirect_uri=https://systemavailability.azurewebsites.net/oauth2callback&response_type=code&client_id=1072189313711.apps.googleusercontent.com";
+	var MONGODB_URL = process.env.MONGODB_URL || '127.0.0.1',
+		MONGODB_PORT = parseInt(process.env.MONGODB_PORT) || 27017,
+	    MONGODB_DB = process.env.MONGODB_DB || 'test'; 
+	    GOOGLE_CLIENT_ID = '1072189313711.apps.googleusercontent.com',
+	    GOOGLE_CLIENT_SECRET = 'Evqt9n8JS3f50GFCqoyn5ElN',
+	    GOOGLE_REDIRECT_URI = 'https://systemavailability.azurewebsites.net/oauth2callback';
+		GOOGLE_OAUTH2_URL = "https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=%2Fprofile&redirect_uri=https://systemavailability.azurewebsites.net/oauth2callback&response_type=code&client_id=1072189313711.apps.googleusercontent.com";
 
 
 	var app = express.createServer();
-// Set up authentication using Goole API
-
-
 
 	var pool = generic_pool.Pool({
 		name: 'mongodb',
@@ -194,12 +193,12 @@
 
 // Authentication via Google API
 	app.get('/authenticate', function(req, res) {
-		res.redirect(loginURL);
+		res.redirect(GOOGLE_OAUTH2_URL);
 	});
 	
 	app.get('/oauth2callback', function(req, res) {
 		console.log("OAUTH callback from Google");
-		res.redirect('/');
+		res.redirect('/' + '?' + req.param('code'));
 	});
 	
 	function getResponse(error, result) {
