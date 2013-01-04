@@ -199,6 +199,7 @@
 	
 	app.get('/oauth2callback', function(req, res) {
 		console.log("OAUTH callback from Google");
+		res.redirect('/');
 	});
 	
 	function getResponse(error, result) {
