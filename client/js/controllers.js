@@ -187,18 +187,9 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils)
 		return classString;
 	}
 
-
-	$scope.compactMessageViewClick = function() {
-		$scope.displayCompactMessageView = true;
-	};
-
 	$scope.getClassForCompactMessageContainer = function() {
 		var classString = 'message-container-compact row-fluid';
-
-		if(!$scope.displayCompactMessageView){
-			classString += ' hidden';
-		}
-		
+		if(!$scope.displayCompactMessageView){classString += ' hidden';}
 		return classString;
 	}
 	
@@ -212,68 +203,175 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils)
 			classString += "btn btn-primary month";
 		}
 
-		//if($scope.selectedCompactSystem.sysIndex < 0){
-		if($scope.selectedCompactSystem.hasValue == false) {
-			classString += ' hidden';//ein
-		}
-		
+		if($scope.selectedCompactSystem.hasValue == false) {classString += ' hidden';}
 		return classString;
 	};
 
 	$scope.getClassForCompactYearButton = function(month) {
 		var classString = 'btn btn-primary yearbtn-compact';
-
-		//if($scope.selectedCompactSystem.sysIndex < 0){
-		if($scope.selectedCompactSystem.hasValue == false) {
-			classString += ' hidden';
-		}
-
+		if($scope.selectedCompactSystem.hasValue == false) {classString += ' hidden';}
 		return classString;
 	};
 
 	$scope.getClassForCompactHomeButton = function(month) {
 		var classString = 'btn btn-primary homebtn-compact';
+		if($scope.selectedCompactSystem.hasValue == false && $scope.displayCompactMessageView == false){classString += ' hidden';}
+		return classString;
+	};
 
-		//if($scope.selectedCompactSystem.sysIndex < 0 && $scope.displayCompactMessageView == false){
-		if($scope.selectedCompactSystem.hasValue == false && $scope.displayCompactMessageView == false){
-			classString += ' hidden';
-		}
-		
+	$scope.getClassForCompactSystemBackButton = function(month) {
+		var classString = 'btn btn-primary system-backbtn-compact';
+		if(($scope.selectedCompactSystem.hasValue === true || $scope.displayCompactMessageView === true)
+			|| ($scope.selectedCompactSystem.hasValue === false && $scope.selectedCompactSystemgroup.hasValue === false)){classString += ' hidden';}
+		return classString;
+	};
+
+	$scope.getClassForCompactStatusBackButton = function(month) {
+		var classString = 'btn btn-primary status-backbtn-compact';
+		if(($scope.displayCompactMessageView === true || ($scope.selectedCompactSystemgroup.hasValue === true && $scope.selectedCompactSystem.hasValue === false))
+			|| ($scope.selectedCompactSystem.hasValue === false && $scope.selectedCompactSystemgroup.hasValue === false)){classString += ' hidden';}
 		return classString;
 	};
 
 	$scope.getClassForCompactSearchButton = function(month) {
 		var classString = 'btn btn-primary searchbtn-compact';
-
-		//if($scope.selectedCompactSystem.sysIndex > -1){
-		if($scope.selectedCompactSystem.hasValue == true) {
-			classString += ' hidden';
-		}
-		
+		if($scope.selectedCompactSystem.hasValue == true) {classString += ' hidden';}
 		return classString;
 	};
 
 	$scope.getClassForCompactMessageButton = function(month) {
 		var classString = 'btn btn-primary messagebtn-compact';
-
-		//if($scope.selectedCompactSystem.sysIndex > -1 || $scope.displayCompactMessageView == true){
-		if($scope.selectedCompactSystem.hasValue == true || $scope.displayCompactMessageView == true){
-			classString += ' hidden';
-		}
-		
+		if($scope.selectedCompactSystem.hasValue == true || $scope.displayCompactMessageView == true){classString += ' hidden';}
 		return classString;
 	};
 	
 	$scope.getClassForCompactSystemViewLabel = function(month) {
 		var classString = 'systemview-heading-compact';
-
-		//if($scope.selectedCompactSystem.sysIndex > -1){
-		if($scope.selectedCompactSystem.hasValue == true){
-			classString += ' hidden';
-		}
-		
+		if($scope.selectedCompactSystem.hasValue == true){classString += ' hidden';}
 		return classString;
 	};
+
+	$scope.getClassForSystemCompactView = function(element) {
+		var classString = 'status';
+
+		if(element.type == 'error'){
+			classString = ' error';
+		}
+
+		if($scope.selectedCompactSystem.hasValue == false){
+			classString += ' hidden';
+		}
+
+		return classString;
+	}
+
+	$scope.getClassForMonth = function(month) {
+		if (month == $scope.selectedMonth) {
+			return "span1 month selectedmonth";
+		} else {
+			return "span1 month";
+		}
+	};
+
+	$scope.getClassForSystemgroupListCompact = function() {
+		var classString = '';
+		if($scope.selectedCompactSystem.hasValue == true || $scope.displayCompactMessageView == true || $scope.selectedCompactSystemgroup.hasValue === true){classString = 'hidden';}
+		return classString;
+	}
+
+	$scope.getClassForSystemViewCompact = function() {
+		var classString = '';
+		if($scope.selectedCompactSystem.hasValue == true || $scope.selectedCompactSystemgroup.hasValue == false || $scope.displayCompactMessageView == true ) {classString = 'hidden';}
+		return classString;
+	}
+
+	$scope.compactHomeButtonClick = function() {
+		$scope.selectedCompactSystem.system = "";
+		$scope.selectedCompactSystem.sysIndex = -1;
+		$scope.selectedCompactSystem.hasValue = false;
+		$scope.selectedCompactSystemgroup.hasValue = false;
+		$scope.displayCompactMessageView = false;
+		$scope.selectedYearCompact = Calendar.getCurrentYear();
+		$scope.selectedMonthCompact = Calendar.getCurrentMonth();
+		$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonthCompact);
+		$scope.systemCompactViewList = [];
+	}
+
+	$scope.compactSystemBackButtonClick = function() {
+		$scope.compactHomeButtonClick();
+	};
+
+	$scope.compactStatusBackButtonClick = function() {
+	    $scope.selectedCompactSystem.system = "";
+		$scope.selectedCompactSystem.sysIndex = -1;
+		$scope.selectedCompactSystem.hasValue = false;
+
+		$scope.selectedYearCompact = Calendar.getCurrentYear();
+		$scope.selectedMonthCompact = Calendar.getCurrentMonth();
+		$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonthCompact);
+		$scope.systemCompactViewList = [];
+	};
+
+	$scope.compactMessageViewClick = function() {
+		$scope.displayCompactMessageView = true;
+	};
+
+	$scope.compactSystemGroupElementClick = function(index) {
+		fillSystemViewList(index);
+	};
+
+	$scope.compactSystemElementClick = function(index) {
+
+		fillStatusCompactViewList(index);
+	};
+
+	function fillSystemViewList(groupIndex) {
+		$scope.systemgroupCompactViewList = [];
+		//$scope.selectedCompactSystemgroup.systemGroupIndex = groupIndex;
+
+		var i;
+		for (i = 0; i < $scope.systemnames.length; i++){
+			if ($scope.systemnames[i].systemgroup === $scope.systemgroups[groupIndex].name) {
+
+				var elm = {
+					systemnamesIndex: i,
+					name: $scope.systemnames[i].name,
+					text: $scope.systemnames[i].text,
+					systemgroup: $scope.systemnames[i].systemgroup
+				}
+
+				$scope.systemgroupCompactViewList.push(elm);
+			}
+		}
+
+		if($scope.systemgroupCompactViewList <= 0){
+
+			var elm = {
+				name: '',
+				text: '',
+				systemgroup: ''
+			}
+
+			$scope.systemgroupCompactViewList.push(elm);
+		}
+
+		$scope.selectedCompactSystemgroup.hasValue = true;
+	}
+
+	//kjem inn nameindex
+	function fillStatusCompactViewList(index) {
+		
+		$scope.selectedCompactSystem.sysNameIndex = index;
+		var systemMatch = Utils.findSystem($scope.systemlines, $scope.systemnames[index]);
+		
+		if(systemMatch.result) {
+			$scope.selectedCompactSystem.sysIndex = systemMatch.index;
+			fillExistingCompactData(systemMatch.index);
+		}else{
+			fillEmptyCompactListElement();
+			$scope.selectedCompactSystem.hasValue = true;
+		}
+	}
 
 	function fillExistingCompactData(syslinesIndex) {
 		$scope.systemCompactViewList = [];
@@ -289,9 +387,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils)
 				}
 			}
 
-			//$scope.selectedCompactSystem._id = "";
 			$scope.selectedCompactSystem.system = systemtext; 
-			//$scope.selectedCompactSystem.sysIndex = index;
 		}
 
 
@@ -338,126 +434,14 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils)
 		$scope.systemCompactViewList.push(elm);
 	}
 
-	//kjem inn nameindex
-	$scope.fillSystemCompactViewList = function(index) {
-		
-		$scope.selectedCompactSystem.sysNameIndex = index;
-		var systemMatch = Utils.findSystem($scope.systemlines, $scope.systemnames[index].name);
-		
-		if(systemMatch.result) {
-			$scope.selectedCompactSystem.sysIndex = systemMatch.index;
-			fillExistingCompactData(systemMatch.index);
-		}else{
-			fillEmptyCompactListElement();
-			$scope.selectedCompactSystem.hasValue = true;
-		}
-
-	}
-
-	$scope.fillSystemgroupViewList = function(groupIndex) {
-	
-		$scope.selectedCompactSystemgroup.systemGroupIndex = groupIndex;
-
-		var i;
-		for (i = 0; i < $scope.systemnames.length; i++){
-			if ($scope.systemnames[i].systemgroup === $scope.systemgroups[groupIndex].name) {
-
-				var elm = {
-					index: i,
-					name: $scope.systemnames[i].name,
-					text: $scope.systemnames[i].text,
-					systemgroup: $scope.systemnames[i].systemgroup
-				}
-
-				$scope.systemgroupCompactViewList.push(elm);
-			}
-		}
-
-		if($scope.systemgroupCompactViewList <= 0){
-
-			var elm = {
-				name: '',
-				text: '',
-				systemgroup: ''
-			}
-
-			$scope.systemgroupCompactViewList.push(elm);
-		}
-
-		$scope.selectedCompactSystemgroup.hasValue = true;
-
-	}
-
-	$scope.getClassForSystemCompactView = function(element) {
-		var classString = 'status';
-
-		if(element.type == 'error'){
-			classString = ' error';
-		}
-
-		if($scope.selectedCompactSystem.hasValue == false){
-			classString += ' hidden';
-		}
-
-		return classString;
-	}
-
-	$scope.compactListReset = function() {
-		$scope.selectedCompactSystem._id = "";
-		$scope.selectedCompactSystem.system = ""; 
-		$scope.selectedCompactSystem.sysIndex = -1;
-		$scope.selectedCompactSystem.hasValue = false;
-
-		$scope.displayCompactMessageView = false;
-
-		$scope.selectedYearCompact = Calendar.getCurrentYear();
-		$scope.selectedMonthCompact = Calendar.getCurrentMonth();
-		$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonthCompact);
-
-		$scope.systemCompactViewList = [];
-	}
-
-	$scope.getClassForSystemgroupListCompact = function() {
-		var classString = '';
-		//if($scope.selectedCompactSystem.sysIndex >= 0 || $scope.displayCompactMessageView == true){
-		if($scope.selectedCompactSystem.hasValue == true || $scope.displayCompactMessageView == true ) {
-			classString = 'hidden';
-		}
-		
-		return classString;
-	}
-
-	$scope.getClassForSystemViewCompact = function() {
-		var classString = '';
-		//if($scope.selectedCompactSystem.sysIndex >= 0 || $scope.displayCompactMessageView == true){
-		if($scope.selectedCompactSystem.hasValue == true || $scope.selectedCompactSystemgroup.hasValue == false || $scope.displayCompactMessageView == true ) {
-			classString = 'hidden';
-		}
-		
-		return classString;
-	}
-
 	$scope.gotoMonthCompact = function(event, month) {
 		$scope.selectedMonthCompact = month;
 		$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonthCompact);
 
 		if($scope.selectedCompactSystem.hasValue == true) {
-			//fillExistingCompactData($scope.selectedCompactSystem.sysIndex);
-			$scope.fillSystemCompactViewList($scope.selectedCompactSystem.sysNameIndex);
+			fillStatusCompactViewList($scope.selectedCompactSystem.sysNameIndex);
 		}
-		
-		//$scope.fillSystemCompactViewList($scope.selectedCompactSystem.sysIndex);
-	}	
-	
-	$scope.getClassForMonth = function(month) {
-		if (month == $scope.selectedMonth) {
-			return "span1 month selectedmonth";
-		} else {
-			return "span1 month";
-		}
-	};
-
-
+	}
 	
 	$scope.gotoMonth = function(event, month) {
 		
@@ -466,12 +450,8 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils)
 		}
 
 		$scope.clearHoverElement();
-		$scope.unSelectElement();
-						
+		$scope.unSelectElement();				
 		$scope.selectedMonth = month;
-
-		//$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonth);
-		//$scope.fillSystemCompactViewList($scope.selectedCompactSystem.sysIndex);
 
 		var elem = angular.element(event.srcElement);
 		elem[0].className += " selectedmonth";

@@ -236,7 +236,7 @@ angular.module('utilsModule', []).
 			return monthList;
 		}
 
-		ns.findSystem = function(systemlines, systemName) {
+		ns.findSystem = function(systemlines, systemline) {
 			var match = {
 				result: false,
 				index: -1
@@ -244,7 +244,7 @@ angular.module('utilsModule', []).
 		
 			var j;
 			for(j = 0; j < systemlines.length; j++){
-				if (systemName == systemlines[j].system) {
+				if (systemline.name == systemlines[j].system) {
 					match.result = true;
 					match.index = j;
 					break;

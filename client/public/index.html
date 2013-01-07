@@ -53,8 +53,9 @@
 			</div>
 
 			<div class="navbar-buttons-compact pull-right">
-				<button ng:class="getClassForCompactHomeButton()" ng:click="compactListReset()"> <i class="icon-home icon-white"></i></button>
-				<!--button ng:class="getClassForCompactSearchButton()" ng:click=""> <i class="icon-search icon-white"></i></button-->
+				<button ng:class="getClassForCompactHomeButton()" ng:click="compactHomeButtonClick()"> <i class="icon-home icon-white"></i></button>
+				<button ng:class="getClassForCompactSystemBackButton()" ng:click="compactSystemBackButtonClick()"> <i class="icon-step-backward icon-white"></i></button>
+				<button ng:class="getClassForCompactStatusBackButton()" ng:click="compactStatusBackButtonClick()"> <i class="icon-step-backward icon-white"></i></button>
 				<button ng:class="getClassForCompactMessageButton()" ng:click="compactMessageViewClick()">({{alertlines.length}}) <i class="icon-envelope icon-white"></i></button>
 				<button ng:class="getClassForCompactYearButton()" ng-click="">{{selectedYearCompact}}</button>
 

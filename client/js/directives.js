@@ -112,7 +112,7 @@ directiveModule.directive('systemgroupsViewCompact', function($compile, Utils){
 
 						//template += '<h5 class="systemgroup_compact">{{systemgroups['+i+'].name}}</h5>';
 
-						template += '<li><a ng:click="fillSystemgroupViewList('+i+')">'+
+						template += '<li><a ng:click="compactSystemGroupElementClick('+i+')">'+
 								    '<i class="icon-chevron-right"></i><h4>{{systemgroups['+i+'].name}}</h4>';
 						template += '</a></li>';
 					}
@@ -134,96 +134,18 @@ directiveModule.directive('systemViewCompact', function($compile, Utils){
 	return {
 			restrict: 'A',
 			link: function(scope, element, attrs) {
-				var template = '';
-				/*
-				var dataStatus = {
-					systemlines: false,
-					systemnames: false,
-					systemgroups: false
-				}
+				var template;
 
-				function dataIsReady() {
-					var result = false;
-					if(dataStatus.systemlines == true && dataStatus.systemnames == true && dataStatus.systemgroups == true) {
-						result = true;
-					}
-					return result;
-				}
+					template = '<ul class="nav elementlist-compact listelement-button nav-list">'+
 
-				scope.$watch('systemlines', function(newVal, oldVal) {
-					dataStatus.systemlines = true;
-					if(dataIsReady) {
-						buildList();
-					}
-				});
-				
-				scope.$watch('systemnames', function() {
-					dataStatus.systemnames = true;
-					if(dataIsReady) {
-						buildList();
-					}
-				});
+							   	  '<li ng:repeat="line in systemgroupCompactViewList">'+
+							   	  	 '<a ng:class="getClassForSystemViewCompact(line)" ng:click="compactSystemElementClick(line.systemnamesIndex)">'+
+							   	  	 	'<i class="icon-chevron-right"></i>'+ 
+							   	  	 	'<p>{{line.name}} - {{line.text}} - {{line.systemnamesIndex}}</p>'+
+							   	  	 '</a>'+
+							   	  '</li>'+
 
-				scope.$watch('systemgroups', function() {
-					dataStatus.systemgroups = true;
-					if(dataIsReady) {
-						buildList();
-					}
-				});
-				
-
-				function buildList() {
-					//template = '<ul class="nav mobnav nav-list">';
-					template = '<span ng:class="getClassForSystemViewCompact()">'
-
-					var i;
-					var j;
-					for(i = 0; i < scope.systemgroups.length; i++){
-
-						template += '<h5 class="systemgroup_compact">{{systemgroups['+i+'].name}}</h5>';
-						template += '<ul class="nav elementlist-compact listelement-button nav-list">';
-
-						for (j = 0; j < scope.systemnames.length; j++){
-							if (scope.systemnames[j].systemgroup == scope.systemgroups[i].name) {
-
-								template += '<li><a ng:click="fillSystemCompactViewList('+j+')">'+
-								'<i class="icon-chevron-right"></i>{{systemnames['+j+'].name}} {{systemnames['+j+'].text}}';
-
-								template += '</a></li>';
-
-							}
-						}
-
-						template += '</ul>';
-					}
-
-
-					element.html(template);				
-					$compile(element.contents())(scope);
-					dataStatus.systemlines = false;
-					dataStatus.systemnames = false;
-					dataStatus.systemgroups = false;
-					}
-					*/
-
-
-
-					/*
-					template = '<ul class="nav .elementlist-compact listelement-button nav-list" ng:class="getClassForSystemViewCompact()>';
-
-					
-					template += '<li ng:repeat="line in systemgroupCompactViewList"  ng:click="fillSystemCompactViewList({{line.index}})>'+
-									'<a>'+
-										'<p>{{line.name}} - {{line.text}}</p>' +
-									'</a>'+
-								'</li>';
-
-					template += '</ul>';
-					*/
-
-					template = '<ul class="nav .elementlist-compact listelement-button nav-list">'+
-								'<li> <a ng:click="fillSystemCompactViewList('+2+')"><i class="icon-chevron-right"></i>test</a> </li>'+
-								'</ul>';
+							   '</ul>';
 
 
 					element.html(template);
