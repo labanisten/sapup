@@ -315,17 +315,13 @@ app.get('/auth/google',
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
 
-// app.get('/auth/google/callback', 
-//  passport.authenticate('google', { successRedirect: '/',
-// 								   failureRedirect: '/loginerror' 
-// }));
 
-app.get('/auth/google/callback', function(req, res) {
-	console.log("Callback");
-	console.log(req);
-	 passport.authenticate('google', { successRedirect: '/',
-								   failureRedirect: '/loginerror' }); 
-});
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+  	res.cookie('name', token);
+    res.redirect('/');
+  });
 
 
 
@@ -333,12 +329,6 @@ app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
 });
-
-app.get('/auth/client', function(req, res){
-
-
-});
-
 
 
 ////
