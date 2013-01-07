@@ -17,6 +17,7 @@
 
 	<script src="../js/angular.js"></script>
 	<script src="../js/angular-resource.js"></script>
+	<script src="../js/angular-cookies.js"></script>
 
 	<script src="../js/controllers.js"></script>
 	<script src="../js/directives.js"></script>
@@ -64,7 +65,9 @@
 				</a-->
 			</div>
 			
-			<a class="btn btn-small" href="/authenticate">Login</a>
+			<a class="btn btn-small" href="/auth/google">Login</a>
+			<!-- <a class="btn btn-small" ng-click="authenticate()">Login</a> -->
+			User {{getUser()}}
 
 			<div class="btn-group pull-right">
 				<button class="btn btn-small navbtn-edit" data-toggle="modal" href="#addalertdialog"> <i class="icon-warning-sign"></i>

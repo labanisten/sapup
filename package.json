@@ -4,7 +4,7 @@
 
 
   "dependencies": {
-    "express": "2.x",
+    "express": ">= 0.0.1",
     "stylus": ">= 0.0.1",
     "connect": ">= 0.0.1",
     "ejs": ">= 0.4.3",
@@ -12,6 +12,8 @@
     "azure": ">= 0.5.1",
     "mongodb": ">= 1.0.0",
     "generic-pool": ">= 0.0.0",
-	  "rss": ">= 0.0.0"
+	  "rss": ">= 0.0.0",
+    "passport": ">= 0.0.0",
+    "passport-google-oauth": ">= 0.0.0"
   }
 }
