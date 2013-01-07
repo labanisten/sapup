@@ -307,7 +307,11 @@ passport.use(new GoogleStrategy({
 
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
-                                            'https://www.googleapis.com/auth/userinfo.email'] }));
+                                            'https://www.googleapis.com/auth/userinfo.email'] }),
+  function(req, res){
+    // The request will be redirected to Google for authentication, so this
+    // function will not be called.
+  });
 
 // GET /auth/google/callback
 //   Use passport.authenticate() as route middleware to authenticate the
@@ -317,7 +321,7 @@ app.get('/auth/google',
 
 
 app.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/loginerror' }),
+  passport.authenticate('google', { failureRedirect: '/loginerror.html' }),
   function(req, res) {
   	res.cookie('name', token);
     res.redirect('/');
