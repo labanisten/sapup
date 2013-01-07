@@ -4,7 +4,7 @@
 
 
   "dependencies": {
-    "express": ">= 0.0.1",
+    "express": ">= 3.0.0",
     "util": ">= 0.0.1",
     "stylus": ">= 0.0.1",
     "connect": ">= 0.0.1",
@@ -15,6 +15,8 @@
     "generic-pool": ">= 0.0.0",
 	  "rss": ">= 0.0.0",
     "passport": ">= 0.0.0",
-    "passport-google-oauth": ">= 0.0.0"
+    "passport-google-oauth": ">= 0.0.0",
+	"util": ">= 0.0.0",
+	"http": ">= 0.0.0"
   }
 }

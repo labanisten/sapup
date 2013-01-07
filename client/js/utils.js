@@ -236,7 +236,7 @@ angular.module('utilsModule', []).
 			return monthList;
 		}
 
-		ns.findSystem = function(systemlines, systemName) {
+		ns.findSystem = function(systemlines, systemline) {
 			var match = {
 				result: false,
 				index: -1
@@ -244,7 +244,7 @@ angular.module('utilsModule', []).
 		
 			var j;
 			for(j = 0; j < systemlines.length; j++){
-				if (systemName == systemlines[j].system) {
+				if (systemline.name == systemlines[j].system) {
 					match.result = true;
 					match.index = j;
 					break;
@@ -252,6 +252,51 @@ angular.module('utilsModule', []).
 			}
 			
 			return match;
+		}
+
+
+		ns.findElementWindowPosition = function(obj) {
+			var obj2 = obj;
+			var curtop = 0;
+			var curleft = 0;
+			if (document.getElementById || document.all) {
+			    do {
+				    curleft += obj.offsetLeft-obj.scrollLeft;
+				    curtop += obj.offsetTop-obj.scrollTop;
+				    obj = obj.offsetParent;
+				    obj2 = obj2.parentNode;
+				    while (obj2!=obj) {
+					    curleft -= obj2.scrollLeft;
+					    curtop -= obj2.scrollTop;
+					    obj2 = obj2.parentNode;
+				    }
+			  } while (obj.offsetParent)
+			  } else if (document.layers) {
+				curtop += obj.y;
+				curleft += obj.x;
+			  }
+			 return { top: curtop, left: curleft };//[curtop, curleft];
+		}
+
+		ns.setScroll = function(pos) {
+
+		    window.onscroll = function () { 
+
+			    var doc = document.body, 
+			    scrollPosition = doc.scrollTop;
+			    //pageSize = (doc.scrollHeight - doc.clientHeight),
+			    //percentageScrolled = Math.floor((scrollPosition / pageSize) * 100); 
+
+			    if(scrollPosition > pos.top) {
+			    	$('.month-header-table').removeClass('hidden');
+			    }else{
+			    	if(!$('.month-header-table').hasClass('hidden')) {
+			    		$('.month-header-table').addClass('hidden');
+			    	}
+			    }
+
+		    }; 
+
 		}
 
 	
