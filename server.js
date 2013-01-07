@@ -317,7 +317,7 @@ app.get('/auth/google',
 
 
 app.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
+  passport.authenticate('google', { failureRedirect: '/loginerror' }),
   function(req, res) {
   	res.cookie('name', token);
     res.redirect('/');
