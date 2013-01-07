@@ -1,7 +1,7 @@
-var myModule = angular.module('systemAvailability', ['mongodbModule', 'calendarModule', 'utilsModule', 'directiveModule']);
+var myModule = angular.module('systemAvailability', ['mongodbModule', 'calendarModule', 'utilsModule', 'directiveModule', 'ngCookies']);
 
 
-myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils) {
+myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils, $cookies) {
 
 	$scope.systemlines = getSystemData();
 	$scope.systemnames = getSystemNames();
@@ -104,13 +104,19 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils)
 	$scope.systemgroupCompactViewList = [];
 	$scope.displayCompactMessageView = false;
 	
+	$scope.getUser = function() {
+
+	}; 
+
 	$scope.authenticate = function() {
-		$http({method: 'GET', url: '/authenticate'}).
+		$http({method: 'POST', url: 'http://127.0.0.1:4000/auth/google'}).
 			 success(function(data, status, headers, config) {
+			 	var d = data;
 			    // this callback will be called asynchronously
 			    // when the response is available
 			 }).
 			 error(function(data, status, headers, config) {
+			 	var d = data;
 			    // called asynchronously if an error occurs
 			    // or server returns response with status
 			    // code outside of the <200, 400) range
