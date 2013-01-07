@@ -15,7 +15,7 @@ var MONGODB_URL = process.env.MONGODB_URL || '127.0.0.1',
     MONGODB_DB = process.env.MONGODB_DB || 'test'; 
     GOOGLE_CLIENT_ID = '1072189313711.apps.googleusercontent.com',
     GOOGLE_CLIENT_SECRET = 'Evqt9n8JS3f50GFCqoyn5ElN',
-    GOOGLE_REDIRECT_URI = 'http://127.0.0.1:4000/auth/google/callback',
+    GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || 'http://127.0.0.1:4000/auth/google/callback',
     GOOGLE_SCOPE = 'https://www.googleapis.com/auth/userinfo.email';
 
 
@@ -27,7 +27,6 @@ app.configure(function() {
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
   // app.use(express.logger());
-  app.use(express.favicon());
   app.use(express.cookieParser());
   app.use(express.cookieSession({ secret: 'keyboard cat' }));
   app.use(express.bodyParser());
