@@ -138,7 +138,7 @@ var rssServices = {
 		var feed = new RSS({
 	        title: 'SAP system availability',
 	        description: 'SAP system uptime overview',
-	        feed_url: 'http://systemavailability.azurewebsites.net/messages.xml',
+	        feed_url: 'http://systemavailability.azurewebsites.net/messages.rss',
 	        site_url: 'http://systemavailability.azurewebsites.net',
 	        author: 'Statoil ASA'
 	    });
@@ -188,7 +188,7 @@ app.get('/systemnames', function(req, res) {restServices.get(req, res);});
 app.get('/alerttypes', function(req, res) {restServices.get(req, res);});
 app.get('/systemstatuses', function(req, res) {restServices.get(req, res);});
 app.get('/alerts', function(req, res) {restServices.get(req, res);});
-app.get('/messages.xml', function(req, res) {rssServices.get(req, res);});
+app.get('/messages.rss', function(req, res) {rssServices.get(req, res);});
 
 app.post('/systemgroups', function(req, res) {restServices.post(req, res);});
 app.post('/systems', function(req, res) {restServices.post(req, res);});

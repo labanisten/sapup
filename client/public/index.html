@@ -4,7 +4,7 @@
 
 	<link rel="shortcut icon" href="favicon.ico" />
 
-	<link href="http://systemavailability.azurewebsites.net/messages.xml" rel="alternate" type="application/rss+xml" title="System availability messages RSS" />
+	<link href="http://systemavailability.azurewebsites.net/messages.rss" rel="alternate" type="application/rss+xml" title="System availability messages RSS" />
 
 	<meta charset="utf-8">
 	<title>System availability</title>
@@ -58,7 +58,7 @@
 				<button ng:class="getClassForCompactSystemBackButton()" ng:click="compactSystemBackButtonClick()"> <i class="icon-step-backward icon-white"></i></button>
 				<button ng:class="getClassForCompactStatusBackButton()" ng:click="compactStatusBackButtonClick()"> <i class="icon-step-backward icon-white"></i></button>
 				<button ng:class="getClassForCompactMessageButton()" ng:click="compactMessageViewClick()">({{alertlines.length}}) <i class="icon-envelope icon-white"></i></button>
-				<button ng:class="getClassForCompactYearButton()" ng-click="">{{selectedYearCompact}}</button>
+				<!--button ng:class="getClassForCompactYearButton()" ng-click="">{{selectedYearCompact}}</button-->
 
 				<!--button class="btn btn-small navbtn-compact"> <i class="icon-arrow-left"></i></button-->
 				<!--a href="http://systemavailability.azurewebsites.net/messages.rss" class="btn btn-link navbtn-compact pull-right">
@@ -76,7 +76,7 @@
 				<button class="btn btn-small navbtn-edit" data-toggle="modal" href="#addelementdialog"> <i class="icon-calendar"></i>
 					<span class="new-status-btn-txt">Add status</span>
 				</button>
-				<a href="http://systemavailability.azurewebsites.net/messages.xml" class="btn btn-link navbtn-edit">
+				<a href="http://systemavailability.azurewebsites.net/messages.rss" class="btn btn-link navbtn-edit">
 				  <img style="width:20px" src="../images/feed-icon-28x28.png" class="pull-left"/>
 				</a>
 			</div>
