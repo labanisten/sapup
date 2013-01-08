@@ -15,7 +15,7 @@ var MONGODB_URL = process.env.MONGODB_URL || '127.0.0.1',
     MONGODB_DB = process.env.MONGODB_DB || 'test'; 
     GOOGLE_CLIENT_ID = '1072189313711.apps.googleusercontent.com',
     GOOGLE_CLIENT_SECRET = 'Evqt9n8JS3f50GFCqoyn5ElN',
-    GOOGLE_REDIRECT_URI = 'http://127.0.0.1:4000/auth/google/callback',
+    GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || 'http://127.0.0.1:4000/auth/google/callback',
     GOOGLE_SCOPE = 'https://www.googleapis.com/auth/userinfo.email';
 
 
@@ -27,7 +27,6 @@ app.configure(function() {
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
   // app.use(express.logger());
-  app.use(express.favicon());
   app.use(express.cookieParser());
   app.use(express.cookieSession({ secret: 'keyboard cat' }));
   app.use(express.bodyParser());
@@ -308,7 +307,11 @@ passport.use(new GoogleStrategy({
 
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
-                                            'https://www.googleapis.com/auth/userinfo.email'] }));
+                                            'https://www.googleapis.com/auth/userinfo.email'] }),
+  function(req, res){
+    // The request will be redirected to Google for authentication, so this
+    // function will not be called.
+  });
 
 // GET /auth/google/callback
 //   Use passport.authenticate() as route middleware to authenticate the
@@ -316,17 +319,13 @@ app.get('/auth/google',
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
 
-// app.get('/auth/google/callback', 
-//  passport.authenticate('google', { successRedirect: '/',
-// 								   failureRedirect: '/loginerror' 
-// }));
 
-app.get('/auth/google/callback', function(req, res) {
-	console.log("Callback");
-	console.log(req);
-	 passport.authenticate('google', { successRedirect: '/',
-								   failureRedirect: '/loginerror' }); 
-});
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/loginerror.html' }),
+  function(req, res) {
+  	res.cookie('name', token);
+    res.redirect('/');
+  });
 
 
 
@@ -334,12 +333,6 @@ app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
 });
-
-app.get('/auth/client', function(req, res){
-
-
-});
-
 
 
 ////
