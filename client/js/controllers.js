@@ -206,7 +206,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		if (month == $scope.selectedMonthCompact) {
 			classString += "btn btn-success month selectedmonth";
 		} else {
-			classString += "btn btn-primary month";
+			classString += "btn btn-primary month"; 
 		}
 
 		if($scope.selectedCompactSystem.hasValue == false) {classString += ' hidden';}
@@ -368,7 +368,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	function fillStatusCompactViewList(index) {
 		
 		$scope.selectedCompactSystem.sysNameIndex = index;
-		var systemMatch = Utils.findSystem($scope.systemlines, $scope.systemnames[index]);
+		var systemMatch = Utils.findSystem($scope.systemlines, $scope.systemnames[index].name);
 		
 		if(systemMatch.result) {
 			$scope.selectedCompactSystem.sysIndex = systemMatch.index;

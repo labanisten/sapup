@@ -141,7 +141,7 @@ directiveModule.directive('systemViewCompact', function($compile, Utils){
 							   	  '<li ng:repeat="line in systemgroupCompactViewList">'+
 							   	  	 '<a ng:class="getClassForSystemViewCompact(line)" ng:click="compactSystemElementClick(line.systemnamesIndex)">'+
 							   	  	 	'<i class="icon-chevron-right"></i>'+ 
-							   	  	 	'<p>{{line.name}} - {{line.text}} - {{line.systemnamesIndex}}</p>'+
+							   	  	 	'<p>{{line.name}} - {{line.text}}</p>'+
 							   	  	 '</a>'+
 							   	  '</li>'+
 
