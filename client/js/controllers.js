@@ -112,6 +112,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	};
 
 	$scope.currentCompactpage = $scope.page.main;
+	$scope.systemTableStartColumnSize;
 	
 	$scope.getUser = function() {
 
@@ -131,8 +132,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 			    // code outside of the <200, 400) range
 			 });
 	};
-
-	$scope.systemTableStartColumnSize;
 
 	$scope.messageAreaClass = function() {
 		if ($scope.alertlines.length > 0) {
@@ -192,13 +191,22 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		}
 	};
 
+	$scope.getClassFixedMonthHeader = function() {
+		var classString = 'system-table month-header-table hidden';
+
+		console.log("getclass");
+		//var calendarHeaderPos = Utils.findElementWindowPosition($('.systemtablespacer'));
+		//Utils.setScroll(calendarHeaderPos);
+
+		return classString;
+	}
+
 	$scope.getClassForSystemTableSpacer = function($event) {
 		var classString = 'systemtablespacer week';
 		$scope.systemTableStartColumnSize = $('.systemtablespacer').width() + 1;
-
+		//console.log("spacer: " + $scope.systemTableStartColumnSize);
 		//Utils.setScroll(Utils.findElementWindowPosition(document.getElementById('tablespacer')));
 		//console.log("fp: " + Utils.findElementWindowPosition(document.getElementById('tablespacer')));
-
 		return classString;
 	}
 
@@ -295,7 +303,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	$scope.getClassForStatusCompactViewElement = function(element) {
 		var classString = 'status';
 		if(element.type == 'error'){classString = 'error';}
-		//if($scope.currentCompactpage != $scope.page.system){classString += ' hidden'}
 		return classString;
 	}
 
@@ -356,7 +363,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	function fillSystemViewList(groupIndex) {
 		$scope.systemgroupCompactViewList = [];
 		$scope.selectedCompactSystemgroup.name = $scope.systemgroups[groupIndex].name;
-		//$scope.selectedCompactSystemgroup.systemGroupIndex = groupIndex;
 
 		var i;
 		for (i = 0; i < $scope.systemnames.length; i++){
@@ -387,7 +393,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		$scope.selectedCompactSystemgroup.hasValue = true;
 	}
 
-	//kjem inn nameindex
 	function fillStatusCompactViewList(index) {
 		
 		$scope.selectedCompactSystem.sysNameIndex = index;

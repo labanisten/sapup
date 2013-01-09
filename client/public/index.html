@@ -354,7 +354,9 @@
 
 	<!-- User voice Widget -->
 	<script type="text/javascript">
+
 		var uvOptions = {};
+
 		(function() {
 		    var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
 		    uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/EcgrjArON8DuOEsrfdUTQ.js';
@@ -362,15 +364,44 @@
   		})();
 
 
+  		function findElementWindowPosition(obj) {
+			var obj2 = obj;
+			var curtop = 0;
+			var curleft = 0;
+			if (document.getElementById || document.all) {
+			    do {
+				    curleft += obj.offsetLeft-obj.scrollLeft;
+				    curtop += obj.offsetTop-obj.scrollTop;
+				    obj = obj.offsetParent;
+				    obj2 = obj2.parentNode;
+				    while (obj2!=obj) {
+					    curleft -= obj2.scrollLeft;
+					    curtop -= obj2.scrollTop;
+					    obj2 = obj2.parentNode;
+				    }
+			  } while (obj.offsetParent)
+			  } else if (document.layers) {
+				curtop += obj.y;
+				curleft += obj.x;
+			  }
+			 return { top: curtop, left: curleft };
+		}
+
+
   		window.onload = function () { 
 		    window.onscroll = function () { 
 
 			    var doc = document.body, 
-			    scrollPosition = doc.scrollTop,
-			    pageSize = (doc.scrollHeight - doc.clientHeight),
-			    percentageScrolled = Math.floor((scrollPosition / pageSize) * 100); 
+			    scrollPosition = doc.scrollTop;
+			    //pageSize = (doc.scrollHeight - doc.clientHeight),
+			    //percentageScrolled = Math.floor((scrollPosition / pageSize) * 100); 
 
-			    if(scrollPosition > 318) {
+			    var obj = document.getElementById('tablespacer');
+			    if(obj.offsetParent !== null) {
+			    var pos = findElementWindowPosition(document.getElementById('tablespacer'));
+			    console.log("pos: " + pos.top);
+
+			    if(scrollPosition >= pos.top - 19) { //318
 			    	$('.month-header-table').removeClass('hidden');
 			    }else{
 			    	if(!$('.month-header-table').hasClass('hidden')) {
@@ -378,9 +409,15 @@
 			    	}
 			    }
 
+				}else{
+					if(!$('.month-header-table').hasClass('hidden')) {
+			    		$('.month-header-table').addClass('hidden');
+			    	}
+				}
+
 		    }; 
 		};
-		
+	
 
 	</script>
 </body>

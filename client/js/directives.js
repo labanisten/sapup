@@ -259,7 +259,7 @@ directiveModule.directive('fixedMonthHeader', function($compile, Utils){
 			restrict: 'A',
 			link: function(scope, element, attrs) {
 
-				var template = 	'<table class="system-table month-header-table hidden">' +
+				var template = 	'<table ng:class="getClassFixedMonthHeader()">' +
 
 									'<thead>'+
 
@@ -270,7 +270,8 @@ directiveModule.directive('fixedMonthHeader', function($compile, Utils){
 											'</tr>'+
 											
 											'<tr class="shortdaynames">'+
-												'<th ng-repeat="shortDayName in shortDayNamesInMonth('+scope.selectedMonth+')">{{shortDayName}}</th>'+
+												'<th rowspan="3" style="width:{{systemTableStartColumnSize}}px"></th>'+
+												'<th class="fixedheader" ng-repeat="shortDayName in shortDayNamesInMonth('+scope.selectedMonth+')">{{shortDayName}}</th>'+
 											'</tr>'+
 											
 											'<tr>'+

@@ -278,6 +278,17 @@ angular.module('utilsModule', []).
 			 return { top: curtop, left: curleft };//[curtop, curleft];
 		}
 
+		ns.getScrollPosition = function() {
+
+		    window.onscroll = function () { 
+
+			    var doc = document.body, 
+			    scrollPosition = doc.scrollTop;
+			    
+		    }; 
+
+		}
+
 		ns.setScroll = function(pos) {
 
 		    window.onscroll = function () { 

@@ -145,13 +145,20 @@
 		  background-color: @grayLighter ;
 		  font-weight: normal;
 		  font-size: 0.9em;
+		  min-width: 20px;
 		}
 
+		/*
+		th .fixedheader {
+		  border: 0px;
+		}
+		*/
+		
 		td {
 		  border: 1px solid #E0E0E0;
 		  background-color: @grayLighter;
 		  padding: 2px;
-		  min-width: 12px;
+		  min-width: 20px;
 		}
 
 		tbody {
@@ -251,6 +258,7 @@
 		display:none;
 	}
 
+
 	.shortdaynames{
 		display:none;
 	}
@@ -310,6 +318,17 @@
 	}
 
 	@media (max-width: 950px) {
+
+		table.system-table {
+
+			th {
+			  min-width: 12px;
+			}
+
+			td {
+			  min-width: 12px;
+			}
+	    }
 
 		.daynames{
 			display:none;
@@ -449,6 +468,8 @@
 	  margin: 0 0 -1px;
 	  padding: 8px 14px;
 	  border: 1px solid #e5e5e5;
+	  font-weight: bold;
+	  /*font-size: 12.5px;*/
 	}
 
 	.elementlist-compact > li:first-child > a {
@@ -511,6 +532,7 @@
 	  margin: 0 0 -1px;
 	  padding: 8px 14px;
 	  border: 1px solid #e5e5e5;
+	  font-weight: normal;
 
 	  -webkit-border-radius: 6px 6px 6px 6px;
 	  -moz-border-radius: 6px 6px 6px 6px;
