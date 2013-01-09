@@ -253,7 +253,7 @@ directiveModule.directive('CompressedListElementView', function($compile, Utils)
 	};
 });
 
-
+/*
 directiveModule.directive('fixedMonthHeader', function($compile, Utils){
 	return {
 			restrict: 'A',
@@ -282,22 +282,6 @@ directiveModule.directive('fixedMonthHeader', function($compile, Utils){
 
 									'</thead>'+
 
-									/*'<tbody>';
-
-
-									var i,j;
-											for (j = 0; j < scope.systemgroups.length; j++){
-												template += '<tr><td class="systemgroup"><span>{{systemgroups['+j+'].name}}</span></td><td colspan="{{noOfDaysInMonth[selectedMonth]}}"></td>';
-												for (i = 0; i < scope.systemnames.length; i++){
-													if (scope.systemnames[i].systemgroup == scope.systemgroups[j].name) {
-														template += '<tr class="systemrow"><td class="system"><span>{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}</span></td>';
-														
-													};
-												};
-											};
-
-									template += '</tbody>'+*/
-
 								'</table>';
 
 					element.html(template);
@@ -306,7 +290,7 @@ directiveModule.directive('fixedMonthHeader', function($compile, Utils){
 		   }		
 	};
 });
-
+*/
 
 directiveModule.directive('systemTable', function($compile, Utils){
 	return {

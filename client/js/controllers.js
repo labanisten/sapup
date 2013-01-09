@@ -191,6 +191,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		}
 	};
 
+	/*
 	$scope.getClassFixedMonthHeader = function() {
 		var classString = 'system-table month-header-table hidden';
 
@@ -204,11 +205,12 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	$scope.getClassForSystemTableSpacer = function($event) {
 		var classString = 'systemtablespacer week';
 		$scope.systemTableStartColumnSize = $('.systemtablespacer').width() + 1;
-		console.log("spacer: " + $scope.systemTableStartColumnSize);
+		//console.log("spacer: " + $scope.systemTableStartColumnSize);
 		//Utils.setScroll(Utils.findElementWindowPosition(document.getElementById('tablespacer')));
 		//console.log("fp: " + Utils.findElementWindowPosition(document.getElementById('tablespacer')));
 		return classString;
 	}
+	*/
 
 	$scope.getClassForMonth = function(month) {
 		if (month == $scope.selectedMonth) {
