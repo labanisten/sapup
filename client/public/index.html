@@ -80,18 +80,21 @@
 	<div class="compact-layout navbar navbar-fixed-top">
 		<div class="navbar-inner">
 
-				<a class="brand" href="#">
-					<div class="navbar-headingtext-compact">Statoil SAA
-						<sup style="font-size:10px; color:red">BETA</sup>
-					</div>
-				</a>
-
-				<div class="navbar-buttons-compact pull-right">
+				<div class="navbar-buttons-compact pull-left">
 					<button ng:class="getClassForCompactSystemBackButton()" ng:click="compactSystemBackButtonClick()"> <i class="icon-step-backward icon-white"></i></button>
 					<button ng:class="getClassForCompactStatusBackButton()" ng:click="compactStatusBackButtonClick()"> <i class="icon-step-backward icon-white"></i></button>
 					<button ng:class="getClassForCompactHomeButton()" ng:click="compactHomeButtonClick()"> <i class="icon-home icon-white"></i></button>
 					<button ng:class="getClassForCompactMessageButton()" ng:click="compactMessageViewClick()">({{alertlines.length}}) <i class="icon-envelope icon-white"></i></button>
 				</div>
+
+				<div class="pull-right">
+					<a class="brand" href="#">
+						<div class="navbar-headingtext-compact">Statoil SAA
+							<sup style="font-size:10px; color:red">BETA</sup>
+						</div>
+					</a>
+				</div>
+
 		</div>
 	</div>
 
