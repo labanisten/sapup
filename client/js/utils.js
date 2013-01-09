@@ -244,7 +244,7 @@ angular.module('utilsModule', []).
 		
 			var j;
 			for(j = 0; j < systemlines.length; j++){
-				if (systemline.name == systemlines[j].system) {
+				if (systemline === systemlines[j].system) {
 					match.result = true;
 					match.index = j;
 					break;
@@ -276,6 +276,17 @@ angular.module('utilsModule', []).
 				curleft += obj.x;
 			  }
 			 return { top: curtop, left: curleft };//[curtop, curleft];
+		}
+
+		ns.getScrollPosition = function() {
+
+		    window.onscroll = function () { 
+
+			    var doc = document.body, 
+			    scrollPosition = doc.scrollTop;
+			    
+		    }; 
+
 		}
 
 		ns.setScroll = function(pos) {

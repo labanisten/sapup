@@ -6,19 +6,27 @@
 		padding-top:55px;
 	}
 
+	.ng-cloak { display: none; }
+
 	.element
 	{
 		padding: 0;   
 	}
 
+/*
 	.compactnavbar {
 		display:none;
+	}
+*/
+	.compact-layout {
+		display: none;
 	}
 
 	.systemtable-compact {
 		display:none;
 	}
 
+/*
 	.navbar-buttons-compact {
 		display:none;
 	}	
@@ -26,7 +34,7 @@
 	.navbar-headingtext-compact {
 		display:none;
 	}
-
+*/
 	/*
 	.system-monthlist-compact {
 		display:none;
@@ -137,13 +145,20 @@
 		  background-color: @grayLighter ;
 		  font-weight: normal;
 		  font-size: 0.9em;
+		  min-width: 20px;
 		}
+
+		/*
+		th .fixedheader {
+		  border: 0px;
+		}
+		*/
 
 		td {
 		  border: 1px solid #E0E0E0;
 		  background-color: @grayLighter;
 		  padding: 2px;
-		  min-width: 12px;
+		  min-width: 20px;
 		}
 
 		tbody {
@@ -243,6 +258,7 @@
 		display:none;
 	}
 
+
 	.shortdaynames{
 		display:none;
 	}
@@ -301,7 +317,18 @@
 	  background: url("../img/feed-icon-28x28.png") no-repeat;
 	}
 
-	@media (max-width: 950px) {
+	@media (max-width: 1050px) {
+
+		table.system-table {
+
+			th {
+			  min-width: 12px;
+			}
+
+			td {
+			  min-width: 12px;
+			}
+	    }
 
 		.daynames{
 			display:none;
@@ -336,9 +363,19 @@
 /*@media (max-width: 479px) {*/
 @media (max-width: 767px) {
 
+	.ng-cloak { 
+		display: none;
+	}
+
+	.standard-layout {
+		display: none;
+	}
+
+	/*
 	.navbar-headingtext-normal{
 		display:none;
 	}
+	*/
 
 	#accordionContainer {
 		display:none;
@@ -393,56 +430,12 @@
 		display:none;		
 	}
 
-
-	.systemlist-compact {
-		margin-top: 0px;
-	}
-
-	.systemlist-compact .hidden {
-		display:none;
-	}
-
-
-	.systemview-compact {
-		margin-top: 10px;
-	}
-
-	.systemview-compact .hidden {
-		display:none;
-	}
-
-
-	.systemgroup-compact {
-		margin-top: 10px;
-	}
-
-	.systemgroup-compact .hidden {
-		display:none;
-	}
-
-
-	.systemview-heading-compact {
-		margin-top: 50px;
-		text-align: center;
-		color: #08C;
-	}
-
+/*
 	.systemview-heading-compact .hidden {
 		display:none;
 	}
-
-
-	.system-monthlist-compact {
-		margin-top: 0px;
-	}
-
-	.system-monthlist-compact .hidden {
-		display:none;
-	}
-
-	.navbar-buttons-compact .hidden {
-		display:none;
-	}
+*/
+	
 
 	.btn-group-wrap {
     	text-align: center;
@@ -453,15 +446,6 @@
 	    text-align: center;
 	    width: inherit;
 	    display: inline-block;
-	}
-
-	/* Mainpage for messages */
-	.message-container-compact {
-		margin-top: 50px;
-	}
-
-	.message-view-compact .hidden{
-		display:none;
 	}
 
 	.elementlist-compact {
@@ -484,6 +468,8 @@
 	  margin: 0 0 -1px;
 	  padding: 8px 14px;
 	  border: 1px solid #e5e5e5;
+	  font-weight: bold;
+	  /*font-size: 12.5px;*/
 	}
 
 	.elementlist-compact > li:first-child > a {
@@ -546,6 +532,7 @@
 	  margin: 0 0 -1px;
 	  padding: 8px 14px;
 	  border: 1px solid #e5e5e5;
+	  font-weight: normal;
 
 	  -webkit-border-radius: 6px 6px 6px 6px;
 	  -moz-border-radius: 6px 6px 6px 6px;
@@ -591,6 +578,74 @@
 	  background-color: #f5f5f5;
 	}
 
+	.hidden {
+		display:none;
+	}
+	/*
+	.center.navbar .nav,
+	.center.navbar .nav > li {
+	    float:none;
+	    display:inline-block;
+	    vertical-align: top;
+	}
+
+	.center .navbar-inner {
+	    text-align:center;
+	}
+	*/
+
+	/* Mainpage for messages */
+	.message-view-compact {
+		margin-top: 50px;
+	}
+
+	.systemgroup-view-compact {
+		margin-top: 50px;
+	}
+
+	.system-view-compact {
+		margin-top: 50px; 
+	}
+
+	.status-view-compact {
+		margin-top: 50px; 
+	}
+
+	.systemview-heading-compact {
+		margin-top: 30px;
+		text-align: center;
+		color: #08C;
+	}
+
+	
+	.system-monthlist-compact {
+		margin-bottom: 10px;
+	}
+/*
+	.system-monthlist-compact .hidden {
+		display:none;
+	}
+
+	
+	.navbar-buttons-compact .hidden {
+		display:none;
+	}
+*/
+
+	/*
+	.systemgroup-compact {
+		margin-top: 10px; 
+	}
+
+	.systemgroup-compact .hidden {
+		display:none;
+	}
+	*/
+	/*
+	.message-view-compact .hidden{
+		display:none;
+	}
+	*/
 }
 
 

@@ -138,7 +138,7 @@ var rssServices = {
 		var feed = new RSS({
 	        title: 'SAP system availability',
 	        description: 'SAP system uptime overview',
-	        feed_url: 'http://systemavailability.azurewebsites.net/alerts.rss',
+	        feed_url: 'http://systemavailability.azurewebsites.net/messages.rss',
 	        site_url: 'http://systemavailability.azurewebsites.net',
 	        author: 'Statoil ASA'
 	    });

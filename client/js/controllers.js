@@ -24,7 +24,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 	$scope.selectedCompactSystemgroup = {
 		_id: "",
-		system: "",
+		name: "",
 		systemGroupIndex: -1,
 		hasValue: false
 	};
@@ -36,7 +36,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		sysNameIndex: -1,
 		hasValue: false
 	};
-	
+
 	$scope.hoverElement = {
 		_id: "",
 		system: "",
@@ -103,6 +103,16 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	$scope.systemCompactViewList = [];
 	$scope.systemgroupCompactViewList = [];
 	$scope.displayCompactMessageView = false;
+
+	$scope.page = {
+		main: "pg1",
+		system: "pg2",
+		status: "pg3",
+		message: "pg4"
+	};
+
+	$scope.currentCompactpage = $scope.page.main;
+	$scope.systemTableStartColumnSize;
 	
 	$scope.getUser = function() {
 
@@ -122,8 +132,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 			    // code outside of the <200, 400) range
 			 });
 	};
-
-	$scope.systemTableStartColumnSize;
 
 	$scope.messageAreaClass = function() {
 		if ($scope.alertlines.length > 0) {
@@ -183,91 +191,22 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		}
 	};
 
+	$scope.getClassFixedMonthHeader = function() {
+		var classString = 'system-table month-header-table hidden';
+
+		//console.log("getclass");
+		//var calendarHeaderPos = Utils.findElementWindowPosition($('.systemtablespacer'));
+		//Utils.setScroll(calendarHeaderPos);
+
+		return classString;
+	}
+
 	$scope.getClassForSystemTableSpacer = function($event) {
 		var classString = 'systemtablespacer week';
 		$scope.systemTableStartColumnSize = $('.systemtablespacer').width() + 1;
-
+		console.log("spacer: " + $scope.systemTableStartColumnSize);
 		//Utils.setScroll(Utils.findElementWindowPosition(document.getElementById('tablespacer')));
 		//console.log("fp: " + Utils.findElementWindowPosition(document.getElementById('tablespacer')));
-
-		return classString;
-	}
-
-	$scope.getClassForCompactMessageContainer = function() {
-		var classString = 'message-container-compact row-fluid';
-		if(!$scope.displayCompactMessageView){classString += ' hidden';}
-		return classString;
-	}
-	
-
-	$scope.getClassForCompactMonth = function(month) {
-		var classString = '';
-
-		if (month == $scope.selectedMonthCompact) {
-			classString += "btn btn-success month selectedmonth";
-		} else {
-			classString += "btn btn-primary month";
-		}
-
-		if($scope.selectedCompactSystem.hasValue == false) {classString += ' hidden';}
-		return classString;
-	};
-
-	$scope.getClassForCompactYearButton = function(month) {
-		var classString = 'btn btn-primary yearbtn-compact';
-		if($scope.selectedCompactSystem.hasValue == false) {classString += ' hidden';}
-		return classString;
-	};
-
-	$scope.getClassForCompactHomeButton = function(month) {
-		var classString = 'btn btn-primary homebtn-compact';
-		if($scope.selectedCompactSystem.hasValue == false && $scope.displayCompactMessageView == false){classString += ' hidden';}
-		return classString;
-	};
-
-	$scope.getClassForCompactSystemBackButton = function(month) {
-		var classString = 'btn btn-primary system-backbtn-compact';
-		if(($scope.selectedCompactSystem.hasValue === true || $scope.displayCompactMessageView === true)
-			|| ($scope.selectedCompactSystem.hasValue === false && $scope.selectedCompactSystemgroup.hasValue === false)){classString += ' hidden';}
-		return classString;
-	};
-
-	$scope.getClassForCompactStatusBackButton = function(month) {
-		var classString = 'btn btn-primary status-backbtn-compact';
-		if(($scope.displayCompactMessageView === true || ($scope.selectedCompactSystemgroup.hasValue === true && $scope.selectedCompactSystem.hasValue === false))
-			|| ($scope.selectedCompactSystem.hasValue === false && $scope.selectedCompactSystemgroup.hasValue === false)){classString += ' hidden';}
-		return classString;
-	};
-
-	$scope.getClassForCompactSearchButton = function(month) {
-		var classString = 'btn btn-primary searchbtn-compact';
-		if($scope.selectedCompactSystem.hasValue == true) {classString += ' hidden';}
-		return classString;
-	};
-
-	$scope.getClassForCompactMessageButton = function(month) {
-		var classString = 'btn btn-primary messagebtn-compact';
-		if($scope.selectedCompactSystem.hasValue == true || $scope.displayCompactMessageView == true){classString += ' hidden';}
-		return classString;
-	};
-	
-	$scope.getClassForCompactSystemViewLabel = function(month) {
-		var classString = 'systemview-heading-compact';
-		if($scope.selectedCompactSystem.hasValue == true){classString += ' hidden';}
-		return classString;
-	};
-
-	$scope.getClassForSystemCompactView = function(element) {
-		var classString = 'status';
-
-		if(element.type == 'error'){
-			classString = ' error';
-		}
-
-		if($scope.selectedCompactSystem.hasValue == false){
-			classString += ' hidden';
-		}
-
 		return classString;
 	}
 
@@ -279,20 +218,105 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		}
 	};
 
-	$scope.getClassForSystemgroupListCompact = function() {
+	$scope.getClassForCompactMessageContainer = function() {
+		var classString = 'message-view-compact row-fluid';
+		if($scope.currentCompactpage != $scope.page.message){classString += ' hidden'}
+		return classString;
+	}
+	
+	$scope.getClassForCompactMonthBar = function() {
+		var classString = 'months';
+		if($scope.currentCompactpage != $scope.page.status){classString += ' hidden'}
+		return classString;
+	};
+
+	$scope.getClassForCompactMonthElement = function(month) {
 		var classString = '';
-		if($scope.selectedCompactSystem.hasValue == true || $scope.displayCompactMessageView == true || $scope.selectedCompactSystemgroup.hasValue === true){classString = 'hidden';}
+
+		if (month == $scope.selectedMonthCompact) {
+			classString += "btn btn-success month selectedmonth";
+		} else {
+			classString += "btn btn-primary month"; 
+		}
+
+		return classString;
+	};
+
+	$scope.getClassForCompactYearButton = function(month) {
+		var classString = 'btn btn-primary yearbtn-compact';
+		if($scope.currentCompactpage != $scope.page.status){classString += ' hidden'}
+		return classString;
+	};
+
+	$scope.getClassForCompactHomeButton = function(month) {
+		var classString;
+		if($scope.currentCompactpage === $scope.page.status || $scope.currentCompactpage === $scope.page.message)
+			classString = 'btn btn-primary homebtn-compact';
+		else{
+			classString = 'btn btn-primary homebtn-compact hidden';
+		}
+		return classString;
+	};
+
+	$scope.getClassForCompactSystemBackButton = function(month) {
+		var classString = 'btn btn-primary system-backbtn-compact';
+		if($scope.currentCompactpage != $scope.page.system){classString += ' hidden'}
+		return classString;
+	};
+
+	$scope.getClassForCompactStatusBackButton = function(month) {
+		var classString = 'btn btn-primary status-backbtn-compact';
+		if($scope.currentCompactpage != $scope.page.status){classString += ' hidden'}
+		return classString;
+	};
+
+	$scope.getClassForCompactSearchButton = function(month) {
+		/*var classString = 'btn btn-primary searchbtn-compact';
+		if($scope.selectedCompactSystem.hasValue == true) {classString += ' hidden';}
+		return classString;*/
+	};
+
+	$scope.getClassForCompactMessageButton = function(month) {
+		var classString = 'btn btn-primary messagebtn-compact';
+		if($scope.currentCompactpage != $scope.page.main){classString += ' hidden'}
+		return classString;
+	};
+
+	$scope.getClassForCompactStatusViewLabel = function(month) {
+		var classString = 'systemview-heading-compact';
+		if($scope.currentCompactpage != $scope.page.status){classString += ' hidden'}
+		return classString;
+	};
+
+	$scope.getClassForSystemgroupCompactView = function() {
+		var classString = 'systemgroup-view-compact';
+		if($scope.currentCompactpage != $scope.page.main){classString += ' hidden'}
 		return classString;
 	}
 
-	$scope.getClassForSystemViewCompact = function() {
-		var classString = '';
-		if($scope.selectedCompactSystem.hasValue == true || $scope.selectedCompactSystemgroup.hasValue == false || $scope.displayCompactMessageView == true ) {classString = 'hidden';}
+	$scope.getClassForSystemCompactView = function() {
+		var classString = 'status-view-compact';
+		if($scope.currentCompactpage != $scope.page.system){classString += ' hidden'}
 		return classString;
 	}
+
+	$scope.getClassForStatusCompactViewElement = function(element) {
+		var classString = 'status';
+		if(element.type == 'error'){classString = 'error';}
+		return classString;
+	}
+
+	$scope.getClassForStatusCompactView = function() {
+		var classString = 'status-view-compact';
+		if($scope.currentCompactpage != $scope.page.status){classString += ' hidden'}
+		return classString;
+	}
+
 
 	$scope.compactHomeButtonClick = function() {
+		$scope.currentCompactpage = $scope.page.main;
 		$scope.selectedCompactSystem.system = "";
+		$scope.selectedCompactSystemgroup.name = "";
 		$scope.selectedCompactSystem.sysIndex = -1;
 		$scope.selectedCompactSystem.hasValue = false;
 		$scope.selectedCompactSystemgroup.hasValue = false;
@@ -304,11 +328,14 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	}
 
 	$scope.compactSystemBackButtonClick = function() {
+		$scope.currentCompactpage = $scope.page.main;
 		$scope.compactHomeButtonClick();
 	};
 
 	$scope.compactStatusBackButtonClick = function() {
+		$scope.currentCompactpage = $scope.page.system;
 	    $scope.selectedCompactSystem.system = "";
+	    //$scope.selectedCompactSystemgroup.name = "";
 		$scope.selectedCompactSystem.sysIndex = -1;
 		$scope.selectedCompactSystem.hasValue = false;
 
@@ -320,20 +347,22 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 	$scope.compactMessageViewClick = function() {
 		$scope.displayCompactMessageView = true;
+		$scope.currentCompactpage = $scope.page.message;
 	};
 
 	$scope.compactSystemGroupElementClick = function(index) {
 		fillSystemViewList(index);
+		$scope.currentCompactpage = $scope.page.system;
 	};
 
 	$scope.compactSystemElementClick = function(index) {
-
 		fillStatusCompactViewList(index);
+		$scope.currentCompactpage = $scope.page.status;
 	};
 
 	function fillSystemViewList(groupIndex) {
 		$scope.systemgroupCompactViewList = [];
-		//$scope.selectedCompactSystemgroup.systemGroupIndex = groupIndex;
+		$scope.selectedCompactSystemgroup.name = $scope.systemgroups[groupIndex].name;
 
 		var i;
 		for (i = 0; i < $scope.systemnames.length; i++){
@@ -364,11 +393,10 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		$scope.selectedCompactSystemgroup.hasValue = true;
 	}
 
-	//kjem inn nameindex
 	function fillStatusCompactViewList(index) {
-		
+		//TODO; handle for no data
 		$scope.selectedCompactSystem.sysNameIndex = index;
-		var systemMatch = Utils.findSystem($scope.systemlines, $scope.systemnames[index]);
+		var systemMatch = Utils.findSystem($scope.systemlines, $scope.systemnames[index].name);
 		
 		if(systemMatch.result) {
 			$scope.selectedCompactSystem.sysIndex = systemMatch.index;
