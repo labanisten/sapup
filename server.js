@@ -45,7 +45,7 @@ var pool = generic_pool.Pool({
 	max: 20,
 	create: function(callback) {
 		var dbServer = new mongodb.Server(MONGODB_URL, MONGODB_PORT, {safe:true});
-		var db = new mongodb.Db(MONGODB_DB, dbServer, {});
+		var db = new mongodb.Db(MONGODB_DB, dbServer, {safe:true});
 		
 		db.open(function(err, db) {
 			callback(err, db);
@@ -305,19 +305,19 @@ passport.use(new GoogleStrategy({
  	})
  }))
 
-app.get('/auth/google',
-  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
-                                            'https://www.googleapis.com/auth/userinfo.email'] }),
-  function(req, res){
-    // The request will be redirected to Google for authentication, so this
-    // function will not be called.
-});
 
 // GET /auth/google/callback
 //   Use passport.authenticate() as route middleware to authenticate the
 //   request.  If authentication fails, the user will be redirected back to the
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.email'] }),
+  function(req, res){
+    // The request will be redirected to Google for authentication, so this
+    // function will not be called.
+});
+
 
 
 app.get('/auth/google/callback', 
