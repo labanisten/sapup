@@ -311,7 +311,7 @@ app.get('/auth/google',
   function(req, res){
     // The request will be redirected to Google for authentication, so this
     // function will not be called.
-  });
+});
 
 // GET /auth/google/callback
 //   Use passport.authenticate() as route middleware to authenticate the
