@@ -1,10 +1,9 @@
 var directiveModule = angular.module('directiveModule', ['utilsModule']);
 
-
+//TODO: Kan me fjerna denna?
 function build(scope) {
 	console.log("build!; " + scope.systemlines.length);
 }
-
 
 directiveModule.directive('messageViewCompact', function($compile, Utils){
 	return {
@@ -17,16 +16,13 @@ directiveModule.directive('messageViewCompact', function($compile, Utils){
 
 				function buildCompactMessageContainer() {
 					var template;
-					template = '<div ng:class="getClassForCompactMessageContainer()">'+
-									
+					template = '<div class="row-fluid">'+			
 									'<div ng-repeat="alertline in alertlines">'+
 										'<div class="alert alert-{{alertline.alerttype}}">'+
 											'<h5>{{alertline.title}}</h5>'+
 											'<p>{{alertline.comment}}</p>'+
 										'</div>'+
 									'</div>'+
-
-
 							   '</div>';
 
 					element.html(template);				
@@ -45,19 +41,16 @@ directiveModule.directive('monthSelectionbarCompact', function($compile, Utils){
 			link: function(scope, element, attrs) {
 
 				scope.$watch('selectedMonthCompact', function() {
-					//if(scope.selectedMonth > 0) {
 						buildCompactMonthHeader();
-					//}
 				});
-				
 
 				function buildCompactMonthHeader() {
 					var template;
 
-					template = '<div class="months" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
+					template = '<div ng:class="getClassForCompactMonthBar()" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
 									'<div class="btn-group-wrap">'+
 										'<div class="btn-group">'+
-											'<button ng:class="getClassForCompactMonth(month)" ng-click="gotoMonthCompact($event, month)" ng-repeat="month in monthListCompact">'+
+											'<button ng:class="getClassForCompactMonthElement(month)" ng-click="gotoMonthCompact($event, month)" ng-repeat="month in monthListCompact">'+
 												'{{months[month]}}' +
 											'</button>'+
 										'</div>'+
@@ -66,7 +59,6 @@ directiveModule.directive('monthSelectionbarCompact', function($compile, Utils){
 
 					element.html(template);				
 					$compile(element.contents())(scope);
-
 				}
 		    }
 	};
@@ -94,9 +86,6 @@ directiveModule.directive('systemgroupsViewCompact', function($compile, Utils){
 				}
 
 				scope.$watch('systemgroups', function() {
-					/*if(Utils.isDataReady(scope.systemgroups)){
-						buildList();
-					}*/
 					dataStatus.systemgroups = true;
 					if(dataIsReady) {
 						buildList();
@@ -105,21 +94,16 @@ directiveModule.directive('systemgroupsViewCompact', function($compile, Utils){
 				
 
 				function buildList() {
-					template = '<ul ng:class="getClassForSystemgroupListCompact()" class="nav elementlist-compact listelement-button nav-list">';
+					template = '<ul class="nav elementlist-compact listelement-button nav-list">';
 
 					var i;
 					for(i = 0; i < scope.systemgroups.length; i++){
-
-						//template += '<h5 class="systemgroup_compact">{{systemgroups['+i+'].name}}</h5>';
-
 						template += '<li><a ng:click="compactSystemGroupElementClick('+i+')">'+
 								    '<i class="icon-chevron-right"></i><h4>{{systemgroups['+i+'].name}}</h4>';
 						template += '</a></li>';
 					}
 
-
 					template += '</ul>';
-
 
 					element.html(template);
 					$compile(element.contents())(scope);
@@ -137,21 +121,17 @@ directiveModule.directive('systemViewCompact', function($compile, Utils){
 				var template;
 
 					template = '<ul class="nav elementlist-compact listelement-button nav-list">'+
-
 							   	  '<li ng:repeat="line in systemgroupCompactViewList">'+
-							   	  	 '<a ng:class="getClassForSystemViewCompact(line)" ng:click="compactSystemElementClick(line.systemnamesIndex)">'+
+							   	  	 '<a ng:click="compactSystemElementClick(line.systemnamesIndex)">'+
 							   	  	 	'<i class="icon-chevron-right"></i>'+ 
 							   	  	 	'<p>{{line.name}} - {{line.text}}</p>'+
 							   	  	 '</a>'+
 							   	  '</li>'+
-
 							   '</ul>';
-
 
 					element.html(template);
 					$compile(element.contents())(scope);
-				}
-			
+				}	
 	};
 });
 
@@ -162,15 +142,11 @@ directiveModule.directive('statusViewCompact', function($compile, Utils){
 			link: function(scope, element, attrs) {
 				var template;
 
-
-					//systemlines[selectedCompactSystem.sysIndex].statuslines"
-					var systemIndex = scope.selectedCompactSystem.sysIndex;
-					
-					template = '<ul class="nav .elementlist-compact listelement-datacontainer nav-list">';
-
+					var systemIndex = scope.selectedCompactSystem.sysIndex;				
+					template = '<ul class="nav elementlist-compact listelement-datacontainer nav-list">';
 					
 					template += '<li ng:repeat="line in systemCompactViewList">'+
-									'<a ng:class="getClassForSystemCompactView(line)" >'+
+									'<a ng:class="getClassForStatusCompactViewElement(line)">'+
 										'<h5 class="statusheader-compact">{{line.start}} - {{line.end}}</h5>' +
 										'<p class="statustext-compact">Status: {{line.status}}</p>' +
 										'<p class="statuscomment-compact">{{line.comment}}</p>' +
@@ -180,14 +156,6 @@ directiveModule.directive('statusViewCompact', function($compile, Utils){
 
 					template += '</ul>';
 					
-					/*
-					template += '<li ng:repeat="line in systemCompactViewList">'+
-						'<a ng:class="getClassForSystemCompactView(line)" >'+
-							'{{line.index}}' +
-						'</a>'+
-					'</li>';
-					*/
-
 					element.html(template);
 					$compile(element.contents())(scope);
 			}

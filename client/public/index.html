@@ -30,17 +30,15 @@
 </head>
 
 <body ng-controller="TimelineCtrl" class="ng-cloak">
-	<div class="navbar navbar-fixed-top">
+
+	<div class="standard-layout navbar navbar-fixed-top">
 		<div class="navbar-inner">
 
-				<a class="brand" href="#">
-					<div class="navbar-headingtext-normal">SAP System availability
-						<sup style="font-size:10px; color:red">BETA</sup>
-					</div>
-					<div class="navbar-headingtext-compact">Statoil SAA
-						<sup style="font-size:10px; color:red">BETA</sup>
-					</div>
-				</a>
+			<a class="brand" href="#">
+				<div class="navbar-headingtext-normal">SAP System availability
+					<sup style="font-size:10px; color:red">BETA</sup>
+				</div>
+			</a>
 
 			<div class="linknav-normal">
 				<ul class="nav">
@@ -51,19 +49,6 @@
 						<a href="admin.html">Administration</a>
 					</li>
 				</ul>
-			</div>
-
-			<div class="navbar-buttons-compact pull-right">
-				<button ng:class="getClassForCompactHomeButton()" ng:click="compactHomeButtonClick()"> <i class="icon-home icon-white"></i></button>
-				<button ng:class="getClassForCompactSystemBackButton()" ng:click="compactSystemBackButtonClick()"> <i class="icon-step-backward icon-white"></i></button>
-				<button ng:class="getClassForCompactStatusBackButton()" ng:click="compactStatusBackButtonClick()"> <i class="icon-step-backward icon-white"></i></button>
-				<button ng:class="getClassForCompactMessageButton()" ng:click="compactMessageViewClick()">({{alertlines.length}}) <i class="icon-envelope icon-white"></i></button>
-				<!--button ng:class="getClassForCompactYearButton()" ng-click="">{{selectedYearCompact}}</button-->
-
-				<!--button class="btn btn-small navbtn-compact"> <i class="icon-arrow-left"></i></button-->
-				<!--a href="http://systemavailability.azurewebsites.net/messages.rss" class="btn btn-link navbtn-compact pull-right">
-				  <img src="../images/feed-icon-28x28.png" class="pull-left"/>
-				</a-->
 			</div>
 			
 			<a class="btn btn-small" href="/auth/google">Login</a>
@@ -76,13 +61,13 @@
 				<button class="btn btn-small navbtn-edit" data-toggle="modal" href="#addelementdialog"> <i class="icon-calendar"></i>
 					<span class="new-status-btn-txt">Add status</span>
 				</button>
-				<a href="http://systemavailability.azurewebsites.net/messages.rss" class="btn btn-link navbtn-edit">
+				<a href="http://systemavailability.azurewebsites.net/messages.rss" class="btn btn-link navbtn-edit" type="application/rss+xml">
 				  <img style="width:20px" src="../images/feed-icon-28x28.png" class="pull-left"/>
 				</a>
 			</div>
 		</div>
 
-		<div class="container-fluid">
+		<div class="standard-layout container-fluid">
 			<div class="row-fluid">
 				<div class="span12">
 					<div fixed-month-header></div>
@@ -92,7 +77,25 @@
 
 	</div>
 
-	<div class="container-fluid">
+	<div class="compact-layout navbar navbar-fixed-top">
+		<div class="navbar-inner">
+
+				<a class="brand" href="#">
+					<div class="navbar-headingtext-compact">Statoil SAA
+						<sup style="font-size:10px; color:red">BETA</sup>
+					</div>
+				</a>
+
+				<div class="navbar-buttons-compact pull-right">
+					<button ng:class="getClassForCompactSystemBackButton()" ng:click="compactSystemBackButtonClick()"> <i class="icon-step-backward icon-white"></i></button>
+					<button ng:class="getClassForCompactStatusBackButton()" ng:click="compactStatusBackButtonClick()"> <i class="icon-step-backward icon-white"></i></button>
+					<button ng:class="getClassForCompactHomeButton()" ng:click="compactHomeButtonClick()"> <i class="icon-home icon-white"></i></button>
+					<button ng:class="getClassForCompactMessageButton()" ng:click="compactMessageViewClick()">({{alertlines.length}}) <i class="icon-envelope icon-white"></i></button>
+				</div>
+		</div>
+	</div>
+
+	<div class="standard-layout container-fluid">
 
 		<div class="row-fluid">
 			<div ng-class="messageAreaClass()" id="accordionContainer">
@@ -131,12 +134,24 @@
 	</div-->
 
 	<div class="systemtable-compact container-fluid">
-		<h5 ng:class="getClassForCompactSystemViewLabel()">{{selectedCompactSystem.system}}</h5>
-		<div class="message-view-compact" message-view-compact></div>
-		<div class="system-monthlist-compact" month-selectionbar-compact></div>
-		<div class="systemgroup-compact" systemgroups-view-compact></div>
-		<div class="systemlist-compact" system-view-compact></div>
-		<div class="systemview-compact" status-view-compact></div>
+
+		<div ng:class="getClassForCompactMessageContainer()" message-view-compact></div>
+
+		<div ng:class="getClassForSystemgroupCompactView()">
+			<div systemgroups-view-compact></div>
+		</div>
+
+		<div ng:class="getClassForSystemCompactView()">
+			<h4 class="systemview-heading-compact">{{selectedCompactSystemgroup.name}}</h4>
+			<div system-view-compact></div>
+		</div>
+
+		<div ng:class="getClassForStatusCompactView()">
+			<h4 ng:class="getClassForCompactStatusViewLabel()">{{selectedCompactSystem.system}}</h4>
+			<div class="system-monthlist-compact" month-selectionbar-compact></div>
+			<div status-view-compact></div>
+		</div>
+
 	</div>
 
 	<div class="modal hide fade" id="addalertdialog">
