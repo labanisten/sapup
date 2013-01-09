@@ -275,7 +275,7 @@
 				<label for="system">System</label>
 				<select id="csystem" name="system" ng-model="addFormData.system" class="input-large">
 					<option value=""></option>
-					<option ng-repeat="systemname in systemnames">{{systemname.name}}</option>
+					<option ng-repeat="systemname in systemnames | orderBy:'name'">{{systemname.name}}</option>
 				</select>
 		
 				<label for="status">Status</label>
