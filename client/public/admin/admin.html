@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html ng-app="systemAvailabilityAdmin" lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>System availability</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<script src="../js/jquery-1.8.2.js"></script>
+	<script src="../js/angular.js"></script>
+	<script src="../js/angular-resource.js"></script>
+
+	<script src="../js/adminControllers.js"></script>
+	<script src="../js/mongodb.js"></script>
+	<script src="../js/directives.js"></script>
+
+	<link href="../bootstrap/bootstrap/css/bootstrap.css" rel="stylesheet">
+	<link href="../css/jquery-ui-1.8.21.custom.css" rel="stylesheet">
+	<link href="../css/jquery.dataTables.css" rel="stylesheet">
+</head>
+
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<a class="brand" href="#">
+				SAP System availability <sup style="font-size:10px; color:red">BETA</sup>
+			</a>
+			<ul class="nav">
+				<li>
+					<a href="/index.html">Home</a>
+				</li>
+				<li class="active">
+					<a href="/admin/admin.html">Administration</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="span12">
+				<div class="tabbable" style="margin-bottom: 18px">
+					<ul class="nav nav-pills">
+						<li class="active">
+							<a href="#tab-systemgroups" data-toggle="tab">Systemlines</a>
+						</li>
+						<li>
+							<a href="#tab-systems" data-toggle="tab">Systems</a>
+						</li>
+						<li>
+							<a href="#tab-alerts" data-toggle="tab">Alerts</a>
+						</li>
+					</ul>
+					<div class="tab-content">
+						<!-- Systemgroups tab -->
+						<div ng-controller="systemgroupListCtrl" class="tab-pane active" id="tab-systemgroups">
+							<div class="row">
+								<div class="span12">
+									<button class="btn btn-primary" data-toggle="modal" href="#addNewSystemgroup"> <i class="icon-plus-sign icon-white"></i>
+										Add new systemline
+									</button>
+								</div>
+							</div>
+							<div class="row">
+								<div class="span12">
+									<table class="table table-condense table-hover">
+										<thead>
+											<tr>
+												<th>Order</th>
+												<th>Systemline ID</th>
+												<th>Systemline name</th>
+												<th style="width:10%"></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="systemgroup in list.getItems() | orderBy:'order'">
+												<td>{{systemgroup.order}}</td>
+												<td>{{systemgroup.name}}</td>
+												<td>{{systemgroup.text}}</td>
+												<td>
+													<a  ng-click="list.moveItemUp(systemgroup)" class=""> <i ng-class="{invisible:list.isFirstItem(systemgroup)}" class="icon-chevron-up"></i>
+													</a>
+													<a ng-click="list.moveItemDown(systemgroup)">
+														<i ng-class= "{invisible:list.isLastItem(systemgroup)}" class="icon-chevron-down"></i>
+													</a>
+													<a data-toggle="modal" href="#removeSystemgroup" ng-click="list.setSelectedItemByID(systemgroup._id)">
+														<i class="icon-trash"></i>
+													</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<!-- Systems tab -->
+						<div ng-controller="systemListCtrl" class="tab-pane" id="tab-systems">
+							<div class="row">
+								<div class="span12">
+									<button class="btn btn-primary" data-toggle="modal" href="#addNewSystem">
+										<i class="icon-plus-sign icon-white"></i>
+										Add new system
+									</button>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span12">
+									<div class="accordion" id="systemgroups-accordion">
+										<div class="accordion-group" ng-repeat="group in systemgroupList.getItems()| orderBy:'order'">
+											<div class="accordion-heading">
+												<a  class="accordion-toggle" data-toggle="collapse" data-parent="systemgroups-accordion" href="#{{group.name}}">
+													{{group.name}} ({{systemList.getNoItemsOfGroup(group.name)}})
+												</a>
+											</div>
+											<div id="{{group.name}}" class="accordion-body collapse">
+												<div class="accordion-inner">
+													<table class="table table-condense table-hover">
+														<thead>
+															<tr>
+																<th>Order</th>
+																<th>Systemline</th>
+																<th>System ID</th>
+																<th>System name</th>
+																<th style="width:10%"></th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr ng-repeat="system in systemList.getItems() | orderBy:'order' | filter:{systemgroup:group.name}">
+																<td>{{system.order}}</td>
+																<td>{{system.systemgroup}}</td>
+																<td>{{system.name}}</td>
+																<td>{{system.text}}</td>
+																<td>
+																	<a  ng-click="systemList.moveItemUp(system)" class="">
+																		<i ng-class="{invisible:systemList.isFirstItemInGroup(system)}" class="icon-chevron-up"></i>
+																	</a>
+																	<a ng-click="systemList.moveItemDown(system)">
+																		<i ng-class= "{invisible:systemList.isLastItemInGroup(system)}" class="icon-chevron-down"></i>
+																	</a>
+																	<a data-toggle="modal" href="#editSystemname" ng-click="systemList.setSelectedItemByID(system._id)">
+																		<i class="icon-pencil"></i>
+																	</a>
+																	<a data-toggle="modal" href="#removeSystemname" ng-click="systemList.setSelectedItemByID(system._id)">
+																		<i class="icon-trash"></i>
+																	</a>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+										<div class="accordion-group">
+											<div class="accordion-heading">
+												<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="systemgroups-accordion" href="#allsystems">All systems ({{systemList.getItems().length}})</a>
+											</div>
+											<div id="allsystems" class="accordion-body collapse">
+												<div class="accordion-inner">
+													<table class="table table-condense table-hover">
+														<thead>
+															<tr>
+																<th>Systemline</th>
+																<th>Order</th>
+																<th>System ID</th>
+																<th>System name</th>
+																<th style="width:10%"></th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr ng-repeat="system in systemList.getItems() | orderBy:['systemgroup', 'order']">
+																<td>{{system.systemgroup}}</td>
+																<td>{{system.order}}</td>
+																<td>{{system.name}}</td>
+																<td>{{system.text}}</td>
+																<td>
+																	<a data-toggle="modal" href="#editSystemname" ng-click="systemList.setSelectedItemByID(system._id)">
+																		<i class="icon-pencil"></i>
+																	</a>
+																	<a data-toggle="modal" href="#removeSystemname" ng-click="systemList.setSelectedItemByID(system._id)">
+																		<i class="icon-trash"></i>
+																	</a>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Alerts tab -->
+						<div ng-controller="alertListCtrl" class="tab-pane" id="tab-alerts">
+							<div class="container">
+								<div class="row">
+									<div class="span12">
+										<table class="table table-condense table-hover">
+											<thead>
+												<tr>
+													<th>Title</th>
+													<th>Text</th>
+													<th>Expiry date</th>
+													<th style="width:10%"></th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr ng-repeat="alert in alertList.getItems()">
+													<td>{{alert.title}}</td>
+													<td>{{alert.comment}}</td>
+													<td>{{alert.expdate}}</td>
+													<td>
+														<a ng-click="alertList.setSelectedItemByID(alert._id);alertList.deleteItem()">
+															<i class="icon-trash"></i>
+														</a>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal Add new systemgroup  -->
+	<div ng-controller="systemgroupModalCtrl" class="modal hide fade" id="addNewSystemgroup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">Add new systemgroup</h3>
+		</div>
+		<div class="modal-body">
+			<div class="input form-vertical">
+				<label for="systemInput">Systemgroup ID</label>
+				<input class="input-small" name="systemInput" id="systemInput" ng-model="list.getItemToUpdate().name" type="text" >
+				<label for="textInput">Systemgroup name</label>
+				<input class="input-xlarge" name="textInput" id="textInput" ng-model="list.getItemToUpdate().text" type="text">
+			</div>
+		</div>
+
+		<div class="modal-footer">
+			<button id="close" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+			<button id="save" data-dismiss="modal" ng-click="list.saveItem()" class="btn btn-primary">Save</button>
+		</div>
+	</div>
+
+	<!-- Modal Add new system  -->
+	<div ng-controller="systemModalCtrl" class="modal hide fade" id="addNewSystem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">Add new system</h3>
+		</div>
+		<div class="modal-body">
+			<div class="input form-vertical">
+				<label for="systemInput">System ID</label>
+				<input class="input-small" name="systemInput" id="systemInput" ng-model="systemList.getItemToUpdate().name" type="text" >
+
+				<label for="textInput">System name</label>
+				<input class="input-xlarge" name="textInput" id="textInput" ng-model="systemList.getItemToUpdate().text" type="text">
+				<div class="control-group">
+					<label for="systemgroup">Systemgroup</label>
+					<select class="input-small" id="systemgroup" name="systemgroup" ng-model="systemList.getItemToUpdate().systemgroup" >
+						<option ng-repeat="systemgroup in systemgroupList.getItems()">{{systemgroup.name}}</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button id="close" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+			<button id="save" data-dismiss="modal" ng-click="systemList.saveItem()" class="btn btn-primary">Save</button>
+		</div>
+	</div>
+
+	<!-- Modal Edit system -->
+	<div ng-controller="systemModalCtrl" class="modal hide fade" id="editSystemname" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">Edit system details for {{systemList.getItemToUpdate().name}}</h3>
+		</div>
+		<div class="modal-body">
+			<div class="input form-vertical">
+				<div class="control-group">
+					<label for="systemInput">System ID</label>
+					<input class="input-small" name="systemInput" id="systemInput" ng-model="systemList.getItemToUpdate().name" type="text" disabled>
+					<label for="textInput">System name</label>
+					<input class="input-xlarge" name="textInput" id="textInput" ng-model="systemList.getItemToUpdate().text" type="text">
+				</div>
+				<div class="control-group">
+					<label for="systemgroup">Systemgroup</label>
+					<select class="input-small" id="systemgroup" name="systemgroup" ng-model="systemList.getItemToUpdate().systemgroup" ng-change="systemList.changeGroup()">
+						<option ng-repeat="systemgroup in systemgroupList.getItems()">{{systemgroup.name}}</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<!-- <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button> -->
+			<button data-dismiss="modal" ng-click="systemList.updateItem()" class="btn btn-primary">Done</button>
+		</div>			
+	</div>
+
+	<!-- Modal Remove systemgroup -->
+	<div ng-controller="systemgroupModalCtrl" class="modal hide fade" id="removeSystemgroup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">
+				Delete systemline {{list.getItemToUpdate().name}}
+			</h3>
+		</div>
+		<div class="modal-body">
+			<p>
+				<i class="icon-warning-sign icon-modal"></i>
+				Are you sure you want to delete the systemline?
+			</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			<button data-dismiss="modal" ng-click="list.deleteItem(list.getItemToUpdate()._id)" class="btn btn-danger">Delete systemgroup</button>
+		</div>
+	</div>
+
+	<!-- Modal Remove system -->
+	<div ng-controller="systemModalCtrl" class="modal hide fade" id="removeSystemname" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">Delete system {{systemList.getItemToUpdate().name}}</h3>
+		</div>
+		<div class="modal-body">
+			<p>
+				<i class="icon-warning-sign icon-modal"></i>
+				Are you sure you want to delete the system?
+			</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			<button data-dismiss="modal" ng-click="systemList.deleteItem(systemList.getItemToUpdate()._id)" class="btn btn-danger">Delete system</button>
+		</div>
+	</div>
+
+	<!-- Le javascript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="../bootstrap/bootstrap/js/bootstrap.js"></script>
+	<script src="../js/utils.js"></script>
+
+</body>
+
+</html>

@@ -19,26 +19,47 @@ var MONGODB_URL = process.env.MONGODB_URL || '127.0.0.1',
     GOOGLE_SCOPE = 'https://www.googleapis.com/auth/userinfo.email';
 
 
-
 var app = express();
+
 
 // configure Express
 app.configure(function() {
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
-  // app.use(express.logger());
   app.use(express.cookieParser());
-  app.use(express.cookieSession({ secret: 'keyboard cat' }));
+  app.use(express.cookieSession({ secret: 'have a great holiday' }));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.session({ secret: 'keyboard cat' }));
+  app.use(app.router);
   // Initialize Passport!  Also use passport.session() middleware, to support
   // persistent login sessions (recommended).
   app.use(passport.initialize());
-  app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
+  app.use(passport.session());
+
 });
 
+// Set static routes
+app.use("/", express.static(__dirname + "/client/public"));
+app.use("/public", express.static(__dirname + "/client/public"));
+app.use("/images", express.static(__dirname + "/client/images"));
+app.use("/css/images", express.static(__dirname + "/client/css/images"));
+app.use("/js", express.static(__dirname + "/client/js"));
+app.use("/css", express.static(__dirname + "/client/css"));
+app.use("/bootstrap", express.static(__dirname + "/client/bootstrap"));
+
+
+// Set admin route with authentication
+app.get('/admin/*', function(req, res, next) {
+	console.log("Please authenticate");
+	console.log("User: " + req.user);
+	console.log("Session: " + JSON.stringify(req.session));
+
+	if (!req.user) {
+		res.sendfile(__dirname + '/client/public/admin/login.html'); 
+	} else {
+		res.sendfile(__dirname + '/client/public/admin/admin.html'); 
+	};
+});
 
 var pool = generic_pool.Pool({
 	name: 'mongodb',
@@ -57,13 +78,7 @@ var pool = generic_pool.Pool({
 	}
 });
 
-app.use("/", express.static(__dirname + "/client/public"));
-app.use("/public", express.static(__dirname + "/client/public"));
-app.use("/images", express.static(__dirname + "/client/images"));
-app.use("/css/images", express.static(__dirname + "/client/css/images"));
-app.use("/js", express.static(__dirname + "/client/js"));
-app.use("/css", express.static(__dirname + "/client/css"));
-app.use("/bootstrap", express.static(__dirname + "/client/bootstrap"));
+
 
 var restServices = {
 	get: function(req, res){		
@@ -312,7 +327,8 @@ passport.use(new GoogleStrategy({
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
 app.get('/auth/google',
-  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.email'] }),
+  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
+                                            'https://www.googleapis.com/auth/userinfo.email'] }),
   function(req, res){
     // The request will be redirected to Google for authentication, so this
     // function will not be called.
@@ -323,7 +339,6 @@ app.get('/auth/google',
 app.get('/auth/google/callback', 
   passport.authenticate('google', { failureRedirect: '/loginerror.html' }),
   function(req, res) {
-  	res.cookie('name', token);
     res.redirect('/');
   });
 
