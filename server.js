@@ -30,11 +30,11 @@ app.configure(function() {
   app.use(express.cookieSession({ secret: 'have a great holiday' }));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(app.router);
   // Initialize Passport!  Also use passport.session() middleware, to support
   // persistent login sessions (recommended).
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(app.router);
 
 });
 
