@@ -31,7 +31,8 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 	$scope.selectedCompactSystem = {
 		_id: "",
-		system: "",
+		name: "",
+		text:"",
 		sysIndex: -1,
 		sysNameIndex: -1,
 		hasValue: false
@@ -103,6 +104,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	$scope.systemCompactViewList = [];
 	$scope.systemgroupCompactViewList = [];
 	$scope.displayCompactMessageView = false;
+	$scope.systemlinesActive = [];
 
 	$scope.page = {
 		main: "pg1",
@@ -302,9 +304,40 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		return classString;
 	}
 
+	$scope.getClassForActiveSystemIndicator = function(element) {
+		var classString = 'system-active-indicator hidden';
+
+		var i;
+		for(i = 0; i < $scope.systemlinesActive.length; i++) {
+			if($scope.systemlinesActive[i].system == element.name) {
+				classString = 'system-active-indicator pull-right show';
+			}
+		}
+
+		return classString;
+	}
+
+	$scope.getClassForActiveStatusIndicator = function(element) {
+		var classString;//'pull-right';
+
+		if(element.isActive !== "true") {
+			classString = 'hidden';
+		}
+
+		return classString;
+	}
+
 	$scope.getClassForStatusCompactViewElement = function(element) {
 		var classString = 'status';
 		if(element.type == 'error'){classString = 'error';}
+
+		//color if covers currentday
+		/*
+		if(element.isActive === "true") {
+			classString += ' active';
+		}
+		*/
+
 		return classString;
 	}
 
@@ -317,7 +350,8 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 	$scope.compactHomeButtonClick = function() {
 		$scope.currentCompactpage = $scope.page.main;
-		$scope.selectedCompactSystem.system = "";
+		$scope.selectedCompactSystem.name = "";
+		$scope.selectedCompactSystem.text = "";
 		$scope.selectedCompactSystemgroup.name = "";
 		$scope.selectedCompactSystem.sysIndex = -1;
 		$scope.selectedCompactSystem.hasValue = false;
@@ -336,8 +370,8 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 	$scope.compactStatusBackButtonClick = function() {
 		$scope.currentCompactpage = $scope.page.system;
-	    $scope.selectedCompactSystem.system = "";
-	    //$scope.selectedCompactSystemgroup.name = "";
+	    $scope.selectedCompactSystem.name = "";
+		$scope.selectedCompactSystem.text = "";
 		$scope.selectedCompactSystem.sysIndex = -1;
 		$scope.selectedCompactSystem.hasValue = false;
 
@@ -361,6 +395,28 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		fillStatusCompactViewList(index);
 		$scope.currentCompactpage = $scope.page.status;
 	};
+
+	function fillSystemlinesActive() {
+		Calendar.currentDate;
+		var i,j;
+		for (i = 0; i < $scope.systemlines.length; i++){
+			for(j = 0; j < $scope.systemlines[i].statuslines.length; j++) {
+				var start = Utils.convertToDate($scope.systemlines[i].statuslines[j].start);
+				var end = Utils.convertToDate($scope.systemlines[i].statuslines[j].end);
+				if(start <= Calendar.currentDate && end >= Calendar.currentDate) {
+
+					var line = {
+						system: "",
+						statuslines: []
+					};
+					
+					line.system = $scope.systemlines[i].system;
+					line.statuslines.push($scope.systemlines[i].statuslines[j]);
+					$scope.systemlinesActive.push(line);
+				}
+			} 
+		}
+	}
 
 	function fillSystemViewList(groupIndex) {
 		$scope.systemgroupCompactViewList = [];
@@ -401,6 +457,8 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		var systemMatch = Utils.findSystem($scope.systemlines, $scope.systemnames[index].name);
 		
 		if(systemMatch.result) {
+			$scope.selectedCompactSystem.name = $scope.systemnames[index].name;
+			$scope.selectedCompactSystem.text = $scope.systemnames[index].text;
 			$scope.selectedCompactSystem.sysIndex = systemMatch.index;
 			fillExistingCompactData(systemMatch.index);
 		}else{
@@ -410,22 +468,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	}
 
 	function fillExistingCompactData(syslinesIndex) {
-		$scope.systemCompactViewList = [];
-
-		//TODO: Find system text, might not be needed... Used in view header
-		if( $scope.selectedCompactSystem.hasValue == false) {
-			var systemtext;
-			var j;
-			for(j = 0; j < $scope.systemnames.length; j++){
-				if($scope.systemnames[j].name == $scope.systemlines[syslinesIndex].system) {
-					systemtext = $scope.systemlines[syslinesIndex].system + ' - ' + $scope.systemnames[j].text;
-					break;
-				}
-			}
-
-			$scope.selectedCompactSystem.system = systemtext; 
-		}
-
+		$scope.systemCompactViewList = []; 
 
 		var i;
 		for(i = 0; i < $scope.systemlines[syslinesIndex].statuslines.length; i++){
@@ -439,11 +482,25 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 				var elm = {
 					status: line.status,
-					start: start.getDate() + ' ' + $scope.monthLabels[start.getMonth()],
-					end: end.getDate() + ' ' + $scope.monthLabels[end.getMonth()],
+					startText: start.getDate() + ' ' + $scope.monthLabels[start.getMonth()],
+					endText: end.getDate() + ' ' + $scope.monthLabels[end.getMonth()],
+					isActive: 'false',
+					//start: line.start,
+					//end: line.end,
 					comment: line.comment
 				}
 
+				//element status today
+				var j;
+				for(j = 0; j < $scope.systemlinesActive.length; j++) {
+					if($scope.systemlinesActive[j].system == $scope.selectedCompactSystem.name) {
+						if($scope.systemlinesActive[j].statuslines[0].start === line.start) {
+							elm.isActive = 'true';
+						}
+					}
+				}
+
+				//TODO: Sorting
 				$scope.systemCompactViewList.push(elm);
 			}
 		}
@@ -528,6 +585,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		var promise = db.System.get();
 		promise.then(function(data) {
 			$scope.systemlines = data;
+			fillSystemlinesActive();
 		});
 
 		return [];

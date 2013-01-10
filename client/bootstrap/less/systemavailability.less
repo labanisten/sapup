@@ -526,19 +526,23 @@
 
 
 	/* Table for viewing spesific system status elements */
-	.listelement-datacontainer > li > .status{
-	  display: block;
+	.listelement-datacontainer > li > .status {
+	  /*display: block;*/
 	  /*width: 230px \9;*/
-	  margin: 0 0 -1px;
-	  padding: 8px 14px;
-	  border: 1px solid #e5e5e5;
+	  /*margin: 0 0 -1px;*/
+	  /*padding: 8px 14px;*/
+	  /*border: 1px solid #e5e5e5;*/
 	  font-weight: normal;
 
 	  -webkit-border-radius: 6px 6px 6px 6px;
 	  -moz-border-radius: 6px 6px 6px 6px;
 	  border-radius: 6px 6px 6px 6px;
 
-	  .statuserror-compact{
+	  .active {
+	  	border: 1px solid #CD007A;
+	  }
+
+	  .statuserror-compact {
 	  	display:none;
 	  }
 
@@ -547,12 +551,16 @@
 	  }
 	}
 
+	.listelement-datacontainer > li > .active {
+	  border: 1px solid rgba(205, 0, 122, 0.18);
+	}
+
 	.listelement-datacontainer > li > .error{
-	  display: block;
+	  /*display: block;*/
 	  /*width: 230px \9;*/
-	  margin: 0 0 -1px;
-	  padding: 8px 14px;
-	  border: 1px solid #e5e5e5;
+	  /*margin: 0 0 -1px;*/
+	  /*padding: 8px 14px;*/
+	  /*border: 1px solid #e5e5e5;*/
 
 	  -webkit-border-radius: 6px 6px 6px 6px;
 	  -moz-border-radius: 6px 6px 6px 6px;
@@ -621,6 +629,12 @@
 	.system-monthlist-compact {
 		margin-bottom: 10px;
 	}
+
+	.system-active-indicator {
+		margin-right: 20px;
+	}
+
+
 /*
 	.system-monthlist-compact .hidden {
 		display:none;
