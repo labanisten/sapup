@@ -57,7 +57,7 @@ app.get('/admin/*', function(req, res, next) {
 	if (!req.user) {
 		res.sendfile(__dirname + '/client/public/admin/login.html'); 
 	} else {
-		res.sendfile(__dirname + '/client/public/admin/admin.html'); 
+		return next(); 
 	};
 });
 
