@@ -67,13 +67,14 @@
 			</div>
 		</div>
 
-		<div class="standard-layout container-fluid">
+
+		<!--div class="standard-layout container-fluid">
 			<div class="row-fluid">
 				<div class="span12">
 					<div fixed-month-header></div>
 				</div>
 			</div>
-		</div>
+		</div-->
 
 	</div>
 
@@ -118,6 +119,12 @@
 			</div>
 		</div>
 
+		<div class="row-fluid">
+			<div class="span12">
+				<div toolbar></div>
+			</div>
+		</div>
+
 
 		<div class="row-fluid">
 			<div id="sysdiv span12">
@@ -150,7 +157,7 @@
 		</div>
 
 		<div ng:class="getClassForStatusCompactView()">
-			<h4 ng:class="getClassForCompactStatusViewLabel()">{{selectedCompactSystem.system}}</h4>
+			<h4 ng:class="getClassForCompactStatusViewLabel()">{{selectedCompactSystem.name}} - {{selectedCompactSystem.text}}</h4>
 			<div class="system-monthlist-compact" month-selectionbar-compact></div>
 			<div status-view-compact></div>
 		</div>

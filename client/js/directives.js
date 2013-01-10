@@ -5,6 +5,33 @@ function build(scope) {
 	console.log("build!; " + scope.systemlines.length);
 }
 
+directiveModule.directive('toolbar', function($compile, Utils){
+	return {
+			restrict: 'A',
+			link: function(scope, element, attrs) {
+
+				//scope.$watch('alertlines', function() {
+					//buildCompactMessageContainer();
+				//});
+
+				//function buildCompactMessageContainer() {
+					var template;
+
+					template = '<div ng:class="getClassForToolbar()">'+
+									'<div class="input-append">'+
+									  '<input class="span2" id="appendedInput" type="text">'+
+									  '<span class="add-on"><i class="icon-search"></i></span>'+
+									'</div>'+
+							   '</div>';
+
+					element.html(template);				
+					$compile(element.contents())(scope);
+
+				//}
+		    }
+	};
+});
+
 directiveModule.directive('messageViewCompact', function($compile, Utils){
 	return {
 			restrict: 'A',
@@ -124,7 +151,10 @@ directiveModule.directive('systemViewCompact', function($compile, Utils){
 							   	  '<li ng:repeat="line in systemgroupCompactViewList">'+
 							   	  	 '<a ng:click="compactSystemElementClick(line.systemnamesIndex)">'+
 							   	  	 	'<i class="icon-chevron-right"></i>'+ 
-							   	  	 	'<p>{{line.name}} - {{line.text}}</p>'+
+							   	  	 	'<div>'+
+							   	  	 		'<span>{{line.name}} - {{line.text}}</span>'+
+							   	  	 		'<div ng:class="getClassForActiveSystemIndicator(line)"><i class="icon-exclamation-sign"></i></div>'
+							   	  	 	'</div>'+
 							   	  	 '</a>'+
 							   	  '</li>'+
 							   '</ul>';
@@ -147,7 +177,12 @@ directiveModule.directive('statusViewCompact', function($compile, Utils){
 					
 					template += '<li ng:repeat="line in systemCompactViewList">'+
 									'<a ng:class="getClassForStatusCompactViewElement(line)">'+
-										'<h5 class="statusheader-compact">{{line.start}} - {{line.end}}</h5>' +
+										
+											'<h5 class="statusheader-compact">{{line.startText}} - {{line.endText}}'+
+												'<div ng:class="getClassForActiveStatusIndicator(line)"><i class="icon-exclamation-sign"></i></div>'+
+											'</h5>'+
+											
+										
 										'<p class="statustext-compact">Status: {{line.status}}</p>' +
 										'<p class="statuscomment-compact">{{line.comment}}</p>' +
 										'<h4 class="statuserror-compact">{{line.error}}</h4>' +
