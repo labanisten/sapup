@@ -1,5 +1,6 @@
 var generic_pool = require('generic-pool'),
-	mongodb = require('mongodb');
+	mongodb = require('mongodb'),
+	BSON = mongodb.BSONPure;
 
 var MONGODB_URL = process.env.MONGODB_URL || '127.0.0.1',
 	MONGODB_PORT = parseInt(process.env.MONGODB_PORT) || 27017,
