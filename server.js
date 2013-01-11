@@ -1,16 +1,11 @@
 var express = require('express'),
-	// mongodb = require('mongodb'),
-	// generic_pool = require('generic-pool'),
 	http = require('http'),
     passport = require('passport'),
     util = require('util'),
-    // GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-	// BSON = mongodb.BSONPure,
-	// RSS = require('rss'),
+    GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 	rest =  require('./server/rest.js'),
 	rss =  require('./server/rss.js'),
 	auth =  require('./server/auth.js');
-
 
 //Constants
 var MONGODB_URL = process.env.MONGODB_URL || '127.0.0.1',
@@ -130,8 +125,6 @@ app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
 });
-
-
 
 
 var port = process.env.PORT || 4000;
