@@ -111,21 +111,16 @@ app.get('/auth/google',
     // function will not be called.
 });
 
-
-
 app.get('/auth/google/callback', 
   passport.authenticate('google', { failureRedirect: '/loginerror.html' }),
   function(req, res) {
     res.redirect('/');
   });
 
-
-
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
 });
-
 
 var port = process.env.PORT || 4000;
 app.listen(port, function() {
