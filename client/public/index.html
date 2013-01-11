@@ -46,14 +46,11 @@
 						<a href="index.html">Home</a>
 					</li>
 					<li>
-						<a href="admin.html">Administration</a>
+						<a href="admin/admin.html">Administration</a>
 					</li>
 				</ul>
 			</div>
-			
-			<a class="btn btn-small" href="/auth/google">Login</a>
-			<!-- <a class="btn btn-small" ng-click="authenticate()">Login</a> -->
-
+			<div class="pull-right"><p class="navbar-text">{{userdata.displayName}}</p></div>
 			<div class="btn-group pull-right">
 				<button class="btn btn-small navbtn-edit" data-toggle="modal" href="#addalertdialog"> <i class="icon-warning-sign"></i>
 					<span class="new-message-btn-txt">Add message</span>

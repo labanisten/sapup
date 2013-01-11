@@ -28,10 +28,10 @@
 			</a>
 			<ul class="nav">
 				<li>
-					<a href="index.html">Home</a>
+					<a href="/index.html">Home</a>
 				</li>
 				<li class="active">
-					<a href="admin.html">Administration</a>
+					<a href="/admin/admin.html">Administration</a>
 				</li>
 			</ul>
 		</div>
@@ -244,8 +244,6 @@
 				<input class="input-small" name="systemInput" id="systemInput" ng-model="list.getItemToUpdate().name" type="text" >
 				<label for="textInput">Systemgroup name</label>
 				<input class="input-xlarge" name="textInput" id="textInput" ng-model="list.getItemToUpdate().text" type="text">
-				<label for="tagInput">Systemgroup Tags</label>
-				<input class="input-xlarge" name="tagInput" id="tagInput" ng-model="list.getItemToUpdate().tags" type="text">
 			</div>
 		</div>
 
@@ -274,8 +272,6 @@
 						<option ng-repeat="systemgroup in systemgroupList.getItems()">{{systemgroup.name}}</option>
 					</select>
 				</div>
-				<label for="tagInput">System Tags</label>
-				<input class="input-xlarge" name="tagInput" id="tagInput" ng-model="systemList.getItemToUpdate().tags" type="text">
 			</div>
 		</div>
 		<div class="modal-footer">

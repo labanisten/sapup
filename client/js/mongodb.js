@@ -5,13 +5,9 @@ angular.module('mongodbModule', []).
 		
 		(function(ns) {
 
-
 			ns.noCache = function() {
 				return '?_=' + Math.random();
 			}
-
-
-
 
 			addResource = function(name, url) {
 				ns[name] = function(data) {
@@ -24,8 +20,6 @@ angular.module('mongodbModule', []).
 							return response.data;
 						});					
 					} else {
-						var seconds = new Date().getTime() / 1000;
-						// return $http.get('/' + url + '/' + '?' + seconds).then(function(response){
 						return $http.get('/' + url + ns.noCache()).then(function(response){
 							return response.data;
 						});
@@ -55,12 +49,13 @@ angular.module('mongodbModule', []).
 
 			};
 		
-			addResource("Systemgroup", "systemgroups");
-			addResource("System", "systems");
-			addResource("Systemname", "systemnames");
-			addResource("Alerttype", "alerttypes");
-			addResource("Systemstatus", "systemstatuses");
-			addResource("Alert", "alerts");
+			addResource("Systemgroup", "resources/systemgroups");
+			addResource("System", "resources/systems");
+			addResource("Systemname", "resources/systemnames");
+			addResource("Alerttype", "resources/alerttypes");
+			addResource("Systemstatus", "resources/systemstatuses");
+			addResource("Alert", "resources/alerts");
+			addResource("Userdata", "userdata");
 		
 		})(db);
 

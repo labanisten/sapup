@@ -9,6 +9,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	$scope.systemgroups = getSystemgroups();
 	$scope.alertlines = getAlertData();
 	$scope.alerttypes = getAlertTypes();
+	$scope.userdata = getUserData();
 
 	$scope.selectedElement = {
 		_id: "",
@@ -667,6 +668,17 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		promise.then(function(data) {
 			$scope.systemlines = data;
 			fillSystemlinesActive();
+		});
+
+		return [];
+
+	}
+
+	function getUserData() {
+
+		var promise = db.Userdata.get();
+		promise.then(function(data) {
+			$scope.userdata = data;
 		});
 
 		return [];
