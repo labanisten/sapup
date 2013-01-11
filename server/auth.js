@@ -1,6 +1,7 @@
 	// Authentication 	
 var passport = require('passport'),
-    GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+    GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
+    generic_pool = require('generic-pool');
 
 var GOOGLE_CLIENT_ID = '1072189313711.apps.googleusercontent.com',
     GOOGLE_CLIENT_SECRET = 'Evqt9n8JS3f50GFCqoyn5ElN',
@@ -8,7 +9,23 @@ var GOOGLE_CLIENT_ID = '1072189313711.apps.googleusercontent.com',
     GOOGLE_SCOPE = 'https://www.googleapis.com/auth/userinfo.email';
 
 
-var auth; 
+var pool = generic_pool.Pool({
+	name: 'mongodb',
+	max: 20,
+	create: function(callback) {
+		var dbServer = new mongodb.Server(MONGODB_URL, MONGODB_PORT, {safe:true});
+		var db = new mongodb.Db(MONGODB_DB, dbServer, {safe:true});
+		
+		db.open(function(err, db) {
+			callback(err, db);
+		});
+
+	},
+	destroy: function(db) {
+		db.close();
+	}
+});
+
 
 var user = {
 	findByID: function(id, callback) {
