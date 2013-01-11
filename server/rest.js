@@ -54,6 +54,7 @@ var restServices = {
 			pool.acquire(function(err, db) {
 				if (err) {return res.end("At connection, " + err);}
 				var resource = req.path.split("/")[2];
+				console.log("Resource " + resource);
 				var itemId = {'_id': new BSON.ObjectID(req.params.id.toString())};
 				console.log("Put " + itemId._id);
 				db.collection(resource, function(err, collection) {
