@@ -74,26 +74,26 @@ app.get('/resources/systemstatuses', function(req, res) {rest.restServices.get(r
 app.get('/resources/alerts', function(req, res) {rest.restServices.get(req, res);});
 app.get('/resources/messages.rss', function(req, res) {rest.restServices.get(req, res);});
 
-app.post('resources/systemgroups', function(req, res) {rest.post(req, res);});
-app.post('resources/systems', function(req, res) {rest.post(req, res);});
-app.post('resources/systemnames', function(req, res) {rest.post(req, res);});
-app.post('resources/alerttypes', function(req, res) {rest.post(req, res);});
-app.post('resources/systemstatuses', function(req, res) {rest.post(req, res);});
-app.post('resources/alerts', function(req, res) {rest.post(req, res);});
+app.post('/resources/systemgroups', function(req, res) {rest.restServices.post(req, res);});
+app.post('/resources/systems', function(req, res) {rest.restServices.post(req, res);});
+app.post('/resources/systemnames', function(req, res) {rest.restServices.post(req, res);});
+app.post('/resources/alerttypes', function(req, res) {rest.restServices.post(req, res);});
+app.post('/resources/systemstatuses', function(req, res) {rest.restServices.post(req, res);});
+app.post('/resources/alerts', function(req, res) {rest.restServices.post(req, res);});
 
-app.put('resources/systemgroups/:id', function(req, res) {rest.put(req, res);});
-app.put('resources/systems/:id', function(req, res) {rest.put(req, res);});
-app.put('resources/systemnames/:id', function(req, res) {rest.put(req, res);});
-app.put('resources/alerttypes/:id', function(req, res) {rest.put(req, res);});
-app.put('resources/systemstatuses/:id', function(req, res) {rest.put(req, res);});
-app.put('resources/alerts/:id', function(req, res) {rest.put(req, res);});
+app.put('/resources/systemgroups/:id', function(req, res) {rest.restServices.put(req, res);});
+app.put('/resources/systems/:id', function(req, res) {rest.restServices.put(req, res);});
+app.put('/resources/systemnames/:id', function(req, res) {rest.restServices.put(req, res);});
+app.put('/resources/alerttypes/:id', function(req, res) {rest.restServices.put(req, res);});
+app.put('/resources/systemstatuses/:id', function(req, res) {rest.restServices.put(req, res);});
+app.put('/resources/alerts/:id', function(req, res) {rest.restServices.put(req, res);});
 
-app.delete('resources/systemgroups/:id', function(req, res) {rest.delete(req, res);});
-app.delete('resources/systems/:id', function(req, res) {rest.delete(req, res);});
-app.delete('resources/systemnames/:id', function(req, res) {rest.delete(req, res);});
-app.delete('resources/alerttypes/:id', function(req, res) {rest.delete(req, res);});
-app.delete('resources/systemstatuses/:id', function(req, res) {rest.delete(req, res);});
-app.delete('resources/alerts/:id', function(req, res) {rest.delete(req, res);});
+app.delete('/resources/systemgroups/:id', function(req, res) {rest.restServices.delete(req, res);});
+app.delete('/resources/systems/:id', function(req, res) {rest.restServices.delete(req, res);});
+app.delete('/resources/systemnames/:id', function(req, res) {rest.restServices.delete(req, res);});
+app.delete('/resources/alerttypes/:id', function(req, res) {rest.restServices.delete(req, res);});
+app.delete('/resources/systemstatuses/:id', function(req, res) {rest.restServices.delete(req, res);});
+app.delete('/resources/alerts/:id', function(req, res) {rest.restServices.delete(req, res);});
 
 
 
