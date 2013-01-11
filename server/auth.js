@@ -1,7 +1,8 @@
 	// Authentication 	
 var passport = require('passport'),
     GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
-    generic_pool = require('generic-pool');
+    generic_pool = require('generic-pool'),
+    mongodb = require('mongodb');
 
 var GOOGLE_CLIENT_ID = '1072189313711.apps.googleusercontent.com',
     GOOGLE_CLIENT_SECRET = 'Evqt9n8JS3f50GFCqoyn5ElN',
