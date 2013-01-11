@@ -10,24 +10,70 @@ directiveModule.directive('toolbar', function($compile, Utils){
 			restrict: 'A',
 			link: function(scope, element, attrs) {
 
-				//scope.$watch('alertlines', function() {
-					//buildCompactMessageContainer();
-				//});
+				scope.$watch('systemnames', function() {
+					buildTemplate();
+				});
 
-				//function buildCompactMessageContainer() {
+				/*
+				function existInTagArray(tag) {
+					var result = false;
+					var i;
+					for(i = 0; i < scope.filterTags.length; i++) {
+						if(tag === scope.filterTags[i]) {
+							result = true;
+							break;
+						}
+					}
+					return result;
+				}
+				*/
+
+				function updateTagStorage(tags) {
+					var i;
+					for(i = 0; i < tags.length; i++) {
+						var match = Utils.existInTagArray(tags[i], scope.filterTags);
+						if(match.result === false) {
+							var elm = {
+								text: tags[i],
+								isActive: false
+							}
+							scope.filterTags.push(elm);
+						}
+					}
+				}
+
+				function buildTemplate() {
 					var template;
 
-					template = '<div ng:class="getClassForToolbar()">'+
-									'<div class="input-append">'+
-									  '<input class="span2" id="appendedInput" type="text">'+
+					var i;
+					for(i = 0; i < scope.systemnames.length; i++) {
+						if(scope.systemnames[i].tags !== undefined) {
+							var tags = scope.systemnames[i].tags.split(';');
+							updateTagStorage(tags);
+						}
+					}
+
+					template = '<div class="row-fluid" ng:class="getClassForToolbar()">'+
+
+									/*
+									'<div class="span2 input-append">'+
+									  '<input class="span12" id="appendedInput" type="text" placeholder="Tag search" ng-model="tagSearchValue">'+
 									  '<span class="add-on"><i class="icon-search"></i></span>'+
 									'</div>'+
-							   '</div>';
+									*/
+									//'<div class="row-fluid">'+
+
+									'<div class="span12">'+
+										'<span ng-repeat="tag in filterTags" ng:class="getClassForTagBadge(tag)" ng:click="tagBadgeClick(tag)">{{tag.text}}</span>'+
+									'</div>'+
+									//'</div>';
+
+					'</div>';
 
 					element.html(template);				
 					$compile(element.contents())(scope);
 
-				//}
+				}
 		    }
 	};
 });
@@ -112,6 +158,7 @@ directiveModule.directive('systemgroupsViewCompact', function($compile, Utils){
 					return result;
 				}
 
+				//TODO: no need for dataready func. if only one datagroup
 				scope.$watch('systemgroups', function() {
 					dataStatus.systemgroups = true;
 					if(dataIsReady) {
@@ -178,10 +225,10 @@ directiveModule.directive('statusViewCompact', function($compile, Utils){
 					template += '<li ng:repeat="line in systemCompactViewList">'+
 									'<a ng:class="getClassForStatusCompactViewElement(line)">'+
 										
-											'<h5 class="statusheader-compact">{{line.startText}} - {{line.endText}}'+
-												'<div ng:class="getClassForActiveStatusIndicator(line)"><i class="icon-exclamation-sign"></i></div>'+
-											'</h5>'+
-											
+										'<div>'+
+											'<h5 class="statusheader-compact">{{line.startText}} - {{line.endText}}</h5>'+
+											'<div ng:class="getClassForActiveStatusIndicator(line)"><i class="icon-exclamation-sign"></i></div>'+
+										'</div>'+
 										
 										'<p class="statustext-compact">Status: {{line.status}}</p>' +
 										'<p class="statuscomment-compact">{{line.comment}}</p>' +
@@ -551,10 +598,10 @@ directiveModule.directive('systemTable', function($compile, Utils){
 										'<tbody>';
 											var i, j;
 											for (j = 0; j < scope.systemgroups.length; j++){
-												template += '<tr><td class="systemgroup"><span>{{systemgroups['+j+'].text}}</span></td><td colspan="{{noOfDaysInMonth[selectedMonth]}}"></td>';
+												template += '<tr ng:class="getClassForTableRowSystemGroup()"><td class="systemgroup"><span>{{systemgroups['+j+'].text}}</span></td><td colspan="{{noOfDaysInMonth[selectedMonth]}}"></td>';
 												for (i = 0; i < scope.systemnames.length; i++){
 													if (scope.systemnames[i].systemgroup == scope.systemgroups[j].name) {
-														template += '<tr class="systemrow"><td class="system"><span>{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}</span></td>';
+														template += '<tr class="systemrow" ng:class="getClassForSystemTableRow('+i+')"><td class="system"><span>{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}</span></td>';
 														var systemMatch = Utils.findSystem(scope.systemlines, scope.systemnames[i].name);
 														if (systemMatch.result) {
 															template += buildTemplateForExistingSystem(systemMatch.index);

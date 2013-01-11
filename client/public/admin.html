@@ -123,6 +123,7 @@
 																<th>Systemline</th>
 																<th>System ID</th>
 																<th>System name</th>
+																<th>System tags</th>
 																<th style="width:10%"></th>
 															</tr>
 														</thead>
@@ -132,6 +133,7 @@
 																<td>{{system.systemgroup}}</td>
 																<td>{{system.name}}</td>
 																<td>{{system.text}}</td>
+																<td>{{system.tags}}</td>
 																<td>
 																	<a  ng-click="systemList.moveItemUp(system)" class="">
 																		<i ng-class="{invisible:systemList.isFirstItemInGroup(system)}" class="icon-chevron-up"></i>
@@ -302,6 +304,8 @@
 						<option ng-repeat="systemgroup in systemgroupList.getItems()">{{systemgroup.name}}</option>
 					</select>
 				</div>
+				<label for="tagInput">System Tags</label>
+				<input class="input-xlarge" name="tagInput" id="tagInput" ng-model="systemList.getItemToUpdate().tags" type="text">
 			</div>
 		</div>
 		<div class="modal-footer">

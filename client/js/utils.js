@@ -284,7 +284,7 @@ angular.module('utilsModule', []).
 
 			    var doc = document.body, 
 			    scrollPosition = doc.scrollTop;
-			    
+
 		    }; 
 
 		}
@@ -305,9 +305,24 @@ angular.module('utilsModule', []).
 			    		$('.month-header-table').addClass('hidden');
 			    	}
 			    }
-
 		    }; 
+		}
 
+		ns.existInTagArray = function(tag, array) {
+			var match = {
+				result: false
+			};
+
+			var i;
+			for(i = 0; i < array.length; i++) {
+				if(tag === array[i].text) {
+					match.result = true;
+					match.index = i;
+					break;
+				}
+			}
+
+			return match;
 		}
 
 	

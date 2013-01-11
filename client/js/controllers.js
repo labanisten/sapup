@@ -105,6 +105,10 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	$scope.systemgroupCompactViewList = [];
 	$scope.displayCompactMessageView = false;
 	$scope.systemlinesActive = [];
+	$scope.filterTags = [];
+	$scope.activeTagCount = 0;
+	//$scope.activeTags = [];
+	$scope.tagSearchValue;
 
 	$scope.page = {
 		main: "pg1",
@@ -220,6 +224,63 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		} else {
 			return "span1 month";
 		}
+	};
+
+	$scope.getClassForTableRowSystemGroup = function(element) {
+		var classString = "";
+
+		if($scope.activeTagCount > 0) {
+			classString = 'hidden';
+		}
+
+		return classString;
+	};
+
+	function findActiveTagMatch() {
+		var i,j;
+		for(i = 0; i < tags.length; i++){
+		}
+	}
+
+	//TODO: refactor, somewhat unreadabl
+	$scope.getClassForSystemTableRow = function(systemnamesIndex) {
+		var classString = 'hidden';
+
+		var tagMatch = false;
+
+		if($scope.activeTagCount > 0) {
+
+			if($scope.systemnames[systemnamesIndex].tags !== undefined) {
+
+				var tags = $scope.systemnames[systemnamesIndex].tags.split(';');
+				var i,j;
+				for(i = 0; i < tags.length; i++){
+					
+					var match = Utils.existInTagArray(tags[i], $scope.filterTags);
+
+					if($scope.filterTags[match.index].isActive) {
+						classString = '';
+						break;
+					}
+				}
+			}
+
+		}else{
+			classString = '';
+		}
+		return classString;
+	};
+
+	$scope.getClassForTagBadge = function(tag) {
+		var classString = "calendar-filtertag badge";
+		var i;
+		for(i = 0; i < $scope.filterTags.length; i++) {
+			if($scope.filterTags[i].text === tag.text && $scope.filterTags[i].isActive === true) {
+				classString += " badge-selected";
+				break;
+			}
+		}
+		return classString;
 	};
 
 	$scope.getClassForCompactMessageContainer = function() {
@@ -526,6 +587,26 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 		$scope.systemCompactViewList.push(elm);
 	}
+
+	$scope.tagBadgeClick = function(tag) {
+		var i;
+		for(i = 0; i < $scope.filterTags.length; i++) {
+
+			if(tag.text === $scope.filterTags[i].text) {
+				if($scope.filterTags[i].isActive === false) {
+					$scope.filterTags[i].isActive = true;
+					$scope.activeTagCount++;
+				}else{
+					$scope.filterTags[i].isActive = false;
+					$scope.activeTagCount--;
+				}
+				
+				break;
+			}
+
+		}
+	};
+
 
 	$scope.gotoMonthCompact = function(event, month) {
 		$scope.selectedMonthCompact = month;
