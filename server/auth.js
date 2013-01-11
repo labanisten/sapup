@@ -43,7 +43,7 @@ var user = {
 				if (err) {
 					callback(new Error('Error accessing collection'));
 				};
-				collection.findOne({"email":id}, function(err, user) {
+				collection.findOne({"id":id}, function(err, user) {
 					if (err) {
 						return null;
 					};
