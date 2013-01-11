@@ -23,6 +23,15 @@ var pool = generic_pool.Pool({
 	}
 });
 
+function getResponse(error, result) {
+	var resStr;
+	if(!error){
+		resStr = result;
+	}else{
+		resStr = error;
+	}
+	return resStr;
+}
 
 
 var restServices = {
