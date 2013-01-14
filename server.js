@@ -5,17 +5,8 @@ var express = require('express'),
     GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 	rest =  require('./server/rest.js'),
 	rss =  require('./server/rss.js'),
+	config =  require('./server/config.js'),
 	auth =  require('./server/auth.js');
-
-//Constants
-var MONGODB_URL = process.env.MONGODB_URL || '127.0.0.1',
-	MONGODB_PORT = parseInt(process.env.MONGODB_PORT) || 27017,
-    MONGODB_DB = process.env.MONGODB_DB || 'test'; 
-    GOOGLE_CLIENT_ID = '1072189313711.apps.googleusercontent.com',
-    GOOGLE_CLIENT_SECRET = 'Evqt9n8JS3f50GFCqoyn5ElN',
-    GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || 'http://127.0.0.1:4000/auth/google/callback',
-    GOOGLE_SCOPE = 'https://www.googleapis.com/auth/userinfo.email';
-
 
 var app = express();
 
@@ -124,7 +115,7 @@ app.get('/logout', function(req, res){
 var port = process.env.PORT || 4000;
 app.listen(port, function() {
 	console.log("Listening on " + port);
-	console.log("MongoDB port: " + MONGODB_PORT);
-	console.log("MongoDB URL: " + MONGODB_URL);
-	console.log("MongoDB database: " + MONGODB_DB);
+	console.log("MongoDB port: " + config.MONGODB_PORT);
+	console.log("MongoDB URL: " + config.MONGODB_URL);
+	console.log("MongoDB database: " + config.MONGODB_DB);
 });
