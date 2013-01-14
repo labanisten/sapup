@@ -14,20 +14,6 @@ directiveModule.directive('toolbar', function($compile, Utils){
 					buildTemplate();
 				});
 
-				/*
-				function existInTagArray(tag) {
-					var result = false;
-					var i;
-					for(i = 0; i < scope.filterTags.length; i++) {
-						if(tag === scope.filterTags[i]) {
-							result = true;
-							break;
-						}
-					}
-					return result;
-				}
-				*/
-
 				function updateTagStorage(tags) {
 					var i;
 					for(i = 0; i < tags.length; i++) {
@@ -283,8 +269,27 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 							  '</div>';
 				
 			var data = titleString;
-				
+
+			function getPopoverPlacement(elm) {
+		        var offset = $(elm).offset();
+		        //height = $(document).outerHeight();
+		        height = $(document).height();
+		        //width = $(document).outerWidth();
+		        width = $(document).width();
+		        vert = 0.5 * height - offset.top;
+		        vertPlacement = vert > 0 ? 'bottom' : 'top';
+		        horiz = 0.5 * width - offset.left;
+		        horizPlacement = horiz > 0 ? 'right' : 'left';
+		        placement = Math.abs(horiz) > Math.abs(vert) ?  horizPlacement : vertPlacement;
+		        return placement;
+		    }
+			
+			
+
 			element.popover({
+
+
+
 				title: function() {
 					$timeout(function() {
 						$compile(element.data('popover').tip())(scope);
@@ -292,13 +297,14 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 					return data;
 				},
 				trigger: 'manual',
-				placement: 'bottom',
+				placement: getPopoverPlacement(element),
 				content: testcontent,
 				html: true
 			});
 				
 			
 			element.click(function() {
+				//var pl = place(element);
 
 				if(element != scope.hoverElement.element) {
 					scope.hoverElement.element.popover('hide');
