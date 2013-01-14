@@ -199,7 +199,7 @@ directiveModule.directive('systemViewCompact', function($compile, Utils){
 							   	  	 '<a ng:click="compactSystemElementClick(line.systemnamesIndex)">'+
 							   	  	 	'<i class="icon-chevron-right"></i>'+ 
 							   	  	 	'<div>'+
-							   	  	 		'<span>{{line.name}} - {{line.text}}</span>'+
+							   	  	 		'<h4>{{line.name}} - {{line.text}}</h4>'+
 							   	  	 		'<div ng:class="getClassForActiveSystemIndicator(line)"><i class="icon-exclamation-sign"></i></div>'
 							   	  	 	'</div>'+
 							   	  	 '</a>'+
