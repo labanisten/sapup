@@ -1,5 +1,6 @@
 var generic_pool = require('generic-pool'),
-	mongodb = require('mongodb');
+	mongodb = require('mongodb'),
+	BSON = mongodb.BSONPure;
 
 var MONGODB_URL = process.env.MONGODB_URL || '127.0.0.1',
 	MONGODB_PORT = parseInt(process.env.MONGODB_PORT) || 27017,
@@ -22,6 +23,15 @@ var pool = generic_pool.Pool({
 	}
 });
 
+function getResponse(error, result) {
+	var resStr;
+	if(!error){
+		resStr = result;
+	}else{
+		resStr = error;
+	}
+	return resStr;
+}
 
 
 var restServices = {
@@ -53,7 +63,7 @@ var restServices = {
 			pool.acquire(function(err, db) {
 				if (err) {return res.end("At connection, " + err);}
 				var resource = req.path.split("/")[2];
-				resource = splitOnSlash(resource);
+				console.log("Resource " + resource);
 				var itemId = {'_id': new BSON.ObjectID(req.params.id.toString())};
 				console.log("Put " + itemId._id);
 				db.collection(resource, function(err, collection) {
@@ -70,7 +80,6 @@ var restServices = {
 			pool.acquire(function(err, db) {
 				if (err) {return res.end("At connection, " + err);}
 				var resource = req.path.split("/")[2];
-				resource = splitOnSlash(resource);				
 				var itemId = {'_id': new BSON.ObjectID(req.params.id.toString())};
 				db.collection(resource, function(err, collection) {
 					collection.remove(itemId, function(err, result) {
