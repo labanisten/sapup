@@ -260,11 +260,12 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 					var match = Utils.existInTagArray(tags[i], $scope.filterTags);
 
 					if($scope.filterTags[match.index].isActive) {
-						classString = 'show';
-					}else{
+						classString = '';
+						break;
+					}/*else{
 						classString = 'hidden';
 						break;
-					}
+					}*/
 				}
 			}
 
