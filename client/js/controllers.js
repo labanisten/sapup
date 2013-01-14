@@ -261,7 +261,10 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 					if($scope.filterTags[match.index].isActive) {
 						classString = '';
 						break;
-					}
+					}/*else{
+						classString = 'hidden';
+						break;
+					}*/
 				}
 			}
 
@@ -599,11 +602,9 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 				}else{
 					$scope.filterTags[i].isActive = false;
 					$scope.activeTagCount--;
-				}
-				
+				}		
 				break;
 			}
-
 		}
 	};
 
