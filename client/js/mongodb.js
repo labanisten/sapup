@@ -55,7 +55,7 @@ angular.module('mongodbModule', []).
 			addResource("Alerttype", "resources/alerttypes");
 			addResource("Systemstatus", "resources/systemstatuses");
 			addResource("Alert", "resources/alerts");
-			addResource("Userdata", "userdata");
+			addResource("User", "resources/users");
 		
 		})(db);
 

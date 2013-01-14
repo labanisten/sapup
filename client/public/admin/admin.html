@@ -51,6 +51,9 @@
 						<li>
 							<a href="#tab-alerts" data-toggle="tab">Alerts</a>
 						</li>
+						<li>
+							<a href="#tab-users" data-toggle="tab">Users</a>
+						</li>
 					</ul>
 					<div class="tab-content">
 						<!-- Systemgroups tab -->
@@ -226,6 +229,43 @@
 								</div>
 							</div>
 						</div>
+						<!-- Users tab -->
+						<div ng-controller="userListCtrl" class="tab-pane" id="tab-users">
+							<div class="row">
+								<div class="span12">
+									<button class="btn btn-primary" data-toggle="modal" href="#addNewUser"> <i class="icon-plus-sign icon-white"></i>
+										Add user
+									</button>
+								</div>
+							</div>
+							<div class="row">
+								<div class="span12">
+									<table class="table table-condense table-hover">
+										<thead>
+											<tr>
+												<th>Gmail address</th>
+												<th>Name</th>
+												<th>Administrator</th>
+												<th style="width:10%"></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="user in list.getItems()">
+												<td>{{user.id}}</td>
+												<td>{{user.displayName}}</td>
+												<td><input type="checkbox" disabled ng-model="user.isAdmin" /></td>
+												<td>
+													<a data-toggle="modal" href="#removeUser" ng-click="list.setSelectedItemByID(user._id)">
+														<i class="icon-trash"></i>
+													</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+
 					</div>
 				</div>
 			</div>
@@ -345,6 +385,48 @@
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
 			<button data-dismiss="modal" ng-click="systemList.deleteItem(systemList.getItemToUpdate()._id)" class="btn btn-danger">Delete system</button>
+		</div>
+	</div>
+
+	<!-- Modal Add new user  -->
+	<div ng-controller="userModalCtrl" class="modal hide fade" id="addNewUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">Add new user</h3>
+		</div>
+		<div class="modal-body">
+			<div class="input form-vertical">
+				<label for="systemInput">User Gamil address</label>
+				<input class="input-xlarge" name="userInput" id="userInput" ng-model="list.getItemToUpdate().id" type="text" >
+				<label for="textInput">User name</label>
+				<input class="input-xlarge" name="textInput" id="nameInput" ng-model="list.getItemToUpdate().displayName" type="text">
+				 <label class="checkbox">
+      				<input type="checkbox" ng-model="list.getItemToUpdate().isAdmin" > Administrator
+    			</label>
+			</div>
+		</div>
+
+		<div class="modal-footer">
+			<button id="close" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+			<button id="save" data-dismiss="modal" ng-click="list.saveItem()" class="btn btn-primary">Save</button>
+		</div>
+	</div>
+
+	<!-- Modal Remove user -->
+	<div ng-controller="userModalCtrl" class="modal hide fade" id="removeUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">Delete user {{list.getItemToUpdate().displayName}}</h3>
+		</div>
+		<div class="modal-body">
+			<p>
+				<i class="icon-warning-sign icon-modal"></i>
+				Are you sure you want to delete the user?
+			</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			<button data-dismiss="modal" ng-click="list.deleteItem(systemList.getItemToUpdate()._id)" class="btn btn-danger">Delete user</button>
 		</div>
 	</div>
 

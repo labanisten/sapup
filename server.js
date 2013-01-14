@@ -1,12 +1,12 @@
 var express = require('express'),
-	http = require('http'),
+    config =  require('./server/config.js'),
+    http = require('http'),
     passport = require('passport'),
     util = require('util'),
-    GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-	rest =  require('./server/rest.js'),
-	rss =  require('./server/rss.js'),
-	config =  require('./server/config.js'),
-	auth =  require('./server/auth.js');
+    // GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+    rest =  require('./server/rest.js'),
+    rss =  require('./server/rss.js'),
+    auth =  require('./server/auth.js');
 
 var app = express();
 
@@ -63,6 +63,7 @@ app.get('/resources/systemnames', function(req, res) {rest.restServices.get(req,
 app.get('/resources/alerttypes', function(req, res) {rest.restServices.get(req, res);});
 app.get('/resources/systemstatuses', function(req, res) {rest.restServices.get(req, res);});
 app.get('/resources/alerts', function(req, res) {rest.restServices.get(req, res);});
+app.get('/resources/users', function(req, res) {rest.restServices.get(req, res);});
 app.get('/resources/messages.rss', function(req, res) {rest.restServices.get(req, res);});
 
 app.post('/resources/systemgroups', function(req, res) {rest.restServices.post(req, res);});
@@ -71,6 +72,7 @@ app.post('/resources/systemnames', function(req, res) {rest.restServices.post(re
 app.post('/resources/alerttypes', function(req, res) {rest.restServices.post(req, res);});
 app.post('/resources/systemstatuses', function(req, res) {rest.restServices.post(req, res);});
 app.post('/resources/alerts', function(req, res) {rest.restServices.post(req, res);});
+app.post('/resources/users', function(req, res) {rest.restServices.post(req, res);});
 
 app.put('/resources/systemgroups/:id', function(req, res) {rest.restServices.put(req, res);});
 app.put('/resources/systems/:id', function(req, res) {rest.restServices.put(req, res);});
@@ -78,6 +80,7 @@ app.put('/resources/systemnames/:id', function(req, res) {rest.restServices.put(
 app.put('/resources/alerttypes/:id', function(req, res) {rest.restServices.put(req, res);});
 app.put('/resources/systemstatuses/:id', function(req, res) {rest.restServices.put(req, res);});
 app.put('/resources/alerts/:id', function(req, res) {rest.restServices.put(req, res);});
+app.put('/resources/users/:id', function(req, res) {rest.restServices.put(req, res);});
 
 app.delete('/resources/systemgroups/:id', function(req, res) {rest.restServices.delete(req, res);});
 app.delete('/resources/systems/:id', function(req, res) {rest.restServices.delete(req, res);});
@@ -85,6 +88,7 @@ app.delete('/resources/systemnames/:id', function(req, res) {rest.restServices.d
 app.delete('/resources/alerttypes/:id', function(req, res) {rest.restServices.delete(req, res);});
 app.delete('/resources/systemstatuses/:id', function(req, res) {rest.restServices.delete(req, res);});
 app.delete('/resources/alerts/:id', function(req, res) {rest.restServices.delete(req, res);});
+app.delete('/resources/users/:id', function(req, res) {rest.restServices.delete(req, res);});
 
 
 
@@ -117,5 +121,5 @@ app.listen(port, function() {
 	console.log("Listening on " + port);
 	console.log("MongoDB port: " + config.MONGODB_PORT);
 	console.log("MongoDB URL: " + config.MONGODB_URL);
-	console.log("MongoDB database: " + config.MONGODB_DB);
+	console.log("MongoDB database: " + config.MONGODB_DB);      
 });
