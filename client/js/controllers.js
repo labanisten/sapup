@@ -11,6 +11,9 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	$scope.alerttypes = getAlertTypes();
 	$scope.userdata = getUserData();
 
+	// $scope.userdata = {displayName:"Frank Stødle", isAdmin:true};
+
+
 	$scope.selectedElement = {
 		_id: "",
 		system: "",
@@ -121,10 +124,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	$scope.currentCompactpage = $scope.page.main;
 	$scope.systemTableStartColumnSize;
 	
-	$scope.getUser = function() {
-
-	}; 
-
 	$scope.authenticate = function() {
 		$http({method: 'POST', url: 'http://127.0.0.1:4000/auth/google'}).
 			 success(function(data, status, headers, config) {
