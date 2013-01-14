@@ -97,8 +97,7 @@ app.delete('/resources/alerts/:id', function(req, res) {rest.restServices.delete
 
 
 
-// Authentication routes
-// GET /auth/google/callback
+//   Authentication routes
 //   Use passport.authenticate() as route middleware to authenticate the
 //   request.  If authentication fails, the user will be redirected back to the
 //   login page.  Otherwise, the primary route function function will be called,
