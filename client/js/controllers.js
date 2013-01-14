@@ -107,8 +107,8 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	$scope.displayCompactMessageView = false;
 	$scope.systemlinesActive = [];
 	$scope.filterTags = [];
-	$scope.activeTagCount = 0;
-	//$scope.activeTags = [];
+	//$scope.activeTagCount = 0;
+	$scope.activeTags = [];
 	$scope.tagSearchValue;
 
 	$scope.page = {
@@ -230,59 +230,47 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	$scope.getClassForTableRowSystemGroup = function(element) {
 		var classString = "";
 
-		if($scope.activeTagCount > 0) {
+		if($scope.activeTags.length > 0) {
 			classString = 'hidden';
 		}
 
 		return classString;
 	};
 
-	function findActiveTagMatch() {
-		var i,j;
-		for(i = 0; i < tags.length; i++){
-		}
-	}
-
-	//TODO: refactor, somewhat unreadabl
 	$scope.getClassForSystemTableRow = function(systemnamesIndex) {
-		var classString = 'hidden';
+		var classString = '';
 
-		var tagMatch = false;
-
-		if($scope.activeTagCount > 0) {
+		if($scope.activeTags.length > 0) { 
 
 			if($scope.systemnames[systemnamesIndex].tags !== undefined) {
 
 				var tags = $scope.systemnames[systemnamesIndex].tags.split(';');
-				var i,j;
-				for(i = 0; i < tags.length; i++){
-					
-					var match = Utils.existInTagArray(tags[i], $scope.filterTags);
 
-					if($scope.filterTags[match.index].isActive) {
-						classString = '';
-						break;
-					}/*else{
+				var i;
+				for(i = 0; i < $scope.activeTags.length; i++){
+					
+					var index = tags.indexOf($scope.activeTags[i]); 
+
+					if(index < 0) {
 						classString = 'hidden';
 						break;
-					}*/
+					}
 				}
+			}else{
+				//row has no tags
+				classString = 'hidden';
 			}
-
-		}else{
-			classString = '';
 		}
+
 		return classString;
 	};
 
 	$scope.getClassForTagBadge = function(tag) {
 		var classString = "calendar-filtertag badge";
-		var i;
-		for(i = 0; i < $scope.filterTags.length; i++) {
-			if($scope.filterTags[i].text === tag.text && $scope.filterTags[i].isActive === true) {
-				classString += " badge-selected";
-				break;
-			}
+
+		var index = $scope.activeTags.indexOf(tag.text); 
+		if(index > -1) {
+			classString += " badge-selected";
 		}
 		return classString;
 	};
@@ -593,19 +581,12 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	}
 
 	$scope.tagBadgeClick = function(tag) {
-		var i;
-		for(i = 0; i < $scope.filterTags.length; i++) {
-
-			if(tag.text === $scope.filterTags[i].text) {
-				if($scope.filterTags[i].isActive === false) {
-					$scope.filterTags[i].isActive = true;
-					$scope.activeTagCount++;
-				}else{
-					$scope.filterTags[i].isActive = false;
-					$scope.activeTagCount--;
-				}		
-				break;
-			}
+		var i;	
+		var index = $scope.activeTags.indexOf(tag.text); 
+		if(index < 0) {
+			$scope.activeTags.push(tag.text);
+		}else{
+			$scope.activeTags.splice(index, 1);
 		}
 	};
 
