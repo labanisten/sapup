@@ -680,6 +680,7 @@ directiveModule.directive('jqDatepicker', function (Utils) {
 		link: function postLink(scope, element, attrs) {
 			element.datepicker({
 				dateFormat: "dd.mm.yy",
+				minDate: new Date(2011, 10 - 1, 25),
 				onClose: function (dateText, inst) {
 					if(element.context.id == "updateFormStartDate"){
 						scope.updateFormData.start = dateText;
@@ -709,10 +710,14 @@ directiveModule.directive('jqDatepicker', function (Utils) {
 					}
 					scope.$apply();
 				}	
+
+				onSelect: function(dateText, inst) {
+					console.log("onselect");
+				}
 			});
 		}
 	};
-});					
+});			
 
 
 directiveModule.directive('ngEnterkey', function () {
