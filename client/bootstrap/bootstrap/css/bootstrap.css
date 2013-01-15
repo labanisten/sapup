@@ -4971,8 +4971,8 @@ a.badge:hover {
     background-color: #eeeeee;
   }
   .alert-area {
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
   .login-form {
     margin-left: 65px;
