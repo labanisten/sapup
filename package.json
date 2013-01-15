@@ -16,6 +16,7 @@
 	  "rss": ">= 0.0.0",
     "passport": ">= 0.0.0",
     "passport-google-oauth": ">= 0.0.0",
+    "passport-local": ">= 0.0.0",
 	"util": ">= 0.0.0",
 	"http": ">= 0.0.0"
   }
