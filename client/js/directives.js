@@ -39,22 +39,11 @@ directiveModule.directive('toolbar', function($compile, Utils){
 						}
 					}
 
-					template = '<div class="row-fluid" ng:class="getClassForToolbar()">'+
-
-									/*
-									'<div class="span2 input-append">'+
-									  '<input class="span12" id="appendedInput" type="text" placeholder="Tag search" ng-model="tagSearchValue">'+
-									  '<span class="add-on"><i class="icon-search"></i></span>'+
-									'</div>'+
-									*/
-									//'<div class="row-fluid">'+
-
+					template = '<div ng:class="getClassForToolbar()">'+
 									'<div class="span12">'+
 										'<span ng-repeat="tag in filterTags" ng:class="getClassForTagBadge(tag)" ng:click="tagBadgeClick(tag)">{{tag.text}}</span>'+
 									'</div>'+
-									//'</div>';
-
-					'</div>';
+								'</div>';
 
 					element.html(template);				
 					$compile(element.contents())(scope);
