@@ -39,11 +39,9 @@ directiveModule.directive('toolbar', function($compile, Utils){
 						}
 					}
 
-					template = '<div ng:class="getClassForToolbar()">'+
+					template = '<div class="row-fluid" ng:class="getClassForToolbar()">'+
 									'<div class="span12">'+
-										'<div ng-repeat="tag in filterTags">'+
-											'<span ng:class="getClassForTagBadge(tag)" ng:click="tagBadgeClick(tag)">{{tag.text}}</span>'+
-										'</div>'+
+										'<span ng-repeat="tag in filterTags" ng:class="getClassForTagBadge(tag)" ng:click="tagBadgeClick(tag)">{{tag.text}}</span>'+
 									'</div>'+
 								'</div>';
 
@@ -680,7 +678,6 @@ directiveModule.directive('jqDatepicker', function (Utils) {
 		link: function postLink(scope, element, attrs) {
 			element.datepicker({
 				dateFormat: "dd.mm.yy",
-				minDate: new Date(2011, 10 - 1, 25),
 				onClose: function (dateText, inst) {
 					if(element.context.id == "updateFormStartDate"){
 						scope.updateFormData.start = dateText;
@@ -709,21 +706,28 @@ directiveModule.directive('jqDatepicker', function (Utils) {
 						$("#expireMessage").text("Message will expire in " + daysLeft + " " + dayText);
 					}
 					scope.$apply();
-				}
+				}	
 			});
 		}
 	};
 });	
-
 
 directiveModule.directive('endDatePicker', function (Utils) {
 	return {
 		link: function postLink(scope, element, attrs) {
 
 			function processMinDateUpdate() {
-				return {
-				    minDate: (new Date()) 
-				};
+				if(element.context.id == "updateFormEndDate"){
+					return {
+				    	minDate:  Utils.viewDateToDateObject(scope.updateFormData.end)
+					};
+				}else if(element.context.id == "newFormEndDate") {
+					return {
+				    	minDate:  Utils.viewDateToDateObject(scope.addFormData.end)
+					};
+				}
+
+
 			}
 
 			element.datepicker({
@@ -741,7 +745,7 @@ directiveModule.directive('endDatePicker', function (Utils) {
 			});
 		}
 	};
-});			
+});						
 
 
 directiveModule.directive('ngEnterkey', function () {
