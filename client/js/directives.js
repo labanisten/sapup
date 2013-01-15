@@ -717,17 +717,17 @@ directiveModule.directive('endDatePicker', function (Utils) {
 		link: function postLink(scope, element, attrs) {
 
 			function processMinDateUpdate() {
+				var result;
 				if(element.context.id == "updateFormEndDate"){
-					return {
-				    	minDate:  Utils.viewDateToDateObject(scope.updateFormData.end)
-					};
+					if(scope.updateFormData.start !== undefined){
+						result = {minDate:  Utils.viewDateToDateObject(scope.updateFormData.start)};
+					}
 				}else if(element.context.id == "newFormEndDate") {
-					return {
-				    	minDate:  Utils.viewDateToDateObject(scope.addFormData.end)
-					};
+					if(scope.addFormData.start !== undefined){
+						result = {minDate: Utils.viewDateToDateObject(scope.addFormData.start)};
+					}
 				}
-
-
+				return result;
 			}
 
 			element.datepicker({
