@@ -673,7 +673,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 });
 
 
-directiveModule.directive('jqDatepicker', function (Utils) {
+directiveModule.directive('alerDatePicker', function (Utils) {
 	return {
 		link: function postLink(scope, element, attrs) {
 
@@ -728,7 +728,6 @@ directiveModule.directive('startDatePicker', function (Utils) {
 				onClose: function (dateText, inst) {
 					if(element.context.id == "updateFormStartDate"){
 						scope.updateFormData.start = dateText;
-					}
 					}else if(element.context.id == "newFormStartDate"){
 						scope.addFormData.start = dateText;
 					}
