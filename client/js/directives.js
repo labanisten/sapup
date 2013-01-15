@@ -1,10 +1,5 @@
 var directiveModule = angular.module('directiveModule', ['utilsModule']);
 
-//TODO: Kan me fjerna denna?
-function build(scope) {
-	console.log("build!; " + scope.systemlines.length);
-}
-
 directiveModule.directive('toolbar', function($compile, Utils){
 	return {
 			restrict: 'A',
@@ -40,21 +35,10 @@ directiveModule.directive('toolbar', function($compile, Utils){
 					}
 
 					template = '<div class="row-fluid" ng:class="getClassForToolbar()">'+
-
-									/*
-									'<div class="span2 input-append">'+
-									  '<input class="span12" id="appendedInput" type="text" placeholder="Tag search" ng-model="tagSearchValue">'+
-									  '<span class="add-on"><i class="icon-search"></i></span>'+
-									'</div>'+
-									*/
-									//'<div class="row-fluid">'+
-
 									'<div class="span12">'+
 										'<span ng-repeat="tag in filterTags" ng:class="getClassForTagBadge(tag)" ng:click="tagBadgeClick(tag)">{{tag.text}}</span>'+
 									'</div>'+
-									//'</div>';
-
-					'</div>';
+								'</div>';
 
 					element.html(template);				
 					$compile(element.contents())(scope);
@@ -93,7 +77,6 @@ directiveModule.directive('messageViewCompact', function($compile, Utils){
 });
 
 
-
 directiveModule.directive('monthSelectionbarCompact', function($compile, Utils){
 	return {
 			restrict: 'A',
@@ -130,28 +113,9 @@ directiveModule.directive('systemgroupsViewCompact', function($compile, Utils){
 			link: function(scope, element, attrs) {
 				var template = '';
 
-				var dataStatus = {
-					systemlines: false,
-					systemnames: false,
-					systemgroups: false
-				}
-
-				function dataIsReady() {
-					var result = false;
-					if(dataStatus.systemgroups == true) {
-						result = true;
-					}
-					return result;
-				}
-
-				//TODO: no need for dataready func. if only one datagroup
 				scope.$watch('systemgroups', function() {
-					dataStatus.systemgroups = true;
-					if(dataIsReady) {
-						buildList();
-					}
-				});
-				
+					buildList();
+				});		
 
 				function buildList() {
 					template = '<ul class="nav elementlist-compact listelement-button nav-list">';
@@ -341,44 +305,6 @@ directiveModule.directive('CompressedListElementView', function($compile, Utils)
 	};
 });
 
-/*
-directiveModule.directive('fixedMonthHeader', function($compile, Utils){
-	return {
-			restrict: 'A',
-			link: function(scope, element, attrs) {
-
-				var template = 	'<table ng:class="getClassFixedMonthHeader()">' +
-
-									'<thead>'+
-
-
-											'<tr class="daynames">'+
-												'<th rowspan="3" style="width:{{systemTableStartColumnSize}}px"></th>'+
-												'<th ng-repeat="dayName in dayNamesInMonth('+scope.selectedMonth+')">{{dayName}}</th>'+
-											'</tr>'+
-											
-											'<tr class="shortdaynames">'+
-												'<th rowspan="3" style="width:{{systemTableStartColumnSize}}px"></th>'+
-												'<th class="fixedheader" ng-repeat="shortDayName in shortDayNamesInMonth('+scope.selectedMonth+')">{{shortDayName}}</th>'+
-											'</tr>'+
-											
-											'<tr>'+
-												'<th ng:class="getClassForDayColumn(day)" ng-repeat="day in monthDayList['+scope.selectedMonth+']">{{day}}</th>'+
-											'</tr>'+
-											
-
-
-									'</thead>'+
-
-								'</table>';
-
-					element.html(template);
-					$compile(element.contents())(scope);
-
-		   }		
-	};
-});
-*/
 
 directiveModule.directive('systemTable', function($compile, Utils){
 	return {
@@ -620,16 +546,9 @@ directiveModule.directive('systemTable', function($compile, Utils){
 											
 							template += '</tbody>'+
 									'</table>';
-								  
-					
 
 					element.html(template);
 					$compile(element.contents())(scope);
-					
-					//var wid = $('.systemtablespacer');
-					//console.log("w: " + $('.systemtablespacer').css('width'));
-					
-					//scope.systemTableStartColumnSize = 200;
 				}
 
 
@@ -683,74 +602,103 @@ directiveModule.directive('systemTable', function($compile, Utils){
 	};
 });
 
-		
-directiveModule.directive('jqDatepicker', function (Utils) {
+
+directiveModule.directive('alerDatePicker', function (Utils) {
 	return {
 		link: function postLink(scope, element, attrs) {
+
 			element.datepicker({
 				dateFormat: "dd.mm.yy",
+				minDate: (new Date()),
+				onClose: function (dateText, inst) {
+
+					scope.addAlertLine.expdate = dateText;
+					
+					var dbdate = Utils.viewDateToDBDate(dateText);
+					var currentDate = Utils.getDateString(new Date());
+					var daysLeft = dbdate - currentDate;
+					
+					var dayText;
+					if(daysLeft > 1){
+						dayText = "in " + daysLeft + " " + "days";
+					}else{
+						dayText = "today";
+					}
+					
+					$("#expireMessage").text("Message will expire " + dayText);
+					
+					scope.$apply();
+				}	
+			});
+		}
+	};
+});	
+
+		
+directiveModule.directive('startDatePicker', function (Utils) {
+	return {
+		link: function postLink(scope, element, attrs) {
+
+			function processMaxDate() {
+				var result;
+				if(element.context.id == "updateFormStartDate"){
+					if(scope.updateFormData.end !== undefined){
+						result = {maxDate:  Utils.viewDateToDateObject(scope.updateFormData.end)};
+					}
+				}else if(element.context.id == "newFormStartDate") {
+					if(scope.addFormData.end !== undefined){
+						result = {maxDate: Utils.viewDateToDateObject(scope.addFormData.end)};
+					}
+				}
+				return result;
+			}
+
+			element.datepicker({
+				dateFormat: "dd.mm.yy",
+				beforeShow: processMaxDate,
 				onClose: function (dateText, inst) {
 					if(element.context.id == "updateFormStartDate"){
 						scope.updateFormData.start = dateText;
-					}
-					else if(element.context.id == "updateFormEndDate"){
-						scope.updateFormData.end = dateText;
 					}else if(element.context.id == "newFormStartDate"){
 						scope.addFormData.start = dateText;
-					}else if(element.context.id == "newFormEndDate"){
-						scope.addFormData.end = dateText;
-					}
-					else if(element.context.id == "alertDialogExpDate"){
-						scope.addAlertLine.expdate = dateText;
-						
-						var dbdate = Utils.viewDateToDBDate(dateText);
-						var currentDate = Utils.getDateString(new Date());
-						var daysLeft = dbdate - currentDate;
-						
-						var dayText;
-						if(daysLeft > 1){
-							dayText = "days";
-						}else{
-							dayText = "day";
-						}
-						
-						$("#expireMessage").text("Message will expire in " + daysLeft + " " + dayText);
 					}
 					scope.$apply();
 				}	
 			});
 		}
 	};
-});					
+});	
 
-
-directiveModule.directive('ngEnterkey', function () {
+directiveModule.directive('endDatePicker', function (Utils) {
 	return {
-				link: function postLink(scope, element, attrs) {
-					element.keydown(function(event) {
-						if(event.which == 13){
-						
-							var searchStr = 'ng-enterkey="';
-							var ohtml = element[0].outerHTML;
-							
-							var matchPos = ohtml.indexOf(searchStr);
-							
-							if(matchPos > 0){
-								matchPos = matchPos + searchStr.length;	
-								var matchPosEnd = ohtml.indexOf('(', matchPos);
-								
-								var incommingFunction = ohtml.substr(matchPos, matchPosEnd - matchPos);	
-								incommingFunction = 'scope.' + incommingFunction;
-								incommingFunction = new Function("scope", "return " + incommingFunction + "();");
-								
-								//Run
-								incommingFunction(scope);
+		link: function postLink(scope, element, attrs) {
 
-							}
-							
-						}
-					});
+			function processMinDate() {
+				var result;
+				if(element.context.id == "updateFormEndDate"){
+					if(scope.updateFormData.start !== undefined){
+						result = {minDate:  Utils.viewDateToDateObject(scope.updateFormData.start)};
+					}
+				}else if(element.context.id == "newFormEndDate") {
+					if(scope.addFormData.start !== undefined){
+						result = {minDate: Utils.viewDateToDateObject(scope.addFormData.start)};
+					}
 				}
+				return result;
+			}
+
+			element.datepicker({
+				dateFormat: "dd.mm.yy",
+				beforeShow: processMinDate,
+				onClose: function (dateText, inst) {
+					if(element.context.id == "updateFormEndDate"){
+						scope.updateFormData.end = dateText;
+					}else if(element.context.id == "newFormEndDate"){
+						scope.addFormData.end = dateText;
+					}
+					scope.$apply();
+				}
+			});
+		}
 	};
 });
-	
