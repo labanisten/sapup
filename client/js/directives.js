@@ -709,7 +709,7 @@ directiveModule.directive('jqDatepicker', function (Utils) {
 						$("#expireMessage").text("Message will expire in " + daysLeft + " " + dayText);
 					}
 					scope.$apply();
-				}	
+				},
 
 				onSelect: function(dateText, inst) {
 					console.log("onselect");
