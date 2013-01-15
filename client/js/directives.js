@@ -723,7 +723,7 @@ directiveModule.directive('jqDatepickerEnd', function (Utils) {
 				dateFormat: "dd.mm.yy",
 				minDate: scope.addFormData.start,
 				onClose: function (dateText, inst) {
-					else if(element.context.id == "updateFormEndDate"){
+					if(element.context.id == "updateFormEndDate"){
 						scope.updateFormData.end = dateText;
 					}else if(element.context.id == "newFormEndDate"){
 						scope.addFormData.end = dateText;
