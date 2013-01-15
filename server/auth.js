@@ -1,24 +1,15 @@
-	// Authentication 	
-var passport = require('passport'),
+var config =  require('./config.js'),
+	passport = require('passport'),
     GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
     generic_pool = require('generic-pool'),
     mongodb = require('mongodb');
-
-var GOOGLE_CLIENT_ID = '1072189313711.apps.googleusercontent.com',
-    GOOGLE_CLIENT_SECRET = 'Evqt9n8JS3f50GFCqoyn5ElN',
-    GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || 'http://127.0.0.1:4000/auth/google/callback',
-    GOOGLE_SCOPE = 'https://www.googleapis.com/auth/userinfo.email',
-	MONGODB_URL = process.env.MONGODB_URL || '127.0.0.1',
-	MONGODB_PORT = parseInt(process.env.MONGODB_PORT) || 27017,
-    MONGODB_DB = process.env.MONGODB_DB || 'test'; 
-
 
 var pool = generic_pool.Pool({
 	name: 'mongodb',
 	max: 20,
 	create: function(callback) {
-		var dbServer = new mongodb.Server(MONGODB_URL, MONGODB_PORT, {safe:true});
-		var db = new mongodb.Db(MONGODB_DB, dbServer, {safe:true});
+		var dbServer = new mongodb.Server(config.MONGODB_URL, config.MONGODB_PORT, {safe:true});
+		var db = new mongodb.Db(config.MONGODB_DB, dbServer, {safe:true});
 		
 		db.open(function(err, db) {
 			callback(err, db);
@@ -79,9 +70,9 @@ passport.deserializeUser(function(userObject, done) {
 //   credentials (in this case, an accessToken, refreshToken, and Google
 //   profile), and invoke a callback with a user object.
 passport.use(new GoogleStrategy({
-    clientID: GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: GOOGLE_REDIRECT_URI
+    clientID: config.GOOGLE_CLIENT_ID,
+    clientSecret: config.GOOGLE_CLIENT_SECRET,
+    callbackURL: config.GOOGLE_REDIRECT_URI
   },
   function(accessToken, refreshToken, profile, done) {
     // asynchronous verification, for effect...

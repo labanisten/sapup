@@ -1,17 +1,14 @@
 var generic_pool = require('generic-pool'),
 	mongodb = require('mongodb'),
+	config =  require('./config.js'),
 	BSON = mongodb.BSONPure;
-
-var MONGODB_URL = process.env.MONGODB_URL || '127.0.0.1',
-	MONGODB_PORT = parseInt(process.env.MONGODB_PORT) || 27017,
-    MONGODB_DB = process.env.MONGODB_DB || 'test'; 
 
 var pool = generic_pool.Pool({
 	name: 'mongodb',
 	max: 20,
 	create: function(callback) {
-		var dbServer = new mongodb.Server(MONGODB_URL, MONGODB_PORT, {safe:true});
-		var db = new mongodb.Db(MONGODB_DB, dbServer, {safe:true});
+		var dbServer = new mongodb.Server(config.MONGODB_URL, config.MONGODB_PORT, {safe:true});
+		var db = new mongodb.Db(config.MONGODB_DB, dbServer, {safe:true});
 		
 		db.open(function(err, db) {
 			callback(err, db);

@@ -1,21 +1,12 @@
 var express = require('express'),
-	http = require('http'),
+    config =  require('./server/config.js'),
+    http = require('http'),
     passport = require('passport'),
     util = require('util'),
-    GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-	rest =  require('./server/rest.js'),
-	rss =  require('./server/rss.js'),
-	auth =  require('./server/auth.js');
-
-//Constants
-var MONGODB_URL = process.env.MONGODB_URL || '127.0.0.1',
-	MONGODB_PORT = parseInt(process.env.MONGODB_PORT) || 27017,
-    MONGODB_DB = process.env.MONGODB_DB || 'test'; 
-    GOOGLE_CLIENT_ID = '1072189313711.apps.googleusercontent.com',
-    GOOGLE_CLIENT_SECRET = 'Evqt9n8JS3f50GFCqoyn5ElN',
-    GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || 'http://127.0.0.1:4000/auth/google/callback',
-    GOOGLE_SCOPE = 'https://www.googleapis.com/auth/userinfo.email';
-
+    // GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+    rest =  require('./server/rest.js'),
+    rss =  require('./server/rss.js'),
+    auth =  require('./server/auth.js');
 
 var app = express();
 
@@ -72,6 +63,7 @@ app.get('/resources/systemnames', function(req, res) {rest.restServices.get(req,
 app.get('/resources/alerttypes', function(req, res) {rest.restServices.get(req, res);});
 app.get('/resources/systemstatuses', function(req, res) {rest.restServices.get(req, res);});
 app.get('/resources/alerts', function(req, res) {rest.restServices.get(req, res);});
+app.get('/resources/users', function(req, res) {rest.restServices.get(req, res);});
 app.get('/resources/messages.rss', function(req, res) {rest.restServices.get(req, res);});
 
 app.post('/resources/systemgroups', function(req, res) {rest.restServices.post(req, res);});
@@ -80,6 +72,7 @@ app.post('/resources/systemnames', function(req, res) {rest.restServices.post(re
 app.post('/resources/alerttypes', function(req, res) {rest.restServices.post(req, res);});
 app.post('/resources/systemstatuses', function(req, res) {rest.restServices.post(req, res);});
 app.post('/resources/alerts', function(req, res) {rest.restServices.post(req, res);});
+app.post('/resources/users', function(req, res) {rest.restServices.post(req, res);});
 
 app.put('/resources/systemgroups/:id', function(req, res) {rest.restServices.put(req, res);});
 app.put('/resources/systems/:id', function(req, res) {rest.restServices.put(req, res);});
@@ -87,6 +80,7 @@ app.put('/resources/systemnames/:id', function(req, res) {rest.restServices.put(
 app.put('/resources/alerttypes/:id', function(req, res) {rest.restServices.put(req, res);});
 app.put('/resources/systemstatuses/:id', function(req, res) {rest.restServices.put(req, res);});
 app.put('/resources/alerts/:id', function(req, res) {rest.restServices.put(req, res);});
+app.put('/resources/users/:id', function(req, res) {rest.restServices.put(req, res);});
 
 app.delete('/resources/systemgroups/:id', function(req, res) {rest.restServices.delete(req, res);});
 app.delete('/resources/systems/:id', function(req, res) {rest.restServices.delete(req, res);});
@@ -94,6 +88,7 @@ app.delete('/resources/systemnames/:id', function(req, res) {rest.restServices.d
 app.delete('/resources/alerttypes/:id', function(req, res) {rest.restServices.delete(req, res);});
 app.delete('/resources/systemstatuses/:id', function(req, res) {rest.restServices.delete(req, res);});
 app.delete('/resources/alerts/:id', function(req, res) {rest.restServices.delete(req, res);});
+app.delete('/resources/users/:id', function(req, res) {rest.restServices.delete(req, res);});
 
 
 
@@ -124,7 +119,7 @@ app.get('/logout', function(req, res){
 var port = process.env.PORT || 4000;
 app.listen(port, function() {
 	console.log("Listening on " + port);
-	console.log("MongoDB port: " + MONGODB_PORT);
-	console.log("MongoDB URL: " + MONGODB_URL);
-	console.log("MongoDB database: " + MONGODB_DB);
+	console.log("MongoDB port: " + config.MONGODB_PORT);
+	console.log("MongoDB URL: " + config.MONGODB_URL);
+	console.log("MongoDB database: " + config.MONGODB_DB);      
 });
