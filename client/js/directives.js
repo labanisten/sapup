@@ -721,7 +721,7 @@ directiveModule.directive('jqDatepickerEnd', function (Utils) {
 		link: function postLink(scope, element, attrs) {
 			element.datepicker({
 				dateFormat: "dd.mm.yy",
-				minDate: scope.addFormData.start,
+				minDate: Utils.viewDateToDateObject(scope.addFormData.start),
 				onClose: function (dateText, inst) {
 					if(element.context.id == "updateFormEndDate"){
 						scope.updateFormData.end = dateText;
