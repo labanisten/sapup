@@ -672,38 +672,65 @@ directiveModule.directive('systemTable', function($compile, Utils){
 	};
 });
 
-		
+
 directiveModule.directive('jqDatepicker', function (Utils) {
 	return {
 		link: function postLink(scope, element, attrs) {
+
 			element.datepicker({
 				dateFormat: "dd.mm.yy",
+				onClose: function (dateText, inst) {
+
+					scope.addAlertLine.expdate = dateText;
+					
+					var dbdate = Utils.viewDateToDBDate(dateText);
+					var currentDate = Utils.getDateString(new Date());
+					var daysLeft = dbdate - currentDate;
+					
+					var dayText;
+					if(daysLeft > 1){
+						dayText = "days";
+					}else{
+						dayText = "day";
+					}
+					
+					$("#expireMessage").text("Message will expire in " + daysLeft + " " + dayText);
+					
+					scope.$apply();
+				}	
+			});
+		}
+	};
+});	
+
+		
+directiveModule.directive('startDatePicker', function (Utils) {
+	return {
+		link: function postLink(scope, element, attrs) {
+
+			function processMaxDate() {
+				var result;
+				if(element.context.id == "updateFormStartDate"){
+					if(scope.updateFormData.end !== undefined){
+						result = {maxDate:  Utils.viewDateToDateObject(scope.updateFormData.end)};
+					}
+				}else if(element.context.id == "newFormStartDate") {
+					if(scope.addFormData.end !== undefined){
+						result = {maxDate: Utils.viewDateToDateObject(scope.addFormData.end)};
+					}
+				}
+				return result;
+			}
+
+			element.datepicker({
+				dateFormat: "dd.mm.yy",
+				beforeShow: processMaxDate,
 				onClose: function (dateText, inst) {
 					if(element.context.id == "updateFormStartDate"){
 						scope.updateFormData.start = dateText;
 					}
-					else if(element.context.id == "updateFormEndDate"){
-						scope.updateFormData.end = dateText;
 					}else if(element.context.id == "newFormStartDate"){
 						scope.addFormData.start = dateText;
-					}else if(element.context.id == "newFormEndDate"){
-						scope.addFormData.end = dateText;
-					}
-					else if(element.context.id == "alertDialogExpDate"){
-						scope.addAlertLine.expdate = dateText;
-						
-						var dbdate = Utils.viewDateToDBDate(dateText);
-						var currentDate = Utils.getDateString(new Date());
-						var daysLeft = dbdate - currentDate;
-						
-						var dayText;
-						if(daysLeft > 1){
-							dayText = "days";
-						}else{
-							dayText = "day";
-						}
-						
-						$("#expireMessage").text("Message will expire in " + daysLeft + " " + dayText);
 					}
 					scope.$apply();
 				}	
@@ -716,7 +743,7 @@ directiveModule.directive('endDatePicker', function (Utils) {
 	return {
 		link: function postLink(scope, element, attrs) {
 
-			function processMinDateUpdate() {
+			function processMinDate() {
 				var result;
 				if(element.context.id == "updateFormEndDate"){
 					if(scope.updateFormData.start !== undefined){
@@ -732,8 +759,7 @@ directiveModule.directive('endDatePicker', function (Utils) {
 
 			element.datepicker({
 				dateFormat: "dd.mm.yy",
-				//minDate: Utils.viewDateToDateObject(scope.addFormData.start),
-				beforeShow: processMinDateUpdate,
+				beforeShow: processMinDate,
 				onClose: function (dateText, inst) {
 					if(element.context.id == "updateFormEndDate"){
 						scope.updateFormData.end = dateText;
