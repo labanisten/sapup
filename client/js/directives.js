@@ -620,12 +620,12 @@ directiveModule.directive('alerDatePicker', function (Utils) {
 					
 					var dayText;
 					if(daysLeft > 1){
-						dayText = "days";
+						dayText = "in " + daysLeft + " " + "days";
 					}else{
-						dayText = "day";
+						dayText = "today";
 					}
 					
-					$("#expireMessage").text("Message will expire in " + daysLeft + " " + dayText);
+					$("#expireMessage").text("Message will expire " + dayText);
 					
 					scope.$apply();
 				}	
