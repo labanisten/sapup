@@ -709,10 +709,26 @@ directiveModule.directive('jqDatepicker', function (Utils) {
 						$("#expireMessage").text("Message will expire in " + daysLeft + " " + dayText);
 					}
 					scope.$apply();
-				},
+				}
+			});
+		}
+	};
+});	
 
-				onSelect: function(dateText, inst) {
-					console.log("onselect");
+
+directiveModule.directive('jqDatepickerEnd', function (Utils) {
+	return {
+		link: function postLink(scope, element, attrs) {
+			element.datepicker({
+				dateFormat: "dd.mm.yy",
+				minDate: scope.addFormData.start,
+				onClose: function (dateText, inst) {
+					else if(element.context.id == "updateFormEndDate"){
+						scope.updateFormData.end = dateText;
+					}else if(element.context.id == "newFormEndDate"){
+						scope.addFormData.end = dateText;
+					}
+					scope.$apply();
 				}
 			});
 		}
