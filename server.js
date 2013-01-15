@@ -1,15 +1,17 @@
 var express = require('express'),
     config =  require('./server/config.js'),
     http = require('http'),
-    passport = require('passport'),
     util = require('util'),
-    // GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+    passport = require('passport'),
+    GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
+    LocalStrategy = require('passport-local').Strategy,
     rest =  require('./server/rest.js'),
     rss =  require('./server/rss.js'),
-    auth =  require('./server/auth.js');
+	app = express(),
+	noauth = false;
 
-var app = express();
-
+// Turn of authentication? 
+noauth = process.argv[2] === "noauth";
 
 // configure Express
 app.configure(function() {
@@ -44,13 +46,14 @@ app.get('/admin/*', function(req, res, next) {
 	console.log("Session: " + JSON.stringify(req.session));
 
 	if (!req.user) {
-		res.sendfile(__dirname + '/client/public/admin/login.html'); 
+		res.sendfile(__dirname + '/client/public/login.html'); 
 	} else {
 		return next(); 
 	};
 });
 
 app.get('/userdata', function(req, res, next) {
+	// req.user = {id:"localuser", displayName:"localuser", isAdmin:true};	
 	res.send(req.user); 
 });
 
@@ -97,24 +100,68 @@ app.delete('/resources/users/:id', function(req, res) {rest.restServices.delete(
 //   request.  If authentication fails, the user will be redirected back to the
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
-app.get('/auth/google',
-  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
-                                            'https://www.googleapis.com/auth/userinfo.email'] }),
-  function(req, res){
-    // The request will be redirected to Google for authentication, so this
-    // function will not be called.
-});
+if (noauth) {	
 
-app.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/loginerror.html' }),
-  function(req, res) {
-    res.redirect('/');
-  });
+	passport.serializeUser(function(user, done) {
+	  done(null, user.id);
+	});
 
-app.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('/');
-});
+	passport.deserializeUser(function(id, done) {
+		var user = {id:"localuser", displayName:"localuser", isAdmin:true};	 
+	    done(null, user);
+	});
+
+
+	passport.use(new LocalStrategy(
+		function(username, password, done) {
+	      // Find the user by username.  If there is no user with the given
+	      // username, or the password is not correct, set the user to `false` to
+	      // indicate failure and set a flash message.  Otherwise, return the
+	      // authenticated `user`.
+		  	var user = {id:"localuser", displayName:"localuser", isAdmin:true};	  			
+			done(null, user);
+		}
+	));	
+
+	app.get('/auth/google', function(req, res, next) {
+	passport.authenticate('local', function(err, user, info) {
+		var user = {id:"localuser", displayName:"localuser", isAdmin:true};	  			
+		req.logIn(user, function(err) {
+		if (err) { return next(err); }
+			return res.redirect('/');
+		});
+		})(req, res, next);
+	});
+
+	app.get('/logout', function(req, res){
+		req.logout();
+		res.redirect('/');
+	});
+
+
+}
+else {
+    auth =  require('./server/auth.js');
+
+	app.get('/auth/google',
+		passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
+		                                        'https://www.googleapis.com/auth/userinfo.email'] }),
+		function(req, res){
+		// The request will be redirected to Google for authentication, so this
+		// function will not be called.
+		});
+
+	app.get('/auth/google/callback', 
+	  passport.authenticate('google', { failureRedirect: '/loginerror.html' }),
+	  function(req, res) {
+	    res.redirect('/');
+	  });
+	
+	app.get('/logout', function(req, res){
+		req.logout();
+		res.redirect('/');	
+	});
+}
 
 var port = process.env.PORT || 4000;
 app.listen(port, function() {

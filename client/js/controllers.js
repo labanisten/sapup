@@ -11,9 +11,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	$scope.alerttypes = getAlertTypes();
 	$scope.userdata = getUserData();
 
-	// $scope.userdata = {displayName:"Frank Stødle", isAdmin:true};
-
-
 	$scope.selectedElement = {
 		_id: "",
 		system: "",
