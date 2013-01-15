@@ -41,7 +41,7 @@ directiveModule.directive('toolbar', function($compile, Utils){
 
 					template = '<div ng:class="getClassForToolbar()">'+
 									'<div class="span12">'+
-										'<span ng-repeat="tag in filterTags" ng:class="getClassForTagBadge(tag)" ng:click="tagBadgeClick(tag)">{{tag.text}}</span>'+
+										'<span class="span1" ng-repeat="tag in filterTags" ng:class="getClassForTagBadge(tag)" ng:click="tagBadgeClick(tag)">{{tag.text}}</span>'+
 									'</div>'+
 								'</div>';
 
