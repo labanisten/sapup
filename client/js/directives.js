@@ -113,28 +113,9 @@ directiveModule.directive('systemgroupsViewCompact', function($compile, Utils){
 			link: function(scope, element, attrs) {
 				var template = '';
 
-				var dataStatus = {
-					systemlines: false,
-					systemnames: false,
-					systemgroups: false
-				}
-
-				function dataIsReady() {
-					var result = false;
-					if(dataStatus.systemgroups == true) {
-						result = true;
-					}
-					return result;
-				}
-
-				//TODO: no need for dataready func. if only one datagroup
 				scope.$watch('systemgroups', function() {
-					dataStatus.systemgroups = true;
-					if(dataIsReady) {
-						buildList();
-					}
-				});
-				
+					buildList();
+				});		
 
 				function buildList() {
 					template = '<ul class="nav elementlist-compact listelement-button nav-list">';
@@ -565,16 +546,9 @@ directiveModule.directive('systemTable', function($compile, Utils){
 											
 							template += '</tbody>'+
 									'</table>';
-								  
-					
 
 					element.html(template);
 					$compile(element.contents())(scope);
-					
-					//var wid = $('.systemtablespacer');
-					//console.log("w: " + $('.systemtablespacer').css('width'));
-					
-					//scope.systemTableStartColumnSize = 200;
 				}
 
 
@@ -635,6 +609,7 @@ directiveModule.directive('alerDatePicker', function (Utils) {
 
 			element.datepicker({
 				dateFormat: "dd.mm.yy",
+				minDate: (new Date()),
 				onClose: function (dateText, inst) {
 
 					scope.addAlertLine.expdate = dateText;

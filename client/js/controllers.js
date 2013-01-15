@@ -13,7 +13,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 	// $scope.userdata = {displayName:"Frank Stødle", isAdmin:true};
 
-
 	$scope.selectedElement = {
 		_id: "",
 		system: "",
@@ -86,6 +85,13 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		expdate: undefined,
 		comment: ""
 	};
+
+	$scope.page = {
+		main: "pg1",
+		system: "pg2",
+		status: "pg3",
+		message: "pg4"
+	};
 	
 	$scope.monthDayList = Calendar.getMonthDayList();
 	$scope.monthWeekList = Calendar.getMonthWeekList();
@@ -110,20 +116,10 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	$scope.displayCompactMessageView = false;
 	$scope.systemlinesActive = [];
 	$scope.filterTags = [];
-	//$scope.activeTagCount = 0;
 	$scope.activeTags = [];
-	$scope.tagSearchValue;
-
-	$scope.page = {
-		main: "pg1",
-		system: "pg2",
-		status: "pg3",
-		message: "pg4"
-	};
-
 	$scope.currentCompactpage = $scope.page.main;
 	$scope.systemTableStartColumnSize;
-	
+
 	$scope.messageAreaClass = function() {
 		if ($scope.alertlines.length > 0) {
 			return "accordion span12";
