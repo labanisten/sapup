@@ -146,15 +146,6 @@
 
 	</div>
 
-	<!--div class="compactnavbar">asdfgag</div-->
-	<!--div class="compactnavbar navbar navbar-fixed-top">
-		<div class="navbar-inner">
-			<a class="brand" href="#">
-				SAP System availability <sup style="font-size:10px; color:red">BETA</sup>
-			</a>
-		</div>
-	</div-->
-
 	<div class="compact-layout container-fluid">
 
 		<div ng:class="getClassForCompactMessageContainer()" message-view-compact></div>
@@ -384,62 +375,6 @@
 		    uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/EcgrjArON8DuOEsrfdUTQ.js';
 		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
   		})();
-
-/*
-  		function findElementWindowPosition(obj) {
-			var obj2 = obj;
-			var curtop = 0;
-			var curleft = 0;
-			if (document.getElementById || document.all) {
-			    do {
-				    curleft += obj.offsetLeft-obj.scrollLeft;
-				    curtop += obj.offsetTop-obj.scrollTop;
-				    obj = obj.offsetParent;
-				    obj2 = obj2.parentNode;
-				    while (obj2!=obj) {
-					    curleft -= obj2.scrollLeft;
-					    curtop -= obj2.scrollTop;
-					    obj2 = obj2.parentNode;
-				    }
-			  } while (obj.offsetParent)
-			  } else if (document.layers) {
-				curtop += obj.y;
-				curleft += obj.x;
-			  }
-			 return { top: curtop, left: curleft };
-		}
-*/
-/*
-  		window.onload = function () { 
-		    window.onscroll = function () { 
-
-			    var doc = document.body, 
-			    scrollPosition = doc.scrollTop;
-			    //pageSize = (doc.scrollHeight - doc.clientHeight),
-			    //percentageScrolled = Math.floor((scrollPosition / pageSize) * 100); 
-
-			    var obj = document.getElementById('tablespacer');
-			    if(obj.offsetParent !== null) {
-			    var pos = findElementWindowPosition(document.getElementById('tablespacer'));
-			    console.log("pos: " + pos.top);
-
-			    if(scrollPosition >= pos.top - 19) { //318
-			    	$('.month-header-table').removeClass('hidden');
-			    }else{
-			    	if(!$('.month-header-table').hasClass('hidden')) {
-			    		$('.month-header-table').addClass('hidden');
-			    	}
-			    }
-
-				}else{
-					if(!$('.month-header-table').hasClass('hidden')) {
-			    		$('.month-header-table').addClass('hidden');
-			    	}
-				}
-
-		    }; 
-		};
-	*/
 
 	</script>
 </body>

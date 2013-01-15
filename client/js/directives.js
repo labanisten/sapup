@@ -1,10 +1,5 @@
 var directiveModule = angular.module('directiveModule', ['utilsModule']);
 
-//TODO: Kan me fjerna denna?
-function build(scope) {
-	console.log("build!; " + scope.systemlines.length);
-}
-
 directiveModule.directive('toolbar', function($compile, Utils){
 	return {
 			restrict: 'A',
@@ -80,7 +75,6 @@ directiveModule.directive('messageViewCompact', function($compile, Utils){
 		    }
 	};
 });
-
 
 
 directiveModule.directive('monthSelectionbarCompact', function($compile, Utils){
@@ -330,44 +324,6 @@ directiveModule.directive('CompressedListElementView', function($compile, Utils)
 	};
 });
 
-/*
-directiveModule.directive('fixedMonthHeader', function($compile, Utils){
-	return {
-			restrict: 'A',
-			link: function(scope, element, attrs) {
-
-				var template = 	'<table ng:class="getClassFixedMonthHeader()">' +
-
-									'<thead>'+
-
-
-											'<tr class="daynames">'+
-												'<th rowspan="3" style="width:{{systemTableStartColumnSize}}px"></th>'+
-												'<th ng-repeat="dayName in dayNamesInMonth('+scope.selectedMonth+')">{{dayName}}</th>'+
-											'</tr>'+
-											
-											'<tr class="shortdaynames">'+
-												'<th rowspan="3" style="width:{{systemTableStartColumnSize}}px"></th>'+
-												'<th class="fixedheader" ng-repeat="shortDayName in shortDayNamesInMonth('+scope.selectedMonth+')">{{shortDayName}}</th>'+
-											'</tr>'+
-											
-											'<tr>'+
-												'<th ng:class="getClassForDayColumn(day)" ng-repeat="day in monthDayList['+scope.selectedMonth+']">{{day}}</th>'+
-											'</tr>'+
-											
-
-
-									'</thead>'+
-
-								'</table>';
-
-					element.html(template);
-					$compile(element.contents())(scope);
-
-		   }		
-	};
-});
-*/
 
 directiveModule.directive('systemTable', function($compile, Utils){
 	return {
@@ -770,36 +726,4 @@ directiveModule.directive('endDatePicker', function (Utils) {
 			});
 		}
 	};
-});						
-
-
-directiveModule.directive('ngEnterkey', function () {
-	return {
-				link: function postLink(scope, element, attrs) {
-					element.keydown(function(event) {
-						if(event.which == 13){
-						
-							var searchStr = 'ng-enterkey="';
-							var ohtml = element[0].outerHTML;
-							
-							var matchPos = ohtml.indexOf(searchStr);
-							
-							if(matchPos > 0){
-								matchPos = matchPos + searchStr.length;	
-								var matchPosEnd = ohtml.indexOf('(', matchPos);
-								
-								var incommingFunction = ohtml.substr(matchPos, matchPosEnd - matchPos);	
-								incommingFunction = 'scope.' + incommingFunction;
-								incommingFunction = new Function("scope", "return " + incommingFunction + "();");
-								
-								//Run
-								incommingFunction(scope);
-
-							}
-							
-						}
-					});
-				}
-	};
 });
-	
