@@ -4873,7 +4873,7 @@ a.badge:hover {
   
   }
   body {
-    padding-top: 55px;
+    padding-top: 50px;
   }
   .ng-cloak {
     display: none;
@@ -4969,6 +4969,10 @@ a.badge:hover {
   }
   .alert-container-body {
     background-color: #eeeeee;
+  }
+  .alert-area {
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
   .login-form {
     margin-left: 65px;
