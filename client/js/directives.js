@@ -34,9 +34,11 @@ directiveModule.directive('toolbar', function($compile, Utils){
 						}
 					}
 
-					template = '<div class="row-fluid" ng:class="getClassForToolbar()">'+
-									'<div class="span12">'+
-										'<span ng-repeat="tag in filterTags" ng:class="getClassForTagBadge(tag)" ng:click="tagBadgeClick(tag)">{{tag.text}}</span>'+
+					scope.filterTags.sort(function(a,b){return (a.text < b.text) ? -1 : 1;});
+
+					template = '<div ng:class="getClassForToolbar()">'+
+									'<div>'+
+										'<span class="span" ng-repeat="tag in filterTags" ng:class="getClassForTagBadge(tag)" ng:click="tagBadgeClick(tag)">{{tag.text}}</span>'+
 									'</div>'+
 								'</div>';
 
@@ -610,28 +612,18 @@ directiveModule.directive('alerDatePicker', function (Utils) {
 				dateFormat: "dd.mm.yy",
 				minDate: (new Date()),
 				onClose: function (dateText, inst) {
-
 					scope.addAlertLine.expdate = dateText;
-					
 					var dbdate = Utils.viewDateToDBDate(dateText);
 					var currentDate = Utils.getDateString(new Date());
 					var daysLeft = dbdate - currentDate;
-					
-					var dayText;
-					if(daysLeft > 1){
-						dayText = "in " + daysLeft + " " + "days";
-					}else{
-						dayText = "today";
-					}
-					
+					var dayText = "in " + daysLeft + " " + "days";
 					$("#expireMessage").text("Message will expire " + dayText);
-					
 					scope.$apply();
-				}	
+				}
 			});
 		}
 	};
-});	
+});
 
 		
 directiveModule.directive('startDatePicker', function (Utils) {
