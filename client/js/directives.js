@@ -131,7 +131,6 @@ directiveModule.directive('systemgroupsViewCompact', function($compile, Utils){
 
 					element.html(template);
 					$compile(element.contents())(scope);
-					dataStatus.systemgroups = false;
 				}
 			}
 	};

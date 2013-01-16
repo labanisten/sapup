@@ -1,27 +1,8 @@
 var config =  require('./config.js'),
 	passport = require('passport'),
     GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
-    generic_pool = require('generic-pool'),
-    mongodb = require('mongodb');
-
-var pool = generic_pool.Pool({
-	name: 'mongodb',
-	max: 20,
-	create: function(callback) {
-		var dbServer = new mongodb.Server(config.MONGODB_URL, config.MONGODB_PORT, {safe:true});
-		var db = new mongodb.Db(config.MONGODB_DB, dbServer, {safe:true});
-		
-		db.open(function(err, db) {
-			callback(err, db);
-		});
-
-	},
-	destroy: function(db) {
-		db.close();
-	}
-});
-
-
+    pool =  require('./database');
+    
 var user = {
 	findByID: function(id, callback) {
 		var user;
@@ -96,4 +77,4 @@ passport.use(new GoogleStrategy({
  }))
 
 
-module.exports = passport; 
+exports = passport; 

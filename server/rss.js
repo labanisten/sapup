@@ -1,3 +1,5 @@
+var pool =  require('./database');
+
 function hashCode(str){
     var hash = 0, i, char;
     if (str.length === 0) return hash;

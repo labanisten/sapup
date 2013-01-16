@@ -1,5 +1,6 @@
 var express = require('express'),
     config =  require('./server/config.js'),
+    database =  require('./server/database.js'),
     http = require('http'),
     util = require('util'),
     passport = require('passport'),
