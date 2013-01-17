@@ -1,5 +1,5 @@
 //Constants
-var config = {	
+var config = {
 				MONGODB_URL: process.env.MONGODB_URL || '127.0.0.1',
 				MONGODB_PORT: parseInt(process.env.MONGODB_PORT) || 27017,
 				MONGODB_DB: process.env.MONGODB_DB || 'test',
@@ -12,4 +12,4 @@ var config = {
 			};
 
 
-module.exports = config; 
+module.exports = config;

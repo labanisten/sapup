@@ -9,19 +9,19 @@ var user = {
 		pool.acquire(function(err, db) {
 			if(err) {
 				callback(new Error('Error accessing DB'));
-			};
-			var resource = 'users';			
+			}
+			var resource = 'users';
 			db.collection(resource, function(err, collection) {
 				if (err) {
 					callback(new Error('Error accessing collection'));
-				};
+				}
 				collection.findOne({"id":id}, function(err, user) {
 					if (err) {
 						return null;
-					};
+					}
 					callback(null, user);
 					pool.release(db);
-				}); 
+				});
 			});
 		});
 	}
@@ -64,17 +64,17 @@ passport.use(new GoogleStrategy({
       // represent the logged-in user.  In a typical application, you would want
       // to associate the Google account with a user record in your database,
       // and return that user instead.
- 		user.findByID(profile._json.email, function(err, user) {
- 			// Match ID (email address) from Google with our local user database
+		user.findByID(profile._json.email, function(err, user) {
+			// Match ID (email address) from Google with our local user database
 			if (err) { return done(err); }
 			if (!user) { return done(null, false, { message: 'Unknown user ' + profile._json.email}); }
 			// If we found the user in our DB, return the user object from our DB - it will be available as 'req.user' throughout the session
 			// We could augment the user object with additional data from the Google profile, but for now we'll just maintain the user data we
 			// need at the client in our own database
 			return done(null, user);
-    	});
- 	})
- }))
+		});
+	});
+ }));
 
 
-exports = passport; 
+exports = passport;
