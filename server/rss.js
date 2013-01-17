@@ -38,7 +38,7 @@ var rssServices = {
 						title:  items[i].title,
 						description: items[i].comment,
 						url: 'http://systemavailability.azurewebsites.net/', // link to the item
-						guid: Math.abs(hashCode(items[i].title + items[i].comment)), 
+						guid: Math.abs(hashCode(items[i].title + items[i].comment)),
 						author: 'System availability messages',
 						date: items[i].timestamp // any format that js Date can parse.
 						};
@@ -49,7 +49,7 @@ var rssServices = {
 					res.send(feed.xml());
 				});
 			});
-		});			
+		});
 	}
 };
 
