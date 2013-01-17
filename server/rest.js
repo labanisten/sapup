@@ -14,7 +14,7 @@ function getResponse(error, result) {
 
 
 var restServices = {
-	get: function(req, res){	
+	get: function(req, res){
 			pool.acquire(function(err, db) {
 				if(err) {return res.end("At connection, " + err);}
 				var resource = req.path.split("/")[2];
@@ -25,7 +25,7 @@ var restServices = {
 					});
 				});
 			});
-		 },
+		},
 	post:  function(req, res){
 			pool.acquire(function(err, db) {
 				if (err) {return res.end("At connection, " + err);}
@@ -35,10 +35,10 @@ var restServices = {
 						res.send(items);
 						pool.release(db);
 					});
-				});	
+				});
 			});
-		 },
-	put:  function(req, res){	
+			},
+	put:  function(req, res){
 			pool.acquire(function(err, db) {
 				if (err) {return res.end("At connection, " + err);}
 				var resource = req.path.split("/")[2];
@@ -54,7 +54,7 @@ var restServices = {
 					});
 				});
 			});
-		 },
+		},
 	delete:  function(req, res){
 			pool.acquire(function(err, db) {
 				if (err) {return res.end("At connection, " + err);}
@@ -70,7 +70,7 @@ var restServices = {
 				});
 
 			});
-		 }
-}
+		}
+};
 
 exports.restServices = restServices;

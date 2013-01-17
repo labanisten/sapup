@@ -1,4 +1,4 @@
-// Establish database connection 
+// Establish database connection
 var	config =  require('./config.js'),
 	mongodb = require('mongodb'),
 	generic_pool = require('generic-pool');
@@ -24,7 +24,5 @@ var pool = generic_pool.Pool({
 		db.close();
 	}
 });
-
-
 
 module.exports = pool;
