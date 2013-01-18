@@ -35,10 +35,14 @@ directiveModule.directive('toolbar', function($compile, Utils){
 					}
 
 					scope.filterTags.sort(function(a,b){return (a.text < b.text) ? -1 : 1;});
-
+					scope.systemgroups;
 					template = '<div ng:class="getClassForToolbar()">'+
+
 									'<div>'+
-										'<span class="span" ng-repeat="tag in filterTags" ng:class="getClassForTagBadge(tag)" ng:click="tagBadgeClick(tag)">{{tag.text}}</span>'+
+										'<span class="span" ng-repeat="grouptag in systemgroups" ng:class="getClassForGroupTagBadge(grouptag.name)" ng:click="groupBadgeClick(grouptag.name)">{{grouptag.name}}</span>'+
+									'</div>'+
+									'<div>'+
+										'<span class="span" ng-repeat="tag in filterTags" ng:class="getClassForTagBadge(tag.text)" ng:click="tagBadgeClick(tag.text)">{{tag.text}}</span>'+
 									'</div>'+
 								'</div>';
 
