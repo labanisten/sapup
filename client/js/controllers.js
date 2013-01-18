@@ -114,6 +114,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	$scope.displayCompactMessageView = false;
 	$scope.systemlinesActive = [];
 	$scope.filterTags = [];
+	$scope.activeGroupTags = [];
 	$scope.activeTags = [];
 	$scope.currentCompactpage = $scope.page.main;
 	$scope.systemTableStartColumnSize;
@@ -187,45 +188,141 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	$scope.getClassForTableRowSystemGroup = function(element) {
 		var classString = "";
 
-		if($scope.activeTags.length > 0) {
+		if($scope.activeTags.length > 0 || $scope.activeGroupTags.length) {
 			classString = 'hidden';
 		}
 
 		return classString;
 	};
 
-	$scope.getClassForSystemTableRow = function(systemnamesIndex) {
-		var classString = '';
+	/*
+	function searchForActiveGroupTags(systemnamesIndex) {
+		var result = false;
+		var i;
 
-		if($scope.activeTags.length > 0) { 
+
+		for(i = 0; i < $scope.activeGroupTags.length; i++){
+
+			if($scope.activeTags[i] === $scope.systemnames[systemnamesIndex].systemgroup) {
+				result = true;
+			}
+		}
+
+		return result;
+	}
+	*/
+
+	function searchForActiveTagsForStatus(systemnamesIndex) {
+		var result = false;
+		var tags;
+
+		if($scope.activeGroupTags.length > 0) {
+
+			
+			for(i = 0; i < $scope.activeGroupTags.length; i++){
+
+				if($scope.activeGroupTags[i] !== $scope.systemnames[systemnamesIndex].systemgroup) {
+					//tag for systemgroup not selected, hide 
+					result = true;
+					break
+				}
+			}	
+
+
+			if($scope.activeTags.length > 0) {
+
+				if($scope.systemnames[systemnamesIndex].tags !== undefined) {
+					var tags = $scope.systemnames[systemnamesIndex].tags.split(';');
+
+					var i;
+					for(i = 0; i < $scope.activeTags.length; i++){
+						var index = tags.indexOf($scope.activeTags[i]); 
+
+						//tag for row not selected, hide
+						if(index < 0) {
+							result = true;
+							break;
+						}else{ // tag is selected, test for selected group also
+							for(i = 0; i < $scope.activeGroupTags.length; i++){
+								if($scope.activeGroupTags[i] !== $scope.systemnames[systemnamesIndex].systemgroup) {
+									//tag for systemgroup not selected, hide 
+									result = true;
+									break
+								}
+							}
+						}
+					}
+				}else{
+					result = true;
+				}
+			}
+
+
+
+
+		}else{
 
 			if($scope.systemnames[systemnamesIndex].tags !== undefined) {
-
 				var tags = $scope.systemnames[systemnamesIndex].tags.split(';');
 
 				var i;
 				for(i = 0; i < $scope.activeTags.length; i++){
-					
 					var index = tags.indexOf($scope.activeTags[i]); 
 
+					//tag for row not selected, hide
 					if(index < 0) {
-						classString = 'hidden';
+						result = true;
 						break;
 					}
 				}
 			}else{
-				//row has no tags
+				result = true;
+			}
+
+		}
+
+		return result;
+	}
+
+	function isNotSelectedInTag(systemnamesIndex) {
+		var hide = false;
+
+		if(searchForActiveTagsForStatus(systemnamesIndex)){
+			hide = true;
+		}
+
+		//if(searchForActiveGroupTags(systemnamesIndex)){
+			//hide = true;
+		//}
+
+		return hide;
+	}
+
+	$scope.getClassForSystemTableRow = function(systemnamesIndex) {
+		var classString = '';
+
+		if($scope.activeTags.length > 0 || $scope.activeGroupTags.length > 0) {
+			if(isNotSelectedInTag(systemnamesIndex)) {
 				classString = 'hidden';
 			}
 		}
+		return classString;
+	};
 
+	$scope.getClassForGroupTagBadge = function(tag) {
+		var classString = "calendar-filtertag badge";
+
+		var index = $scope.activeGroupTags.indexOf(tag); 
+		if(index > -1) {
+			classString += " badge-selected";
+		}
 		return classString;
 	};
 
 	$scope.getClassForTagBadge = function(tag) {
 		var classString = "calendar-filtertag badge";
 
-		var index = $scope.activeTags.indexOf(tag.text); 
+		var index = $scope.activeTags.indexOf(tag); 
 		if(index > -1) {
 			classString += " badge-selected";
 		}
@@ -537,11 +634,21 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		$scope.systemCompactViewList.push(elm);
 	}
 
+	$scope.groupBadgeClick = function(tag) {
+		var i;	
+		var index = $scope.activeGroupTags.indexOf(tag); 
+		if(index < 0) {
+			$scope.activeGroupTags.push(tag);
+		}else{
+			$scope.activeGroupTags.splice(index, 1);
+		}
+	};
+
 	$scope.tagBadgeClick = function(tag) {
 		var i;	
-		var index = $scope.activeTags.indexOf(tag.text); 
+		var index = $scope.activeTags.indexOf(tag); 
 		if(index < 0) {
-			$scope.activeTags.push(tag.text);
+			$scope.activeTags.push(tag);
 		}else{
 			$scope.activeTags.splice(index, 1);
 		}
