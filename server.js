@@ -1,5 +1,6 @@
 var express = require('express'),
     config =  require('./server/config.js'),
+    database =  require('./server/database.js'),
     http = require('http'),
     util = require('util'),
     passport = require('passport'),
@@ -10,7 +11,7 @@ var express = require('express'),
 	app = express(),
 	noauth = false;
 
-// Turn of authentication? 
+// Turn of authentication?
 noauth = process.argv[2] === "noauth";
 
 // configure Express
@@ -46,20 +47,17 @@ app.get('/admin/*', function(req, res, next) {
 	console.log("Session: " + JSON.stringify(req.session));
 
 	if (!req.user) {
-		res.sendfile(__dirname + '/client/public/login.html'); 
+		res.sendfile(__dirname + '/client/public/login.html');
 	} else {
-		return next(); 
-	};
+		return next();
+	}
 });
 
 app.get('/userdata', function(req, res, next) {
-	// req.user = {id:"localuser", displayName:"localuser", isAdmin:true};	
-	res.send(req.user); 
+	res.send(req.user);
 });
 
-
-
-//Set REST routes 
+//Set REST routes
 app.get('/resources/systemgroups', function(req, res) {rest.restServices.get(req, res);});
 app.get('/resources/systems', function(req, res) {rest.restServices.get(req, res);});
 app.get('/resources/systemnames', function(req, res) {rest.restServices.get(req, res);});
@@ -100,32 +98,32 @@ app.delete('/resources/users/:id', function(req, res) {rest.restServices.delete(
 //   request.  If authentication fails, the user will be redirected back to the
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
-if (noauth) {	
+if (noauth) {
 
 	passport.serializeUser(function(user, done) {
-	  done(null, user.id);
+		done(null, user.id);
 	});
 
 	passport.deserializeUser(function(id, done) {
-		var user = {id:"localuser", displayName:"localuser", isAdmin:true};	 
-	    done(null, user);
+		var user = {id:"localuser", displayName:"localuser", isAdmin:true};
+		done(null, user);
 	});
 
 
 	passport.use(new LocalStrategy(
 		function(username, password, done) {
-	      // Find the user by username.  If there is no user with the given
-	      // username, or the password is not correct, set the user to `false` to
-	      // indicate failure and set a flash message.  Otherwise, return the
-	      // authenticated `user`.
-		  	var user = {id:"localuser", displayName:"localuser", isAdmin:true};	  			
+			// Find the user by username.  If there is no user with the given
+			// username, or the password is not correct, set the user to `false` to
+			// indicate failure and set a flash message.  Otherwise, return the
+			// authenticated `user`.
+			var user = {id:"localuser", displayName:"localuser", isAdmin:true};
 			done(null, user);
 		}
-	));	
+	));
 
 	app.get('/auth/google', function(req, res, next) {
 	passport.authenticate('local', function(err, user, info) {
-		var user = {id:"localuser", displayName:"localuser", isAdmin:true};	  			
+		user = {id:"localuser", displayName:"localuser", isAdmin:true};
 		req.logIn(user, function(err) {
 		if (err) { return next(err); }
 			return res.redirect('/');
@@ -145,21 +143,21 @@ else {
 
 	app.get('/auth/google',
 		passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
-		                                        'https://www.googleapis.com/auth/userinfo.email'] }),
+													'https://www.googleapis.com/auth/userinfo.email'] }),
 		function(req, res){
 		// The request will be redirected to Google for authentication, so this
 		// function will not be called.
 		});
 
-	app.get('/auth/google/callback', 
-	  passport.authenticate('google', { failureRedirect: '/loginerror.html' }),
-	  function(req, res) {
-	    res.redirect('/');
-	  });
-	
+	app.get('/auth/google/callback',
+		passport.authenticate('google', { failureRedirect: '/loginerror.html' }),
+		function(req, res) {
+		res.redirect('/');
+		});
+
 	app.get('/logout', function(req, res){
 		req.logout();
-		res.redirect('/');	
+		res.redirect('/');
 	});
 }
 
@@ -168,5 +166,5 @@ app.listen(port, function() {
 	console.log("Listening on " + port);
 	console.log("MongoDB port: " + config.MONGODB_PORT);
 	console.log("MongoDB URL: " + config.MONGODB_URL);
-	console.log("MongoDB database: " + config.MONGODB_DB);      
+	console.log("MongoDB database: " + config.MONGODB_DB);
 });

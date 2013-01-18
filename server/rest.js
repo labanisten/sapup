@@ -1,24 +1,6 @@
-var generic_pool = require('generic-pool'),
-	mongodb = require('mongodb'),
-	config =  require('./config.js'),
-	BSON = mongodb.BSONPure;
-
-var pool = generic_pool.Pool({
-	name: 'mongodb',
-	max: 20,
-	create: function(callback) {
-		var dbServer = new mongodb.Server(config.MONGODB_URL, config.MONGODB_PORT, {safe:true});
-		var db = new mongodb.Db(config.MONGODB_DB, dbServer, {safe:true});
-		
-		db.open(function(err, db) {
-			callback(err, db);
-		});
-
-	},
-	destroy: function(db) {
-		db.close();
-	}
-});
+var config =  require('./config.js'),
+ pool =  require('./database');
+	
 
 function getResponse(error, result) {
 	var resStr;
@@ -32,7 +14,7 @@ function getResponse(error, result) {
 
 
 var restServices = {
-	get: function(req, res){		
+	get: function(req, res){
 			pool.acquire(function(err, db) {
 				if(err) {return res.end("At connection, " + err);}
 				var resource = req.path.split("/")[2];
@@ -43,7 +25,7 @@ var restServices = {
 					});
 				});
 			});
-		 },
+		},
 	post:  function(req, res){
 			pool.acquire(function(err, db) {
 				if (err) {return res.end("At connection, " + err);}
@@ -53,10 +35,10 @@ var restServices = {
 						res.send(items);
 						pool.release(db);
 					});
-				});	
+				});
 			});
-		 },
-	put:  function(req, res){	
+			},
+	put:  function(req, res){
 			pool.acquire(function(err, db) {
 				if (err) {return res.end("At connection, " + err);}
 				var resource = req.path.split("/")[2];
@@ -72,7 +54,7 @@ var restServices = {
 					});
 				});
 			});
-		 },
+		},
 	delete:  function(req, res){
 			pool.acquire(function(err, db) {
 				if (err) {return res.end("At connection, " + err);}
@@ -88,7 +70,7 @@ var restServices = {
 				});
 
 			});
-		 }
-}
+		}
+};
 
 exports.restServices = restServices;
