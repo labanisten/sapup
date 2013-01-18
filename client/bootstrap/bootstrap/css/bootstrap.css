@@ -4859,6 +4859,8 @@ a.badge:hover {
 }
 @media (min-width: 768px) {
   {
+    /* The 'hidden' state to transition from & to */
+  
     /*
   	@media (max-width: 720px) {
   		.navbtn-edit .new-message-btn-txt {
@@ -4888,6 +4890,17 @@ a.badge:hover {
   }
   .badge-selected {
     background-color: #CD007A;
+    -webkit-transform: rotatex(360deg);
+  }
+  span.tag {
+    transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+  }
+  span .ui-animate .tag {
+    opacity: 0;
+    background-color: #999999;
   }
   .compact-layout {
     display: none;

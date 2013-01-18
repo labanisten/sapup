@@ -1,5 +1,6 @@
 var directiveModule = angular.module('directiveModule', ['utilsModule']);
 
+
 directiveModule.directive('toolbar', function($compile, Utils){
 	return {
 			restrict: 'A',
@@ -39,10 +40,10 @@ directiveModule.directive('toolbar', function($compile, Utils){
 					template = '<div ng:class="getClassForToolbar()">'+
 
 									'<div>'+
-										'<span class="span" ng-repeat="grouptag in systemgroups" ng:class="getClassForGroupTagBadge(grouptag.name)" ng:click="groupBadgeClick(grouptag.name)">{{grouptag.name}}</span>'+
+										'<span ui-animate class="tag span" ng-repeat="grouptag in systemgroups" ng:class="getClassForGroupTagBadge(grouptag.name)" ng:click="groupBadgeClick(grouptag.name)">{{grouptag.name}}</span>'+
 									'</div>'+
 									'<div>'+
-										'<span class="span" ng-repeat="tag in filterTags" ng:class="getClassForTagBadge(tag.text)" ng:click="tagBadgeClick(tag.text)">{{tag.text}}</span>'+
+										'<span ui-animate class="tag span" ng-repeat="tag in filterTags" ng:class="getClassForTagBadge(tag.text)" ng:click="tagBadgeClick(tag.text)">{{tag.text}}</span>'+
 									'</div>'+
 								'</div>';
 
