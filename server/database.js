@@ -13,10 +13,10 @@ var pool = generic_pool.Pool({
 		
 		db.open(function(err, db) {
 			if (!err) {
-				db.authenticate(config.MONGODB_ADMIN_USER, config.MONGODB_ADMIN_PASSWORD, function(err, result) {
-					if (err) console.log("Unable to authneticate for MongoDB " + err);
+				// db.authenticate(config.MONGODB_ADMIN_USER, config.MONGODB_ADMIN_PASSWORD, function(err, result) {
+				// 	if (err) console.log("Unable to authneticate for MongoDB " + err);
 					callback(err, db);
-				});
+				// });
 			}
 		});
 	},
