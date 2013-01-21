@@ -36,7 +36,14 @@ directiveModule.directive('toolbar', function($compile, Utils){
 					}
 
 					scope.filterTags.sort(function(a,b){return (a.text < b.text) ? -1 : 1;});
-					scope.systemgroups;
+/*
+					template = '<div ng-class="messageAreaClass()" id="accordionContainer" class="alert-area">'+
+								'<div class="alert-accordion-group">'+
+								'<div  class="accordion-toggle alert-container-header alert-accordion-heading" data-toggle="collapse" data-parent="#accordionContainer" href="#collapseTwo">Filters</div>'+
+								'<div id="collapseTwo" class="accordion-body in collapse" style="height: auto; ">'+
+									'<div class="accordion-inner">';
+*/
+					//scope.systemgroups;
 					template = '<div class="tag-bar">'+
 									'<div class="tag-row">'+
 										'<span ui-animate class="tag span" ng-repeat="grouptag in systemgroups" ng:class="getClassForGroupTagBadge(grouptag.name)" ng:click="groupBadgeClick(grouptag.name)">{{grouptag.name}}</span>'+
@@ -45,6 +52,9 @@ directiveModule.directive('toolbar', function($compile, Utils){
 										'<span ui-animate class="tag span" ng-repeat="tag in filterTags" ng:class="getClassForTagBadge(tag.text)" ng:click="tagBadgeClick(tag.text)">{{tag.text}}</span>'+
 									'</div>'+
 								'</div>';
+/*
+					template += '</div></div></div></div></div>';
+*/
 
 					element.html(template);				
 					$compile(element.contents())(scope);
