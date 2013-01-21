@@ -187,31 +187,13 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 	$scope.getClassForTableRowSystemGroup = function(element) {
 		var classString = "";
-
 		if($scope.activeTags.length > 0 || $scope.activeGroupTags.length) {
 			classString = 'hidden';
 		}
-
 		return classString;
 	};
 
-	/*
-	function searchForActiveGroupTags(systemnamesIndex) {
-		var result = false;
-		var i;
-
-
-		for(i = 0; i < $scope.activeGroupTags.length; i++){
-
-			if($scope.activeTags[i] === $scope.systemnames[systemnamesIndex].systemgroup) {
-				result = true;
-			}
-		}
-
-		return result;
-	}
-	*/
-
+	//TODO: refactor
 	function searchForActiveTagsForStatus(systemnamesIndex) {
 		var result = false;
 		var tags;
@@ -224,7 +206,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 				if($scope.activeGroupTags[i] !== $scope.systemnames[systemnamesIndex].systemgroup) {
 					//tag for systemgroup not selected, hide 
 					result = true;
-					break
 				}
 			}	
 
@@ -257,9 +238,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 				}
 			}
 
-
-
-
 		}else{
 
 			if($scope.systemnames[systemnamesIndex].tags !== undefined) {
@@ -284,25 +262,11 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		return result;
 	}
 
-	function isNotSelectedInTag(systemnamesIndex) {
-		var hide = false;
-
-		if(searchForActiveTagsForStatus(systemnamesIndex)){
-			hide = true;
-		}
-
-		//if(searchForActiveGroupTags(systemnamesIndex)){
-			//hide = true;
-		//}
-
-		return hide;
-	}
-
 	$scope.getClassForSystemTableRow = function(systemnamesIndex) {
 		var classString = '';
 
 		if($scope.activeTags.length > 0 || $scope.activeGroupTags.length > 0) {
-			if(isNotSelectedInTag(systemnamesIndex)) {
+			if(searchForActiveTagsForStatus(systemnamesIndex)) {
 				classString = 'hidden';
 			}
 		}
@@ -314,7 +278,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 		var index = $scope.activeGroupTags.indexOf(tag); 
 		if(index > -1) {
-			classString += " badge-selected";
+			classString += " label-selected";
 		}
 		return classString;
 	};
