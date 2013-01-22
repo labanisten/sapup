@@ -626,6 +626,146 @@ myModule.factory('userListService', function(db) {
 	return service;
 
 });
+myModule.factory('backupListService', function($http, db) {
+	
+	var service,
+		items = [],
+		itemToUpdate = {},
+		promise;
+		// db = db.Backup;
+
+	var	isFirstItem = function(item) {
+			if (item.order == 1) {
+				return true;
+			};	
+		},
+
+	    isLastItem = function(item) {
+	    	return item.order == getHighestOrder();
+		},
+
+		getHighestOrder = function() {
+			var highestOrder = 0;  
+			
+			for (var i = 0; i < items.length; i++) {
+				if (items[i].order > highestOrder) {
+					highestOrder = items[i].order;
+				};
+			};
+			return highestOrder;
+		},
+
+		updateItemInDB = function(item) {
+
+			var updateItem = new db(item); 
+			updateItem.update(updateItem._id).then(function(response) {
+					if (response.data) {
+					} else {
+						//Unable to update
+					};
+			});
+			itemToUpdate = {};
+		},
+
+		updateOrderForItemsAfterDeletion = function(fromItem) {
+			for (var i = 0; i < items.length; i++) {
+				if (items[i].order > fromItem.order) {
+					items[i].order--; 
+					updateItemInDB(items[i]);
+				};
+			};
+		};
+
+
+
+	service = {
+		
+
+		getItems: function() {
+			// if (items.length > 0) {
+			// 	return items;
+			// } else if (!promise) {
+			// 	promise = db.get();
+			// 	promise.then(function(data) {
+			// 		items = data;
+			// 		return items;
+			// 	});
+			// };
+
+			var backupSets = [];
+			$http({method: 'GET', url: 'systemavailability.blob.core.windows.net/backup/?comp=list'}).
+			  success(function(data, status, headers, config) {
+				$(data).find('Name').each(function(){
+					var obj = {}; 
+					obj.name = $(this).attr('name');
+					backupSets.push(obj);
+				});
+				return backupSets;
+			  }).
+			  error(function(data, status, headers, config) {
+			    return [];
+			  });
+
+		},
+
+		getItemToUpdate: function() {
+			return itemToUpdate;
+		},
+
+		setSelectedItemByID: function(id) {
+			var i; 
+			for (i = 0; items.length; i++) {
+				if (items[i]._id == id) {
+					itemToUpdate = items[i];
+					break;
+				};
+			};		
+		},
+
+
+		deleteItem: function() {
+			db.remove(itemToUpdate._id).then(function(response) {
+					if (response.data) {
+						for (var i = 0; i < items.length; i++) {
+							if (items[i]._id == itemToUpdate._id) {
+								items.splice(i, 1);
+								updateOrderForItemsAfterDeletion(itemToUpdate);
+							};
+						};			
+					} else {
+						//Unable to delete
+					};
+			});
+		},
+
+		saveItem: function() {
+
+			itemToUpdate.order = getHighestOrder() + 1;
+
+			var newItem = new db(itemToUpdate);
+			newItem.create().then(function(createdItem) {
+				items.push(createdItem);
+			});
+
+			itemToUpdate = {};
+		},
+
+		updateItem: function() {
+
+			var system = new db(itemToUpdate); 
+			system.update(itemToUpdate._id).then(function(response) {
+					if (response.data) {
+					} else {
+						//Unable to update
+					}
+			});
+			itemToUpdate = {};
+		}
+	};	
+
+	return service;
+
+});
 
 
 myModule.controller("systemModalCtrl", function($scope, systemListService, systemgroupListService) {
@@ -663,4 +803,8 @@ myModule.controller("userListCtrl", function($scope, userListService) {
 	
 myModule.controller("userModalCtrl", function($scope, userListService) {
 	$scope.list = userListService;
+});
+
+myModule.controller("backupListCtrl", function($scope, backupListService) {
+	$scope.list = backupListService;
 });

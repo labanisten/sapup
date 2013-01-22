@@ -53,9 +53,14 @@ app.get('/admin/*', function(req, res, next) {
 	}
 });
 
+// Userdata - only contains data for logged in users
 app.get('/userdata', function(req, res, next) {
 	res.send(req.user);
 });
+
+// RSS route
+app.get('/messages.rss', function(req, res) {rss.rssServices.get(req, res);});
+
 
 //Set REST routes
 app.get('/resources/systemgroups', function(req, res) {rest.restServices.get(req, res);});
@@ -65,7 +70,6 @@ app.get('/resources/alerttypes', function(req, res) {rest.restServices.get(req, 
 app.get('/resources/systemstatuses', function(req, res) {rest.restServices.get(req, res);});
 app.get('/resources/alerts', function(req, res) {rest.restServices.get(req, res);});
 app.get('/resources/users', function(req, res) {rest.restServices.get(req, res);});
-app.get('/resources/messages.rss', function(req, res) {rest.restServices.get(req, res);});
 
 app.post('/resources/systemgroups', function(req, res) {rest.restServices.post(req, res);});
 app.post('/resources/systems', function(req, res) {rest.restServices.post(req, res);});
