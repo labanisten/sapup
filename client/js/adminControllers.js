@@ -805,6 +805,6 @@ myModule.controller("userModalCtrl", function($scope, userListService) {
 	$scope.list = userListService;
 });
 
-myModule.controller("backupListCtrl", function($scope, backupListService) {
-	$scope.list = backupListService;
-});
+// myModule.controller("backupListCtrl", function($scope, backupListService) {
+// 	$scope.list = backupListService;
+// });
