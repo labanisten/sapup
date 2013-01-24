@@ -121,7 +121,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 	$scope.messageAreaClass = function() {
 		if ($scope.alertlines.length > 0) {
-			return "accordion span12";
+			return "FV";
 		} else {
 			return "invisible hide";
 		};
@@ -274,22 +274,45 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	};
 
 	$scope.getClassForGroupTagBadge = function(tag) {
-		var classString = "calendar-filtertag badge";
-
-		var index = $scope.activeGroupTags.indexOf(tag); 
+		///var classString = "calendar-filtertag badge";
+		var classString = "calendar-filtertag";
+		/*var index = $scope.activeGroupTags.indexOf(tag); 
 		if(index > -1) {
-			classString += " label-selected";
-		}
+			//classString += " label-selected";
+		}*/
 		return classString;
 	};
 
-	$scope.getClassForTagBadge = function(tag) {
-		var classString = "calendar-filtertag badge";
+	$scope.getClassForGroupTagBadgeInner = function(tag) {
+		///var classString = "calendar-filtertag badge";
+		var classString = "";
+		var index = $scope.activeGroupTags.indexOf(tag); 
+		if(index > -1) {
+			classString += " selected";
+		}
+		return classString;
+	};	
 
+	$scope.getClassForTagBadge = function(tag) {
+		//var classString = "calendar-filtertag badge";
+
+		var classString = "calendar-filtertag";
+		/*var index = $scope.activeTags.indexOf(tag); 
+		if(index > -1) {
+			classString += " selected";
+		}*/
+		return classString;
+	};
+
+	$scope.getClassForTagBadgeInner = function(tag) {
+		//var classString = "calendar-filtertag badge";
+
+		var classString = "";
 		var index = $scope.activeTags.indexOf(tag); 
 		if(index > -1) {
-			classString += " badge-selected";
+			classString += " selected";
 		}
+
 		return classString;
 	};
 

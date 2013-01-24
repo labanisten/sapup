@@ -36,24 +36,55 @@ directiveModule.directive('toolbar', function($compile, Utils){
 					}
 
 					scope.filterTags.sort(function(a,b){return (a.text < b.text) ? -1 : 1;});
-/*
-					template = '<div ng-class="messageAreaClass()" id="accordionContainer" class="alert-area">'+
+
+					template = '<div class="accordion span12" id="accordionContainer2">'+
 								'<div class="alert-accordion-group">'+
-								'<div  class="accordion-toggle alert-container-header alert-accordion-heading" data-toggle="collapse" data-parent="#accordionContainer" href="#collapseTwo">Filters</div>'+
-								'<div id="collapseTwo" class="accordion-body in collapse" style="height: auto; ">'+
+								'<div  class="accordion-toggle alert-container-header alert-accordion-heading" data-toggle="collapse" data-parent="#accordionContainer2" href="#collapseTwo">Filters</div>'+
+								'<div id="collapseTwo" class="accordion-body collapse">'+
 									'<div class="accordion-inner">';
-*/
+
 					//scope.systemgroups;
-					template = '<div class="tag-bar">'+
+
+				/*	
+					template += //'<div class="tag-bar">'+
 									'<div class="tag-row">'+
 										'<span ui-animate class="tag span" ng-repeat="grouptag in systemgroups" ng:class="getClassForGroupTagBadge(grouptag.name)" ng:click="groupBadgeClick(grouptag.name)">{{grouptag.name}}</span>'+
 									'</div>'+
+
 									'<div class="tag-row">'+
 										'<span ui-animate class="tag span" ng-repeat="tag in filterTags" ng:class="getClassForTagBadge(tag.text)" ng:click="tagBadgeClick(tag.text)">{{tag.text}}</span>'+
-									'</div>'+
+									//'</div>'+
 								'</div>';
-/*
+					*/
+					template += '<h5>System Groups:</h5>'
+
+						template += '<div class="">'+
+
+										'<ul class="tags">'+
+											'<li ng-repeat="grouptag in systemgroups" ng:class="getClassForGroupTagBadge(grouptag.name)" ng:click="groupBadgeClick(grouptag.name)"> <a ng:class="getClassForGroupTagBadgeInner(grouptag.name)" href="#">{{grouptag.name}}</a></li>'+
+										'</ul>'+
+
+									'</div>';
+
+					template += '<h5>Systems:</h5>'
+
+						template += '<div class="">'+
+
+										'<ul class="tags">'+
+											'<li ng-repeat="tag in filterTags" ng:class="getClassForTagBadge(tag.text)" ng:click="tagBadgeClick(tag.text)"> <a ng:class="getClassForTagBadgeInner(tag.text)" href="#">{{tag.text}}</a></li>'+
+										'</ul>'+
+
+									'</div>';
+
+
 					template += '</div></div></div></div></div>';
+/*
+    <ul class="tags">
+      <li><a href="index.html">Interface <span>4</span></a></li>
+      <li><a href="index.html">Icon <span>8</span></a></li>
+      <li><a href="index.html">Typography <span>15</span></a></li>
+      <li><a href="index.html">Color <span>16</span></a></li>
+    </ul>
 */
 
 					element.html(template);				
