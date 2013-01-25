@@ -15,8 +15,9 @@
 	<script src="../js/jquery-1.8.2.js"></script>
 	<script src="../js/jquery-ui-1.8.21.custom.min.js"></script>
 
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script> <!-- Use CDN for better performance -->
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular-cookies.min.js"></script>
+	<script src="../js/angular.js"></script> <!-- Use CDN for better performance -->
+	<script src="../js/angular-ui.min.js"></script>
+	<script src="../js/angular-cookies.js"></script>
 
 	<script src="../js/controllers.js"></script>
 	<script src="../js/directives.js"></script>
@@ -64,7 +65,7 @@
 				<p class="navbar-text"> {{userdata.displayName}}&nbsp&nbsp </p>
 			</div>
 			<div class="pull-right">
-				<a href="http://systemavailability.azurewebsites.net/messages.rss" class="btn btn-link navbtn-edit" type="application/rss+xml">
+				<a href="/messages.rss" class="btn btn-link navbtn-edit" type="application/rss+xml">
 				  <img style="width:20px" src="../images/feed-icon-28x28.png" class="pull-left"/>
 				</a>
 			</div>
@@ -121,20 +122,7 @@
 		</div>
 
 <style>
-span.tag {
 
-	transition: all 0.5s ease;
-  -o-transition: all 0.5s ease;
-  -moz-transition: all 0.5s ease;
-  -webkit-transition: all 0.5s ease;
-*/  
-
-}
-/* The 'hidden' state to transition from & to */
-span .ui-animate .tag {
-	opacity: 0;
-	background-color: #999999;
-}
 </style>
 		<!--div class="container-fluid"-->
 			<div class="row-fluid">

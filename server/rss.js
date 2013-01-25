@@ -1,4 +1,5 @@
-var pool =  require('./database');
+var pool =  require('./database'),
+	RSS  =   require('rss');
 
 function hashCode(str){
     var hash = 0, i, char;
@@ -53,4 +54,4 @@ var rssServices = {
 	}
 };
 
-exports.rss = rssServices;
+exports.rssServices = rssServices;

@@ -283,6 +283,16 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		return classString;
 	};
 
+	
+	$scope.getClassForGroupTagButton = function(tag) {
+		var classString = "btn btn-small";
+		var index = $scope.activeGroupTags.indexOf(tag); 
+		if(index > -1) {
+			classString += " selected";
+		}
+		return classString;
+	};	
+
 	$scope.getClassForGroupTagBadgeInner = function(tag) {
 		///var classString = "calendar-filtertag badge";
 		var classString = "";

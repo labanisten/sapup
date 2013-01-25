@@ -1,5 +1,7 @@
 var config =  require('./config.js'),
- pool =  require('./database');
+	pool =  require('./database'),
+	mongodb = require('mongodb'),
+	BSON = mongodb.BSONPure;
 	
 
 function getResponse(error, result) {

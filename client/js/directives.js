@@ -56,6 +56,10 @@ directiveModule.directive('toolbar', function($compile, Utils){
 									//'</div>'+
 								'</div>';
 					*/
+
+
+
+
 					template += '<h5>System Groups:</h5>'
 
 						template += '<div class="">'+
@@ -78,14 +82,6 @@ directiveModule.directive('toolbar', function($compile, Utils){
 
 
 					template += '</div></div></div></div></div>';
-/*
-    <ul class="tags">
-      <li><a href="index.html">Interface <span>4</span></a></li>
-      <li><a href="index.html">Icon <span>8</span></a></li>
-      <li><a href="index.html">Typography <span>15</span></a></li>
-      <li><a href="index.html">Color <span>16</span></a></li>
-    </ul>
-*/
 
 					element.html(template);				
 					$compile(element.contents())(scope);

@@ -54,7 +54,10 @@
 						<li>
 							<a href="#tab-users" data-toggle="tab">Users</a>
 						</li>
-					</ul>
+<!-- 						<li>
+							<a href="#tab-backups" data-toggle="tab">Backup sets</a>
+						</li>
+ -->					</ul>
 					<div class="tab-content">
 						<!-- Systemgroups tab -->
 						<div ng-controller="systemgroupListCtrl" class="tab-pane active" id="tab-systemgroups">
@@ -265,7 +268,41 @@
 								</div>
 							</div>
 						</div>
-
+						<!-- Backup sets tan -->
+<!-- 						<div ng-controller="backupListCtrl" class="tab-pane" id="tab-backups">
+							<div class="row">
+								<div class="span12">
+									<button class="btn btn-primary" data-toggle="modal" href="#backupNow"> <i class="icon-plus-sign icon-white"></i>
+										Backup now
+									</button>
+								</div>
+							</div>
+							<div class="row">
+								<div class="span12">
+									<table class="table table-condense table-hover">
+										<thead>
+											<tr>
+												<th>Backup set</th>
+												<th>Date</th>
+												<th style="width:10%"></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="set in list.getItems()">
+												<td>{{set.id}}</td>
+												<td>{{set.date}}</td>
+												<td>
+													<a data-toggle="modal" href="#removeBackup" ng-click="list.setSelectedItemByID(user._id)">
+														<i class="icon-trash"></i>
+													</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+ -->
 					</div>
 				</div>
 			</div>
