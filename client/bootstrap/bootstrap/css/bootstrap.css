@@ -4998,7 +4998,7 @@ a.badge:hover {
   }
   .alert-accordion-heading {
     background-color: #eeeeee;
-    line-height: 30px;
+    line-height: 25px;
   }
   .alert-accordion-group {
     background-color: #eeeeee;
@@ -5009,7 +5009,7 @@ a.badge:hover {
   .alert-container-header {
     border: none;
     background-color: #eeeeee;
-    font-size: 1.6em;
+    font-size: 1.3em;
     text-align: center;
   }
   .alert-container-body {
