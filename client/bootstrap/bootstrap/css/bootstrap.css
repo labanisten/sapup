@@ -4983,6 +4983,16 @@ a.badge:hover {
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff999999', endColorstr='#ffb3b3b3', GradientType=0);
   }
+  .element-inner.information {
+    background-color: #0ca7e8;
+    background-image: -moz-linear-gradient(top, #049cdb, #17b8fb);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#049cdb), to(#17b8fb));
+    background-image: -webkit-linear-gradient(top, #049cdb, #17b8fb);
+    background-image: -o-linear-gradient(top, #049cdb, #17b8fb);
+    background-image: linear-gradient(to bottom, #049cdb, #17b8fb);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff049cdb', endColorstr='#ff17b8fb', GradientType=0);
+  }
   .element-inner.selected {
     background-color: #ede71c;
     background-image: -moz-linear-gradient(top, #fafa11, #d9ca2b);

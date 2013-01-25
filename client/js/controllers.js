@@ -149,6 +149,9 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 					case "Maybe down":
 						statusClass = 'maybedown'; 
 						break; 
+					case "Information":
+						statusClass = 'information'; 
+						break; 
 					case "Ready for test":
 						statusClass = 'readyfortest'; 
 						break; 
