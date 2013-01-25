@@ -60,25 +60,16 @@ directiveModule.directive('toolbar', function($compile, Utils){
 
 
 
-					template += '<h5>Systemlines:</h5>'
 
-						template += '<div class="">'+
+						template += '<ul class="tags">'+
+										'<li style="margin-right:5px;width:45px"><sup>Systemlines</sup></li>' + 
+										'<li ng-repeat="grouptag in systemgroups" ng:class="getClassForGroupTagBadge(grouptag.name)" ng:click="groupBadgeClick(grouptag.name)"> <a ng:class="getClassForGroupTagBadgeInner(grouptag.name)" href="#">{{grouptag.name}}</a></li>'+
+									'</ul>';
 
-										'<ul class="tags">'+
-											'<li ng-repeat="grouptag in systemgroups" ng:class="getClassForGroupTagBadge(grouptag.name)" ng:click="groupBadgeClick(grouptag.name)"> <a ng:class="getClassForGroupTagBadgeInner(grouptag.name)" href="#">{{grouptag.name}}</a></li>'+
-										'</ul>'+
-
-									'</div>';
-
-					template += '<h5>Systems:</h5>'
-
-						template += '<div class="">'+
-
-										'<ul class="tags">'+
-											'<li ng-repeat="tag in filterTags" ng:class="getClassForTagBadge(tag.text)" ng:click="tagBadgeClick(tag.text)"> <a ng:class="getClassForTagBadgeInner(tag.text)" href="#">{{tag.text}}</a></li>'+
-										'</ul>'+
-
-									'</div>';
+						template += '<ul class="tags">'+
+										'<li style="margin-right:5px;width:45px"><sup>Tags</sup></li>' + 
+										'<li ng-repeat="tag in filterTags" ng:class="getClassForTagBadge(tag.text)" ng:click="tagBadgeClick(tag.text)"> <a ng:class="getClassForTagBadgeInner(tag.text)" href="#">{{tag.text}}</a></li>'+
+									'</ul>';
 
 
 					template += '</div></div></div></div></div>';
