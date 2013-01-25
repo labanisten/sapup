@@ -192,7 +192,9 @@ directiveModule.directive('systemViewCompact', function($compile, Utils){
 							   	  	 	'<i class="icon-chevron-right"></i>'+ 
 							   	  	 	'<div>'+
 							   	  	 		'<h4>{{line.name}} - {{line.text}}</h4>'+
-							   	  	 		'<div ng:class="getClassForActiveSystemIndicator(line)"><i class="icon-exclamation-sign"></i></div>'
+							   	  	 		//TODO: exclamation mark for current day not correctly aligned
+							   	  	 		//'<div ng:class="getClassForActiveSystemIndicator(line)"><i class="icon-exclamation-sign"></i></div>'
+							   	  	 		'<div ng:class="getClassForActiveSystemIndicator(line)"></div>'
 							   	  	 	'</div>'+
 							   	  	 '</a>'+
 							   	  '</li>'+
@@ -219,7 +221,9 @@ directiveModule.directive('statusViewCompact', function($compile, Utils){
 										
 										'<div>'+
 											'<h5 class="statusheader-compact">{{line.startText}} - {{line.endText}}</h5>'+
-											'<div ng:class="getClassForActiveStatusIndicator(line)"><i class="icon-exclamation-sign"></i></div>'+
+											//TODO: exclamation mark for current day not correctly aligned
+											//'<div ng:class="getClassForActiveStatusIndicator(line)"><i class="icon-exclamation-sign"></i></div>'+
+											'<div ng:class="getClassForActiveStatusIndicator(line)"></div>'+
 										'</div>'+
 										
 										'<p class="statustext-compact">Status: {{line.status}}</p>' +
