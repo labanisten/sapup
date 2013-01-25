@@ -60,7 +60,7 @@ directiveModule.directive('toolbar', function($compile, Utils){
 
 
 
-					template += '<h5>System Groups:</h5>'
+					template += '<h5>Systemlines:</h5>'
 
 						template += '<div class="">'+
 
