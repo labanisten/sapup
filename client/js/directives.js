@@ -62,12 +62,12 @@ directiveModule.directive('toolbar', function($compile, Utils){
 
 
 						template += '<ul class="tags">'+
-										'<li style="margin-right:5px;width:45px"><sup>Systemlines</sup></li>' + 
+										// '<li style="margin-right:5px;width:45px"><sup>Systemlines</sup></li>' + 
 										'<li ng-repeat="grouptag in systemgroups" ng:class="getClassForGroupTagBadge(grouptag.name)" ng:click="groupBadgeClick(grouptag.name)"> <a ng:class="getClassForGroupTagBadgeInner(grouptag.name)" href="#">{{grouptag.name}}</a></li>'+
 									'</ul>';
 
 						template += '<ul class="tags">'+
-										'<li style="margin-right:5px;width:45px"><sup>Systemtypes</sup></li>' + 
+										// '<li style="margin-right:5px;width:45px"><sup>Systemtypes</sup></li>' + 
 										'<li ng-repeat="tag in filterTags" ng:class="getClassForTagBadge(tag.text)" ng:click="tagBadgeClick(tag.text)"> <a ng:class="getClassForTagBadgeInner(tag.text)" href="#">{{tag.text}}</a></li>'+
 									'</ul>';
 

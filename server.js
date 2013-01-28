@@ -61,6 +61,11 @@ app.get('/userdata', function(req, res, next) {
 // RSS route
 app.get('/messages.rss', function(req, res) {rss.rssServices.get(req, res);});
 
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.send("No authorization");
+}
+
 
 //Set REST routes
 app.get('/resources/systemgroups', function(req, res) {rest.restServices.get(req, res);});
@@ -75,7 +80,7 @@ app.post('/resources/systemgroups', function(req, res) {rest.restServices.post(r
 app.post('/resources/systems', function(req, res) {rest.restServices.post(req, res);});
 app.post('/resources/systemnames', function(req, res) {rest.restServices.post(req, res);});
 app.post('/resources/alerttypes', function(req, res) {rest.restServices.post(req, res);});
-app.post('/resources/systemstatuses', function(req, res) {rest.restServices.post(req, res);});
+app.post('/resources/systemstatuses', ensureAuthenticated, function(req, res) {rest.restServices.post(req, res);});
 app.post('/resources/alerts', function(req, res) {rest.restServices.post(req, res);});
 app.post('/resources/users', function(req, res) {rest.restServices.post(req, res);});
 
