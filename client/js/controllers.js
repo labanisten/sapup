@@ -196,29 +196,20 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		return classString;
 	};
 
-	function partOfActiveGrouptags(index, systemRow) {
+	function partOfActiveGrouptags(systemRow) {
 		var result = true;
 		var i;
-
-		/*
-		for(i = 0; i < $scope.activeGroupTags.length; i++){
-			if($scope.activeGroupTags[i] !== systemRow.systemgroup) {
-				//tag for systemgroup not selected, hide 
-				result = true;
-			}
-		}	
-		*/
 		for(i = 0; i < $scope.activeGroupTags.length; i++){
 			if($scope.activeGroupTags[i] === systemRow.systemgroup) {
 				result = false;
 				break;
 			}
 		}
-
 		return result;
 	}
 
-	function partOfActiveTags(systemnamesIndex, systemRow) {
+	//TODO: refactor for readability
+	function partOfActiveTagsAndGroup(systemRow) {
 		var result = false;
 
 		if(systemRow.tags !== undefined) {
@@ -236,13 +227,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 					var groupMatch = false; 
 					var k;
 					for(k = 0; k < $scope.activeGroupTags.length; k++){
-						/*
-						if($scope.activeGroupTags[k] !== systemRow.systemgroup) {
-							//tag for systemgroup not selected, hide 
-							result = true;
-							break
-						}
-						*/
 						if($scope.activeGroupTags[k] === systemRow.systemgroup) {
 							//tag for systemgroup not selected, hide 
 							groupMatch = true;
@@ -263,7 +247,21 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		return result;
 	}
 
-	//TODO: refactor
+	function partOfActiveTags(tags) {
+		var result = false;
+		var i;
+		for(i = 0; i < $scope.activeTags.length; i++){
+			var index = tags.indexOf($scope.activeTags[i]); 
+
+			//tag for row not selected, hide
+			if(index < 0) {
+				result = true;
+				break;
+			}
+		}
+		return result;
+	}
+
 	function searchForActiveTagsForStatus(systemnamesIndex) {
 		var result = false;
 		var systemRow = $scope.systemnames[systemnamesIndex];
@@ -271,31 +269,20 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 		if($scope.activeGroupTags.length > 0) {
 
-			result = partOfActiveGrouptags(systemnamesIndex, systemRow);
+			result = partOfActiveGrouptags(systemRow);
 
 			if($scope.activeTags.length > 0) {
-				result = partOfActiveTags(systemnamesIndex, systemRow);
+				result = partOfActiveTagsAndGroup(systemRow);
 			}
 
 		}else{
 
-			if($scope.systemnames[systemnamesIndex].tags !== undefined) {
-				var tags = $scope.systemnames[systemnamesIndex].tags.split(';');
-
-				var i;
-				for(i = 0; i < $scope.activeTags.length; i++){
-					var index = tags.indexOf($scope.activeTags[i]); 
-
-					//tag for row not selected, hide
-					if(index < 0) {
-						result = true;
-						break;
-					}
-				}
+			if(systemRow.tags !== undefined) {
+				var tags = systemRow.tags.split(';');
+				result = partOfActiveTags(tags);
 			}else{
 				result = true;
 			}
-
 		}
 
 		return result;
