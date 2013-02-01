@@ -509,68 +509,69 @@ directiveModule.directive('systemTable', function($compile, Utils){
 				
 
 				function buildCalendar() {
-					var template = 	'<table class="system-table" id="maintable">' +
+					var months = [0,1,2,3,4,5,6,7,8,9,10,11],
+						colSpan = 0,
+						template = 	'<table class="system-table" id="maintable">' +
 										'<thead>'+
-										
-											'<tr>'+
-												'<th class="year" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
+											'<tr>';
+												colSpan = scope.noOfDaysInMonth[scope.selectedMonth] + 1;
+					template +=					'<th class="year" colspan="' + colSpan + '">'+
 													'<i class="yeararrow" ng-click="gotoPreviousYear()" clear-popovers-and-selections><</i>'+
-													'<span class="yeartext">{{selectedYear}}</span>'+
+													'<span class="yeartext">' + scope.selectedYear + '</span>'+
 													'<i class="yeararrow"  ng-click="gotoNextYear()" clear-popovers-and-selections>></i>'+
 												'</th>'+
 											'</tr>'+
-											
 											'<tr>'+
-												'<th class="months" colspan="{{noOfDaysInMonth[' + scope.selectedMonth + '] + 1}}">'+
+												'<th class="months" colspan="' + colSpan + '">'+
 
 														'<div class="row-fluid">'+
 
 														'<div class="span1 montharrowcell">'+
 																'<i class="montharrow" ng-click="gotoPreviousMonth()" clear-popovers-and-selections><</i>'+
 														'</div>'+
-
-														'<div class="span10 row-fluid">'+
-
-															'<div ng:class="getClassForMonth(month)" ng-click="gotoMonth($event, month)" ng-repeat="month in [0,1,2,3,4,5,6,7,8,9,10,11]">'+
-																'{{months[month]}}' +
-															'</div>'+
-
-														'</div>'+
+														'<div class="span10 row-fluid">';
+														for (var i = 0; i < months.length; i++) {
+					template += 							'<div ng:class="getClassForMonth(' + i + ')" ng-click="gotoMonth($event,' + i + ')">'+
+																scope.months[i] +
+															'</div>';
+														};
+					template += 						'</div>'+
 
 														'<div class="span1 montharrowcell">'+
 																'<i class="montharrow"  ng-click="gotoNextMonth()" clear-popovers-and-selections>></i>'+
 														'</div>'+
-
 														'</div>'+
-
 												'</th>'+
 											'</tr>'+
-
 											'<tr>'+
-												'<th id="tablespacer" rowspan="4" ng:class="getClassForSystemTableSpacer()"></th>'+
-												'<th class="week" ng-repeat="week in monthWeekList['+scope.selectedMonth+']" colspan="{{week.colSpan}}">{{week.week}}</th>'+
-											'</tr>'+
-											
-											'<tr class="daynames">'+
-												'<th ng-repeat="dayName in dayNamesInMonth('+scope.selectedMonth+')">{{dayName}}</th>'+
-											'</tr>'+
-											
-											'<tr class="shortdaynames">'+
-												'<th ng-repeat="shortDayName in shortDayNamesInMonth('+scope.selectedMonth+')">{{shortDayName}}</th>'+
-											'</tr>'+
-											
-											'<tr>'+
-												'<th ng:class="getClassForDayColumn(day)" ng-repeat="day in monthDayList['+scope.selectedMonth+']">{{day}}</th>'+
-											'</tr>'+
-											
+												'<th id="tablespacer" rowspan="4" ng:class="getClassForSystemTableSpacer()"></th>';
+												for (i=0; i < scope.monthWeekList[scope.selectedMonth].length; i++) {
+					template +=						'<th class="week" colspan="' + scope.monthWeekList[scope.selectedMonth][i].colSpan + '">' + scope.monthWeekList[scope.selectedMonth][i].week + '</th>';
+												};
+					template +=				'</tr>' +
+											'<tr class="daynames">';
+											for (i=0; i<scope.dayNamesInMonth(scope.selectedMonth).length; i++ ) {
+					template +=					'<th>' + scope.dayNamesInMonth(scope.selectedMonth)[i] + '</th>';
+											}
+					template +=   			'</tr>'+
+											'<tr class="shortdaynames">';
+											for (i=0; i<scope.shortDayNamesInMonth(scope.selectedMonth).length; i++ ) {
+												'<th>' + scope.shortDayNamesInMonth(scope.selectedMonth)[i] + '</th>';
+											};
+					template +=				'</tr>'+
+											'<tr>';
+											for (i=0; i<scope.monthDayList[scope.selectedMonth].length; i++) {
+					template +=					'<th ng:class="getClassForDayColumn(' + i + ')">' + scope.monthDayList[scope.selectedMonth][i] + '</th>';
+											};
+					template +=				'</tr>'+
 										'</thead>'+
 										'<tbody>';
 											var i, j;
 											for (j = 0; j < scope.systemgroups.length; j++){
-												template += '<tr ng:class="getClassForTableRowSystemGroup()"><td class="systemgroup"><span>{{systemgroups['+j+'].text}}</span></td><td colspan="{{noOfDaysInMonth[selectedMonth]}}"></td>';
+												template += '<tr ng:class="getClassForTableRowSystemGroup()"><td class="systemgroup"><span>' + scope.systemgroups[j].text + ' </span></td><td colspan="' + scope.noOfDaysInMonth[scope.selectedMonth] + '"></td>';
 												for (i = 0; i < scope.systemnames.length; i++){
 													if (scope.systemnames[i].systemgroup == scope.systemgroups[j].name) {
-														template += '<tr class="systemrow" ng:class="getClassForSystemTableRow('+i+')"><td class="system"><span>{{systemnames['+i+'].name}} {{systemnames['+i+'].text}}</span></td>';
+														template += '<tr class="systemrow" ng:class="getClassForSystemTableRow('+i+')"><td class="system"><span>' + scope.systemnames[i].name + ' ' + scope.systemnames[i].text + '</span></td>';
 														var systemMatch = Utils.findSystem(scope.systemlines, scope.systemnames[i].name);
 														if (systemMatch.result) {
 															template += buildTemplateForExistingSystem(systemMatch.index);
@@ -581,7 +582,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 												};
 											};
 											
-							template += '</tbody>'+
+					template += 		'</tbody>'+
 									'</table>';
 
 					element.html(template);
