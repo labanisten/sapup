@@ -196,49 +196,85 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		return classString;
 	};
 
+	function partOfActiveGrouptags(index, systemRow) {
+		var result = true;
+		var i;
+
+		/*
+		for(i = 0; i < $scope.activeGroupTags.length; i++){
+			if($scope.activeGroupTags[i] !== systemRow.systemgroup) {
+				//tag for systemgroup not selected, hide 
+				result = true;
+			}
+		}	
+		*/
+		for(i = 0; i < $scope.activeGroupTags.length; i++){
+			if($scope.activeGroupTags[i] === systemRow.systemgroup) {
+				result = false;
+				break;
+			}
+		}
+
+		return result;
+	}
+
+	function partOfActiveTags(systemnamesIndex, systemRow) {
+		var result = false;
+
+		if(systemRow.tags !== undefined) {
+			var tags = systemRow.tags.split(';');
+
+			var j;
+			for(j = 0; j < $scope.activeTags.length; j++){
+				var index = tags.indexOf($scope.activeTags[j]); 
+
+				//tag for row not selected, hide
+				if(index < 0) {
+					result = true;
+					break;
+				}else{ // tag is selected, test for selected group also
+					var groupMatch = false; 
+					var k;
+					for(k = 0; k < $scope.activeGroupTags.length; k++){
+						/*
+						if($scope.activeGroupTags[k] !== systemRow.systemgroup) {
+							//tag for systemgroup not selected, hide 
+							result = true;
+							break
+						}
+						*/
+						if($scope.activeGroupTags[k] === systemRow.systemgroup) {
+							//tag for systemgroup not selected, hide 
+							groupMatch = true;
+							break
+						}
+					}
+
+					// row is not part of selected groups, hide
+					if(groupMatch === false) {
+						result = true;
+					}
+				}
+			}
+		}else{
+			result = true;
+		}
+
+		return result;
+	}
+
 	//TODO: refactor
 	function searchForActiveTagsForStatus(systemnamesIndex) {
 		var result = false;
+		var systemRow = $scope.systemnames[systemnamesIndex];
 		var tags;
 
 		if($scope.activeGroupTags.length > 0) {
 
-			
-			for(i = 0; i < $scope.activeGroupTags.length; i++){
-
-				if($scope.activeGroupTags[i] !== $scope.systemnames[systemnamesIndex].systemgroup) {
-					//tag for systemgroup not selected, hide 
-					result = true;
-				}
-			}	
-
+			result = partOfActiveGrouptags(systemnamesIndex, systemRow);
 
 			if($scope.activeTags.length > 0) {
-
-				if($scope.systemnames[systemnamesIndex].tags !== undefined) {
-					var tags = $scope.systemnames[systemnamesIndex].tags.split(';');
-
-					var i;
-					for(i = 0; i < $scope.activeTags.length; i++){
-						var index = tags.indexOf($scope.activeTags[i]); 
-
-						//tag for row not selected, hide
-						if(index < 0) {
-							result = true;
-							break;
-						}else{ // tag is selected, test for selected group also
-							for(i = 0; i < $scope.activeGroupTags.length; i++){
-								if($scope.activeGroupTags[i] !== $scope.systemnames[systemnamesIndex].systemgroup) {
-									//tag for systemgroup not selected, hide 
-									result = true;
-									break
-								}
-							}
-						}
-					}
-				}else{
-					result = true;
-				}
+				result = partOfActiveTags(systemnamesIndex, systemRow);
 			}
 
 		}else{
@@ -276,18 +312,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		return classString;
 	};
 
-	$scope.getClassForGroupTagBadge = function(tag) {
-		///var classString = "calendar-filtertag badge";
-		var classString = "calendar-filtertag";
-		/*var index = $scope.activeGroupTags.indexOf(tag); 
-		if(index > -1) {
-			//classString += " label-selected";
-		}*/
-		return classString;
-	};
-
-	
-	$scope.getClassForGroupTagButton = function(tag) {
+    $scope.getClassForGroupTagButton = function(tag) {
 		var classString = "btn btn-small";
 		var index = $scope.activeGroupTags.indexOf(tag); 
 		if(index > -1) {
@@ -296,8 +321,12 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		return classString;
 	};	
 
+	$scope.getClassForGroupTagBadge = function(tag) {
+		var classString = "calendar-filtertag";
+		return classString;
+	};
+
 	$scope.getClassForGroupTagBadgeInner = function(tag) {
-		///var classString = "calendar-filtertag badge";
 		var classString = "";
 		var index = $scope.activeGroupTags.indexOf(tag); 
 		if(index > -1) {
@@ -307,19 +336,11 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	};	
 
 	$scope.getClassForTagBadge = function(tag) {
-		//var classString = "calendar-filtertag badge";
-
 		var classString = "calendar-filtertag";
-		/*var index = $scope.activeTags.indexOf(tag); 
-		if(index > -1) {
-			classString += " selected";
-		}*/
 		return classString;
 	};
 
 	$scope.getClassForTagBadgeInner = function(tag) {
-		//var classString = "calendar-filtertag badge";
-
 		var classString = "";
 		var index = $scope.activeTags.indexOf(tag); 
 		if(index > -1) {
