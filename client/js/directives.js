@@ -245,9 +245,9 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 				titleString = systeml.system + ' - ' + statusl.status + closeButtonTemplate + deleteButtonTemplate + editButtonTemplate,
 				contentString = statusl.comment;
 				
-			var testcontent = '<div>' +
+			var testcontent = '<div class="popovertext">' +
 								  '<p>{{hoverElement.start}} - {{hoverElement.end}}</p>' +
-								  '</br>' +
+								  //'</br>' +
 								  '<p>{{hoverElement.comment}}</p>' +
 							  '</div>';
 				
@@ -270,9 +270,6 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 			
 
 			element.popover({
-
-
-
 				title: function() {
 					$timeout(function() {
 						$compile(element.data('popover').tip())(scope);
@@ -280,7 +277,7 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 					return data;
 				},
 				trigger: 'manual',
-				placement: getPopoverPlacement(element),
+				placement: 'top',//getPopoverPlacement(element),
 				content: testcontent,
 				html: true
 			});
