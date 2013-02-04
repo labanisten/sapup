@@ -37,13 +37,13 @@ directiveModule.directive('toolbar', function($compile, Utils){
 
 					scope.filterTags.sort(function(a,b){return (a.text < b.text) ? -1 : 1;});
 
-					template = '<div class="accordion span12" id="accordionContainer2">'+
+					/*template = '<div class="accordion span12" id="accordionContainer2">'+
 								'<div class="alert-accordion-group">'+
 								'<div  class="accordion-toggle alert-container-header alert-accordion-heading" data-toggle="collapse" data-parent="#accordionContainer2" href="#collapseTwo">Filters</div>'+
 								'<div id="collapseTwo" class="accordion-body collapse">'+
 									'<div class="accordion-inner">';
-
-						template += '<ul class="tags">'+
+					*/
+						template = '<ul class="tags">'+
 										// '<li style="margin-right:5px;width:45px"><sup>Systemlines</sup></li>' + 
 										'<li ng-repeat="grouptag in systemgroups" class="calendar-filtertag" ng:click="groupBadgeClick(grouptag.name)"> <a ng:class="getClassForGroupTagBadgeInner(grouptag.name)" href="#">{{grouptag.name}}</a></li>'+
 									'</ul>';
@@ -54,7 +54,7 @@ directiveModule.directive('toolbar', function($compile, Utils){
 									'</ul>';
 
 
-					template += '</div></div></div></div></div>';
+					//template += '</div></div></div></div></div>';
 
 					element.html(template);				
 					$compile(element.contents())(scope);
