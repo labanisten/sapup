@@ -271,6 +271,16 @@ angular.module('utilsModule', []).
 			return match;
 		}
 
+		ns.dateIsWeekend = function(date) {
+			var result = false;
+			var asdf = date.getDay();
+			if(date.getDay() === 6 || date.getDay() === 0) {
+				result = true;
+			}
+
+			return result;
+		}
+
 	
 		})(utils);
 

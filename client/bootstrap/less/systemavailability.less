@@ -126,12 +126,10 @@
 		margin-bottom: 10px;
 	}
 
-
 // Login
-
-	  .login-form {
+	.login-form {
 		margin-left: 65px;
-	  }
+	}
 	
 	.system-table-container {
 		margin-top: 10px;
@@ -154,12 +152,6 @@
 		  min-width: 20px;
 		}
 
-		/*
-		th .fixedheader {
-		  border: 0px;
-		}
-		*/
-
 		td {
 		  border: 1px solid #E0E0E0;
 		  background-color: @grayLighter;
@@ -172,15 +164,10 @@
 		    tr.systemrow:hover th{
 		      background-color: @tableBackgroundHover;
 		    }
-		  }
-		
-		.week {
-		  background-color: @grayLighter;
-		}
-
-		.system {
+		 }
+	
+		tbody .systemrow > td.systemrowheading {
 		  background-color: @grayLighter; 
-		  font-weight: 1000;
 		  font-size: 0.9em;
 		  width: 1%;
 		  white-space: nowrap;
@@ -188,24 +175,29 @@
 		  padding-right: 5px;
 		}
 
-		.systemgroup {
-		  background-color: @grayLighter; 
-		  font-weight: bold;
-		  font-size: 1em;
-		  width: 1%;
-		  white-space: nowrap;
-		  padding-left: 5px;
-		  padding-right: 5px;
+		tbody > .systemrow > td.weekend {
+		  	background-color: @grayLighterAccented;	  	
 		}
 
-		.month:hover:not(.selectedmonth)  {
+		tbody > .systemgrouprow > td {
+		  	background-color: @grayLighterAccented;	
+		  	border: 0px;
+		  	font-weight: bold;
+		  	padding-left: 5px;
+		}
+
+		tbody > .systemgrouprow > td:last-child {
+		  	border-right: 1px solid #E0E0E0;
+		}
+
+		thead .month:hover:not(.selectedmonth)  {
 		  color:#3a1558;
 		  font-size:1.6em;
 		  .transition(font-size);
 		  .transition-duration(0.2s);  
 		}
 
-		.year {  
+		thead .year {  
 		  height: 40px;
 		  font-size: 2em;
 		  line-height:50px;
@@ -213,30 +205,30 @@
 		  /*color: #345970;*/
 		}
 
-		.yeararrow {  
+		thead .yeararrow {  
 		 margin: 7px;
 		 cursor: pointer;
 		}
 
 
-		.montharrow {  
+		thead .montharrow {  
 		 margin: 7px;
 		 cursor: pointer;
 		}
 
 
-		.montharrowcell {  
+		thead .montharrowcell {  
 		 font-size: 1.5em;
 		 cursor: default;
 		 color: black;
 		}
 
-		.yeartext {
+		thead .yeartext {
 		  margin: 0px 10px;
 		  color:#cd007a; 
 		}
 
-		.months {
+		thead .months {
 		  height: 40px;
 		  font-size: 1.6em;
 		  line-height:50px;
@@ -245,13 +237,17 @@
 		  color: #345970;
 		}
 
-		.selectedmonth { 
+		thead .selectedmonth { 
 		  color:#cd007a; 
 		  font-size:2em;
 		}
 		
-		.currentday {
+		thead .currentday {
 		  color:#cd007a; 
+		}
+
+		thead > tr > th.weekend {
+		  	background-color: @grayLighterAccented;	  	
 		}
 	}
 

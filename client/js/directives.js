@@ -254,16 +254,25 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 			var data = titleString;
 
 			function getPopoverPlacement(elm) {
+				var placement = 'top';
 		        var offset = $(elm).offset();
+		        //var elmWidth = $(elm).outerWidth()
 		        //height = $(document).outerHeight();
-		        height = $(document).height();
+		        //var height = $(document).height();
 		        //width = $(document).outerWidth();
-		        width = $(document).width();
+		        var width = $(document).width();
+
+		        var diff = width - offset.left;
+
+		        if(diff < 250) {
+		        	placement = 'left';
+		        }
+		        /*
 		        vert = 0.5 * height - offset.top;
 		        vertPlacement = vert > 0 ? 'bottom' : 'top';
 		        horiz = 0.5 * width - offset.left;
 		        horizPlacement = horiz > 0 ? 'right' : 'left';
-		        placement = Math.abs(horiz) > Math.abs(vert) ?  horizPlacement : vertPlacement;
+		        placement = Math.abs(horiz) > Math.abs(vert) ?  horizPlacement : vertPlacement;*/
 		        return placement;
 		    }
 			
@@ -277,7 +286,8 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 					return data;
 				},
 				trigger: 'manual',
-				placement: 'top',//getPopoverPlacement(element),
+				//placement: 'top',//getPopoverPlacement(element),
+				placement: getPopoverPlacement(element),
 				content: testcontent,
 				html: true
 			});
@@ -327,7 +337,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 			restrict: 'A',
 			link: function(scope, element, attrs) {
 			
-				//TODO: Utils?
+				//TODO: move to Utils?
 				function firstOfMonthStr(start) {
 					var tmpDate = new String();
 					var selectedMonth = scope.selectedMonth + 1;
@@ -420,6 +430,20 @@ directiveModule.directive('systemTable', function($compile, Utils){
 					return result;
 				}
 
+				function buildEmptyTableCell(day) {
+					var template = '';
+
+					var testDate = new Date(scope.selectedYear, scope.selectedMonth, day + 1);
+					if(Utils.dateIsWeekend(testDate))
+						template += '<td class="weekend" clear-popovers-and-selections></td>';
+					else {
+						template += '<td clear-popovers-and-selections></td>';
+					}
+					delete testDate;
+
+					return template;
+				}
+
 				function buildTemplateForExistingSystem(systemIndex) {
 					
 					var template = "",
@@ -430,7 +454,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 						var element = findMatchingElement(day, jQuery.extend(true, {}, scope.systemlines[systemIndex]));
 						
 						if(element == "") {
-							template += '<td clear-popovers-and-selections></td>';
+							template += buildEmptyTableCell(day);
 						}else{
 						
 							var colspan;
@@ -448,15 +472,15 @@ directiveModule.directive('systemTable', function($compile, Utils){
 							}
 							
 							template += '<td class="filledcell" colspan="'+colspan+'">'+
-							
-											'<span ng:class="getClassForElement('+systemIndex+','+element.index+')"'+ 
-												  'ng-click="selectElement($event, '+systemIndex+','+element.index+')"'+ 
-												  'bs-popoverhover '+ 
+
+											'<span ng:class="getClassForElement('+systemIndex+','+element.index+')"'+
+												  'ng-click="selectElement($event,'+systemIndex+','+element.index+')"'+
+												  'bs-popoverhover '+
 												  'sysIndex="'+systemIndex+'"'+
-												  'elmIndex="'+element.index+'"'+ 
-												  'rel="popover">'+ 
-											'</span>'+	
-											
+												  'elmIndex="'+element.index+'"'+
+												  'rel="popover">'+
+											'</span>'+
+
 										'</td>';
 							day = day + colspan - 1;
 						}
@@ -468,18 +492,18 @@ directiveModule.directive('systemTable', function($compile, Utils){
 				
 				
 				function buildTemplateForNoneExistingSystem(system) {
-					var bagdeText;
-					
+					var bagdeText,
+						day,
+						template = "";
+
 					if(system.text) {
 						badgeText = system.name + ' ' + system.text;
 					}else {
 						badgeText = system.name;
 					}
-					
-					var day,
-						template = "";
+
 					for(day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
-						template += '<td clear-popovers-and-selections></td>';
+						template += buildEmptyTableCell(day);
 					}
 						
 					template += '</tr>';
@@ -525,32 +549,38 @@ directiveModule.directive('systemTable', function($compile, Utils){
 											'<tr>'+
 												'<th id="tablespacer" rowspan="4" ng:class="getClassForSystemTableSpacer()"></th>';
 												for (i=0; i < scope.monthWeekList[scope.selectedMonth].length; i++) {
-					template +=						'<th class="week" colspan="' + scope.monthWeekList[scope.selectedMonth][i].colSpan + '">' + scope.monthWeekList[scope.selectedMonth][i].week + '</th>';
+					template +=						'<th colspan="' + scope.monthWeekList[scope.selectedMonth][i].colSpan + '">' + scope.monthWeekList[scope.selectedMonth][i].week + '</th>';
 												};
 					template +=				'</tr>' +
 											'<tr class="daynames">';
 											for (i=0; i<scope.dayNamesInMonth(scope.selectedMonth).length; i++ ) {
-					template +=					'<th>' + scope.dayNamesInMonth(scope.selectedMonth)[i] + '</th>';
+					template +=					'<th ng:class="getClassForDayNameHeaderCell(' + i + ')">' + scope.dayNamesInMonth(scope.selectedMonth)[i] + '</th>';
 											}
 					template +=   			'</tr>'+
 											'<tr class="shortdaynames">';
 											for (i=0; i<scope.shortDayNamesInMonth(scope.selectedMonth).length; i++ ) {
-												'<th>' + scope.shortDayNamesInMonth(scope.selectedMonth)[i] + '</th>';
+					template +=					'<th ng:class="getClassForDayNameHeaderCell(' + i + ')">' + scope.shortDayNamesInMonth(scope.selectedMonth)[i] + '</th>';
 											};
 					template +=				'</tr>'+
 											'<tr>';
 											for (i=0; i<scope.monthDayList[scope.selectedMonth].length; i++) {
-					template +=					'<th ng:class="getClassForDayColumn(' + i + ')">' + scope.monthDayList[scope.selectedMonth][i] + '</th>';
+					template +=					'<th ng:class="getClassForDayHeaderCell(' + i + ')">' + scope.monthDayList[scope.selectedMonth][i] + '</th>';
 											};
 					template +=				'</tr>'+
 										'</thead>'+
 										'<tbody>';
 											var i, j;
 											for (j = 0; j < scope.systemgroups.length; j++){
-												template += '<tr ng:class="getClassForTableRowSystemGroup()"><td class="systemgroup"><span>' + scope.systemgroups[j].text + ' </span></td><td colspan="' + scope.noOfDaysInMonth[scope.selectedMonth] + '"></td>';
+
+												template += '<tr ng:class="getClassForTableRowSystemGroup()">'+
+																'<td><span>' + scope.systemgroups[j].text + ' </span></td>' +
+																'<td colspan="' + scope.noOfDaysInMonth[scope.selectedMonth] + '"></td>' +
+															'</tr>';
+
 												for (i = 0; i < scope.systemnames.length; i++){
 													if (scope.systemnames[i].systemgroup == scope.systemgroups[j].name) {
-														template += '<tr class="systemrow" ng:class="getClassForSystemTableRow('+i+')"><td class="system"><span>' + scope.systemnames[i].name + ' ' + scope.systemnames[i].text + '</span></td>';
+														template += '<tr ng:class="getClassForSystemTableRow('+i+')">' +
+																		'<td class="systemrowheading"><span>' + scope.systemnames[i].name + ' ' + scope.systemnames[i].text + '</span></td>';
 														var systemMatch = Utils.findSystem(scope.systemlines, scope.systemnames[i].name);
 														if (systemMatch.result) {
 															template += buildTemplateForExistingSystem(systemMatch.index);
