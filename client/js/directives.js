@@ -430,7 +430,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 					return result;
 				}
 
-				function buildEmptyTableCell(day) {
+				var buildEmptyTableCell = function(day) {
 					var template = '';
 
 					var testDate = new Date(scope.selectedYear, scope.selectedMonth, day + 1);
@@ -438,6 +438,20 @@ directiveModule.directive('systemTable', function($compile, Utils){
 						template += '<td class="weekend" clear-popovers-and-selections></td>';
 					else {
 						template += '<td clear-popovers-and-selections></td>';
+					}
+					delete testDate;
+
+					return template;
+				}
+
+				var buildEmptyTableGroupCell = function(day) {
+					var template = '';
+
+					var testDate = new Date(scope.selectedYear, scope.selectedMonth, day + 1);
+					if(Utils.dateIsWeekend(testDate))
+						template += '<td class="weekend" clear-popovers-and-selections></td>';
+					else {
+						template += '<td class="systemrowgroupcell" clear-popovers-and-selections></td>';
 					}
 					delete testDate;
 
@@ -491,19 +505,12 @@ directiveModule.directive('systemTable', function($compile, Utils){
 				}
 				
 				
-				function buildTemplateForNoneExistingSystem(system) {
-					var bagdeText,
-						day,
+				function buildTemplateForNoneExistingSystem(cellfunc) {
+					var day,
 						template = "";
 
-					if(system.text) {
-						badgeText = system.name + ' ' + system.text;
-					}else {
-						badgeText = system.name;
-					}
-
 					for(day = 0; day < scope.noOfDaysInMonth[scope.selectedMonth]; day++){
-						template += buildEmptyTableCell(day);
+						template += cellfunc(day);
 					}
 						
 					template += '</tr>';
@@ -533,11 +540,13 @@ directiveModule.directive('systemTable', function($compile, Utils){
 																'<i class="montharrow" ng-click="gotoPreviousMonth()" clear-popovers-and-selections><</i>'+
 														'</div>'+
 														'<div class="span10 row-fluid">';
+														/*'<div class="slides">';*/
 														for (var i = 0; i < months.length; i++) {
 					template += 							'<div ng:class="getClassForMonth(' + i + ')" ng-click="gotoMonth($event,' + i + ')">'+
 																scope.months[i] +
 															'</div>';
 														};
+														
 					template += 						'</div>'+
 
 														'<div class="span1 montharrowcell">'+
@@ -573,9 +582,10 @@ directiveModule.directive('systemTable', function($compile, Utils){
 											for (j = 0; j < scope.systemgroups.length; j++){
 
 												template += '<tr ng:class="getClassForTableRowSystemGroup()">'+
-																'<td><span>' + scope.systemgroups[j].text + ' </span></td>' +
-																'<td colspan="' + scope.noOfDaysInMonth[scope.selectedMonth] + '"></td>' +
-															'</tr>';
+																'<td class="systemrowgroupheading"><span>' + scope.systemgroups[j].text + ' </span></td>';
+																template += buildTemplateForNoneExistingSystem(buildEmptyTableGroupCell);
+																//'<td colspan="' + scope.noOfDaysInMonth[scope.selectedMonth] + '"></td>' +
+															//'</tr>';
 
 												for (i = 0; i < scope.systemnames.length; i++){
 													if (scope.systemnames[i].systemgroup == scope.systemgroups[j].name) {
@@ -585,7 +595,8 @@ directiveModule.directive('systemTable', function($compile, Utils){
 														if (systemMatch.result) {
 															template += buildTemplateForExistingSystem(systemMatch.index);
 														} else {
-															template += buildTemplateForNoneExistingSystem(scope.systemnames[i]);
+															//template += buildTemplateForNoneExistingSystem();
+															template += buildTemplateForNoneExistingSystem(buildEmptyTableCell);
 														};
 													};
 												};
