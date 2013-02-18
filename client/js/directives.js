@@ -56,7 +56,7 @@ directiveModule.directive('toolbar', function($compile, Utils){
 
 					//template += '</div></div></div></div></div>';
 
-					element.html(template);				
+					element.html(template);
 					$compile(element.contents())(scope);
 
 				}

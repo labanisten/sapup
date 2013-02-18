@@ -457,7 +457,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	$scope.getClassForDayHeaderCell = function(day) {
 		var classString = '';
 
-		if(day == Calendar.currentDate.getDate() && 
+		if(day == Calendar.currentDate.getDate() - 1 && 
 			$scope.selectedMonth == Calendar.currentDate.getMonth() && 
 				$scope.selectedYear == Calendar.currentDate.getFullYear()) {
 			classString += 'currentday ';
