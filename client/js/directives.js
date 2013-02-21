@@ -287,7 +287,7 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 					return data;
 				},
 				trigger: 'manual',
-				placement: 'left',//getPopoverPlacement(element),
+				placement: 'top',//getPopoverPlacement(element),
 				//placement: getPopoverPlacement(element),
 				content: testcontent,
 				html: true
