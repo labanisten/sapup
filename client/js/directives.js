@@ -246,7 +246,8 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 				contentString = statusl.comment;
 				
 			//ng-show="hoverElement.hasValue"
-			var testcontent = '<div class="popovertext hidden">' +
+			//var testcontent = '<div class="popovertext hidden">' +
+			var testcontent = '<div>' +
 								  '<p>{{hoverElement.start}} - {{hoverElement.end}}</p>' +
 								  //'</br>' +
 								  '<p>{{hoverElement.comment}}</p>' +
@@ -309,14 +310,14 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 				if(scope.selectedElement.elmIndex == -1 && scope.selectedElement.sysIndex == -1) {
 					scope.setHoverElement(element.attr('sysIndex'), element.attr('elmIndex'), element);
 					element.popover('show');
-					$('.popovertext').removeClass('hidden');
+					//$('.popovertext').removeClass('hidden');
 				}
 			},
 			function() {
 				if(scope.selectedElement.elmIndex == -1 && scope.selectedElement.sysIndex == -1) {
 					scope.clearHoverElement();
 					element.popover('hide');
-					$('.popovertext').addClass('hidden');
+					//$('.popovertext').addClass('hidden');
 				}
 			});				
 		}

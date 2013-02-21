@@ -713,7 +713,8 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		$scope.selectedMonth = month;
 
 		var elem = angular.element(event.srcElement);
-		elem[0].className += " selectedmonth";
+		//elem[0].className += " selectedmonth";
+		elem.addClass('selectedmonth');
 	};
 	
 	$scope.gotoPreviousYear = function() {
