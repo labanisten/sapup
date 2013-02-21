@@ -245,7 +245,8 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 				titleString = systeml.system + ' - ' + statusl.status + closeButtonTemplate + deleteButtonTemplate + editButtonTemplate,
 				contentString = statusl.comment;
 				
-			var testcontent = '<div class="popovertext">' +
+			//ng-show="hoverElement.hasValue"
+			var testcontent = '<div class="popovertext hidden">' +
 								  '<p>{{hoverElement.start}} - {{hoverElement.end}}</p>' +
 								  //'</br>' +
 								  '<p>{{hoverElement.comment}}</p>' +
@@ -277,7 +278,6 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 		    }
 			
 			
-
 			element.popover({
 				title: function() {
 					$timeout(function() {
@@ -309,12 +309,14 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 				if(scope.selectedElement.elmIndex == -1 && scope.selectedElement.sysIndex == -1) {
 					scope.setHoverElement(element.attr('sysIndex'), element.attr('elmIndex'), element);
 					element.popover('show');
+					$('.popovertext').removeClass('hidden');
 				}
 			},
 			function() {
 				if(scope.selectedElement.elmIndex == -1 && scope.selectedElement.sysIndex == -1) {
 					scope.clearHoverElement();
 					element.popover('hide');
+					$('.popovertext').addClass('hidden');
 				}
 			});				
 		}
