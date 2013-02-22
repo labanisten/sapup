@@ -247,10 +247,10 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 				
 			//ng-show="hoverElement.hasValue"
 			//var testcontent = '<div class="popovertext hidden">' +
-			var testcontent = '<div>' +
-								  '<p>{{hoverElement.start}} - {{hoverElement.end}}</p>' +
+			var testcontent = '<div class="popovertext">' +
+								  '<h5 ng-show="hoverElement.hasValue">{{hoverElement.start}} - {{hoverElement.end}}</h5>' +
 								  //'</br>' +
-								  '<p>{{hoverElement.comment}}</p>' +
+								  '<p ng-show="hoverElement.hasValue">{{hoverElement.comment}}</p>' +
 							  '</div>';
 				
 			var data = titleString;
@@ -287,8 +287,8 @@ directiveModule.directive('bsPopoverhover', function($compile, $http, $timeout) 
 					return data;
 				},
 				trigger: 'manual',
-				placement: 'top',//getPopoverPlacement(element),
-				//placement: getPopoverPlacement(element),
+				//placement: 'top',//getPopoverPlacement(element),
+				placement: getPopoverPlacement(element),
 				content: testcontent,
 				html: true
 			});
