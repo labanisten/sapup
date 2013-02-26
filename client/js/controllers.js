@@ -38,7 +38,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		sysNameIndex: -1,
 		hasValue: false
 	};
-
+	
 	$scope.hoverElement = {
 		_id: "",
 		system: "",
@@ -172,6 +172,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		return result;
 	}
 	
+	//TODO: event parameter not used?
 	$scope.selectElement = function(event, sysIndex, elmIndex) {
 		if(isAlreadySelected(sysIndex, elmIndex)) {
 			$scope.unSelectElement();
@@ -188,6 +189,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		}
 	};
 
+	//TODO: is the element paramater in use?
 	$scope.getClassForTableRowSystemGroup = function(element) {
 		var classString = "systemgrouprow";
 		if($scope.activeTags.length > 0 || $scope.activeGroupTags.length) {
@@ -308,11 +310,13 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		return classString;
 	};	
 
+	//TODO: check if in use
 	$scope.getClassForGroupTagBadge = function(tag) {
 		var classString = "calendar-filtertag";
 		return classString;
 	};
 
+	//TODO: not in use -> no UnitTest 
 	$scope.getClassForGroupTagBadgeInner = function(tag) {
 		var classString = "";
 		var index = $scope.activeGroupTags.indexOf(tag); 
@@ -322,11 +326,13 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		return classString;
 	};	
 
+	//TODO: not in use -> no UnitTest 
 	$scope.getClassForTagBadge = function(tag) {
 		var classString = "calendar-filtertag";
 		return classString;
 	};
 
+	//TODO: not in use -> no UnitTest 
 	$scope.getClassForTagBadgeInner = function(tag) {
 		var classString = "";
 		var index = $scope.activeTags.indexOf(tag); 
@@ -337,6 +343,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		return classString;
 	};
 
+	//TODO: not in use -> no UnitTest 
 	$scope.getClassForCompactMessageContainer = function() {
 		var classString = 'message-view-compact row-fluid';
 		if($scope.currentCompactpage != $scope.page.message){classString += ' hidden'}
@@ -361,12 +368,14 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		return classString;
 	};
 
+	//TODO: month parameter not in use?
 	$scope.getClassForCompactYearButton = function(month) {
 		var classString = 'btn btn-primary yearbtn-compact';
 		if($scope.currentCompactpage != $scope.page.status){classString += ' hidden'}
 		return classString;
 	};
 
+	//TODO: month parameter not in use?
 	$scope.getClassForCompactHomeButton = function(month) {
 		var classString;
 		if($scope.currentCompactpage === $scope.page.status || $scope.currentCompactpage === $scope.page.message)
@@ -377,30 +386,35 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		return classString;
 	};
 
+	//TODO: month parameter not in use?
 	$scope.getClassForCompactSystemBackButton = function(month) {
 		var classString = 'btn btn-primary system-backbtn-compact';
 		if($scope.currentCompactpage != $scope.page.system){classString += ' hidden'}
 		return classString;
 	};
 
+	//TODO: month parameter not in use?
 	$scope.getClassForCompactStatusBackButton = function(month) {
 		var classString = 'btn btn-primary status-backbtn-compact';
 		if($scope.currentCompactpage != $scope.page.status){classString += ' hidden'}
 		return classString;
 	};
 
+	//TODO: month parameter not in use? : no UnitTest
 	$scope.getClassForCompactSearchButton = function(month) {
 		/*var classString = 'btn btn-primary searchbtn-compact';
 		if($scope.selectedCompactSystem.hasValue == true) {classString += ' hidden';}
 		return classString;*/
 	};
 
+	//TODO: month parameter not in use?
 	$scope.getClassForCompactMessageButton = function(month) {
 		var classString = 'btn btn-primary messagebtn-compact';
 		if($scope.currentCompactpage != $scope.page.main){classString += ' hidden'}
 		return classString;
 	};
 
+	//TODO: month parameter not in use?
 	$scope.getClassForCompactStatusViewLabel = function(month) {
 		var classString = 'systemview-heading-compact';
 		if($scope.currentCompactpage != $scope.page.status){classString += ' hidden'}

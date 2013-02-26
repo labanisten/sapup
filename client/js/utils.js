@@ -109,7 +109,8 @@ angular.module('utilsModule', []).
 			
 		};
 		
-		
+
+		//TODO same as convertToDate
 		ns.dateFromString = function(dateString) {
 			return new Date( dateString.substr(0, 4), dateString.substr(4, 2) - 1, dateString.substr(6,2) );
 		};
@@ -158,7 +159,7 @@ angular.module('utilsModule', []).
 		
 		};
 		
-		
+		//TODO: Not in use?
 		ns.isNewElementSingleDay = function(date){
 			var result = false;
 			var startDate = viewDateToDateObject(date.start);
@@ -169,6 +170,7 @@ angular.module('utilsModule', []).
 			}
 			return result;
 		};
+		
 		
 		
 		ns.numberOfDaysBetweenDates = function(fromDate, toDate) {
@@ -187,14 +189,15 @@ angular.module('utilsModule', []).
 			var aSystem = a.system;
 			var bSystem = b.system;
 			return (aSystem < bSystem) ? -1 : (aSystem > bSystem) ? 1 : 0;
-		};	
+		};
 
 		
+		//TODO: Not in use?
 		ns.rangeWithinMonthYear = function(fromDate, toDate, month, year) {
 			return ( dateFromString(fromDate).getMonth() == month && dateFromString(fromDate).getYear() == year ) || ( dateFromString(toDate).getMonth() == month && dateFromString(toDate).getYear() == year );
 		};
 
-
+		//TODO: Not in use?
 		ns.isDataReady = function(dataTab) {
 			var result = false;
 			if (dataTab.length > 0 && ns.dataComplete) {
