@@ -274,6 +274,7 @@ angular.module('utilsModule', []).
 			return match;
 		}
 
+		//TODO: asdf?
 		ns.dateIsWeekend = function(date) {
 			var result = false;
 			var asdf = date.getDay();
@@ -284,7 +285,7 @@ angular.module('utilsModule', []).
 			return result;
 		}
 
-	
+
 		})(utils);
 
 		return utils; 

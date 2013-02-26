@@ -447,7 +447,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	}
 
 	$scope.getClassForActiveStatusIndicator = function(element) {
-		var classString;//'pull-right';
+		var classString = '';//'pull-right';
 
 		if(element.isActive !== "true") {
 			classString = 'hidden';
@@ -456,6 +456,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		return classString;
 	}
 
+	//TODO: day starts at 0 and needs to be ++'d because of for(i = 0.. in directives
 	$scope.getClassForDayNameHeaderCell = function(day) {
 		var classString = '';
 
@@ -468,6 +469,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		return classString;
 	}
 
+	//TODO: if test is reused from getClassForDayNameHeaderCell
 	$scope.getClassForDayHeaderCell = function(day) {
 		var classString = '';
 
@@ -522,6 +524,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		$scope.systemCompactViewList = [];
 	}
 
+	//TODO: redefenition of compactHomeButtonClick() ?
 	$scope.compactSystemBackButtonClick = function() {
 		$scope.currentCompactpage = $scope.page.main;
 		$scope.compactHomeButtonClick();
@@ -555,28 +558,32 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		$scope.currentCompactpage = $scope.page.status;
 	};
 
+	//TODO: test for empty systemdata 
 	function fillSystemlinesActive() {
 		Calendar.currentDate;
-		var i,j;
-		for (i = 0; i < $scope.systemlines.length; i++){
-			for(j = 0; j < $scope.systemlines[i].statuslines.length; j++) {
-				var start = Utils.convertToDate($scope.systemlines[i].statuslines[j].start);
-				var end = Utils.convertToDate($scope.systemlines[i].statuslines[j].end);
-				if(start <= Calendar.currentDate && end >= Calendar.currentDate) {
+		if($scope.systemlines !== undefined) {
+			var i,j;
+			for (i = 0; i < $scope.systemlines.length; i++){
+				for(j = 0; j < $scope.systemlines[i].statuslines.length; j++) {
+					var start = Utils.convertToDate($scope.systemlines[i].statuslines[j].start);
+					var end = Utils.convertToDate($scope.systemlines[i].statuslines[j].end);
+					if(start <= Calendar.currentDate && end >= Calendar.currentDate) {
 
-					var line = {
-						system: "",
-						statuslines: []
-					};
-					
-					line.system = $scope.systemlines[i].system;
-					line.statuslines.push($scope.systemlines[i].statuslines[j]);
-					$scope.systemlinesActive.push(line);
-				}
-			} 
+						var line = {
+							system: "",
+							statuslines: []
+						};
+						
+						line.system = $scope.systemlines[i].system;
+						line.statuslines.push($scope.systemlines[i].statuslines[j]);
+						$scope.systemlinesActive.push(line);
+					}
+				} 
+			}
 		}
 	}
 
+	//TODO: only fill selectedCompactSystemgroup.name ? 
 	function fillSystemViewList(groupIndex) {
 		$scope.systemgroupCompactViewList = [];
 		$scope.selectedCompactSystemgroup.name = $scope.systemgroups[groupIndex].name;
@@ -706,7 +713,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		}
 	};
 
-
 	$scope.gotoMonthCompact = function(event, month) {
 		$scope.selectedMonthCompact = month;
 		$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonthCompact);
@@ -717,7 +723,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	}
 	
 	$scope.gotoMonth = function(event, month) {
-		
 		if($scope.hoverElement.hasValue) {
 			$scope.hoverElement.element.popover('hide');
 		}
