@@ -14,6 +14,8 @@ files = [
   'client/js/angular.js',
   'client/js/angular-cookies.js',
   'test/lib/angular/angular-mocks.js',
+  'client/js/jquery.validate.js',
+  'client/bootstrap/bootstrap/js/bootstrap.js',
 
   'client/js/mongodb.js',
   'client/js/calendar.js',

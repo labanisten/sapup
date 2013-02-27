@@ -872,6 +872,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		}
 	};
 	
+	//TODO: broken?
 	$scope.removeAlert = function(id) {
 		db.alert.remove(id).then(function(response) {
 			if (response.data.ok) {
@@ -896,6 +897,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		});
 	}
 
+	//TODO: no need to splice systemarray because of getSystemData()
 	$scope.removeStatusElement = function() {
 		$.each($scope.systemlines, function(i, v_system) {
 			if (v_system.system == $scope.selectedElement.system) {
@@ -917,6 +919,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		});
 	};
 	
+
 	$scope.updateStatusElement = function() {
 
 		var existingSystem;

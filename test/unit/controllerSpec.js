@@ -11,8 +11,6 @@ describe('The main controller', function() {
   beforeEach(
     inject(function(_$httpBackend_, $rootScope, $controller) {   
 
-      //var systems = [{system:"D03"}]; 
-
       var systemlines = [ 
 
                       { 
@@ -137,21 +135,17 @@ describe('The main controller', function() {
                             }
                           ];
 
-      //var sysJSON = JSON.stringify(systemlines); 
-
       $httpBackend = _$httpBackend_;
       $httpBackend.expectGET(/systems*/).respond(JSON.stringify(systemlines));
       $httpBackend.expectGET(/systemnames*/).respond(JSON.stringify(systemnames));
       $httpBackend.expectGET(/systemstatuses*/).respond(JSON.stringify(systemstatuses));
       $httpBackend.expectGET(/systemgroups*/).respond(JSON.stringify(systemgroups));
       $httpBackend.expectGET(/alerts*/).respond(JSON.stringify(alertlines));
-      //$httpBackend.when('GET', '/alerts*/').respond(JSON.stringify(alertlines));
       $httpBackend.expectGET(/alerttypes*/).respond(JSON.stringify(alerttypes));
       $httpBackend.expectGET(/userdata*/).respond();
 
       scope = $rootScope.$new();
       ctrl = $controller('TimelineCtrl', {$scope: scope});
-
     })
   );
 
@@ -362,6 +356,140 @@ describe('The main controller', function() {
     expect(scope.selectedYear).toBe(2000);
   }); 
 
+
+  it('should add a new alert entry', function() {
+    $httpBackend.flush();
+
+    scope.addAlertLine.title = "testTitle";
+    scope.addAlertLine.alerttype = "success";
+    scope.addAlertLine.expdate = "20000101";
+    scope.addAlertLine.comment = "";
+
+    $httpBackend.expectPOST('/resources/alerts/').respond(201, '[{"title": "testTitle", "alerttype": "success", "expdate": "19990101", "comment": "testComment", "timestamp": "0000000000000", "_id": "000000000000000000000000"}]');
+
+    $('body').append('<form id="alertForm"></form>');
+    $('body').append('<div id="addalertdialog" class="modal"></div>')
+
+    scope.addAlert();
+    
+    $httpBackend.flush();
+
+    expect(scope.alertlines.length).toBe(3);
+    expect(scope.alertlines[2].title).toBe("testTitle");
+    expect(scope.alertlines[2].alerttype).toBe("success");
+    expect(scope.alertlines[2].expdate).toBe("19990101");
+
+    $('#alertForm').remove();
+    $('#addalertdialog').remove();
+  });
+
+  /*
+  it('should remove an alert entry by id', function() {
+    $httpBackend.flush();
+
+    scope.removeAlert("50d16b0ac620d0443c000005");
+
+    expect(scope.alertlines.length).toBe(1);
+  }); 
+  */
+
+  it('should remove a status element by id', function() {
+    $httpBackend.flush();
+
+    scope.selectedElement._id = "507ff2b365058a7c32000001";
+    scope.selectedElement.system = "D05";
+    scope.selectedElement.status = "upgrade";
+    scope.selectedElement.start = new Date(2012,10,17);
+    scope.selectedElement.end = new Date(2012,10,19);
+    scope.selectedElement.comment = "testComment";
+    scope.selectedElement.sysIndex = 1;
+    scope.selectedElement.elmIndex = 1;
+    //hasValue: false
+
+    $httpBackend.expectPUT('/resources/systems/507ff2b365058a7c32000001', '{"system":"D05","statuslines":[{"start":"20121017","end":"20121019","status":"upgrade","comment":""}]}').respond(200, '{"put":"ok"}');
+    $httpBackend.expectGET(/systems*/).respond();
+    scope.removeStatusElement();
+    $httpBackend.flush();
+
+    expect(scope.systemlines).toBe(undefined);
+  });
+
+
+  it('should update a status element by id', function() {
+    $httpBackend.flush();
+
+    scope.selectedElement._id = "507ff2b365058a7c32000001";
+    scope.selectedElement.system = "D05";
+    scope.selectedElement.status = "upgrade";
+    scope.selectedElement.start = new Date(2012,9,17);
+    scope.selectedElement.end = new Date(2012,9,19);
+    scope.selectedElement.comment = "testComment";
+    scope.selectedElement.sysIndex = 1;
+    scope.selectedElement.elmIndex = 1;
+
+    scope.updateFormData._id = scope.selectedElement._id;
+    scope.updateFormData.system = scope.selectedElement.system;
+    scope.updateFormData.status = scope.selectedElement.status;
+    scope.updateFormData.start = "01.10.2020";
+    scope.updateFormData.end = "10.10.2020";
+    scope.updateFormData.comment = scope.selectedElement.comment;
+
+    var expectedRequest = '{"system":"D05","statuslines":[{"start":"20201001","end":"20201010","status":"upgrade","comment":"testComment"}]}';
+    $httpBackend.expectPUT('/resources/systems/507ff2b365058a7c32000001', expectedRequest).respond(200, '{"put":"ok"}');
+    $httpBackend.expectGET(/systems*/).respond();
+    scope.updateStatusElement();
+    $httpBackend.flush();
+
+    expect(scope.systemlines).toBe(undefined);
+  });
+
+
+  it('should add a new status element to an existing system', function() {
+    $httpBackend.flush();
+
+    scope.addFormData._id = "507ff2b365058a7c32000001";
+    scope.addFormData.system = "D05";
+    scope.addFormData.status = "upgrade";
+    scope.addFormData.start = "20.09.2012";
+    scope.addFormData.end = "22.09.2012";
+    scope.addFormData.comment = "testComment";
+
+    $('body').append('<form id="elementForm"></form>');
+
+    var expectedRequest = '{"system":"D05","statuslines":[{"start":"20121017","end":"20121019","status":"upgrade","comment":""},{"start":"20120920","end":"20120922","status":"upgrade","comment":"testComment"}]}';
+    $httpBackend.expectPUT('/resources/systems/507ff2b365058a7c32000001', expectedRequest).respond(200, '{"put":"ok"}');
+    $httpBackend.expectGET(/systems*/).respond();
+    scope.addStatusElement();
+    $httpBackend.flush();
+
+    expect(scope.systemlines).toBe(undefined);
+
+    $('#alertForm').remove();
+  });
+
+
+  it('should add a new status element to a new system', function() {
+    $httpBackend.flush();
+
+    scope.addFormData._id = "";
+    scope.addFormData.system = "Q01";
+    scope.addFormData.status = "upgrade";
+    scope.addFormData.start = "20.09.2012";
+    scope.addFormData.end = "22.09.2012";
+    scope.addFormData.comment = "testComment";
+
+    $('body').append('<form id="elementForm"></form>');
+
+    var expectedRequest = '{"system":"Q01","statuslines":[{"start":"20120920","end":"20120922","status":"upgrade","comment":"testComment"}]}';
+    $httpBackend.expectPOST('/resources/systems/', expectedRequest).respond(200, '{"put":"ok"}');
+    $httpBackend.expectGET(/systems*/).respond();
+    scope.addStatusElement();
+    $httpBackend.flush();
+
+    expect(scope.systemlines).toBe(undefined);
+
+    $('#alertForm').remove();
+  }); 
 
 
 
