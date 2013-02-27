@@ -189,7 +189,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	};
 
 	$scope.getClassForTableRowSystemGroup = function(element) {
-		var classString = "";
+		var classString = "systemgrouprow";
 		if($scope.activeTags.length > 0 || $scope.activeGroupTags.length) {
 			classString = 'hidden';
 		}
@@ -289,7 +289,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	}
 
 	$scope.getClassForSystemTableRow = function(systemnamesIndex) {
-		var classString = '';
+		var classString = 'systemrow ';
 
 		if($scope.activeTags.length > 0 || $scope.activeGroupTags.length > 0) {
 			if(searchForActiveTagsForStatus(systemnamesIndex)) {
@@ -438,6 +438,36 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		if(element.isActive !== "true") {
 			classString = 'hidden';
 		}
+
+		return classString;
+	}
+
+	$scope.getClassForDayNameHeaderCell = function(day) {
+		var classString = '';
+
+		var testDate = new Date($scope.selectedYear, $scope.selectedMonth, day + 1);
+		if(Utils.dateIsWeekend(testDate)) {
+			classString += 'weekend';
+		}
+		delete testDate;
+
+		return classString;
+	}
+
+	$scope.getClassForDayHeaderCell = function(day) {
+		var classString = '';
+
+		if(day == Calendar.currentDate.getDate() - 1 && 
+			$scope.selectedMonth == Calendar.currentDate.getMonth() && 
+				$scope.selectedYear == Calendar.currentDate.getFullYear()) {
+			classString += 'currentday ';
+		}
+
+		var testDate = new Date($scope.selectedYear, $scope.selectedMonth, day + 1);
+		if(Utils.dateIsWeekend(testDate)) {
+			classString += 'weekend';
+		}
+		delete testDate;
 
 		return classString;
 	}
@@ -683,7 +713,8 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		$scope.selectedMonth = month;
 
 		var elem = angular.element(event.srcElement);
-		elem[0].className += " selectedmonth";
+		//elem[0].className += " selectedmonth";
+		elem.addClass('selectedmonth');
 	};
 	
 	$scope.gotoPreviousYear = function() {
@@ -1070,17 +1101,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	$scope.clearModalLog = function(event) {
 		$scope.elementUpdateMessage = ""; 
 		$scope.elementUpdateClass = "hide";
-	};
-	
-	$scope.getClassForDayColumn = function(day) {
-		var classText = '';
-		var currentDate = new Date();
-		
-		if(day == currentDate.getDate() && $scope.selectedMonth == currentDate.getMonth() && $scope.selectedYear == currentDate.getFullYear()){
-			classText = 'currentday'
-		}
-
-		return classText;
 	};
 	
 });
