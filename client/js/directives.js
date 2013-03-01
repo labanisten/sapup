@@ -433,6 +433,7 @@ directiveModule.directive('systemTable', function($compile, Utils){
 					return result;
 				}
 
+				/*
 				var buildEmptyTableCell = function(day) {
 					var template = '';
 
@@ -459,7 +460,37 @@ directiveModule.directive('systemTable', function($compile, Utils){
 					delete testDate;
 
 					return template;
+				}*/
+
+
+				var buildEmptyTableCell = function(day) {
+					var template = '';
+
+					var testDate = new Date(scope.selectedYear, scope.selectedMonth, day + 1);
+					if(Utils.dateIsWeekend(testDate))
+						template += '<td class="weekend"></td>';
+					else {
+						template += '<td></td>';
+					}
+					delete testDate;
+
+					return template;
 				}
+
+				var buildEmptyTableGroupCell = function(day) {
+					var template = '';
+
+					var testDate = new Date(scope.selectedYear, scope.selectedMonth, day + 1);
+					if(Utils.dateIsWeekend(testDate))
+						template += '<td class="weekend"></td>';
+					else {
+						template += '<td class="systemrowgroupcell"></td>';
+					}
+					delete testDate;
+
+					return template;
+				}
+
 
 				function buildTemplateForExistingSystem(systemIndex) {
 					

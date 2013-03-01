@@ -33,7 +33,6 @@ angular.module('calendarModule', []).
 			return ns.daysInMonth;
 		};
 
-	
 		ns.getMonthDayList = function() {
 			
 			var daysInMonths = [];
@@ -125,12 +124,12 @@ angular.module('calendarModule', []).
 		};
 		
 		
-
+		//TODO: Not in use?
 		ns.numberOfDaysBetweenDates = function(fromDate, toDate) {
 			var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
 			return Math.floor((toDate.getTime() - fromDate.getTime())/(oneDay)) ;
 		};
-
+		
 
 	})(calendar);
 
