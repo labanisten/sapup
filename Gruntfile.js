@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = function(grunt) {
 
@@ -12,8 +12,11 @@ module.exports = function(grunt) {
       gruntfile: ['Gruntfile.js'],
       //libs_n_tests: ['lib/**/*.js', '<%= nodeunit.all %>'],
       //subgrunt: ['<%= subgrunt.all %>'],
-      all: ['client/js/controllers.js'],
+      all: ['client/js/controllers.js', 'client/js/utils.js', 'client/js/mongodb.js', 'client/js/calendar.js'/*, 'client/js/directives.js'*/],
       options: {
+        "predef": ["module", "angular", "jQuery", "$"],
+        //strict: false,
+        globalstrict: true,
         curly: true,
         eqeqeq: true,
         immed: true,
@@ -25,7 +28,7 @@ module.exports = function(grunt) {
         unused: true,
         boss: true,
         eqnull: true,
-        node: true,
+        //node: true,
         es5: true
       }
     }

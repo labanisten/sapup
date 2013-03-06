@@ -1,3 +1,4 @@
+"use strict";
 angular.module('mongodbModule', []).
 	factory('db', function($http) {
 	
@@ -7,9 +8,10 @@ angular.module('mongodbModule', []).
 
 			ns.noCache = function() {
 				return '?_=' + Math.random();
-			}
+			};
 
-			addResource = function(name, url) {
+			var addResource = function(name, url) {
+
 				ns[name] = function(data) {
 					angular.extend(this, data);
 				};
@@ -27,22 +29,22 @@ angular.module('mongodbModule', []).
 				};
 
 				ns[name].remove = function(id) {
-					return $http.delete('/' + url + '/' + id).then(function(response) {					 	
+					return $http.delete('/' + url + '/' + id).then(function(response) {
 						return response;
 					});					
-				}
+				};
 
 				ns[name].prototype.update = function(id) {
 					var resource = this;
 					delete resource._id;
-				 	return $http.put('/' + url + '/' + id, resource).then(function(response) {
+					return $http.put('/' + url + '/' + id, resource).then(function() {
 						return resource;
 					});
 				};
 
 				ns[name].prototype.create = function() {
 					var resource = this;
-				 	return $http.post('/' + url + '/', resource).then(function(response) {
+					return $http.post('/' + url + '/', resource).then(function(response) {
 						return response.data[0];
 					});
 				};

@@ -1,14 +1,13 @@
+"use strict";
 
 angular.module('utilsModule', []).
-	run(function(Utils) {
-	
+	/*run(function(Utils) {
 		$(".dismisslegend").click(function() {
 			$(".legend").hide();
 			$(".accordion").css('float', 'none');
 			$(".accordion").css('width', 'auto');
-		});
-		
-	}).
+		});	
+	}).*/
 	
 	factory('Utils', function() {
 	
@@ -25,7 +24,7 @@ angular.module('utilsModule', []).
 				d = datestring.substr(6, 2);
 
 			m = m - 1;
-			date = new Date(y, m, d);
+			var date = new Date(y, m, d);
 
 			return date;
 		};
@@ -58,8 +57,8 @@ angular.module('utilsModule', []).
 		{
 			// var y = new String(date.getFullYear());
 			var y = date.getFullYear().toString();
-			m = ns.padZeroFront(date.getMonth() + 1);
-			d = ns.padZeroFront(date.getDate());
+			var m = ns.padZeroFront(date.getMonth() + 1);
+			var d = ns.padZeroFront(date.getDate());
 			
 			var viewDate = d + '.' + m + '.' + y;
 			
@@ -92,9 +91,9 @@ angular.module('utilsModule', []).
 		ns.padZeroFront = function(str)
 		{
 			
-			if(str < 10)
+			if(str < 10){
 				str = "0" + str;
-			
+			}
 			return str;
 			
 		};
@@ -102,11 +101,10 @@ angular.module('utilsModule', []).
 		
 		ns.getDateString = function(date)
 		{
-			var dateString = new String(date.getFullYear());
+			var dateString = String(date.getFullYear());
 			dateString = dateString.concat(ns.padZeroFront(date.getMonth() + 1));
 			dateString = dateString.concat(ns.padZeroFront(date.getDate()));
 			return dateString;
-			
 		};
 		
 
@@ -117,7 +115,7 @@ angular.module('utilsModule', []).
 
 		
 		ns.sameDay = function(date1, date2) {
-			return date1.getFullYear() == date2.getFullYear() && date1.getMonth() == date2.getMonth() && date1.getDate() == date2.getDate();
+			return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
 		};
 		
 		
@@ -138,9 +136,6 @@ angular.module('utilsModule', []).
 		
 			var validator = $("#alertForm").validate();
 			validator.resetForm();
-		   
-			//$('#alertForm').submit = {};
-			//$('#alertForm')[0].reset();
 			
 			$("#alertTitle").parent('.control-group').removeClass('error');
 			$("#alertType").parent('.control-group').removeClass('error');
@@ -151,28 +146,25 @@ angular.module('utilsModule', []).
 			$("#alertType").parent('.control-group').removeClass('success');
 			$("#alertDialogExpDate").parent('.control-group').removeClass('success');
 			$("#alertComment").parent('.control-group').removeClass('success');
-			
-			//$('#alertForm').find('.control-group').removeClass('error');
-			//$('#alertForm').find('.control-group').removeClass('success');
-			
-			$("#expireMessage").text("");
-		
+			$("#expireMessage").text("");	
 		};
 		
+
 		//TODO: Not in use?
+		/*
 		ns.isNewElementSingleDay = function(date){
 			var result = false;
 			var startDate = viewDateToDateObject(date.start);
 			var endDate = viewDateToDateObject(date.end);
 			
-			if (startDate.getTime() == endDate.getTime()){
+			if (startDate.getTime() === endDate.getTime()){
 				result = true;
 			}
 			return result;
 		};
+		*/
 		
-		
-		
+	
 		ns.numberOfDaysBetweenDates = function(fromDate, toDate) {
 			var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
 			return Math.floor((fromDate.getTime() - toDate.getTime())/(oneDay)) ;
@@ -193,9 +185,11 @@ angular.module('utilsModule', []).
 
 		
 		//TODO: Not in use?
+		/*
 		ns.rangeWithinMonthYear = function(fromDate, toDate, month, year) {
-			return ( dateFromString(fromDate).getMonth() == month && dateFromString(fromDate).getYear() == year ) || ( dateFromString(toDate).getMonth() == month && dateFromString(toDate).getYear() == year );
+			return ( dateFromString(fromDate).getMonth() === month && dateFromString(fromDate).getYear() === year ) || ( dateFromString(toDate).getMonth() === month && dateFromString(toDate).getYear() === year );
 		};
+		*/
 
 		//TODO: Not in use?
 		ns.isDataReady = function(dataTab) {
@@ -206,19 +200,19 @@ angular.module('utilsModule', []).
 				ns.dataComplete = true; 
 			}
 			return result;
-		}
+		};
 
 		ns.decMonth = function(month) {
 			var num = month - 1;
 			if(num < 0) {num = 11;}
 			return num;
-		}
+		};
 		
 		ns.incMonth = function(month) {
 			var num = month + 1;
 			if(num > 11) {num = 0;}
 			return num;
-		}
+		};
 
 		ns.buildCompactMonthList = function(selectedMonth) {
 			var monthList = [];
@@ -237,7 +231,7 @@ angular.module('utilsModule', []).
 			monthList.push(num5);
 
 			return monthList;
-		}
+		};
 
 		ns.findSystem = function(systemlines, systemline) {
 			var match = {
@@ -255,7 +249,7 @@ angular.module('utilsModule', []).
 			}
 			
 			return match;
-		}
+		};
 
 		ns.existInTagArray = function(tag, array) {
 			var match = {
@@ -272,19 +266,16 @@ angular.module('utilsModule', []).
 			}
 
 			return match;
-		}
+		};
 
-		//TODO: asdf?
 		ns.dateIsWeekend = function(date) {
 			var result = false;
-			var asdf = date.getDay();
 			if(date.getDay() === 6 || date.getDay() === 0) {
 				result = true;
 			}
 
 			return result;
-		}
-
+		};
 
 		})(utils);
 

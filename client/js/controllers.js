@@ -1,9 +1,77 @@
 "use strict";
 
-var myModule = angular.module('systemAvailability', ['mongodbModule', 'calendarModule', 'utilsModule', 'directiveModule', 'ngCookies']);
+var myModule = angular.module('systemAvailability', ['mongodbModule', 'calendarModule', 'utilsModule', 'directiveModule']);
 
 
-myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils, $cookies) {
+myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils) {
+
+	function getSystemData() {
+		var promise = db.System.get();
+		promise.then(function(data) {
+			$scope.systemlines = data;
+			fillSystemlinesActive();
+		});
+		return [];
+	}
+
+	function getUserData() {
+		var promise = db.Userdata.get();
+		promise.then(function(data) {
+			$scope.userdata = data;
+		});
+		return [];
+	}
+	
+	function getSystemStatuses(){
+		var promise = db.Systemstatus.get();
+		promise.then(function(data) {
+			$scope.systemstatuses = data;
+		});
+		return [];
+	}
+	
+	function getSystemNames(){
+		var promise = db.Systemname.get();
+		promise.then(function(data) {
+			$scope.systemnames = data;
+			$scope.systemnames.sort(function(a,b){return a.order - b.order;}); //Sort by prder property
+		});
+		return [];
+	}
+
+	function getSystemgroups(){
+		var promise = db.Systemgroup.get();
+		promise.then(function(data) {
+			$scope.systemgroups = data;
+			$scope.systemgroups.sort(function(a,b){return a.order - b.order;}); //Sort by prder property
+		});
+		return [];
+	}
+
+	function getAlertData() {
+		var alerts = [];
+		var currentDate = Utils.getDateString(new Date());
+		var promise = db.Alert.get();
+		promise.then(function(data) {
+			$.each(data, function(i, v_alert) {
+		
+				if(v_alert.expdate >= currentDate){
+					alerts.push(v_alert);
+				}
+				
+			});
+			$scope.alertlines = alerts;
+		});
+		return [];
+	}
+	
+	function getAlertTypes(){
+		var promise = db.Alerttype.get();
+		promise.then(function(data) {
+			$scope.alerttypes = data;
+		});
+		return [];
+	}
 
 	$scope.systemlines = getSystemData();
 	$scope.systemnames = getSystemNames();
@@ -766,88 +834,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		$scope.selectedMonth = nextMonth;
 	};
 
-	function getSystemData() {
-
-		var promise = db.System.get();
-		promise.then(function(data) {
-			$scope.systemlines = data;
-			fillSystemlinesActive();
-		});
-
-		return [];
-
-	}
-
-	function getUserData() {
-
-		var promise = db.Userdata.get();
-		promise.then(function(data) {
-			$scope.userdata = data;
-		});
-
-		return [];
-
-	}
-	
-	function getSystemStatuses(){
-
-		var promise = db.Systemstatus.get();
-		promise.then(function(data) {
-			$scope.systemstatuses = data;
-		});
-
-		return [];
-	}
-	
-	function getSystemNames(){
-
-		var promise = db.Systemname.get();
-		promise.then(function(data) {
-			$scope.systemnames = data;
-			$scope.systemnames.sort(function(a,b){return a.order - b.order;}); //Sort by prder property
-		});
-
-		return [];
-	}
-
-	function getSystemgroups(){
-
-		var promise = db.Systemgroup.get();
-		promise.then(function(data) {
-			$scope.systemgroups = data;
-			$scope.systemgroups.sort(function(a,b){return a.order - b.order;}); //Sort by prder property
-		});
-
-		return [];
-	}
-
-	function getAlertData() {
-		var alerts = [];
-		var currentDate = Utils.getDateString(new Date());
-
-		var promise = db.Alert.get();
-		promise.then(function(data) {
-			$.each(data, function(i, v_alert) {
-		
-				if(v_alert.expdate >= currentDate){
-					alerts.push(v_alert);
-				}
-				
-			});
-			$scope.alertlines = alerts;
-		});
-		return [];
-	}
-	
-	function getAlertTypes(){
-
-		var promise = db.Alerttype.get();
-		promise.then(function(data) {
-			$scope.alerttypes = data;
-		});
-		return [];
-	}
-
 	function issueElementUpdateMessage(system) {
 		$scope.elementUpdateMessage = "Status was updated for system " + system;
 		$scope.elementUpdateClass = "display";
@@ -905,7 +891,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 				spliceCalendarElement(systemElement, $scope.selectedElement);
 					
 				var system = new db.System(systemElement);
-				system.update(v_system._id).then(function(newSystemElement) {
+				system.update(v_system._id).then(function() {
 					$scope.unSelectElement();
 					getSystemData();
 				});
@@ -943,7 +929,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 			systemElement.statuslines.push(statusElement);
 
 			var system = new db.System(systemElement);
-			system.update(existingSystem._id).then(function(newSystemElement) {
+			system.update(existingSystem._id).then(function() {
 				issueElementUpdateMessage(systemElement.system); 
 				$scope.unSelectElement();
 				getSystemData();
@@ -952,7 +938,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	};
 		
 	$scope.addStatusElement = function() {
-		var systemElement;
 		if ($("#elementForm").valid()) {
 
 			var existingSystem,
@@ -970,10 +955,10 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 
 			if (existingSystem) {
-				//Update existing system
-				systemElement = {
-					"system": existingSystem.system,
-					"statuslines": existingSystem.statuslines
+					//Update existing system
+					systemElement = {
+						"system": existingSystem.system,
+						"statuslines": existingSystem.statuslines
 				};
 				
 				statusElement = {
@@ -988,8 +973,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 				system = new db.System(systemElement);
 
-				system.update(existingSystem._id).then(function(newSystemElement) {
-
+				system.update(existingSystem._id).then(function() {
 					issueElementUpdateMessage(systemElement.system); 
 					$scope.unSelectElement();
 					getSystemData();
@@ -1024,12 +1008,11 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 				
 				system = new db.System(systemElement);
 				
-				system.create().then(function(newSystemElement) {
+				system.create().then(function() {
 					issueElementUpdateMessage(systemElement.system); 
 					$scope.unSelectElement();
 					getSystemData();
 				});
-
 			}
 		}
 	};
