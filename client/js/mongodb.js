@@ -1,4 +1,5 @@
 "use strict";
+
 angular.module('mongodbModule', []).
 	factory('db', function($http) {
 	

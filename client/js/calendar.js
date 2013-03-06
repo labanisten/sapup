@@ -1,4 +1,5 @@
 "use strict";
+
 angular.module('calendarModule', []).
 	factory('Calendar', function() {
 
