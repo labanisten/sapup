@@ -1,5 +1,3 @@
-"use strict";
-
 var myModule = angular.module('systemAvailability', ['mongodbModule', 'calendarModule', 'utilsModule', 'directiveModule', 'ngCookies']);
 
 

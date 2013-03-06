@@ -1,4 +1,3 @@
-
 angular.module('calendarModule', []).
 	factory('Calendar', function() {
 
