@@ -267,7 +267,9 @@ describe('The main controller', function() {
     //Use new js date with current date to test the currentday functionality. 
     //found it difficult to change the Calendar.currentDate in scope
     var testDate = new Date();
-    if(date.getDay() === 6 || date.getDay() === 0) {
+    scope.selectedYear = testDate.getFullYear();
+    scope.selectedMonth = testDate.getMonth();
+    if(testDate.getDay() === 6 || testDate.getDay() === 0) {
       expect(scope.getClassForDayHeaderCell(testDate.getDate() - 1)).toBe("currentday weekend");
     }else {
       expect(scope.getClassForDayHeaderCell(testDate.getDate() - 1)).toBe("currentday ");

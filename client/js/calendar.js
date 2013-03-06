@@ -1,3 +1,4 @@
+"use strict";
 angular.module('calendarModule', []).
 	factory('Calendar', function() {
 
@@ -67,9 +68,11 @@ angular.module('calendarModule', []).
 				weekAndDays = [],
 				colSpan = 0;
 
-				$.each(dayArray, function(i, v_day) {
-					weekArray.push(ns.getWeek(new Date(m.getFullYear(), month, i)));
-				});
+				var j;
+				for(j = 0; j < dayArray.length; j++) {
+				//$.each(dayArray, function(i, v_day) {
+					weekArray.push(ns.getWeek(new Date(m.getFullYear(), month, j)));
+				}
 				var i;
 				for (i = 0; i < weekArray.length; i++) {
 					colSpan++;

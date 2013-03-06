@@ -1,7 +1,77 @@
-var myModule = angular.module('systemAvailability', ['mongodbModule', 'calendarModule', 'utilsModule', 'directiveModule', 'ngCookies']);
+"use strict";
+
+var myModule = angular.module('systemAvailability', ['mongodbModule', 'calendarModule', 'utilsModule', 'directiveModule']);
 
 
-myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils, $cookies) {
+myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils) {
+
+	function getSystemData() {
+		var promise = db.System.get();
+		promise.then(function(data) {
+			$scope.systemlines = data;
+			fillSystemlinesActive();
+		});
+		return [];
+	}
+
+	function getUserData() {
+		var promise = db.Userdata.get();
+		promise.then(function(data) {
+			$scope.userdata = data;
+		});
+		return [];
+	}
+	
+	function getSystemStatuses(){
+		var promise = db.Systemstatus.get();
+		promise.then(function(data) {
+			$scope.systemstatuses = data;
+		});
+		return [];
+	}
+	
+	function getSystemNames(){
+		var promise = db.Systemname.get();
+		promise.then(function(data) {
+			$scope.systemnames = data;
+			$scope.systemnames.sort(function(a,b){return a.order - b.order;}); //Sort by prder property
+		});
+		return [];
+	}
+
+	function getSystemgroups(){
+		var promise = db.Systemgroup.get();
+		promise.then(function(data) {
+			$scope.systemgroups = data;
+			$scope.systemgroups.sort(function(a,b){return a.order - b.order;}); //Sort by prder property
+		});
+		return [];
+	}
+
+	function getAlertData() {
+		var alerts = [];
+		var currentDate = Utils.getDateString(new Date());
+		var promise = db.Alert.get();
+		promise.then(function(data) {
+			$.each(data, function(i, v_alert) {
+		
+				if(v_alert.expdate >= currentDate){
+					alerts.push(v_alert);
+				}
+				
+			});
+			$scope.alertlines = alerts;
+		});
+		return [];
+	}
+	
+	function getAlertTypes(){
+		var promise = db.Alerttype.get();
+		promise.then(function(data) {
+			$scope.alerttypes = data;
+		});
+		return [];
+	}
 
 	$scope.systemlines = getSystemData();
 	$scope.systemnames = getSystemNames();
@@ -117,15 +187,15 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	$scope.activeGroupTags = [];
 	$scope.activeTags = [];
 	$scope.currentCompactpage = $scope.page.main;
-	$scope.systemTableStartColumnSize;
+	//$scope.systemTableStartColumnSize = 0;
 
 	$scope.messageAreaClass = function() {
 		if ($scope.alertlines.length > 0) {
 			return "FV";
 		} else {
 			return "invisible hide";
-		};
-	}
+		}
+	};
 
 	function elementExists(sysIndex, elmIndex) {
 		var result = false;
@@ -155,9 +225,9 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 					case "Ready for test":
 						statusClass = 'readyfortest'; 
 						break; 
-				};
+				}
 				classString = "element-inner element-click " + statusClass; 
-				if (sysIndex == $scope.selectedElement.sysIndex && elmIndex == $scope.selectedElement.elmIndex) {
+				if (sysIndex === $scope.selectedElement.sysIndex && elmIndex === $scope.selectedElement.elmIndex) {
 					classString += " selected";
 				}
 			}
@@ -168,7 +238,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	
 	function isAlreadySelected(sysIndex, elmIndex) {
 		var result = false;
-		if($scope.selectedElement.sysIndex == sysIndex && $scope.selectedElement.elmIndex == elmIndex) {result = true;}
+		if($scope.selectedElement.sysIndex === sysIndex && $scope.selectedElement.elmIndex === elmIndex) {result = true;}
 		return result;
 	}
 	
@@ -182,7 +252,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	};
 
 	$scope.getClassForMonth = function(month) {
-		if (month == $scope.selectedMonth) {
+		if (month === $scope.selectedMonth) {
 			return "span1 month selectedmonth";
 		} else {
 			return "span1 month";
@@ -190,7 +260,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	};
 
 	//TODO: is the element paramater in use?
-	$scope.getClassForTableRowSystemGroup = function(element) {
+	$scope.getClassForTableRowSystemGroup = function() {
 		var classString = "systemgrouprow";
 		if($scope.activeTags.length > 0 || $scope.activeGroupTags.length) {
 			classString = 'hidden';
@@ -232,7 +302,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 						if($scope.activeGroupTags[k] === systemRow.systemgroup) {
 							//tag for systemgroup not selected, hide 
 							groupMatch = true;
-							break
+							break;
 						}
 					}
 
@@ -267,7 +337,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	function searchForActiveTagsForStatus(systemnamesIndex) {
 		var result = false;
 		var systemRow = $scope.systemnames[systemnamesIndex];
-		var tags;
 
 		if($scope.activeGroupTags.length > 0) {
 
@@ -311,7 +380,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	};	
 
 	//TODO: check if in use
-	$scope.getClassForGroupTagBadge = function(tag) {
+	$scope.getClassForGroupTagBadge = function() {
 		var classString = "calendar-filtertag";
 		return classString;
 	};
@@ -327,7 +396,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	};	
 
 	//TODO: not in use -> no UnitTest 
-	$scope.getClassForTagBadge = function(tag) {
+	$scope.getClassForTagBadge = function() {
 		var classString = "calendar-filtertag";
 		return classString;
 	};
@@ -346,20 +415,20 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	//TODO: not in use -> no UnitTest 
 	$scope.getClassForCompactMessageContainer = function() {
 		var classString = 'message-view-compact row-fluid';
-		if($scope.currentCompactpage != $scope.page.message){classString += ' hidden'}
+		if($scope.currentCompactpage !== $scope.page.message){classString += ' hidden';}
 		return classString;
-	}
+	};
 	
 	$scope.getClassForCompactMonthBar = function() {
 		var classString = 'months';
-		if($scope.currentCompactpage != $scope.page.status){classString += ' hidden'}
+		if($scope.currentCompactpage !== $scope.page.status){classString += ' hidden';}
 		return classString;
 	};
 
 	$scope.getClassForCompactMonthElement = function(month) {
 		var classString = '';
 
-		if (month == $scope.selectedMonthCompact) {
+		if (month === $scope.selectedMonthCompact) {
 			classString += "btn btn-success month selectedmonth";
 		} else {
 			classString += "btn btn-primary month"; 
@@ -369,82 +438,82 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	};
 
 	//TODO: month parameter not in use?
-	$scope.getClassForCompactYearButton = function(month) {
+	$scope.getClassForCompactYearButton = function() {
 		var classString = 'btn btn-primary yearbtn-compact';
-		if($scope.currentCompactpage != $scope.page.status){classString += ' hidden'}
+		if($scope.currentCompactpage !== $scope.page.status){classString += ' hidden';}
 		return classString;
 	};
 
 	//TODO: month parameter not in use?
-	$scope.getClassForCompactHomeButton = function(month) {
+	$scope.getClassForCompactHomeButton = function() {
 		var classString;
-		if($scope.currentCompactpage === $scope.page.status || $scope.currentCompactpage === $scope.page.message)
+		if($scope.currentCompactpage === $scope.page.status || $scope.currentCompactpage === $scope.page.message) {
 			classString = 'btn btn-primary homebtn-compact';
-		else{
+		}else{
 			classString = 'btn btn-primary homebtn-compact hidden';
 		}
 		return classString;
 	};
 
 	//TODO: month parameter not in use?
-	$scope.getClassForCompactSystemBackButton = function(month) {
+	$scope.getClassForCompactSystemBackButton = function() {
 		var classString = 'btn btn-primary system-backbtn-compact';
-		if($scope.currentCompactpage != $scope.page.system){classString += ' hidden'}
+		if($scope.currentCompactpage !== $scope.page.system){classString += ' hidden';}
 		return classString;
 	};
 
 	//TODO: month parameter not in use?
-	$scope.getClassForCompactStatusBackButton = function(month) {
+	$scope.getClassForCompactStatusBackButton = function() {
 		var classString = 'btn btn-primary status-backbtn-compact';
-		if($scope.currentCompactpage != $scope.page.status){classString += ' hidden'}
+		if($scope.currentCompactpage !== $scope.page.status){classString += ' hidden';}
 		return classString;
 	};
 
 	//TODO: month parameter not in use? : no UnitTest
-	$scope.getClassForCompactSearchButton = function(month) {
+	$scope.getClassForCompactSearchButton = function() {
 		/*var classString = 'btn btn-primary searchbtn-compact';
 		if($scope.selectedCompactSystem.hasValue == true) {classString += ' hidden';}
 		return classString;*/
 	};
 
 	//TODO: month parameter not in use?
-	$scope.getClassForCompactMessageButton = function(month) {
+	$scope.getClassForCompactMessageButton = function() {
 		var classString = 'btn btn-primary messagebtn-compact';
-		if($scope.currentCompactpage != $scope.page.main){classString += ' hidden'}
+		if($scope.currentCompactpage !== $scope.page.main){classString += ' hidden';}
 		return classString;
 	};
 
 	//TODO: month parameter not in use?
-	$scope.getClassForCompactStatusViewLabel = function(month) {
+	$scope.getClassForCompactStatusViewLabel = function() {
 		var classString = 'systemview-heading-compact';
-		if($scope.currentCompactpage != $scope.page.status){classString += ' hidden'}
+		if($scope.currentCompactpage !== $scope.page.status){classString += ' hidden';}
 		return classString;
 	};
 
 	$scope.getClassForSystemgroupCompactView = function() {
 		var classString = 'systemgroup-view-compact';
-		if($scope.currentCompactpage != $scope.page.main){classString += ' hidden'}
+		if($scope.currentCompactpage !== $scope.page.main){classString += ' hidden';}
 		return classString;
-	}
+	};
 
 	$scope.getClassForSystemCompactView = function() {
 		var classString = 'status-view-compact';
-		if($scope.currentCompactpage != $scope.page.system){classString += ' hidden'}
+		if($scope.currentCompactpage !== $scope.page.system){classString += ' hidden';}
 		return classString;
-	}
+	};
 
 	$scope.getClassForActiveSystemIndicator = function(element) {
 		var classString = 'system-active-indicator hidden';
 
 		var i;
 		for(i = 0; i < $scope.systemlinesActive.length; i++) {
-			if($scope.systemlinesActive[i].system == element.name) {
+			if($scope.systemlinesActive[i].system === element.name) {
 				classString = 'system-active-indicator pull-right show';
 			}
 		}
 
 		return classString;
-	}
+	};
 
 	$scope.getClassForActiveStatusIndicator = function(element) {
 		var classString = '';//'pull-right';
@@ -454,7 +523,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		}
 
 		return classString;
-	}
+	};
 
 	//TODO: day starts at 0 and needs to be ++'d because of for(i = 0.. in directives
 	$scope.getClassForDayNameHeaderCell = function(day) {
@@ -464,18 +533,18 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		if(Utils.dateIsWeekend(testDate)) {
 			classString += 'weekend';
 		}
-		delete testDate;
+		//delete testDate;
 
 		return classString;
-	}
+	};
 
 	//TODO: if test is reused from getClassForDayNameHeaderCell
 	$scope.getClassForDayHeaderCell = function(day) {
 		var classString = '';
-
-		if(day == Calendar.currentDate.getDate() - 1 && 
-			$scope.selectedMonth == Calendar.currentDate.getMonth() && 
-				$scope.selectedYear == Calendar.currentDate.getFullYear()) {
+		var currentDay = Calendar.currentDate.getDate() - 1;
+		if(day === currentDay && 
+			$scope.selectedMonth === Calendar.currentDate.getMonth() && 
+				$scope.selectedYear === Calendar.currentDate.getFullYear()) {
 			classString += 'currentday ';
 		}
 
@@ -483,14 +552,14 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		if(Utils.dateIsWeekend(testDate)) {
 			classString += 'weekend';
 		}
-		delete testDate;
+		//delete testDate;
 
 		return classString;
-	}
+	};
 
 	$scope.getClassForStatusCompactViewElement = function(element) {
 		var classString = 'status';
-		if(element.type == 'error'){classString = 'error';}
+		if(element.type === 'error'){classString = 'error';}
 
 		//color if covers currentday
 		/*
@@ -500,13 +569,13 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		*/
 
 		return classString;
-	}
+	};
 
 	$scope.getClassForStatusCompactView = function() {
 		var classString = 'status-view-compact';
-		if($scope.currentCompactpage != $scope.page.status){classString += ' hidden'}
+		if($scope.currentCompactpage !== $scope.page.status){classString += ' hidden';}
 		return classString;
-	}
+	};
 
 
 	$scope.compactHomeButtonClick = function() {
@@ -522,7 +591,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		$scope.selectedMonthCompact = Calendar.getCurrentMonth();
 		$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonthCompact);
 		$scope.systemCompactViewList = [];
-	}
+	};
 
 	//TODO: redefenition of compactHomeButtonClick() ?
 	$scope.compactSystemBackButtonClick = function() {
@@ -532,7 +601,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 	$scope.compactStatusBackButtonClick = function() {
 		$scope.currentCompactpage = $scope.page.system;
-	    $scope.selectedCompactSystem.name = "";
+		$scope.selectedCompactSystem.name = "";
 		$scope.selectedCompactSystem.text = "";
 		$scope.selectedCompactSystem.sysIndex = -1;
 		$scope.selectedCompactSystem.hasValue = false;
@@ -560,7 +629,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 	//TODO: test for empty systemdata 
 	function fillSystemlinesActive() {
-		Calendar.currentDate;
+		//Calendar.currentDate;
 		if($scope.systemlines !== undefined) {
 			var i,j;
 			for (i = 0; i < $scope.systemlines.length; i++){
@@ -585,6 +654,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 	//TODO: only fill selectedCompactSystemgroup.name ? 
 	function fillSystemViewList(groupIndex) {
+		var elm;
 		$scope.systemgroupCompactViewList = [];
 		$scope.selectedCompactSystemgroup.name = $scope.systemgroups[groupIndex].name;
 
@@ -592,12 +662,12 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		for (i = 0; i < $scope.systemnames.length; i++){
 			if ($scope.systemnames[i].systemgroup === $scope.systemgroups[groupIndex].name) {
 
-				var elm = {
+				elm = {
 					systemnamesIndex: i,
 					name: $scope.systemnames[i].name,
 					text: $scope.systemnames[i].text,
 					systemgroup: $scope.systemnames[i].systemgroup
-				}
+				};
 
 				$scope.systemgroupCompactViewList.push(elm);
 			}
@@ -605,11 +675,11 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 		if($scope.systemgroupCompactViewList <= 0){
 
-			var elm = {
+			elm = {
 				name: '',
 				text: '',
 				systemgroup: ''
-			}
+			};
 
 			$scope.systemgroupCompactViewList.push(elm);
 		}
@@ -643,8 +713,8 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 			var end = Utils.convertToDate(line.end);
 
 			//TODO: test for elements that spans several months
-			if((start.getMonth() == $scope.selectedMonthCompact && start.getFullYear() == $scope.selectedYearCompact) || 
-				(start.getMonth() == $scope.selectedMonthCompact && end.getFullYear() == $scope.selectedYearCompact)){
+			if((start.getMonth() === $scope.selectedMonthCompact && start.getFullYear() === $scope.selectedYearCompact) || 
+				(start.getMonth() === $scope.selectedMonthCompact && end.getFullYear() === $scope.selectedYearCompact)){
 
 				var elm = {
 					status: line.status,
@@ -654,12 +724,12 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 					//start: line.start,
 					//end: line.end,
 					comment: line.comment
-				}
+				};
 
 				//element status today
 				var j;
 				for(j = 0; j < $scope.systemlinesActive.length; j++) {
-					if($scope.systemlinesActive[j].system == $scope.selectedCompactSystem.name) {
+					if($scope.systemlinesActive[j].system === $scope.selectedCompactSystem.name) {
 						if($scope.systemlinesActive[j].statuslines[0].start === line.start) {
 							elm.isActive = 'true';
 						}
@@ -688,13 +758,12 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 			comment: '',
 			error: 'No data',
 			type: 'error'
-		}
+		};
 
 		$scope.systemCompactViewList.push(elm);
 	}
 
 	$scope.groupBadgeClick = function(tag) {
-		var i;	
 		var index = $scope.activeGroupTags.indexOf(tag); 
 		if(index < 0) {
 			$scope.activeGroupTags.push(tag);
@@ -704,7 +773,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	};
 
 	$scope.tagBadgeClick = function(tag) {
-		var i;	
 		var index = $scope.activeTags.indexOf(tag); 
 		if(index < 0) {
 			$scope.activeTags.push(tag);
@@ -717,10 +785,10 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		$scope.selectedMonthCompact = month;
 		$scope.monthListCompact = Utils.buildCompactMonthList($scope.selectedMonthCompact);
 
-		if($scope.selectedCompactSystem.hasValue == true) {
+		if($scope.selectedCompactSystem.hasValue === true) {
 			fillStatusCompactViewList($scope.selectedCompactSystem.sysNameIndex);
 		}
-	}
+	};
 	
 	$scope.gotoMonth = function(event, month) {
 		if($scope.hoverElement.hasValue) {
@@ -766,97 +834,10 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		$scope.selectedMonth = nextMonth;
 	};
 
-	function getSystemData() {
-
-		var promise = db.System.get();
-		promise.then(function(data) {
-			$scope.systemlines = data;
-			fillSystemlinesActive();
-		});
-
-		return [];
-
-	}
-
-	function getUserData() {
-
-		var promise = db.Userdata.get();
-		promise.then(function(data) {
-			$scope.userdata = data;
-		});
-
-		return [];
-
-	}
-	
-	function getSystemStatuses(){
-
-		var promise = db.Systemstatus.get();
-		promise.then(function(data) {
-			$scope.systemstatuses = data;
-		});
-
-		return [];
-	}
-	
-	function getSystemNames(){
-
-		var promise = db.Systemname.get();
-		promise.then(function(data) {
-			$scope.systemnames = data;
-			$scope.systemnames.sort(function(a,b){return a.order - b.order}); //Sort by prder property
-		});
-
-		return [];
-	}
-
-	function getSystemgroups(){
-
-		var promise = db.Systemgroup.get();
-		promise.then(function(data) {
-			$scope.systemgroups = data;
-			$scope.systemgroups.sort(function(a,b){return a.order - b.order}); //Sort by prder property
-		});
-
-		return [];
-	}
-
-	function getAlertData() {
-		var alerts = [];
-		var currentDate = Utils.getDateString(new Date());
-
-		var promise = db.Alert.get();
-		promise.then(function(data) {
-			$.each(data, function(i, v_alert) {
-		
-				if(v_alert.expdate >= currentDate){
-					alerts.push(v_alert);
-				}
-				
-			});
-			$scope.alertlines = alerts;
-			// if (alerts.length > 0) {
-			// 	$scope.messageAreaClass = "span12 accordion"; 
-			// };
-
-
-		});
-		return [];
-	}
-	
-	function getAlertTypes(){
-
-		var promise = db.Alerttype.get();
-		promise.then(function(data) {
-			$scope.alerttypes = data;
-		});
-		return [];
-	}
-
 	function issueElementUpdateMessage(system) {
 		$scope.elementUpdateMessage = "Status was updated for system " + system;
 		$scope.elementUpdateClass = "display";
-	};
+	}
 	
 	$scope.addAlert = function() {
 		if($("#alertForm").valid()){
@@ -889,7 +870,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 			var statusStart = Utils.convertToDate(v_status.start);
 			var statusEnd = Utils.convertToDate(v_status.end);
 			
-			if (statusStart.getTime() == item.start.getTime() && statusEnd.getTime() == item.end.getTime() && v_status.status == item.status) {
+			if (statusStart.getTime() === item.start.getTime() && statusEnd.getTime() === item.end.getTime() && v_status.status === item.status) {
 				
 				system.statuslines.splice(j, 1);
 				return false;
@@ -900,7 +881,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	//TODO: no need to splice systemarray because of getSystemData()
 	$scope.removeStatusElement = function() {
 		$.each($scope.systemlines, function(i, v_system) {
-			if (v_system.system == $scope.selectedElement.system) {
+			if (v_system.system === $scope.selectedElement.system) {
 
 				var systemElement = {
 						"system": v_system.system,
@@ -909,8 +890,8 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 					
 				spliceCalendarElement(systemElement, $scope.selectedElement);
 					
-				system = new db.System(systemElement);
-				system.update(v_system._id).then(function(newSystemElement) {
+				var system = new db.System(systemElement);
+				system.update(v_system._id).then(function() {
 					$scope.unSelectElement();
 					getSystemData();
 				});
@@ -925,7 +906,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		var existingSystem;
 		var i;
 		for (i = 0; i < $scope.systemlines.length; i++) {
-			if ( $scope.systemlines[i].system == $scope.updateFormData.system) {
+			if ( $scope.systemlines[i].system === $scope.updateFormData.system) {
 				existingSystem = $scope.systemlines[i];
 				break;
 			}
@@ -948,7 +929,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 			systemElement.statuslines.push(statusElement);
 
 			var system = new db.System(systemElement);
-			system.update(existingSystem._id).then(function(newSystemElement) {
+			system.update(existingSystem._id).then(function() {
 				issueElementUpdateMessage(systemElement.system); 
 				$scope.unSelectElement();
 				getSystemData();
@@ -957,7 +938,6 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 	};
 		
 	$scope.addStatusElement = function() {
-
 		if ($("#elementForm").valid()) {
 
 			var existingSystem,
@@ -967,7 +947,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 			var i;
 			for (i = 0; i < $scope.systemlines.length; i++) {
-				if ( $scope.systemlines[i].system == $scope.addFormData.system) {
+				if ( $scope.systemlines[i].system === $scope.addFormData.system) {
 					existingSystem = $scope.systemlines[i];
 					break;
 				}
@@ -975,10 +955,10 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 
 			if (existingSystem) {
-				//Update existing system
-				systemElement = {
-					"system": existingSystem.system,
-					"statuslines": existingSystem.statuslines
+					//Update existing system
+					systemElement = {
+						"system": existingSystem.system,
+						"statuslines": existingSystem.statuslines
 				};
 				
 				statusElement = {
@@ -993,8 +973,7 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 
 				system = new db.System(systemElement);
 
-				system.update(existingSystem._id).then(function(newSystemElement) {
-
+				system.update(existingSystem._id).then(function() {
 					issueElementUpdateMessage(systemElement.system); 
 					$scope.unSelectElement();
 					getSystemData();
@@ -1006,13 +985,13 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 				//Post new system
 				var systemText;
 				$.each($scope.systemnames, function(i, v_system) {
-					if(v_system.name == $scope.addFormData.system) {
+					if(v_system.name === $scope.addFormData.system) {
 						systemText = v_system.text;
 						return false;
 					}
 				});
 				
-				var systemElement = { 
+				systemElement = { 
 					"system": $scope.addFormData.system,
 					"text": systemText,
 					"statuslines": []
@@ -1029,12 +1008,11 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 				
 				system = new db.System(systemElement);
 				
-				system.create().then(function(newSystemElement) {
+				system.create().then(function() {
 					issueElementUpdateMessage(systemElement.system); 
 					$scope.unSelectElement();
 					getSystemData();
 				});
-
 			}
 		}
 	};
@@ -1116,11 +1094,11 @@ myModule.controller("TimelineCtrl", function($scope, $http, db, Calendar, Utils,
 		$scope.updateFormData.comment = "";
 	}
 	
-	$scope.callModal = function(event) {
+	$scope.callModal = function() {
 		$("#editelementdialog").modal('show');
 	};
 	
-	$scope.clearModalLog = function(event) {
+	$scope.clearModalLog = function() {
 		$scope.elementUpdateMessage = ""; 
 		$scope.elementUpdateClass = "hide";
 	};
